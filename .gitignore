@@ -406,3 +406,9 @@ FodyWeavers.xsd
 !/.idea/.idea.*/.idea
 /.idea/.idea.*/.idea/*
 !/.idea/.idea.*/.idea/runConfigurations
+# JetBrains Rider files
+.idea/
+*.sln.iml
+*.ipr
+*.iws
+
