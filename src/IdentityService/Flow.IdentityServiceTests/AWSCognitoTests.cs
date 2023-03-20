@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Collections;
 
 namespace Flow.IdentityServiceTests
 {
@@ -41,10 +40,9 @@ namespace Flow.IdentityServiceTests
             var serviceProvider = _serviceCollection.BuildServiceProvider();
             var identityService = serviceProvider.GetRequiredService<IIdentityService>();
 
-            var response = await identityService.LoginAsync(username, password);
+            var response = await identityService.LoginAsync(username, password, CancellationToken.None);
 
             Assert.NotNull(response);
-            Assert.IsTrue(response);
         }
 
         [Test]
@@ -54,10 +52,9 @@ namespace Flow.IdentityServiceTests
             var serviceProvider = _serviceCollection.BuildServiceProvider();
             var identityService = serviceProvider.GetRequiredService<IIdentityService>();
 
-            var response = await identityService.LoginAsync(username, password);
+            var response = await identityService.LoginAsync(username, password, CancellationToken.None);
 
-            Assert.IsNotNull(response);
-            Assert.IsFalse(response);
+            Assert.IsNotNull(response);            
         }
 
         [Test, Description("Ensures that LoginAsync fails when called with invalid arguments")]
@@ -66,15 +63,15 @@ namespace Flow.IdentityServiceTests
             var serviceProvider = _serviceCollection.BuildServiceProvider();
             var identityService = serviceProvider.GetRequiredService<IIdentityService>();
 
-            var validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, null));
+            var validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, null, CancellationToken.None));
             Assert.IsNotNull(validationException);
             Assert.That(validationException.Message, Is.EqualTo($"username must not be null or empty"));
 
-            validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync("username", null));
+            validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync("username", null, CancellationToken.None));
             Assert.IsNotNull(validationException);
             Assert.That(validationException.Message, Is.EqualTo($"password must not be null or empty"));
 
-            validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, "password"));
+            validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, "password", CancellationToken.None));
             Assert.IsNotNull(validationException);
             Assert.That(validationException.Message, Is.EqualTo($"username must not be null or empty"));
 

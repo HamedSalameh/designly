@@ -1,57 +1,12 @@
 ﻿using Amazon.CognitoIdentityProvider;
 using Amazon.Extensions.CognitoAuthentication;
-using Amazon.Runtime.Internal.Util;
 using Flow.SharedKernel.Interfaces;
 using Flow.SharedKernel.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Flow.IdentityService
-{
-    //public class AWSCongnito : IIdentityService
-    //{
-    //    private readonly AmazonCognitoIdentityProviderClient _provider;
-    //    private readonly CognitoUserPool _userPool;
-    //    private string AppClientId = "37jb2mi88p635sl5k6si2metde";
-
-    //    public AWSCongnito()
-    //    {
-    //        _provider =
-    //            new AmazonCognitoIdentityProviderClient(new Amazon.Runtime.AnonymousAWSCredentials());
-    //        _userPool = new CognitoUserPool("us-east-1_t7SXW9J4E", AppClientId, _provider);
-    //    }
-
-    //    public async Task<User> LoginAsync(string username, string password)
-    //    {
-    //        var authenticatedUser = await AuthenticateUserAsync(username, password);
-
-    //        return authenticatedUser;
-    //    }
-
-    //    private async Task<User> AuthenticateUserAsync(string emailAddress, string password)
-    //    {
-    //        CognitoUser user = new CognitoUser(emailAddress, AppClientId, _userPool, _provider);
-    //        InitiateSrpAuthRequest authRequest = new InitiateSrpAuthRequest()
-    //        {
-    //            Password = password
-    //        };
-
-    //        AuthFlowResponse authResponse = await user.StartWithSrpAuthAsync(authRequest);
-    //        var result = authResponse.AuthenticationResult;
-
-    //        var authenticatedUser = new User(user.UserID, user.Username);
-    //        authenticatedUser.ExpiresIn = result.ExpiresIn;
-    //        authenticatedUser.AccessToken = result.AccessToken;
-    //        authenticatedUser.IdToken = result.IdToken;
-    //        authenticatedUser.RefreshToken = result.RefreshToken;
-    //        authenticatedUser.TokenType = result.TokenType;
-
-    //        // return new Tuple<CognitoUser, AuthenticationResultType>(user, result);
-    //        return authenticatedUser;
-    //    }
-    //}
-
+{ 
     public class AwsCognitoIdentityService : IIdentityService
     {
         private readonly ILogger<AwsCognitoIdentityService> _logger;
@@ -80,14 +35,16 @@ namespace Flow.IdentityService
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<bool> LoginAsync(string username, string password)
+        public async Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(username))
             {
+                _logger.LogError($"{nameof(username)} must not be null or empty");
                 throw new ArgumentException($"{nameof(username)} must not be null or empty");
             }
             if (string.IsNullOrEmpty(password))
             {
+                _logger.LogError($"{nameof(password)} must not be null or empty");
                 throw new ArgumentException($"{nameof(password)} must not be null or empty");
             }
 
@@ -100,12 +57,21 @@ namespace Flow.IdentityService
                     Password = password
                 };
                 var authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
-                return true;
+
+                var tokenResponse = new TokenResponse
+                {
+                    IdToken = authResponse.AuthenticationResult.IdToken,
+                    AccessToken = authResponse.AuthenticationResult.AccessToken,
+                    ExpiresIn = authResponse.AuthenticationResult.ExpiresIn,
+                    TokenType = authResponse.AuthenticationResult.TokenType
+                };
+
+                return tokenResponse;
             }
             catch (Exception exception)
             {
-                // Handle any exceptions here
-                return false;
+                _logger.LogError($"Could not perform signin against AWS Cognito due to error: {exception.Message}");
+                return null;
             }
         }
     }
