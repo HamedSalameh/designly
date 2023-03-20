@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Flow.SharedKernel.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Flow.IdentityService
 {
@@ -10,6 +10,9 @@ namespace Flow.IdentityService
         {
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>))
+
+            services.Configure<AWSCognitoConfiguration>(configuration.GetSection("Cognito"));
+            services.AddSingleton<IIdentityService, AwsCognitoIdentityService>();
 
             return services;
         }
