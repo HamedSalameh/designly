@@ -1,14 +1,10 @@
-﻿using Amazon.CognitoIdentityProvider.Model;
-using Clients.API.DTO;
+﻿using Clients.API.DTO;
 using Clients.Application.Commands;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
-using System.Security.Claims;
 
 namespace Clients.API.Controllers
 {
@@ -42,12 +38,6 @@ namespace Clients.API.Controllers
 
             var tokenResponse = await _mediator.Send(signinRequest, cancellationToken);
 
-            if (tokenResponse != null &&
-                !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
-            {
-                await userSigningAsunc(clientSigningRequest);
-            }
-
             return Ok(tokenResponse);
         }
 
@@ -63,9 +53,7 @@ namespace Clients.API.Controllers
 
             var signoutRequest = new SignoutRequest(accessToken);
 
-            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
-            
-            await userSignoutAsync();
+            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);            
 
             return Ok();
         }
@@ -101,43 +89,6 @@ namespace Clients.API.Controllers
             // TODO
 
             return Ok($"This is secured!");
-        }
-
-        /// <summary>
-        /// Reference at https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-7.0
-        /// </summary>
-        /// <param name="clientSigningRequest"></param>
-        /// <returns></returns>
-        private async Task userSigningAsunc(ClientSigningRequest clientSigningRequest)
-        {
-            var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, clientSigningRequest.Username)
-                };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = true,
-                AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-            };
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-        }
-
-        /// <summary>
-        /// Reference at https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-7.0
-        /// </summary>
-        /// <param name="clientSigningRequest"></param>
-        /// <returns></returns>
-        private async Task userSignoutAsync()
-        {
-            // Clear the existing external cookie
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
