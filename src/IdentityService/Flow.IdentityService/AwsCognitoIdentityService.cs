@@ -1,4 +1,5 @@
 ﻿using Amazon.CognitoIdentityProvider;
+using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
 using Flow.SharedKernel.Interfaces;
 using Flow.SharedKernel.Models;
@@ -56,6 +57,7 @@ namespace Flow.IdentityService
                 {
                     Password = password
                 };
+
                 var authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
 
                 var tokenResponse = new TokenResponse
@@ -73,6 +75,23 @@ namespace Flow.IdentityService
                 _logger.LogError($"Could not perform signin against AWS Cognito due to error: {exception.Message}");
                 return null;
             }
+        }
+
+        public async Task<bool> SignoutAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new ArgumentException(nameof(accessToken));
+            }
+
+            var signoutRequest = new GlobalSignOutRequest
+            {
+                AccessToken = accessToken
+            };
+
+            var signoutResponse = await _client.GlobalSignOutAsync(signoutRequest).ConfigureAwait(false);
+
+            return signoutResponse.HttpStatusCode is System.Net.HttpStatusCode.OK;
         }
     }
 }

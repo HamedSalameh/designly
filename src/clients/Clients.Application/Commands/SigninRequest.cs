@@ -16,7 +16,7 @@ namespace Clients.Application.Commands
         }
     }
 
-    public class SigninRequestHandler : IRequestHandler<SigninRequest, ITokenResponse>
+    public class SigninRequestHandler : IRequestHandler<SigninRequest, ITokenResponse?>
     {
         private readonly IIdentityService _identityService;
         private readonly ILogger<SigninRequestHandler> logger;
@@ -27,7 +27,7 @@ namespace Clients.Application.Commands
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<ITokenResponse> Handle(SigninRequest request, CancellationToken cancellationToken)
+        public async Task<ITokenResponse?> Handle(SigninRequest request, CancellationToken cancellationToken)
         {
             var username = request.Username;
             var password = request.Password;

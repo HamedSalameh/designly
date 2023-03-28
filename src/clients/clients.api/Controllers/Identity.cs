@@ -40,9 +40,31 @@ namespace Clients.API.Controllers
             return Ok(tokenResponse);
         }
 
+        [HttpPost]
+        [Route("/signout")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Signout(CancellationToken cancellation)
+        {
+            var accessToken = User?.Claims?.FirstOrDefault(c => c.Type == "access_token")?.Value;
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                // Error
+                throw new Exception("Could not extract access token from user principal");
+            }
+
+            var signoutRequest = new SignoutRequest(accessToken);
+
+            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
+
+            return Ok();
+        }
+
         [HttpGet]
         public IActionResult TestAuthentication()
         {
+            // TODO: We did not test the token against the IDP!!!
             return Ok($"This is secured!");
         }
     }
