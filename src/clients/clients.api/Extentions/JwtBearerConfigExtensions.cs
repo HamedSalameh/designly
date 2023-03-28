@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
 namespace Clients.API.Extentions
 {
     public static class JwtBearerConfigExtensions
@@ -17,6 +20,7 @@ namespace Clients.API.Extentions
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
+                options.SaveToken = true;
                 options.Authority = authority;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -27,6 +31,18 @@ namespace Clients.API.Extentions
                     ValidAudience = audience,
                     ValidateAudience = false
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var accessToken = context.SecurityToken as JwtSecurityToken;
+                        var identity = context.Principal.Identity as ClaimsIdentity;
+                        identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                        return Task.CompletedTask;
+                    }
+                };
+
             });
         }
     }
