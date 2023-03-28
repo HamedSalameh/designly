@@ -35,14 +35,14 @@ namespace Flow.IdentityService
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateLifetime = true,
-                    ValidateAudience = false,
-                    //AudienceValidator = (audiences, securityToken, validationParameters) =>
-                    //{
-                    //    //This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"
-                    //    var castedToken = securityToken as JwtSecurityToken;
-                    //    var clientId = castedToken?.Payload["client_id"]?.ToString();
-                    //    return audience.Equals(clientId);
-                    //}
+                    ValidateAudience = true,
+                    AudienceValidator = (audiences, securityToken, validationParameters) =>
+                    {
+                        //This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"
+                        var castedToken = securityToken as JwtSecurityToken;
+                        var clientId = castedToken?.Payload["client_id"]?.ToString();
+                        return audience.Equals(clientId);
+                    }
                 };
 
                 //options.Events = new JwtBearerEvents
