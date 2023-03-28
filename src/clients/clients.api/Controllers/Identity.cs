@@ -3,6 +3,7 @@ using Clients.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 
 namespace Clients.API.Controllers
@@ -36,7 +37,7 @@ namespace Clients.API.Controllers
             var signinRequest = new SigninRequest(clientSigningRequest.Username, clientSigningRequest.Password);
 
             var tokenResponse = await _mediator.Send(signinRequest, cancellationToken);
-            
+
             return Ok(tokenResponse);
         }
 
@@ -47,16 +48,12 @@ namespace Clients.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Signout(CancellationToken cancellation)
         {
-            var accessToken = User?.Claims?.FirstOrDefault(c => c.Type == "access_token")?.Value;
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                // Error
-                throw new Exception("Could not extract access token from user principal");
-            }
+            var accessToken = HttpContext.Request.Headers["Authorization"]
+                .ToString().Replace("Bearer ", string.Empty);
 
             var signoutRequest = new SignoutRequest(accessToken);
 
-            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
+            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);            
 
             return Ok();
         }
@@ -64,7 +61,8 @@ namespace Clients.API.Controllers
         [HttpGet]
         public IActionResult TestAuthentication()
         {
-            // TODO: We did not test the token against the IDP!!!
+            // TODO
+
             return Ok($"This is secured!");
         }
     }
