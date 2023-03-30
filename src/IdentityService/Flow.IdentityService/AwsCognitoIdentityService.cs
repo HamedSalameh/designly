@@ -52,7 +52,7 @@ namespace Flow.IdentityService
             var request = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.USER_PASSWORD_AUTH,
-                ClientId = _clientId,
+                ClientId = _clientId,               
                 AuthParameters = new Dictionary<string, string>
                 {
                     { "USERNAME", username },
@@ -157,7 +157,7 @@ namespace Flow.IdentityService
 
             return signoutResponse.HttpStatusCode is System.Net.HttpStatusCode.OK;
         }
-
+        
         private TokenResponse BuildTokenResponse(InitiateAuthResponse response)
         {
             return new TokenResponse
