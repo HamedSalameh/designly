@@ -44,7 +44,7 @@ namespace Flow.IdentityServiceTests
 
             var response = await identityService.LoginAsync(username, password, CancellationToken.None);
 
-            Assert.NotNull(response);
+            Assert.That(response, Is.Not.Null);
         }
 
         [Test]
@@ -66,15 +66,15 @@ namespace Flow.IdentityServiceTests
             var identityService = serviceProvider.GetRequiredService<IIdentityService>();
 
             var validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, null, CancellationToken.None));
-            Assert.IsNotNull(validationException);
+            Assert.That(validationException, Is.Not.Null);
             Assert.That(validationException.Message, Is.EqualTo($"username must not be null or empty"));
 
             validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync("username", null, CancellationToken.None));
-            Assert.IsNotNull(validationException);
+            Assert.That(validationException, Is.Not.Null);
             Assert.That(validationException.Message, Is.EqualTo($"password must not be null or empty"));
 
             validationException = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(null, "password", CancellationToken.None));
-            Assert.IsNotNull(validationException);
+            Assert.That(validationException, Is.Not.Null);
             Assert.That(validationException.Message, Is.EqualTo($"username must not be null or empty"));
 
             return Task.CompletedTask;
