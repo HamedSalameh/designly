@@ -13,9 +13,10 @@ namespace Flow.IdentityService
         {
             var region = "us-east-1";
             var userPoolId = configuration.GetValue<string>("Security:PoolId");
-            var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
             var audience = configuration.GetValue<string>("Security:ClientId");
 
+            var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
+            
             services.AddCognitoIdentity();
             services.AddAuthentication(options =>
             {
@@ -62,6 +63,10 @@ namespace Flow.IdentityService
         {
             services.Configure<AWSCognitoConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
             services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
+
+            // Register health check
+            services.AddHealthChecks()
+                .AddCheck<IdentityServiceHealthCheck>(nameof(IdentityServiceHealthCheck));
 
             return services;
         }

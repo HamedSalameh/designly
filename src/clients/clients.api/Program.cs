@@ -1,6 +1,11 @@
 using Clients.API.Extentions;
 using Clients.Application;
 using Flow.IdentityService;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net.Mime;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +30,15 @@ builder.Services.ConfigureSecuredSwagger();
 builder.Services.AddApplication(configuration);
 builder.Services.AddIdentityService(configuration);
 
+// Configure Health checks
+builder.Services.AddHealthChecks();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseRouting();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -44,8 +55,39 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+// the call to UserAuthorization should appeat between UseRouting and UseEndpoints
 app.UseAuthorization();
 
-app.MapControllers();
+
+app.UseEndpoints((Action<IEndpointRouteBuilder>)(endpoints =>
+{
+    ConfigureHealthChecksRouting(endpoints);
+
+    endpoints.MapControllers();
+}));
 
 app.Run();
+
+void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
+{
+    endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+    {
+        AllowCachingResponses = false
+    });
+
+    endpoints.MapHealthChecks("/health-details",
+        new HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                var result = JsonSerializer.Serialize(
+                    new
+                    {
+                        status = report.Status.ToString(),
+                        monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
+                    });
+                context.Response.ContentType = MediaTypeNames.Application.Json;
+                await context.Response.WriteAsync(result);
+            }
+        });
+}
