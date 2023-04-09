@@ -1,6 +1,8 @@
 using Clients.API.Extentions;
 using Clients.Application;
 using Flow.IdentityService;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -57,7 +59,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 // the call to UserAuthorization should appeat between UseRouting and UseEndpoints
 app.UseAuthorization();
-
 
 app.UseEndpoints((Action<IEndpointRouteBuilder>)(endpoints =>
 {
