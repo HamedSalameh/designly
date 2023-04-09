@@ -1,5 +1,7 @@
 ﻿using Flow.SharedKernel.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -16,12 +18,27 @@ namespace Flow.IdentityService
             var audience = configuration.GetValue<string>("Security:ClientId");
 
             var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
-            
+
             services.AddCognitoIdentity();
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // commenting our in favaor of cookie based
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // moving from JWT to Cookie based
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {  // Setting up cookie based authentication options
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Unspecified;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1);   // setting cookie life-span
+                options.SlidingExpiration = true;                   // issue a new cookie
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+
             }).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
@@ -44,18 +61,6 @@ namespace Flow.IdentityService
                         return audience.Equals(clientId);
                     }
                 };
-
-                //options.Events = new JwtBearerEvents
-                //{
-                //    OnTokenValidated = context =>
-                //    {
-                //        var accessToken = context.SecurityToken as JwtSecurityToken;
-                //        var identity = context.Principal.Identity as ClaimsIdentity;
-                //        identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                //        return Task.CompletedTask;
-                //    },
-                //};
-
             });
         }
 
