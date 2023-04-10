@@ -1,5 +1,8 @@
+import { ParseSourceFile } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { AuthenticationService } from 'src/app/authentication/authentication-service.service';
+import { SigninRequest } from 'src/app/authentication/models/signin-request.model';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +16,7 @@ export class LoginComponent {
     password: new FormControl('')
   });
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -25,7 +28,15 @@ export class LoginComponent {
   }
 
   signIn() {
-    console.log('Signin is not yet implemented');
+    if (this.loginForm.valid) {
+      const signinRequest = new SigninRequest();
+      signinRequest.username = this.loginForm.value.username || '';
+      signinRequest.password = this.loginForm.value.password || '';
+      
+      this.authenticationService.signIn(signinRequest) .subscribe(response => {
+        console.log(response);
+      });
+    }
   }
 
   signInWithGoogle() {

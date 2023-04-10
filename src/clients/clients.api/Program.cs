@@ -1,9 +1,6 @@
 using Clients.API.Extentions;
 using Clients.Application;
 using Flow.IdentityService;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net.Mime;
@@ -27,6 +24,7 @@ builder.Services.AddAuthorization();
 
 // Configure Swagger
 builder.Services.ConfigureSecuredSwagger();
+builder.Services.ConfigureCors();
 
 // Configure Services
 builder.Services.AddApplication(configuration);
@@ -54,6 +52,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Configure CORS middleware
+app.UseCors("DevelopmentCors");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

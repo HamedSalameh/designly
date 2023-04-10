@@ -25,7 +25,7 @@ namespace Clients.API.Controllers
         }
 
         [HttpPost]
-        [Route("/login")]
+        [Route("/signin")]
         [AllowAnonymous]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
