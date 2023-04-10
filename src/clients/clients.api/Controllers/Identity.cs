@@ -25,7 +25,7 @@ namespace Clients.API.Controllers
         }
 
         [HttpPost]
-        [Route("/login")]
+        [Route("/signin")]
         [AllowAnonymous]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -45,7 +45,7 @@ namespace Clients.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await userSigningAsunc(clientSigningRequest);
+                await userSigningAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -95,7 +95,7 @@ namespace Clients.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpGet("/Test")]
         public IActionResult TestAuthentication()
         {
             // TODO
@@ -108,7 +108,7 @@ namespace Clients.API.Controllers
         /// </summary>
         /// <param name="clientSigningRequest"></param>
         /// <returns></returns>
-        private async Task userSigningAsunc(ClientSigningRequest clientSigningRequest)
+        private async Task userSigningAsync(ClientSigningRequest clientSigningRequest)
         {
             var claims = new List<Claim>()
                 {
