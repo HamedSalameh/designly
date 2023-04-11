@@ -12,6 +12,8 @@ import { AuthenticationModule } from '../authentication/authentication.module';
     CommonModule,
     ReactiveFormsModule,
     AuthenticationModule
+  ], providers: [
+
   ]
 })
 export class LoginModule { }

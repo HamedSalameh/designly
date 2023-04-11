@@ -45,7 +45,7 @@ namespace Clients.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await userSigningAsunc(clientSigningRequest);
+                await userSigningAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -108,7 +108,7 @@ namespace Clients.API.Controllers
         /// </summary>
         /// <param name="clientSigningRequest"></param>
         /// <returns></returns>
-        private async Task userSigningAsunc(ClientSigningRequest clientSigningRequest)
+        private async Task userSigningAsync(ClientSigningRequest clientSigningRequest)
         {
             var claims = new List<Claim>()
                 {

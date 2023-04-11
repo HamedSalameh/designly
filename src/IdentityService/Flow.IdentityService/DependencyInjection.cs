@@ -22,8 +22,8 @@ namespace Flow.IdentityService
             services.AddCognitoIdentity();
             services.AddAuthentication(options =>
             {
-                //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // commenting our in favaor of cookie based
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // moving from JWT to Cookie based
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // commenting our in favaor of cookie based
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;  // moving from JWT to Cookie based
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddCookie(options =>
             {  // Setting up cookie based authentication options

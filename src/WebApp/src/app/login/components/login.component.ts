@@ -1,7 +1,6 @@
 import { ParseSourceFile } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from 'src/app/authentication/authentication-service.service';
 import { SigninRequest } from 'src/app/authentication/models/signin-request.model';
 
@@ -43,6 +42,7 @@ export class LoginComponent {
 
   signInWithGoogle() {
     console.log('Sign In with Google');
+    
     this.authenticationService.test()
     .subscribe(response => {
       console.log(response);
