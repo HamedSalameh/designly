@@ -1,6 +1,7 @@
 import { ParseSourceFile } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from 'src/app/authentication/authentication-service.service';
 import { SigninRequest } from 'src/app/authentication/models/signin-request.model';
 
@@ -16,7 +17,8 @@ export class LoginComponent {
     password: new FormControl('')
   });
 
-  constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder, 
+    private authenticationService: AuthenticationService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -41,6 +43,10 @@ export class LoginComponent {
 
   signInWithGoogle() {
     console.log('Sign In with Google');
+    this.authenticationService.test()
+    .subscribe(response => {
+      console.log(response);
+    });
   }
 
   requestPasswordReset() {

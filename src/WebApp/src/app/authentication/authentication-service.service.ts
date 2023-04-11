@@ -28,4 +28,8 @@ export class AuthenticationService {
 
     return this.httpClient.post<SigninResponse>(`${this.serviceAddress}/signin`, formData, httpOptions);
   }
+
+  public test(): Observable<any> {
+    return this.httpClient.get<any>(`${this.serviceAddress}/test`, { withCredentials: true});
+  }
 }
