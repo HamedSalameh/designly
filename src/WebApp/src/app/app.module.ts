@@ -7,6 +7,8 @@ import { HomeComponent } from './home/home.component';
 
 import { CoreModule } from './core/core.module';
 import { LoginModule } from './login/login.module';
+import { AuthInterceptorService } from './authentication/auth-interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { LoginModule } from './login/login.module';
 
     LoginModule
   ],
-  providers: [],
+  providers: [ 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
