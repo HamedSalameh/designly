@@ -95,7 +95,7 @@ namespace Clients.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpGet("/Test")]
         public IActionResult TestAuthentication()
         {
             // TODO

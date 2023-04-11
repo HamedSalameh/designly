@@ -12,6 +12,8 @@
                         corsPolicyBuilder
                             .AllowAnyOrigin()  //NOSONAR
                             .AllowAnyHeader()
+                            .AllowCredentials()
+                            .WithOrigins("http://localhost:4200")
                             .WithMethods("POST", "PUT", "DELETE", "GET", "HEAD", "OPTIONS", "PATCH",
                                 "CONNECT" /*, "TRACE"*/);// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
                     });
