@@ -1,8 +1,8 @@
-﻿using Flow.SharedKernel.Interfaces;
+﻿using IdentityService.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Clients.Application.Commands
+namespace IdentityService.Application.Commands
 {
     public class SigninRequest : IRequest<ITokenResponse>
     {

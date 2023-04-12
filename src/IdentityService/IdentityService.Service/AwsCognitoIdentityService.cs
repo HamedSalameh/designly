@@ -1,13 +1,12 @@
 ﻿using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
-using Flow.SharedKernel.Interfaces;
-using Flow.SharedKernel.Models;
+using IdentityService.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Flow.IdentityService
-{ 
+namespace IdentityService.Service
+{
     public class AwsCognitoIdentityService : IIdentityService
     {
         private readonly ILogger<AwsCognitoIdentityService> _logger;
@@ -15,7 +14,7 @@ namespace Flow.IdentityService
         private readonly string _poolId;
         private readonly AmazonCognitoIdentityProviderClient _client;
 
-        public AwsCognitoIdentityService( 
+        public AwsCognitoIdentityService(
             IOptions<AWSCognitoConfiguration> AWSCognitoConfiguration,
             ILogger<AwsCognitoIdentityService> logger)
         {
@@ -31,7 +30,7 @@ namespace Flow.IdentityService
                 throw new ArgumentException($"Invalid value for {nameof(_poolId)} : must not be null or empty");
             }
 
-            
+
             _client = new AmazonCognitoIdentityProviderClient();
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -52,14 +51,14 @@ namespace Flow.IdentityService
             var request = new InitiateAuthRequest
             {
                 AuthFlow = AuthFlowType.USER_PASSWORD_AUTH,
-                ClientId = _clientId,               
+                ClientId = _clientId,
                 AuthParameters = new Dictionary<string, string>
                 {
                     { "USERNAME", username },
                     { "PASSWORD", password }
                 }
             };
-            
+
             var response = await _client.InitiateAuthAsync(request, cancellationToken).ConfigureAwait(false);
 
             var tokenResponse = new TokenResponse
@@ -157,7 +156,7 @@ namespace Flow.IdentityService
 
             return signoutResponse.HttpStatusCode is System.Net.HttpStatusCode.OK;
         }
-        
+
         private TokenResponse BuildTokenResponse(InitiateAuthResponse response)
         {
             return new TokenResponse

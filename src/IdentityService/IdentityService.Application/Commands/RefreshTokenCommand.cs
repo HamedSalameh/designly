@@ -1,7 +1,7 @@
-﻿using Flow.SharedKernel.Interfaces;
+﻿using IdentityService.Interfaces;
 using MediatR;
 
-namespace Clients.Application.Commands
+namespace IdentityService.Application.Commands
 {
     public class RefreshTokenCommand : IRequest<ITokenResponse?>
     {

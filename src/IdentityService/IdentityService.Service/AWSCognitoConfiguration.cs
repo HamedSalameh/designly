@@ -1,11 +1,11 @@
 ﻿using System.Text;
 
-namespace Flow.IdentityService
+namespace IdentityService.Service
 {
     public class AWSCognitoConfiguration
     {
-        public string ClientId { get; set; }
-        public string PoolId { get; set; }
+        public string ClientId { get; set; } = "";
+        public string PoolId { get; set; } = "";
 
         public override string ToString()
         {
