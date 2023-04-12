@@ -1,20 +1,19 @@
-﻿using Amazon.CognitoIdentityProvider.Model;
-using Clients.API.DTO;
-using Clients.Application.Commands;
+﻿using IdentityService.API.DTO;
+using IdentityService.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using System.Security.Claims;
 
-namespace Clients.API.Controllers
+namespace IdentityService.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [Authorize]
+    [ApiVersion("1.0")]
     public class Identity : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -64,7 +63,7 @@ namespace Clients.API.Controllers
             var signoutRequest = new SignoutRequest(accessToken);
 
             _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
-            
+
             await userSignoutAsync();
 
             return Ok();

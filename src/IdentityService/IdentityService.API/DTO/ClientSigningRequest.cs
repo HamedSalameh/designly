@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Clients.API.DTO
+namespace IdentityService.API.DTO
 {
     public class ClientSigningRequest
     {
@@ -18,8 +18,8 @@ namespace Clients.API.DTO
 
         public ClientSigningRequest()
         {
-            Username = String.Empty;
-            Password = String.Empty;
+            Username = string.Empty;
+            Password = string.Empty;
         }
     }
 }
