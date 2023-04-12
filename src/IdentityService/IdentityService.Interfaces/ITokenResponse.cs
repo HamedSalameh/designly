@@ -1,4 +1,4 @@
-﻿namespace Flow.SharedKernel.Interfaces
+﻿namespace IdentityService.Interfaces
 {
     public interface ITokenResponse
     {

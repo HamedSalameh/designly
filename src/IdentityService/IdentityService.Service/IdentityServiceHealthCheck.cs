@@ -1,7 +1,7 @@
-﻿using Flow.SharedKernel.Interfaces;
+﻿using IdentityService.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Flow.IdentityService
+namespace IdentityService.Service
 {
     internal class IdentityServiceHealthCheck : IHealthCheck
     {
@@ -16,7 +16,7 @@ namespace Flow.IdentityService
         {
             if (_identityService is null)
             {
-                return Task.FromResult( new HealthCheckResult(context.Registration.FailureStatus, "IdentityService wsa not injected") );
+                return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, "IdentityService wsa not injected"));
             }
 
             return Task.FromResult(HealthCheckResult.Healthy());

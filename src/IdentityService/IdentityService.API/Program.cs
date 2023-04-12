@@ -1,6 +1,8 @@
-using Clients.API.Extentions;
 using Clients.Application;
+using IdentityService.API.Extentions;
+using IdentityService.Service;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net.Mime;
 using System.Text.Json;
@@ -14,11 +16,20 @@ builder.Configuration
 var configuration = builder.Configuration;
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddApiVersioning(v =>
+{
+    v.AssumeDefaultVersionWhenUnspecified = true;
+    v.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    v.ReportApiVersions = true;
+    v.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("api-version"),
+        new MediaTypeApiVersionReader("ver"));
+});
 builder.Services.AddEndpointsApiExplorer();
 
 // Enabled authentication
 builder.Services.AddJwtBearerConfig(configuration);
-
 builder.Services.AddAuthorization();
 
 // Configure Swagger
@@ -27,6 +38,7 @@ builder.Services.ConfigureCors();
 
 // Configure Services
 builder.Services.AddApplication(configuration);
+builder.Services.AddIdentityService(configuration);
 
 // Configure Health checks
 builder.Services.AddHealthChecks();
@@ -37,19 +49,12 @@ var app = builder.Build();
 
 app.UseRouting();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(ui =>
-    {
-        ui.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        // Enable the "Authorize" button in the Swagger UI
-        ui.OAuthUsePkce();
-    });
+    app.UseSwaggerUI();
 }
-
 // Configure CORS middleware
 app.UseCors("DevelopmentCors");
 app.UseHttpsRedirection();

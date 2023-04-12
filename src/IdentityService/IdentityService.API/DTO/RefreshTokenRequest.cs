@@ -1,4 +1,4 @@
-﻿namespace Clients.API.DTO
+﻿namespace IdentityService.API.DTO
 {
     public class RefreshTokenRequest
     {

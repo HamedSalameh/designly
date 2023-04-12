@@ -1,5 +1,4 @@
-﻿using Flow.SharedKernel.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using IdentityService.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -7,15 +6,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Flow.IdentityService
+namespace IdentityService.Service
 {
     public static class DependencyInjection
     {
         public static void AddJwtBearerConfig(this IServiceCollection services, IConfiguration configuration)
         {
-            var region = "us-east-1";
-            var userPoolId = configuration.GetValue<string>("Security:PoolId");
-            var audience = configuration.GetValue<string>("Security:ClientId");
+            var region = configuration.GetValue<string>("AWSCognitoConfiguration:Region");
+            var userPoolId = configuration.GetValue<string>("AWSCognitoConfiguration:PoolId");
+            var audience = configuration.GetValue<string>("AWSCognitoConfiguration:ClientId");
 
             var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
 

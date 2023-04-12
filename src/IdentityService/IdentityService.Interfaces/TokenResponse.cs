@@ -1,12 +1,10 @@
-﻿using Flow.SharedKernel.Interfaces;
-
-namespace Flow.SharedKernel.Models
+﻿namespace IdentityService.Interfaces
 {
     public class TokenResponse : ITokenResponse
     {
         public string IdToken { get; init; } = "Not Set";
         public string RefreshToken { get; init; } = "Not Set";
-        public string AccessToken { get; init; }= "Not Set";
+        public string AccessToken { get; init; } = "Not Set";
         public int ExpiresIn { get; init; } = 0;
         public string TokenType { get; init; } = "Not Set";
     }
