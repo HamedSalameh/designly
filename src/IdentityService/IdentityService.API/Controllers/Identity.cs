@@ -94,14 +94,6 @@ namespace IdentityService.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("/Test")]
-        public IActionResult TestAuthentication()
-        {
-            // TODO
-
-            return Ok($"This is secured!");
-        }
-
         /// <summary>
         /// Reference at https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-7.0
         /// </summary>
