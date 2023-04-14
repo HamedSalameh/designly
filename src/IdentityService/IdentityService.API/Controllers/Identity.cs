@@ -14,17 +14,17 @@ namespace IdentityService.API.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     [Authorize]
     [ApiVersion("1.0")]
-    public class Identity : ControllerBase
+    public class IdentityController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public Identity(IMediator mediator)
+        public IdentityController(IMediator mediator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpPost]
-        [Route("/signin")]
+        [Route("signin")]
         [AllowAnonymous]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -51,7 +51,7 @@ namespace IdentityService.API.Controllers
         }
 
         [HttpPost]
-        [Route("/signout")]
+        [Route("signout")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -70,7 +70,7 @@ namespace IdentityService.API.Controllers
         }
 
         [HttpPost]
-        [Route("/Refresh")]
+        [Route("refresh")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
