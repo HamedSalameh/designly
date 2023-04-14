@@ -10,16 +10,19 @@ namespace Clients.Domain.Entities
 
         public Address Address { get; set; }
 
-        public Client(string firstName, string familyName, Address address)
+        public ContactDetails ContactDetails { get; set; }
+
+        public Client(string firstName, string familyName, Address address, ContactDetails contactDetails)
         {
             if (string.IsNullOrEmpty(firstName))
             {
                 throw new ArgumentException($"{nameof(firstName)} : must not be null or empty");
             }
-
+            Id = Guid.NewGuid();
             FirstName = firstName;
             FamilyName = familyName;
-            Address = address ?? throw new ArgumentNullException(nameof(Address));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
+            ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
         }
     }
 }
