@@ -3,10 +3,10 @@
     public class ContactDetails
     {
         public string PrimaryPhoneNumber { get; set; }
-        public string? SecondaryPhonenumber { get; set; }
-        public string? EmailAddress { get; set; }
+        public string SecondaryPhoneNumber { get; } = "";
+        public string EmailAddress { get; set; } = "";
 
-        public ContactDetails(string primaryPhoneNumber, string secondaryPhonenumber = "", string emailAddress = "")
+        public ContactDetails(string primaryPhoneNumber, string secondaryPhoneNumber = "", string emailAddress = "")
         {
             if (string.IsNullOrEmpty(primaryPhoneNumber))
                 throw new ArgumentNullException(primaryPhoneNumber);
@@ -20,8 +20,7 @@
             }
 
             PrimaryPhoneNumber = primaryPhoneNumber ?? throw new ArgumentNullException(nameof(PrimaryPhoneNumber));
-            
-            SecondaryPhonenumber = secondaryPhonenumber;
+            SecondaryPhoneNumber = secondaryPhoneNumber;
             EmailAddress = emailAddress;
         }
     }

@@ -7,7 +7,7 @@ namespace Clients.Domain.Entities
         public DateTime Modified { get; set; }
 
         int? _requestedHashCode;
-        public virtual long Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         protected Entity()
         {
@@ -17,7 +17,7 @@ namespace Clients.Domain.Entities
 
         public bool IsTransient()
         {
-            return this.Id == default(long);
+            return this.Id == default;
         }
 
         public override bool Equals(object? obj)

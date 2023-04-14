@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Commands\" />
     <Folder Include="Validators\" />
     <Folder Include="Queries\" />
   </ItemGroup>
@@ -17,10 +16,13 @@
     <PackageReference Include="MediatR" Version="11.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\IdentityService\IdentityService.Interfaces\IdentityService.Interfaces.csproj" />
+    <ProjectReference Include="..\Clients.Domain\Clients.Domain.csproj" />
+    <ProjectReference Include="..\Clients.Infrastructure\Clients.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
