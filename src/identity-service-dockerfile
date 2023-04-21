@@ -8,13 +8,13 @@ WORKDIR /src
 
 # Get the dependencies
 # Should be nuget here...
-COPY ["./src/SharedKernel/SharedKernel.csproj", "SharedKernel/"]
+COPY ["./SharedKernel/SharedKernel.csproj", "SharedKernel/"]
 
 # Build the project layers
-COPY ["./src/IdentityService/IdentityService.API/IdentityService.API.csproj", "IdentityService.API/"]
-COPY ["./src/IdentityService/IdentityService.Service/IdentityService.Service.csproj", "IdentityService.Service/"]
-COPY ["./src/IdentityService/IdentityService.Application/IdentityService.Application.csproj", "IdentityService.Application/"]
-COPY ["./src/IdentityService/IdentityService.Interfaces/IdentityService.Interfaces.csproj", "IdentityService.Interfaces/"]
+COPY ["./IdentityService/IdentityService.API/IdentityService.API.csproj", "IdentityService.API/"]
+COPY ["./IdentityService/IdentityService.Service/IdentityService.Service.csproj", "IdentityService.Service/"]
+COPY ["./IdentityService/IdentityService.Application/IdentityService.Application.csproj", "IdentityService.Application/"]
+COPY ["./IdentityService/IdentityService.Interfaces/IdentityService.Interfaces.csproj", "IdentityService.Interfaces/"]
 
 # Restore nuget
 RUN dotnet restore "SharedKernel/SharedKernel.csproj"
@@ -28,12 +28,14 @@ RUN dotnet restore "IdentityService.Interfaces/IdentityService.Interfaces.csproj
 RUN dotnet build "SharedKernel/SharedKernel.csproj" -c Release -o /app/build
 
 COPY . .
-
-#FROM build-env AS publish
-RUN dotnet publish "IdentityService.API/IdentityService.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+FROM build-env AS publish
+WORKDIR IdentityService.API/
+COPY . .
+RUN dotnet publish "IdentityService.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/build .
-ENTRYPOINT ["dotnet", "publish/IdentityService.API.dll"]
+ENTRYPOINT ["bash"]
+#ENTRYPOINT ["dotnet", "publish/IdentityService.API.dll"]
