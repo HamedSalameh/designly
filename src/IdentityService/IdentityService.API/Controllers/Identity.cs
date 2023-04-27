@@ -44,7 +44,7 @@ namespace IdentityService.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await userSigningAsync(clientSigningRequest);
+                await UserSigningAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -64,7 +64,7 @@ namespace IdentityService.API.Controllers
 
             _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
 
-            await userSignoutAsync();
+            await UserSignoutAsync();
 
             return Ok();
         }
@@ -83,11 +83,13 @@ namespace IdentityService.API.Controllers
             {
                 return BadRequest();
             }
-
-            var refreshTokenCommand = new RefreshTokenCommand()
+            var refreshToken = refreshTokenRequest.RefreshToken;
+            if (string.IsNullOrEmpty(refreshToken))
             {
-                RefreshToken = refreshTokenRequest.RefreshToken
-            };
+                return BadRequest(nameof(refreshToken));
+            }
+
+            var refreshTokenCommand = new RefreshTokenCommand(refreshToken);
 
             var response = await _mediator.Send(refreshTokenCommand, cancellation).ConfigureAwait(false);
 
@@ -99,7 +101,7 @@ namespace IdentityService.API.Controllers
         /// </summary>
         /// <param name="clientSigningRequest"></param>
         /// <returns></returns>
-        private async Task userSigningAsync(ClientSigningRequest clientSigningRequest)
+        private async Task UserSigningAsync(ClientSigningRequest clientSigningRequest)
         {
             var claims = new List<Claim>()
                 {
@@ -124,7 +126,7 @@ namespace IdentityService.API.Controllers
         /// </summary>
         /// <param name="clientSigningRequest"></param>
         /// <returns></returns>
-        private async Task userSignoutAsync()
+        private async Task UserSignoutAsync()
         {
             // Clear the existing external cookie
             await HttpContext.SignOutAsync(

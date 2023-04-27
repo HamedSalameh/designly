@@ -1,6 +1,8 @@
-﻿using Amazon.CognitoIdentityProvider;
+﻿using Amazon;
+using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
+using Amazon.Runtime;
 using IdentityService.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,14 +14,16 @@ namespace IdentityService.Service
         private readonly ILogger<AwsCognitoIdentityService> _logger;
         private readonly string _clientId;
         private readonly string _poolId;
+        private readonly string _region;
         private readonly AmazonCognitoIdentityProviderClient _client;
 
         public AwsCognitoIdentityService(
-            IOptions<AWSCognitoConfiguration> AWSCognitoConfiguration,
+            IOptions<IdentityProviderConfiguration> AWSCognitoConfiguration,
             ILogger<AwsCognitoIdentityService> logger)
         {
             _clientId = AWSCognitoConfiguration.Value.ClientId;
             _poolId = AWSCognitoConfiguration.Value.PoolId;
+            _region = AWSCognitoConfiguration.Value.Region;
 
             if (string.IsNullOrEmpty(_clientId))
             {
@@ -29,10 +33,17 @@ namespace IdentityService.Service
             {
                 throw new ArgumentException($"Invalid value for {nameof(_poolId)} : must not be null or empty");
             }
+            if (string.IsNullOrEmpty( _region))
+            {
+                throw new ArgumentException("Region configuration is not set or empty");
+            }
 
+            var awsRegion = RegionEndpoint.GetBySystemName( _region );
 
-            _client = new AmazonCognitoIdentityProviderClient();
+            _client = new AmazonCognitoIdentityProviderClient(awsRegion);
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _logger.LogDebug($"AWS Region is set to {awsRegion.DisplayName}");
         }
 
         public async Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken)

@@ -2,8 +2,9 @@
 
 namespace IdentityService.Service
 {
-    public class AWSCognitoConfiguration
+    public class IdentityProviderConfiguration
     {
+        public string Region { get; set; } = "";
         public string ClientId { get; set; } = "";
         public string PoolId { get; set; } = "";
 

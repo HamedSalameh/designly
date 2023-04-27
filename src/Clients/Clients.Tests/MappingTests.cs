@@ -1,6 +1,7 @@
 using AutoMapper;
 using Clients.API.DTO;
 using Clients.API.Mappers;
+using Clients.Domain.Entities;
 using Clients.Domain.ValueObjects;
 using NuGet.Frameworks;
 
@@ -27,6 +28,18 @@ namespace Clients.Tests
             });
 
             _mapper = mapperConfig.CreateMapper();
+        }
+
+        [Test]
+        public void MapClientDto_To_Client()
+        {
+            var clientDto = new ClientDto("firstName", "lastName",
+                new AddressDto(city, street, buildingNumber, addressLines),
+                new ContactDetailsDto(primaryPhoneNumer, secondaryNumberNumber, emailAddress));
+
+            var client = _mapper.Map<Client>(clientDto);
+
+            Assert.That(client, Is.Not.Null);
         }
 
         [Test]

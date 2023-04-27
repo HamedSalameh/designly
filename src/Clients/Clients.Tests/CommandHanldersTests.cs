@@ -14,15 +14,15 @@ namespace Clients.Tests
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private CreateClientCommandHandler _handler;
 
-        private string firstName = "John";
-        private string familyName = "Doe";
-        string primaryPhoneNumber = "123-9222333";
-        string secondaryPhoneNumber = "12-9987878";
-        string emailAddress = "someaddress@mailserver.com";
-        string street = "SomeStreet";
-        string city = "cityName";
-        string buildingNumber = "bn-05";
-        List<string> addressLines = new List<string>() { "address line1", "address line2" };
+        readonly string firstName = "John";
+        readonly string familyName = "Doe";
+        readonly string primaryPhoneNumber = "123-9222333";
+        readonly string secondaryPhoneNumber = "12-9987878";
+        readonly string emailAddress = "someaddress@mailserver.com";
+        readonly string street = "SomeStreet";
+        readonly string city = "cityName";
+        readonly string buildingNumber = "bn-05";
+        readonly List<string> addressLines = new() { "address line1", "address line2" };
 
         private ContactDetails contactDetails;
         private Address address;

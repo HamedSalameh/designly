@@ -12,7 +12,7 @@ namespace Clients.API.Controllers
 {
 
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     public class ClientsController : ControllerBase
