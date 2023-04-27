@@ -1,4 +1,6 @@
-﻿namespace Clients.Domain.ValueObjects
+﻿using System.Text;
+
+namespace Clients.Domain.ValueObjects
 {
     public class Address
     {
@@ -13,6 +15,34 @@
             Street = street ?? "";
             BuildingNumber = buildingNumber ?? "";
             AddressLines = addressLines ?? new List<string>(); ;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(Street))
+            {
+                sb.Append($"{Street} St.");
+            }
+
+            if (!string.IsNullOrEmpty(BuildingNumber))
+            {
+                sb.Append((sb.Length > 0 ? ", " : "") + BuildingNumber);
+            }
+
+            if (AddressLines != null && AddressLines.Count > 0)
+            {
+                sb.Append((sb.Length > 0 ? ", " : "") + string.Join(", ", AddressLines));
+            }
+
+            if (!string.IsNullOrEmpty(City))
+            {
+                sb.Append((sb.Length > 0 ? ", " : "") + City);
+            }
+
+            return sb.ToString();
+
         }
     }
 }

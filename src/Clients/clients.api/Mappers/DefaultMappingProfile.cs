@@ -10,6 +10,7 @@ namespace Clients.API.Mappers
         public DefaultMappingProfile()
         {
             CreateMap<Client, ClientDto>();
+            CreateMap<ClientDto, Client>();
             
             CreateMap<AddressDto, Address>()
                 .ConstructUsing(src =>
