@@ -33,7 +33,7 @@ namespace IdentityService.Application.Commands
             var password = request.Password;
 
             logger.LogDebug($"Handling request {nameof(SigninRequestHandler)} for {nameof(username)} {username}");
-            var tokenResponse = await _identityService.LoginAsync(username, password, cancellationToken);
+            var tokenResponse = await _identityService.LoginJwtAsync(username, password, cancellationToken);
 
             return tokenResponse;
         }

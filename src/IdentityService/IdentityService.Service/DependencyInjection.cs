@@ -10,7 +10,8 @@ namespace IdentityService.Service
 {
     public static class DependencyInjection
     {
-        public static void AddJwtBearerConfig(this IServiceCollection services, IConfiguration configuration)
+        public static void AddJwtBearerConfig(this IServiceCollection services, 
+            IConfiguration configuration)
         {
             var region = configuration.GetValue<string>("AWSCognitoConfiguration:Region");
             var userPoolId = configuration.GetValue<string>("AWSCognitoConfiguration:PoolId");
@@ -65,7 +66,7 @@ namespace IdentityService.Service
 
         public static IServiceCollection AddIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<AWSCognitoConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
+            services.Configure<IdentityProviderConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
             services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
 
             // Register health check
