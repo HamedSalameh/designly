@@ -1,4 +1,6 @@
-﻿namespace Clients.Domain.ValueObjects
+﻿using System.Text;
+
+namespace Clients.Domain.ValueObjects
 {
     public class ContactDetails
     {
@@ -23,5 +25,28 @@
             SecondaryPhoneNumber = secondaryPhoneNumber;
             EmailAddress = emailAddress;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(PrimaryPhoneNumber))
+            {
+                sb.Append($"Primary phone number: {PrimaryPhoneNumber}");
+            }
+
+            if (!string.IsNullOrEmpty(SecondaryPhoneNumber))
+            {
+                sb.Append($", Secondary phone number: {SecondaryPhoneNumber}");
+            }
+
+            if (!string.IsNullOrEmpty(EmailAddress))
+            {
+                sb.Append($", Email address: {EmailAddress}");
+            }
+
+            return sb.ToString();
+        }
+
     }
 }

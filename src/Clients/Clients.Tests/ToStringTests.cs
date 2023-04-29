@@ -58,5 +58,30 @@ namespace Clients.Tests
             Assert.That(addressToString, Is.Not.Empty);
         }
 
+        [Test]
+        public void ToString_ReturnsAllFields()
+        {
+            // Arrange
+            var contactDetails = new ContactDetails("1234567890", "0987654321", "test@example.com");
+
+            // Act
+            var result = contactDetails.ToString();
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Primary phone number: 1234567890, Secondary phone number: 0987654321, Email address: test@example.com"));
+        }
+
+        [Test]
+        public void ToString_ReturnsOnlyPrimaryPhone()
+        {
+            // Arrange
+            var contactDetails = new ContactDetails("1234567890");
+
+            // Act
+            var result = contactDetails.ToString();
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Primary phone number: 1234567890"));
+        }
     }
 }
