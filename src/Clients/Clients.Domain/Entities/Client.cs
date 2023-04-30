@@ -1,5 +1,6 @@
 ﻿
 using Clients.Domain.ValueObjects;
+using System.Text;
 
 namespace Clients.Domain.Entities
 {
@@ -33,6 +34,18 @@ namespace Clients.Domain.Entities
 
             ContactDetails = new ContactDetails(Consts.Strings.ValueNotSet);
             Address = new Address(Consts.Strings.ValueNotSet);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(FirstName);
+            if (!string.IsNullOrEmpty(FamilyName)) sb.Append(" ").Append(FamilyName);
+
+            sb.Append(", ").Append(Address.ToString());
+            sb.Append(", ").Append(ContactDetails.ToString());
+
+            return sb.ToString();
         }
     }
 }
