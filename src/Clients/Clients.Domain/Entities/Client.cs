@@ -24,5 +24,15 @@ namespace Clients.Domain.Entities
             Address = address ?? throw new ArgumentNullException(nameof(address));
             ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
         }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Internal use by EF Core")]
+        private Client(string firstName, string familyName)
+        {
+            FirstName = firstName;
+            FamilyName = familyName;
+
+            ContactDetails = new ContactDetails(Consts.Strings.ValueNotSet);
+            Address = new Address(Consts.Strings.ValueNotSet);
+        }
     }
 }

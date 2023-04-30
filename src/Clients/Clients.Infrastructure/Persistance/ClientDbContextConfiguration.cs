@@ -11,14 +11,17 @@ namespace Clients.Infrastructure.Persistance
             builder.ToTable("clients");
 
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasColumnName("id")
+                .IsRequired();
+            
             builder.Property(x => x.FirstName)
                 .HasColumnName("first_name")
                 .IsRequired(true);
-            builder.ToTable("clients");
 
             builder.Property(p => p.FamilyName).HasColumnName("family_name");
 
-            builder.Property(p => p.Created).HasColumnName("created");
+            builder.Property(p => p.Created).HasColumnName("created_at");
+            builder.Property(p => p.Modified).HasColumnName("updated_at");
 
             // Address value object mapping
             builder.OwnsOne(o => o.Address)
@@ -30,7 +33,10 @@ namespace Clients.Infrastructure.Persistance
             builder.OwnsOne(o => o.Address)
                 .Property(p => p.BuildingNumber).HasColumnName("building_number");
 
-            throw new NotImplementedException("Mapping JSON in EFCore against Postgres");
+            builder.OwnsOne(o => o.Address)
+                .Property(p => p.AddressLines)
+                .HasColumnName("address_lines")
+                .HasColumnType("jsonb");
 
             builder.OwnsOne(o => o.ContactDetails)
                .Property(p => p.PrimaryPhoneNumber).HasColumnName("primary_phone_number");
