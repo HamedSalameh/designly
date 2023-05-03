@@ -17,6 +17,10 @@ namespace IdentityService.Service
             var userPoolId = configuration.GetValue<string>("AWSCognitoConfiguration:PoolId");
             var audience = configuration.GetValue<string>("AWSCognitoConfiguration:ClientId");
 
+            ArgumentNullException.ThrowIfNull(region, nameof(region));
+            ArgumentNullException.ThrowIfNull(audience, nameof(audience));
+            ArgumentNullException.ThrowIfNull(userPoolId, nameof(userPoolId));
+
             var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
 
             services.AddCognitoIdentity();

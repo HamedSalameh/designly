@@ -6,6 +6,12 @@ namespace IdentityService.Application.Commands
     public class RefreshTokenCommand : IRequest<ITokenResponse?>
     {
         public string RefreshToken { get; set; }
+
+        public RefreshTokenCommand(string refreshToken)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(refreshToken));
+            RefreshToken = refreshToken;
+        }
     }
 
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, ITokenResponse?>
