@@ -4,6 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <IsPackable>true</IsPackable>
+	  <PackageId>Designly.Shared</PackageId>
+    <Product>Designly</Product>
   </PropertyGroup>
 
   <ItemGroup>
