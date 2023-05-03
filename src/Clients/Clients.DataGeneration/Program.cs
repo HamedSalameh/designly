@@ -26,7 +26,7 @@ var _modelFaker = new Faker<Client>()
     //.RuleFor(c => c.ContactDetails, f => new Domain.ValueObjects.ContactDetails(f.Phone.PhoneNumber("(###) ###-####"), f.Phone.PhoneNumber("(###) ###-####"), f.Internet.Email()))
     .FinishWith((f, u) =>
     {
-        Console.WriteLine($"Generated a user: {u.ToString()}");
+        Console.WriteLine($"Generated a user: {u}");
     });
 
 
@@ -55,7 +55,7 @@ do {
         Console.WriteLine("Invalid input, please type Y or N");
     }
 }
-while (!userInput.Trim().ToLower().Equals("y", StringComparison.OrdinalIgnoreCase) && !userInput.Trim().ToLower().Equals("n", StringComparison.OrdinalIgnoreCase));
+while (userInput is null || !userInput.Trim().ToLower().Equals("y", StringComparison.OrdinalIgnoreCase) && !userInput.Trim().ToLower().Equals("n", StringComparison.OrdinalIgnoreCase));
 
 Console.WriteLine(Environment.NewLine);
 Console.WriteLine("Do you want to save the generated users? [Y/N]");
@@ -77,6 +77,6 @@ do
     }
 
 }
-while (!userInput.Trim().ToLower().Equals("y", StringComparison.OrdinalIgnoreCase) && !userInput.Trim().ToLower().Equals("n", StringComparison.OrdinalIgnoreCase));
+while (userInput is null || !userInput.Trim().ToLower().Equals("y", StringComparison.OrdinalIgnoreCase) && !userInput.Trim().ToLower().Equals("n", StringComparison.OrdinalIgnoreCase));
 
 

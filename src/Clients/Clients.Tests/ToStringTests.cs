@@ -1,9 +1,6 @@
 using AutoMapper;
-using Clients.API.DTO;
 using Clients.API.Mappers;
-using Clients.Domain.Entities;
 using Clients.Domain.ValueObjects;
-using NuGet.Frameworks;
 
 namespace Clients.Tests
 {
@@ -11,14 +8,10 @@ namespace Clients.Tests
     public class ToStringOverridesTests
     {
         private static IMapper _mapper;
-
-        string street = "SomeStreet";
-        string city = "cityName";
-        string buildingNumber = "bn-05";
-        List<string> addressLines = new List<string>() { "address line1", "address line2" };
-        string primaryPhoneNumer = "123-9222333";
-        string secondaryNumberNumber = "12-9987878";
-        string emailAddress = "someaddress@mailserver.com";
+        readonly string street = "SomeStreet";
+        readonly string city = "cityName";
+        readonly string buildingNumber = "bn-05";
+        readonly List<string> addressLines = new() { "address line1", "address line2" };
 
         [SetUp]
         public void Setup()
