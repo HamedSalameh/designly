@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clients.API.DTO;
 using Clients.Application.Commands;
+using Clients.Application.Queries;
 using Clients.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,11 +48,32 @@ namespace Clients.API.Controllers
 
             var createClientCommand = new CreateClientCommand(draftClient);
 
-            var clientId = await mediator.Send(createClientCommand).ConfigureAwait(false);
+            var clientId = await mediator.Send(createClientCommand, cancellationToken).ConfigureAwait(false);
 
             var clientResourceUrl = BuildResourceLocation(clientId);
 
             return Ok(clientResourceUrl);
+        }
+
+        [HttpGet("{id}")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == default || id == Guid.Empty)
+            {
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
+                return BadRequest(id);
+            }
+
+            var client = await mediator.Send(new GetClientQuery(id), cancellationToken).ConfigureAwait(false);
+
+            var clientDto = mapper.Map<ClientDto>(client);
+
+            return Ok(clientDto);
         }
 
         protected string BuildResourceLocation<T>(T Id)
