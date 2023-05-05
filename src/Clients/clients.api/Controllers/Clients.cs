@@ -61,11 +61,12 @@ namespace Clients.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError($"Invalid value for {nameof(id)} : {id}");
+                logger.LogError("Invalid value for {nameof(id)} : {id}", id);
                 return BadRequest(id);
             }
 
@@ -74,6 +75,27 @@ namespace Clients.API.Controllers
             var clientDto = mapper.Map<ClientDto>(client);
 
             return Ok(clientDto);
+        }
+
+        [HttpDelete("{id}")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == default || id == Guid.Empty)
+            {
+                logger.LogError("Invalid value for {id} : {id}", nameof(id));
+                return BadRequest(id);
+            }
+
+            var deleteClientCommand = new DeleteClientCommand(id);
+
+            await mediator.Send(deleteClientCommand, cancellationToken).ConfigureAwait(false);
+
+            return Ok();
         }
 
         protected string BuildResourceLocation<T>(T Id)
