@@ -24,7 +24,7 @@ namespace Clients.Application.Queries
             var client = await _unitOfWork.ClientsRepository.GetClientAsyncNoTracking(request.Id, cancellationToken).ConfigureAwait(false);
             if (client == null)
             {
-                _logger.LogInformation($"Could not get entity with Id {request.Id}.");
+                _logger.LogInformation("Could not get entity with Id {request.Id}.", request.Id);
                 throw new EntityNotFoundException(nameof(Client));
             }
 

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Commands
 {
-    public record CreateClientCommand(Client draftClient) : IRequest<Guid>;
+    public record CreateClientCommand(Client DraftClient) : IRequest<Guid>;
 
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, Guid>
     {
@@ -20,17 +20,18 @@ namespace Clients.Application.Commands
 
         public async Task<Guid> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var client = request.draftClient;
+            var client = request.DraftClient;
 
             try
             {
                 var clientId = await unitOfWork.ClientsRepository.CreateClientAsync(client, cancellationToken).ConfigureAwait(false);
+                logger.LogDebug("Created client: {clientId}", clientId);
 
                 return clientId;
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, $"Could not create new client due to error: {exception.Message}");
+                logger.LogError(exception, "Could not create new client due to error: {exception.Message}", exception.Message);
                 throw;
             }
         }
