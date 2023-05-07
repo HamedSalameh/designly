@@ -17,6 +17,11 @@ namespace Clients.Domain.ValueObjects
             AddressLines = addressLines ?? new List<string>(); ;
         }
 
+        private Address()
+        {
+            City = Consts.Strings.ValueNotSet;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

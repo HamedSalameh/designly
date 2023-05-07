@@ -26,6 +26,11 @@ namespace Clients.Domain.ValueObjects
             EmailAddress = emailAddress;
         }
 
+        private ContactDetails() 
+        {
+            PrimaryPhoneNumber = Consts.Strings.ValueNotSet;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
