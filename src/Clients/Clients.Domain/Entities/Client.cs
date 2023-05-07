@@ -26,7 +26,6 @@ namespace Clients.Domain.Entities
             ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Internal use by EF Core")]
         private Client(string firstName, string familyName)
         {
             FirstName = firstName;
@@ -34,6 +33,11 @@ namespace Clients.Domain.Entities
 
             ContactDetails = new ContactDetails(Consts.Strings.ValueNotSet);
             Address = new Address(Consts.Strings.ValueNotSet);
+        }
+
+        // Used by Dapper for automatic object initialization
+        private Client() : this(Consts.Strings.ValueNotSet, Consts.Strings.ValueNotSet)
+        {
         }
 
         public override string ToString()

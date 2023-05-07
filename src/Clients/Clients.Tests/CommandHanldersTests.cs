@@ -59,11 +59,13 @@ namespace Clients.Tests
         public void Handle_NullLogger_ThrowsArgumentNullException()
         {
             // Arrange
-            ILogger<CreateClientCommandHandler> logger = null;
+            ILogger<CreateClientCommandHandler>? logger = null;
             var unitOfWork = new Mock<IUnitOfWork>().Object;
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
+#pragma warning disable CS8604 // Possible null reference argument.
+            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         [Test]
@@ -71,10 +73,12 @@ namespace Clients.Tests
         {
             // Arrange
             var logger = new Mock<ILogger<CreateClientCommandHandler>>().Object;
-            IUnitOfWork unitOfWork = null;
+            IUnitOfWork? unitOfWork = null;
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
+#pragma warning disable CS8604 // Possible null reference argument.
+            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
+#pragma warning restore CS8604 // Possible null reference argument.
         }
     }
 }

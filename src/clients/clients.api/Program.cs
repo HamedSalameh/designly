@@ -3,6 +3,7 @@ using Clients.Application;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
@@ -16,8 +17,12 @@ public class Program
         builder.Configuration
             .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
         var configuration = builder.Configuration;
+
+        builder.Host.UseSerilog((ctx, lc) => lc
+            .WriteTo.Console()  // TODO: Read from configuration
+            .MinimumLevel.Debug()
+            );
 
         // Api versioning
         builder.Services.AddApiVersioning(v =>
