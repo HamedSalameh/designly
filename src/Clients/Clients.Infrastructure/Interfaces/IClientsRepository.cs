@@ -9,5 +9,6 @@ namespace Clients.Infrastructure.Interfaces
         Task<Client?> GetClientAsyncNoTracking(Guid id, CancellationToken cancellationToken);
         Task<Client?> GetClientAsyncWithDapper(Guid id, CancellationToken cancellation);
         Task DeleteClientAsync(Guid id, CancellationToken cancellationToken);
+        Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken);
     }
 }
