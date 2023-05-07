@@ -6,9 +6,13 @@ using Clients.Infrastructure.Polly;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Npgsql;
+using NpgsqlTypes;
+using Polly;
 using Polly.Wrap;
 using SharedKernel.ConnectionProviders;
+using System.Data;
 
 namespace Clients.Infrastructure.Persistance
 {
@@ -34,8 +38,6 @@ namespace Clients.Infrastructure.Persistance
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
 
-            var policy = PollyPolicyFactory.WrappedAsyncPolicies();
-
             await _dbContext.Clients.AddAsync(client, cancellationToken).ConfigureAwait(false);
 
             _ = policy.ExecuteAsync(async () => await _dbContext.SaveChangesAsync().ConfigureAwait(false));
@@ -43,6 +45,54 @@ namespace Clients.Infrastructure.Persistance
             _logger.LogDebug("Client {client.Id} was successfully created.", client.Id);
 
             return client.Id;
+        }
+
+        public async Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken)
+        {
+            if (client == default || client == null)
+            {
+                _logger.LogError($"Invalid value for {nameof(client)}: {client}");
+                throw new ArgumentException($"Invalid value of client object");
+            }
+            if (client.Id == default)
+            {
+                _logger.LogError($"Invalid value for {nameof(client.Id)}: {client.Id}");
+                throw new ArgumentException("Client object has invalid value for Id property.");
+            }
+
+            var parameters = new DynamicParameters();
+            parameters.Add("p_id", client.Id);
+            parameters.Add("p_first_name", client.FirstName);
+            parameters.Add("p_family_name", client.FamilyName);
+            parameters.Add("p_city", client.Address.City);
+            parameters.Add("p_street", client.Address.Street);
+            parameters.Add("p_building_number", client.Address.BuildingNumber);
+            parameters.Add("p_address_lines", JsonConvert.SerializeObject(client.Address.AddressLines));
+            parameters.Add("p_primary_phone_number", client.ContactDetails.PrimaryPhoneNumber);
+            parameters.Add("p_secondary_phone_number", client.ContactDetails.SecondaryPhoneNumber);
+            parameters.Add("p_email_address", client.ContactDetails.EmailAddress);
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        await connection.ExecuteAsync("update_client", parameters,
+                            transaction: transaction, commandType: CommandType.StoredProcedure);
+                        transaction.Commit();
+                    }
+                    catch (Exception exception)
+                    {
+                        _logger.LogError(exception, $"Could not update client entity due to error : {exception.Message}");
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return client;
         }
 
         public async Task DeleteClientAsync(Guid id, CancellationToken cancellationToken)

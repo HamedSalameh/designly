@@ -55,6 +55,30 @@ namespace Clients.API.Controllers
             return Ok(clientResourceUrl);
         }
 
+        [HttpPut("{id}")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateClient(Guid Id, [FromBody] ClientDto clientDto, CancellationToken cancellationToken)
+        {
+            if (Id == default)
+            {
+                logger.LogError("Invalid value of Id : ", Id);
+                return BadRequest(Id);
+            }
+
+            var client = mapper.Map<Client>(clientDto);
+
+            var updateClientCommand = new UpdateClientCommand(client);
+            updateClientCommand.client.Id = Id;     // Patch the update client command, since the Id is provided outside of the request body
+
+            var clientId = await mediator.Send(updateClientCommand, cancellationToken).ConfigureAwait(false);
+
+            return Ok(BuildResourceLocation(clientId.Id));
+        }
+
         [HttpGet("{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -40,6 +40,37 @@ namespace Clients.Domain.Entities
         {
         }
 
+        public void UpdateAddress(Address address)
+        {
+            Address = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null");
+        }
+
+        public void UpdateContactDetails(ContactDetails contactDetails)
+        {
+            ContactDetails = contactDetails ??
+                             throw new ArgumentNullException(nameof(contactDetails), "ContactDetails cannot be null");
+        }
+
+        public Client UpdateClient(Client client)
+        {
+            if (client == null || client == default)
+            {
+                throw new ArgumentException($"Invlaid value for {nameof(client)}");
+            }
+
+            if (client?.ContactDetails != null)
+            {
+                UpdateContactDetails(client.ContactDetails);
+            }
+
+            UpdateAddress(client.Address);
+
+            FirstName = client.FirstName;
+            FamilyName= client.FamilyName;
+
+            return this;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
