@@ -14,6 +14,7 @@ namespace Clients.Tests
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private CreateClientCommandHandler _handler;
 
+        readonly Guid Tenant = Guid.NewGuid();
         readonly string firstName = "John";
         readonly string familyName = "Doe";
         readonly string primaryPhoneNumber = "123-9222333";
@@ -42,7 +43,7 @@ namespace Clients.Tests
         public async Task Handle_ValidRequest_ReturnsClientId()
         {
             // Arrange
-            var draftClient = new Client(firstName, familyName, address, contactDetails);
+            var draftClient = new Client(firstName, familyName, address, contactDetails, Tenant);
             var request = new CreateClientCommand(draftClient);
 
             _unitOfWorkMock.Setup(uow => uow.ClientsRepository.CreateClientAsync(It.IsAny<Client>(), It.IsAny<CancellationToken>()))

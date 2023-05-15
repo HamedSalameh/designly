@@ -61,7 +61,7 @@ namespace Clients.Tests
             var result = contactDetails.ToString();
 
             // Assert
-            Assert.That(result, Is.EqualTo("Primary phone number: 1234567890, Secondary phone number: 0987654321, Email address: test@example.com"));
+            Assert.That(result, Is.EqualTo("1234567890, 0987654321, test@example.com"));
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace Clients.Tests
             var result = contactDetails.ToString();
 
             // Assert
-            Assert.That(result, Is.EqualTo("Primary phone number: 1234567890"));
+            Assert.That(result, Is.EqualTo("1234567890"));
         }
     }
 }

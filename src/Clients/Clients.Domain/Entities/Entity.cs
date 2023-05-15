@@ -8,9 +8,19 @@ namespace Clients.Domain.Entities
 
         int? _requestedHashCode;
         public virtual Guid Id { get; set; }
+        public virtual Guid TenantId { get; }
 
-        protected Entity()
+        protected Entity() : this(Guid.NewGuid())
         {
+        }
+
+        protected Entity(Guid TenantId)
+        {
+            if (TenantId == Guid.Empty || TenantId == default) { 
+                throw new ArgumentException(nameof(TenantId));
+            }
+            
+            this.TenantId = TenantId;
             Created = DateTime.UtcNow;
             Modified = DateTime.UtcNow;
         }
@@ -22,7 +32,7 @@ namespace Clients.Domain.Entities
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || !(obj is Entity))
+            if (obj == null || obj is not Entity)
                 return false;
 
             if (Object.ReferenceEquals(this, obj))
@@ -56,8 +66,8 @@ namespace Clients.Domain.Entities
 
         public static bool operator ==(Entity? left, Entity? right)
         {
-            if (Object.Equals(left, null))
-                return (Object.Equals(right, null)) ? true : false;
+            if (Equals(left, null))
+                return Equals(right, null);
             else
                 return left.Equals(right);
         }

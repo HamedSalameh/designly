@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="changesets\changeset-03-update_client.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>changeset-03-update_client.sql</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="changesets\changeset-03-update_client.sql">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>changeset-03-update_client.Designer.cs</LastGenOutput>
