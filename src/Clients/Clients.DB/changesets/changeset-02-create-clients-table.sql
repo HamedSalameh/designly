@@ -1,5 +1,9 @@
-﻿CREATE TABLE IF NOT EXISTS clients (
-  id UUID PRIMARY KEY,
+﻿-- The uuid_generate_v4() function assumes that the uuid-ossp, hence we make sure to enable it before table creation
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS clients (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   family_name VARCHAR(255) NOT NULL,
   city VARCHAR(255) NOT NULL,
