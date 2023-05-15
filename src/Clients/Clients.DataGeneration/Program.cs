@@ -18,7 +18,8 @@ var _modelFaker = new Faker<Client>()
     new Clients.Domain.ValueObjects.ContactDetails(
         f.Phone.PhoneNumber("(###) ###-####"),
         f.Random.Bool() ? f.Phone.PhoneNumber("(###) ###-####") : string.Empty,
-        f.Internet.Email())))
+        f.Internet.Email()),
+    Guid.NewGuid()))
     .RuleFor(c => c.Id, f => Guid.NewGuid())
     //.RuleFor(c => c.FirstName, f => f.Name.FirstName())
     //.RuleFor(c => c.FamilyName, f => f.Name.LastName())
@@ -32,7 +33,7 @@ var _modelFaker = new Faker<Client>()
 
 Console.WriteLine("How many user do you want to generate ?");
 string? countIput = Console.ReadLine();
-int.TryParse(countIput, out var count);
+int.TryParse(countIput, out int count);
 
 var generatedClients = new List<Client>();
 string? userInput = "";

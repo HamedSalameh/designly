@@ -13,20 +13,20 @@ namespace Clients.Domain.Entities
 
         public ContactDetails ContactDetails { get; set; }
 
-        public Client(string firstName, string familyName, Address address, ContactDetails contactDetails)
+        public Client(string firstName, string familyName, Address address, ContactDetails contactDetails, Guid TenantId)
+            : base(TenantId)
         {
             if (string.IsNullOrEmpty(firstName))
             {
                 throw new ArgumentException($"{nameof(firstName)} : must not be null or empty");
             }
-            Id = Guid.NewGuid();
             FirstName = firstName;
             FamilyName = familyName;
             Address = address ?? throw new ArgumentNullException(nameof(address));
             ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
         }
 
-        private Client(string firstName, string familyName)
+        private Client(string firstName, string familyName, Guid TenantId) : base(TenantId)
         {
             FirstName = firstName;
             FamilyName = familyName;
@@ -36,7 +36,7 @@ namespace Clients.Domain.Entities
         }
 
         // Used by Dapper for automatic object initialization
-        private Client() : this(Consts.Strings.ValueNotSet, Consts.Strings.ValueNotSet)
+        private Client() : this(Consts.Strings.ValueNotSet, Consts.Strings.ValueNotSet, Guid.Empty)
         {
         }
 
@@ -53,7 +53,7 @@ namespace Clients.Domain.Entities
 
         public Client UpdateClient(Client client)
         {
-            if (client == null || client == default)
+            if (client is null || client == default)
             {
                 throw new ArgumentException($"Invlaid value for {nameof(client)}");
             }
@@ -63,19 +63,24 @@ namespace Clients.Domain.Entities
                 UpdateContactDetails(client.ContactDetails);
             }
 
-            UpdateAddress(client.Address);
+            if (client?.Address != null)
+            {
+                UpdateAddress(client.Address);
+            }
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             FirstName = client.FirstName;
-            FamilyName= client.FamilyName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            FamilyName = client.FamilyName;
 
             return this;
         }
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append(FirstName);
-            if (!string.IsNullOrEmpty(FamilyName)) sb.Append(" ").Append(FamilyName);
+            if (!string.IsNullOrEmpty(FamilyName)) sb.Append(' ').Append(FamilyName);
 
             sb.Append(", ").Append(Address.ToString());
             sb.Append(", ").Append(ContactDetails.ToString());

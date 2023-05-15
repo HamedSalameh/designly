@@ -37,17 +37,17 @@ namespace Clients.Domain.ValueObjects
 
             if (!string.IsNullOrEmpty(PrimaryPhoneNumber))
             {
-                sb.Append($"Primary phone number: {PrimaryPhoneNumber}");
+                sb.Append($"{PrimaryPhoneNumber}");
             }
 
             if (!string.IsNullOrEmpty(SecondaryPhoneNumber))
             {
-                sb.Append($", Secondary phone number: {SecondaryPhoneNumber}");
+                sb.Append($", {SecondaryPhoneNumber}");
             }
 
             if (!string.IsNullOrEmpty(EmailAddress))
             {
-                sb.Append($", Email address: {EmailAddress}");
+                sb.Append($", {EmailAddress}");
             }
 
             return sb.ToString();
