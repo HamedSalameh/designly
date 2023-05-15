@@ -6,6 +6,7 @@
 
 CREATE OR REPLACE PROCEDURE update_client(
     p_id UUID,
+    p_tenant_id UUID,
     p_first_name VARCHAR(255),
     p_family_name VARCHAR(255),
 	p_city VARCHAR(255),
@@ -21,7 +22,8 @@ DECLARE
 	c_address_lines jsonb = cast(p_address_lines as jsonb);
 BEGIN  
     -- Check if a row with the given ID exists
-    SELECT created_at INTO v_created_at FROM clients WHERE id = p_id FOR UPDATE;
+    SELECT created_at INTO v_created_at FROM clients 
+    WHERE id = p_id and tenant_id = p_tenant_id FOR UPDATE;
     IF v_created_at IS NULL THEN
         RAISE EXCEPTION ''No client with the provided ID found.'';
     END IF;
@@ -38,6 +40,6 @@ BEGIN
 		secondary_phone_number = p_secondary_phone_number,
 		email_address = p_email_address,
         updated_at = NOW()
-    WHERE id = p_id;
+    WHERE id = p_id AND tenant_id = p_tenant_id;
 
 END;'
