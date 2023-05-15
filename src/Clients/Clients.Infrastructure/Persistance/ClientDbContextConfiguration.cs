@@ -13,6 +13,10 @@ namespace Clients.Infrastructure.Persistance
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("id")
                 .IsRequired();
+
+            builder.Property(p => p.TenantId)
+                .HasColumnName("tenant_id")
+                .IsRequired();
             
             builder.Property(x => x.FirstName)
                 .HasColumnName("first_name")

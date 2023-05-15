@@ -44,7 +44,8 @@ namespace Clients.API.Controllers
             }
 
             var draftClient = mapper.Map<Client>(clientDto);
-            draftClient.Id = default;
+
+            // TODO: Set the tenant Id from the logged in user context tenant
 
             var createClientCommand = new CreateClientCommand(draftClient);
 
@@ -69,10 +70,10 @@ namespace Clients.API.Controllers
                 return BadRequest(Id);
             }
 
+            clientDto.Id = Id;
             var client = mapper.Map<Client>(clientDto);
 
             var updateClientCommand = new UpdateClientCommand(client);
-            updateClientCommand.client.Id = Id;     // Patch the update client command, since the Id is provided outside of the request body
 
             var clientId = await mediator.Send(updateClientCommand, cancellationToken).ConfigureAwait(false);
 

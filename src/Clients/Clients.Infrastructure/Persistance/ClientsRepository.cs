@@ -62,6 +62,7 @@ namespace Clients.Infrastructure.Persistance
 
             var parameters = new DynamicParameters();
             parameters.Add("p_id", client.Id, DbType.Guid);
+            parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
             parameters.Add("p_first_name", client.FirstName, DbType.String);
             parameters.Add("p_family_name", client.FamilyName, DbType.String);
             parameters.Add("p_city", client.Address.City, DbType.String);
@@ -74,21 +75,19 @@ namespace Clients.Infrastructure.Persistance
 
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
-                await connection.OpenAsync();
-                using (var transaction = connection.BeginTransaction())
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
                 {
-                    try
-                    {
-                        await connection.ExecuteAsync("update_client", parameters,
-                            transaction: transaction, commandType: CommandType.StoredProcedure);
-                        transaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        _logger.LogError(exception, $"Could not update client entity due to error : {exception.Message}");
-                        transaction.Rollback();
-                        throw;
-                    }
+                    await connection.ExecuteAsync("update_client", parameters,
+                        transaction: transaction, commandType: CommandType.StoredProcedure);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Could not update client entity due to error : {exception.Message}");
+                    transaction.Rollback();
+                    throw;
                 }
             }
 
@@ -103,7 +102,8 @@ namespace Clients.Infrastructure.Persistance
             }
 
             var policy = PollyPolicyFactory.WrappedAsyncPolicies();
-            var entity = await _dbContext.Clients.FindAsync(id, cancellationToken);
+            var entity = await _dbContext.Clients
+                .FindAsync(new object?[] { id, cancellationToken }, cancellationToken: cancellationToken);
 
             if (entity == null)
             {
@@ -139,7 +139,7 @@ namespace Clients.Infrastructure.Persistance
             _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
-                await connection.OpenAsync();
+                await connection.OpenAsync(cancellationToken);
 
                 var client = await policy.ExecuteAsync(async () =>
                 {
