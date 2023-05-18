@@ -12,6 +12,8 @@ using NpgsqlTypes;
 using Polly;
 using Polly.Wrap;
 using SharedKernel.ConnectionProviders;
+using SqlKata;
+using SqlKata.Compilers;
 using System.Data;
 
 namespace Clients.Infrastructure.Persistance
@@ -157,6 +159,47 @@ namespace Clients.Infrastructure.Persistance
                 });
 
                 return client;
+            };
+        }
+
+        public async Task<IEnumerable<Client>> SearchClientsAsync(string firstName, string familyName, string city, CancellationToken cancellationToken)
+        {
+            var query = new Query("clients")
+                .Select();
+
+            if (!string.IsNullOrEmpty(firstName))
+            {
+                query.WhereContains("first_name", firstName);
+            }
+            if (!string.IsNullOrEmpty(familyName))
+            {
+                query.WhereContains("family_name", familyName);
+            }
+            if (!string.IsNullOrEmpty(city))
+            {
+                query.WhereContains("city", city);
+            }
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+
+                return await policy.ExecuteAsync(async () =>
+                {
+                    var compiler = new PostgresCompiler();
+                    var generatedQuery = compiler.Compile(query);
+                    var result = await connection.QueryAsync<Client, Address, ContactDetails, Client>(
+                        generatedQuery.Sql,
+                        (client, address, contactDetails) =>
+                        {
+                            client.Address = address;
+                            client.ContactDetails = contactDetails;
+                            return client;
+                        },
+                        param: generatedQuery.NamedBindings,
+                        splitOn: "city, primary_phone_number");
+                    return result;
+                });
             };
         }
     }
