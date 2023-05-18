@@ -26,18 +26,14 @@ namespace Clients.Domain.Entities
             ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
         }
 
-        private Client(string firstName, string familyName, Guid TenantId) : base(TenantId)
+        // Used by Dapper for automatic object initialization
+        private Client() : base()
         {
-            FirstName = firstName;
-            FamilyName = familyName;
+            FirstName = Consts.Strings.ValueNotSet;
+            FamilyName = Consts.Strings.ValueNotSet;
 
             ContactDetails = new ContactDetails(Consts.Strings.ValueNotSet);
             Address = new Address(Consts.Strings.ValueNotSet);
-        }
-
-        // Used by Dapper for automatic object initialization
-        private Client() : this(Consts.Strings.ValueNotSet, Consts.Strings.ValueNotSet, Guid.Empty)
-        {
         }
 
         public void UpdateAddress(Address address)
