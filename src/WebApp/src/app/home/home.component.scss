@@ -6,7 +6,7 @@ body {
     grid-template-rows: 60px 1fr;
 
     grid-template-areas: 
-        "side header"
+        "header header"
         "side main"
         "footer footer";
 }
