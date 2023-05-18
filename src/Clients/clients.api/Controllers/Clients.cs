@@ -6,7 +6,6 @@ using Clients.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Net.Mime;
 
 namespace Clients.API.Controllers
@@ -101,6 +100,40 @@ namespace Clients.API.Controllers
 
             return Ok(clientDto);
         }
+
+        [HttpPost("search")]    
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Search([FromBody] ClientSearchDto clientSearchDto, CancellationToken cancellationToken)
+        {
+            if (clientSearchDto == null)
+            {
+                logger.LogError($"Invalid value for {nameof(clientSearchDto)}");
+                return BadRequest($"The submitted search object is not valid or empty");
+            }
+
+            var clientSearchQuery = new SearchClientsQuery(clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
+            var clients = await mediator.Send(clientSearchQuery, cancellationToken).ConfigureAwait(false);
+            var clientDtos = mapper.Map<IEnumerable<ClientDto>>(clients);
+            
+            return Ok(clientDtos);
+        }
+
+        //[HttpGet]
+        //[Consumes(MediaTypeNames.Application.Json)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[Authorize(Policy = "CanViewClients")]
+        //public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        //{
+        //    var clients = await mediator.Send(new GetAllClientsQuery(), cancellationToken).ConfigureAwait(false);
+        //    var clientDtos = mapper.Map<IEnumerable<ClientDto>>(clients);
+        //    return Ok(clientDtos);
+        //}
 
         [HttpDelete("{id}")]
         [Consumes(MediaTypeNames.Application.Json)]

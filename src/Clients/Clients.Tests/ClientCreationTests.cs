@@ -11,7 +11,7 @@ namespace Clients.Tests
         private const string City = "Utopia";
         private const string newCity = "Urbanoia";
         private const string PrimaryPhoneNumber = "0542123123";
-        private Guid TenantId = Guid.NewGuid();
+        private readonly Guid TenantId = Guid.NewGuid();
 
         [Test]
         public void UpdateAddress_ShouldUpdateAddress()
@@ -84,7 +84,9 @@ namespace Clients.Tests
             var client = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
 
             // Act & Assert
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             Assert.Throws<ArgumentException>(() => client.UpdateClient(null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
     }
 }

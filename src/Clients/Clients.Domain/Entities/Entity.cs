@@ -16,8 +16,10 @@ namespace Clients.Domain.Entities
 
         protected Entity(Guid TenantId)
         {
-            if (TenantId == Guid.Empty || TenantId == default) { 
-                throw new ArgumentException(nameof(TenantId));
+            // TenantId is not nullable, so we can't use the ?? operator
+            if (TenantId == Guid.Empty || TenantId == default)
+            {
+                throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }
             
             this.TenantId = TenantId;
