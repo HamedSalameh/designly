@@ -42,11 +42,6 @@ export class LoginComponent {
 
   signInWithGoogle() {
     console.log('Sign In with Google');
-    
-    this.authenticationService.test()
-    .subscribe(response => {
-      console.log(response);
-    });
   }
 
   requestPasswordReset() {
