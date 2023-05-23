@@ -1,0 +1,47 @@
+@import "../../../../assets/scss/variables.scss";
+
+/* Wrapper */
+.wrapper {
+    display: grid;
+    grid-template-columns: $sidebar-width 1fr;
+    grid-template-rows: $topbar-height 1fr;
+    grid-template-areas:
+      "left-nav top-bar"
+      "left-nav main-content";
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Left Nav Bar */
+  .left-nav {
+    grid-area: left-nav;
+    max-width: 100%;
+    height: 100%;
+    background-color: $color-vl-6;
+    color: $color-vl-3;
+    border-right: 2px solid $color-vl-5;
+  }
+  
+  .left-nav .icon {
+    color: $color-vl-6;
+    margin-right: 10px;
+  }
+  
+  /* Top Main Bar */
+  .top-bar {
+    grid-area: top-bar;
+    background-color: $color-vl-6;
+    height: 60px;
+    width: 100%;
+    padding: 0 20px;
+    border-bottom: 2px solid $color-vl-5;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+    grid-area: main-content;
+    background-color: $color-vl-5;
+    padding: 20px;
+  }
+  
