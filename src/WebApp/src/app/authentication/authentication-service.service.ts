@@ -46,7 +46,10 @@ export class AuthenticationService {
   public isAuthenticated() {
     const token = localStorage.getItem(access_token_key);
     if (!token || this.tokenExpired(token)) {
-      return false;
+
+      console.warn('!! DEV ONLY !! Ignoring token expiry');
+      return true;
+      //return false;
     }
     return true;
   }
