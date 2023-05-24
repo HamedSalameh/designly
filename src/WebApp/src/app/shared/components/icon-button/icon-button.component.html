@@ -1,0 +1,12 @@
+<div class="ib-container">
+  <button
+    class="module-button"
+    (click)="handleClick()"
+    [disabled]="disabled"
+  >
+    <span class="icon">
+      <i class="fa-solid {{ icon }}"></i>
+    </span>
+    <span class="mr-2">{{ text }}</span>
+  </button>
+</div>

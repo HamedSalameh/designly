@@ -1,0 +1,14 @@
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar .module-name {
+  font-weight: bold;
+}
+
+.top-bar .profile-icon {
+  font-size: 20px;
+  color: #000000;
+}
