@@ -1,0 +1,59 @@
+@import "../../../assets/scss/variables";
+
+.logo-block {
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    height: 60px;
+    color: $color-vl-2;
+
+    .icon {
+        display: flex;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+
+        img {
+
+        }
+    }
+
+    .brand {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-family: sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+
+        span {
+            margin: 0px;
+            padding: 0px;
+        }
+    }
+}
+
+
+.side-nav-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 12px 0px 12px;
+}
+
+.modules-block {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+}
+
+span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 12px;
+    margin: 12px;
+}

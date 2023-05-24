@@ -1,8 +1,10 @@
+@import "../../../../assets/scss/variables.scss";
+
 /* Wrapper */
 .wrapper {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    grid-template-rows: 60px 1fr;
+    grid-template-columns: $sidebar-width 1fr;
+    grid-template-rows: $topbar-height 1fr;
     grid-template-areas:
       "left-nav top-bar"
       "left-nav main-content";
@@ -14,45 +16,32 @@
   /* Left Nav Bar */
   .left-nav {
     grid-area: left-nav;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 0;
     max-width: 100%;
     height: 100%;
-    background-color: #0f181c;
-    color: #ffffff;
+    background-color: $color-vl-6;
+    color: $color-vl-3;
+    border-right: 2px solid $color-vl-5;
   }
   
   .left-nav .icon {
-    color: #ffffff;
+    color: $color-vl-6;
     margin-right: 10px;
   }
   
   /* Top Main Bar */
   .top-bar {
     grid-area: top-bar;
-    background-color: #efefef;
+    background-color: $color-vl-6;
     height: 60px;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0 20px;
-  }
-  
-  .top-bar .module-name {
-    font-weight: bold;
-  }
-  
-  .top-bar .profile-icon {
-    font-size: 20px;
-    color: #000000;
+    border-bottom: 2px solid $color-vl-5;
   }
   
   /* Main Content Area */
   .main-content {
     grid-area: main-content;
-    background-color: cadetblue;
+    background-color: $color-vl-5;
     padding: 20px;
   }
   
