@@ -1,3 +1,170 @@
 {
-  "signin": {}
+  "signin": {},
+  "clients": [
+    {
+      "FirstName": "David",
+      "FamilyName": "Cohen",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Tel Aviv",
+        "Street": "Rothschild Boulevard",
+        "BuildingNumber": "12",
+        "addressLines": ["Some address line 1", "Additional address line 2"]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "david.cohen@example.com"
+      }
+    },
+    {
+      "FirstName": "Sarah",
+      "FamilyName": "Levi",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Jerusalem",
+        "Street": "King David Street",
+        "BuildingNumber": "20",
+        "addressLines": ["Some address line 1", "Additional address line 2"]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "sarah.levi@example.com"
+      }
+    },
+    {
+      "FirstName": "Daniel",
+      "FamilyName": "Cohen",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Haifa",
+        "Street": "Ben Gurion Avenue",
+        "BuildingNumber": "8",
+        "addressLines": ["Some address line 1", "Additional address line 2"]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "daniel.cohen@example.com"
+      }
+    },
+    {
+      "FirstName": "Rachel",
+      "FamilyName": "Levi",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Tel Aviv",
+        "Street": "Allenby Street",
+        "BuildingNumber": "15",
+        "addressLines": ["Some address line 1", "Additional address line 2"]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "rachel.levi@example.com"
+      }
+    },
+    {
+      "FirstName": "Yakov",
+      "FamilyName": "Cohen",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Netanya",
+        "Street": "Herzl Street",
+        "BuildingNumber": "5",
+        "addressLines": ["Some address line 1", "Additional address line 2"]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "yakov.cohen@example.com"
+      }
+    },
+    {
+      "FirstName": "Avigail",
+      "FamilyName": "Levine",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Haifa",
+        "Street": "Dizengoff Street",
+        "BuildingNumber": "25",
+        "addressLines": [
+          "Some address line 1",
+          "Additional address line 2"
+        ]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "avigail.levine@example.com"
+      }
+    },
+    {
+      "FirstName": "Eitan",
+      "FamilyName": "Cohen",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Tel Aviv",
+        "Street": "Ben Yehuda Street",
+        "BuildingNumber": "7",
+        "addressLines": [
+          "Some address line 1",
+          "Additional address line 2"
+        ]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "eitan.cohen@example.com"
+      }
+    },
+    {
+      "FirstName": "Noa",
+      "FamilyName": "Levi",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Jerusalem",
+        "Street": "Jaffa Street",
+        "BuildingNumber": "10",
+        "addressLines": [
+          "Some address line 1",
+          "Additional address line 2"
+        ]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "noa.levi@example.com"
+      }
+    },
+    {
+      "FirstName": "Itamar",
+      "FamilyName": "Cohen",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Tel Aviv",
+        "Street": "Rabin Square",
+        "BuildingNumber": "18",
+        "addressLines": [
+          "Some address line 1",
+          "Additional address line 2"
+        ]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "itamar.cohen@example.com"
+      }
+    },
+    {
+      "FirstName": "Maya",
+      "FamilyName": "Levine",
+      "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
+      "Address": {
+        "City": "Haifa",
+        "Street": "Herzl Street",
+        "BuildingNumber": "9",
+        "addressLines": [
+          "Some address line 1",
+          "Additional address line 2"
+        ]
+      },
+      "ContactDetails": {
+        "PrimaryPhoneNumber": "1234567890",
+        "EmailAddress": "maya.levine@example.com"
+      }
+    }
+  ]
 }
