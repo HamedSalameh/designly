@@ -1,5 +1,8 @@
 ﻿using Bogus;
 using Clients.Domain.Entities;
+using Clients.Infrastructure;
+using Clients.Infrastructure.Interfaces;
+using RestSharp;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -67,6 +70,8 @@ do
     if (string.Equals(userInput?.Trim(), "y", StringComparison.OrdinalIgnoreCase))
     {
         Console.WriteLine("Sending all generated user to persistance");
+
+
     }
     else if (string.Equals(userInput?.Trim(), "n", StringComparison.OrdinalIgnoreCase))
     {
