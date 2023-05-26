@@ -8,6 +8,7 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent {
+  
   tableData: any[] = [];
 
   tableColumns: any[] = [
@@ -44,5 +45,11 @@ export class ClientsComponent {
         )
       )
       .subscribe((clients) => (this.tableData = clients));
+  }
+
+  onRowSelect($event: any) {
+
+    console.log($event);
+
   }
 }
