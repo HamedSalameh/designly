@@ -1,2 +1,3 @@
-<app-table [data]="tableData" [cols]="tableColumns"></app-table>
-
+<app-table [data]="tableData" [cols]="tableColumns"
+(rowSelected)="onRowSelect($event)"
+></app-table>
