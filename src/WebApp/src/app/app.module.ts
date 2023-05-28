@@ -9,6 +9,9 @@ import { LoginModule } from './login/login.module';
 import { AuthInterceptorService } from './authentication/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HomeModule } from './home/home.module';
+import { NgxsModule } from '@ngxs/store';
+import { ClientState } from './state/client-state/client-state.state';
+import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,10 @@ import { HomeModule } from './home/home.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NgxsModule.forRoot([
+      ClientState
+    ]),
+    NgxsLoggerPluginModule.forRoot(),
     CoreModule,
 
     HomeModule,
