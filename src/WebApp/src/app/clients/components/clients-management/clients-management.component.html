@@ -2,7 +2,7 @@
     <div class="clients-list">
         <app-clients></app-clients>
     </div>
-    <div class="clients-details">
-        <app-client-jacket></app-client-jacket>
+    <div class="clients-details" *ngIf="this.selectedClient">
+        <app-client-jacket [client]="selectedClient"></app-client-jacket>
     </div>
 </div>
