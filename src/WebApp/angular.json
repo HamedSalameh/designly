@@ -4,6 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "DesignFlow": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "he-IL":  "src/local/messages.he.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,6 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": ["he-IL"],
             "outputPath": "dist/design-flow",
             "index": "src/index.html",
             "main": "src/main.ts",
