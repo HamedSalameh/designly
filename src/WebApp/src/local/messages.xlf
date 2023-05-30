@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="sideNav.Dashboard" datatype="html">
+        <source>Dashboard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sideNav.Projects" datatype="html">
+        <source>Projects</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sideNav.Tasks" datatype="html">
+        <source>Tasks</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sideNav.Clients" datatype="html">
+        <source>Clients</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sideNav.Communication" datatype="html">
+        <source>Communication</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sideNav.Analytics" datatype="html">
+        <source>Analytics</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

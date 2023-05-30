@@ -11,40 +11,40 @@
   <div class="modules-block">
     <app-icon-button
       icon="fa-solid fa-house"
-      text="Dashboard"
+      [text]="this.dashboardTitle"
       (buttonClick)="navigateToDashboard()"
     ></app-icon-button>
 
     <app-icon-button
       icon="fa-solid fa-layer-group"
-      text="Projects"
+      [text]="this.projectsTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
       icon="fa-solid fa-list-check"
-      text="Tasks"
+      [text]="this.tasksTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
       icon="fa-solid fa-users"
-      text="Clients"
+      [text]="this.clientsTitle"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
       icon="fa-solid fa-message"
-      text="Messages"
+      [text]="this.communicationTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
       icon="fa-solid fa-chart-simple"
-      text="Analytics"
+      [text]="this.analyticsTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
