@@ -2,6 +2,54 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="clients.Headers.FirstName" datatype="html">
+        <source>FirstName</source>
+        <target>שם פרטי</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clients.Headers.Family" datatype="html">
+        <source>Family</source>
+        <target>שם משפחה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clients.Headers.City" datatype="html">
+        <source>City</source>
+        <target>עיר</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clients.Headers.Address" datatype="html">
+        <source>Address</source>
+        <target>כתובת</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clients.Headers.PrimaryPhoneNumber" datatype="html">
+        <source>PrimaryPhoneNumber</source>
+        <target>מספר טלפון ראשי</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="clients.Headers.Email" datatype="html">
+        <source>Email</source>
+        <target>אימייל</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="sideNav.Dashboard" datatype="html">
         <source>Dashboard</source>
         <target>לוח בקרה</target>

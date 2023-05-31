@@ -10,19 +10,44 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent {
-  
-  tableData: any[] = [];
-
-  tableColumns: any[] = [
-    { field: 'FirstName', header: 'First Name' },
-    { field: 'FamilyName', header: 'Family Name' },
-    { field: 'City', header: 'City' },
-    { field: 'Address', header: 'Address' },
-    { field: 'primaryPhoneNumber', header: 'Primary Phone Number' },
-    { field: 'Email', header: 'Email' },
+  columnTitles = [
+    {
+      ColumnHeader: $localize`:@@clients.Headers.FirstName:FirstName`,
+      DataField: 'FirstName',
+    },
+    {
+      ColumnHeader: $localize`:@@clients.Headers.Family:Family`,
+      DataField: 'FamilyName',
+    },
+    {
+      ColumnHeader: $localize`:@@clients.Headers.City:City`,
+      DataField: 'City',
+    },
+    {
+      ColumnHeader: $localize`:@@clients.Headers.Address:Address`,
+      DataField: 'Address',
+    },
+    {
+      ColumnHeader: $localize`:@@clients.Headers.PrimaryPhoneNumber:PrimaryPhoneNumber`,
+      DataField: 'primaryPhoneNumber',
+    },
+    {
+      ColumnHeader: $localize`:@@clients.Headers.Email:Email`,
+      DataField: 'Email',
+    },
   ];
 
-  constructor(private clientsService: ClientsServiceService, private store: Store) {}
+  tableData: any[] = [];
+
+  tableColumns: any[] = this.columnTitles.map((column) => ({
+    field: column.DataField,
+    header: column.ColumnHeader,
+  }));
+  
+  constructor(
+    private clientsService: ClientsServiceService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.clientsService
@@ -48,7 +73,6 @@ export class ClientsComponent {
   }
 
   onRowSelect($event: any) {
-
     console.log($event);
     const client = {
       Id: $event['Id'],
@@ -64,7 +88,7 @@ export class ClientsComponent {
         PrimaryPhoneNumber: $event['primaryPhoneNumber'],
         EmailAddress: $event['Email'],
       },
-    }
-    this.store.dispatch(new SelectClient( client ));
+    };
+    this.store.dispatch(new SelectClient(client));
   }
 }
