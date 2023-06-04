@@ -4,3 +4,13 @@
     padding: 1rem;
     background-color: red;
 }
+
+.action-bar {
+    // show action bar at the bottom of the parent div
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+
+    background-color: purple;
+}

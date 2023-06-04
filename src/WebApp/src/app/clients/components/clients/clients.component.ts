@@ -10,7 +10,7 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent {
-  columnTitles = [
+  columnsDefinition = [
     {
       ColumnHeader: $localize`:@@clients.Headers.FirstName:FirstName`,
       DataField: 'FirstName',
@@ -39,11 +39,11 @@ export class ClientsComponent {
 
   tableData: any[] = [];
 
-  tableColumns: any[] = this.columnTitles.map((column) => ({
+  tableColumns: any[] = this.columnsDefinition.map((column) => ({
     field: column.DataField,
     header: column.ColumnHeader,
   }));
-  
+
   constructor(
     private clientsService: ClientsServiceService,
     private store: Store
@@ -55,24 +55,13 @@ export class ClientsComponent {
       .pipe(
         tap((clients) => console.log(clients)),
         map((clients) =>
-          clients.map((client) => {
-            return {
-              Id: client.Id,
-              TenantId: client.TenantId,
-              FirstName: client.FirstName,
-              FamilyName: client.FamilyName,
-              City: client.Address.City,
-              Address: `${client.Address.Street}, ${client.Address.BuildingNumber}`,
-              primaryPhoneNumber: client.ContactDetails.PrimaryPhoneNumber,
-              Email: client.ContactDetails.EmailAddress,
-            };
-          })
+          clients.map((client) => this.mapClientToTableData(client))
         )
       )
       .subscribe((clients) => (this.tableData = clients));
   }
 
-  onRowSelect($event: any) {
+  onRowSelect($event: any): void {
     console.log($event);
     const client = {
       Id: $event['Id'],
@@ -90,5 +79,18 @@ export class ClientsComponent {
       },
     };
     this.store.dispatch(new SelectClient(client));
+  }
+
+  private mapClientToTableData(client: any) {
+    return {
+      Id: client.Id,
+      TenantId: client.TenantId,
+      FirstName: client.FirstName,
+      FamilyName: client.FamilyName,
+      City: client.Address.City,
+      Address: `${client.Address.Street}, ${client.Address.BuildingNumber}`,
+      primaryPhoneNumber: client.ContactDetails.PrimaryPhoneNumber,
+      Email: client.ContactDetails.EmailAddress,
+    };
   }
 }

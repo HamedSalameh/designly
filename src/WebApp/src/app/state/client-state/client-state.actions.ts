@@ -9,5 +9,5 @@ export class SelectClient {
 
 export class UnselectClient {
   static readonly type = '[ClientState] UnselectClient';
-  constructor(public payload: Client) {}
+  constructor() {}
 }

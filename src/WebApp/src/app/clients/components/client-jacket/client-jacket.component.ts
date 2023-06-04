@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Client } from '../../models/client.model';
 @Component({
   selector: 'app-client-jacket',
@@ -9,4 +9,12 @@ export class ClientJacketComponent {
 
   @Input() client: Client | undefined;
 
+  @Output() CloseClientJacket: EventEmitter<any> = new EventEmitter();
+
+  constructor() { }
+
+  onClose() {
+    this.client = undefined;
+    this.CloseClientJacket.emit();
+  }
 }

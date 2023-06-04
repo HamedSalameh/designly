@@ -1,6 +1,8 @@
 <div class="client-card" *ngIf="this.client">
-    CARD GOES HERE
-
-    {{ client.FirstName }} {{ client.FamilyName }}
-
+  <!-- General information section -->
+  <app-client-jacket-generalinfo [client]="this.client" ></app-client-jacket-generalinfo>
+  <!-- Footer buttons section -->
+  <div class="action-bar">
+    <button class="btn btn-primary" (click)="this.onClose()">Close</button>
+  </div>
 </div>
