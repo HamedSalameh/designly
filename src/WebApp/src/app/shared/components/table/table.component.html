@@ -4,6 +4,7 @@
   selectionMode="single"
   [(selection)]="selectedItem"
   dataKey="FirstName"
+  (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
 >
   <ng-template pTemplate="header">
