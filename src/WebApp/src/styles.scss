@@ -1,2 +1,19 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import "/src/assets/scss/variables";
+
+.form-container {
+    padding: 20px;
+    border-radius: 5px;
+    background-color: $color-vl-5;
+    margin-bottom: 20px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section-divider {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ebedf2;
+}

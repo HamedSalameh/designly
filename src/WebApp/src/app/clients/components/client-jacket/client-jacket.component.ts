@@ -23,26 +23,26 @@ export class ClientJacketComponent {
     private clientsService: ClientsServiceService,
     private store: Store
   ) {
-    this.clientId = this.store.select(ClientState.selectedClient);
+    this.clientId = this.store.select(ClientState.selectedClient).subscribe();
 
-    this.clientId.subscribe((clientId) => {
-      if (clientId) {
-        this.clientsService.getClient(clientId).subscribe((client) => {
-          this.client = client;
-          this.selectedClient = client
-            ? {
-                ...client,
-                Address: { City: client?.Address?.City },
-                ContactDetails: {
-                  PrimaryPhoneNumber:
-                    client?.ContactDetails?.PrimaryPhoneNumber,
-                  EmailAddress: client?.ContactDetails?.EmailAddress,
-                },
-              }
-            : null;
-        });
-      }
-    });
+    // this.clientId.subscribe((clientId) => {
+    //   if (clientId) {
+    //     this.clientsService.getClient(clientId).subscribe((client) => {
+    //       this.client = client;
+    //       this.selectedClient = client
+    //         ? {
+    //             ...client,
+    //             Address: { City: client?.Address?.City },
+    //             ContactDetails: {
+    //               PrimaryPhoneNumber:
+    //                 client?.ContactDetails?.PrimaryPhoneNumber,
+    //               EmailAddress: client?.ContactDetails?.EmailAddress,
+    //             },
+    //           }
+    //         : null;
+    //     });
+    //   }
+    // });
   }
 
   onClose() {

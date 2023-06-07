@@ -1,6 +1,127 @@
-<div class="app-card">
-    <!-- dispay client general information -->
-    {{ client | json }}
-    <!-- Fiew client details in a form -->
+<div class="app-card" *ngIf="this.selectedClient">
+  <!-- dispay client general information -->
 
+  <!-- Fiew client details in a form -->
+  <!-- Edit Mode -->
+  <div class="form-container">
+    <ng-container [formGroup]="ClientInfo">
+
+      <div class="form-section">
+        <ng-container formGroupName="BasicInfo">
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">{{ localizedFirstName }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="FirstName"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="field">
+                <label class="label">{{ localizedFamilyName }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="FamilyName"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-section">
+        <ng-container formGroupName="AddressInfo">
+          <div class="columns">
+            <div class="column is-flex-grow-2">
+              <div class="field">
+                <label class="label">{{ localizedCity }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="City"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="column is-flex-grow-2">
+              <div class="field">
+                <label class="label">{{ localizedStreet }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="Street"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="field">
+                <label class="label">{{ localizedBuildingNumber }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="BuildingNumber"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-section">
+        <ng-container formGroupName="ContactDetails">
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">{{ localizedPrimaryPhoneNumber }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="PrimaryPhoneNumber"
+                  />
+                </div>
+              </div>
+            </div>
+      
+            <div class="column">
+              <div class="field">
+                <label class="label">{{ localizedEmailAddress }}</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Text input"
+                    formControlName="EmailAddress"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      
+    </ng-container>
+  </div>
 </div>

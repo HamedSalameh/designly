@@ -7,6 +7,7 @@ import { ClientJacketComponent } from './components/client-jacket/client-jacket.
 import { ClientsComponent } from './components/clients/clients.component';
 import { ClientsManagementComponent } from './components/clients-management/clients-management.component';
 import { ClientJacketGeneralinfoComponent } from './components/client-jacket-generalinfo/client-jacket-generalinfo.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ClientJacketGeneralinfoComponent } from './components/client-jacket-gen
   ],
   imports: [
     ClientsRoutingModule,
+    ReactiveFormsModule,
     CommonModule,
     SharedModule
   ]

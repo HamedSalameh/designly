@@ -15,27 +15,27 @@ export class ClientsComponent {
 
   columnsDefinition = [
     {
-      ColumnHeader: $localize`:@@clients.Headers.FirstName:FirstName`,
+      ColumnHeader: $localize`:@@Global.BasicInfo.FirstName:FirstName`,
       DataField: 'FirstName',
     },
     {
-      ColumnHeader: $localize`:@@clients.Headers.Family:Family`,
+      ColumnHeader: $localize`:@@Global.BasicInfo.FamilyName:FamilyName`,
       DataField: 'FamilyName',
     },
     {
-      ColumnHeader: $localize`:@@clients.Headers.City:City`,
+      ColumnHeader: $localize`:@@Global.AddressInfo.City:City`,
       DataField: 'City',
     },
     {
-      ColumnHeader: $localize`:@@clients.Headers.Address:Address`,
+      ColumnHeader: $localize`:@@Global.AddressInfo.Address:Address`,
       DataField: 'Address',
     },
     {
-      ColumnHeader: $localize`:@@clients.Headers.PrimaryPhoneNumber:PrimaryPhoneNumber`,
+      ColumnHeader: $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`,
       DataField: 'primaryPhoneNumber',
     },
     {
-      ColumnHeader: $localize`:@@clients.Headers.Email:Email`,
+      ColumnHeader: $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`,
       DataField: 'Email',
     },
   ];

@@ -1,7 +1,11 @@
+@import "../../../../assets/scss/variables.scss";
+
 .client-jacket {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    border-right: 1px solid $color-vl-4;
+    border-left: 1px solid $color-vl-4;
+    height: 100vh;
 }
 
 .action-bar {
@@ -11,5 +15,5 @@
     align-items: center;
     margin-top: auto;
 
-    background-color: purple;
+    background-color: $color-vl-3;
 }

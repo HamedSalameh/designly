@@ -5,7 +5,7 @@
     flex-direction:row;
     align-items: center;
     height: 60px;
-    color: $color-vl-2;
+    color: $color-vl-3;
 
     .icon {
         display: flex;
@@ -22,12 +22,13 @@
     .brand {
         height: 60px;
         display: flex;
+        flex-grow: 1;
         align-items: center;
         justify-content: center;
 
-        font-family: sans-serif;
-        font-weight: 600;
-        font-size: 24px;
+        font-family: "Segoe UI";
+        font-weight: 100;
+        font-size: 30px;
 
         span {
             margin: 0px;

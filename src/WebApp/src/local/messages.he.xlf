@@ -2,52 +2,92 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="clients.Headers.FirstName" datatype="html">
+      <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
         <target>שם פרטי</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">51</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="clients.Headers.Family" datatype="html">
-        <source>Family</source>
-        <target>שם משפחה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="clients.Headers.City" datatype="html">
-        <source>City</source>
-        <target>עיר</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="clients.Headers.Address" datatype="html">
-        <source>Address</source>
-        <target>כתובת</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="clients.Headers.PrimaryPhoneNumber" datatype="html">
-        <source>PrimaryPhoneNumber</source>
-        <target>מספר טלפון ראשי</target>
+      <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
+        <source>FamilyName</source>
+        <target>שם משפחה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="clients.Headers.Email" datatype="html">
-        <source>Email</source>
-        <target>אימייל</target>
+      <trans-unit id="Global.AddressInfo.City" datatype="html">
+        <source>City</source>
+        <target>עיר</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.Street" datatype="html">
+        <source>Street</source>
+        <target>רחוב</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
+        <source>BuildingNumber</source>
+        <target>מספר בניין</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
+        <source>AddressLine1</source>
+        <target>כתובת</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
+        <source>PrimaryPhoneNumber</source>
+        <target>טלפון ראשי</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
+        <source>EmailAddress</source>
+        <target>כתובת דוא"ל</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.Address" datatype="html">
+        <source>Address</source>
+        <target>כתובת</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="sideNav.Dashboard" datatype="html">
