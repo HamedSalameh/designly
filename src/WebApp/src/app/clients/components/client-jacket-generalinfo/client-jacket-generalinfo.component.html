@@ -5,16 +5,16 @@
   <!-- Edit Mode -->
   <div class="form-container">
     <ng-container [formGroup]="ClientInfo">
-
       <div class="form-section">
         <ng-container formGroupName="BasicInfo">
+
           <div class="columns">
             <div class="column">
               <div class="field">
                 <label class="label">{{ localizedFirstName }}</label>
                 <div class="control">
                   <input
-                    class="input"
+                    class="a-input"
                     type="text"
                     placeholder="Text input"
                     formControlName="FirstName"
@@ -28,7 +28,7 @@
                 <label class="label">{{ localizedFamilyName }}</label>
                 <div class="control">
                   <input
-                    class="input"
+                    class="a-input"
                     type="text"
                     placeholder="Text input"
                     formControlName="FamilyName"
@@ -40,15 +40,15 @@
         </ng-container>
       </div>
 
-      <div class="form-section">
+      <!-- <div class="form-section">
         <ng-container formGroupName="AddressInfo">
           <div class="columns">
             <div class="column is-flex-grow-2">
-              <div class="field">
+              <div class="">
                 <label class="label">{{ localizedCity }}</label>
                 <div class="control">
                   <input
-                    class="input"
+                    class="a-input"
                     type="text"
                     placeholder="Text input"
                     formControlName="City"
@@ -121,7 +121,7 @@
           </div>
         </ng-container>
       </div>
-      
+       -->
     </ng-container>
   </div>
 </div>

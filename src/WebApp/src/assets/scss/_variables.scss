@@ -1,15 +1,31 @@
-// Define 5 scss color variabels
-$font-family: 'Roboto', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Open+Sans:wght@300&display=swap');
+
+// Typography
+$font-family: "Inter", open-sans, sans-serif;
 $font-size-medium: 18px;
 $font-size-default: 14px;
 
 // Color naming conventions: color- variance level from lowers (dark) to brightest (light)
-$color-vl-1: #29303d;
-$color-vl-2: #f4a736;
 $color-vl-3: #9098a7;
 $color-vl-4: #aaafbb;
 $color-vl-5: #f5f7f9;
 $color-vl-6: #ffffff;
+
+// Color System
+$color-v1-black: #1C1C1C;
+$color-v1-white: #ffffff;
+$color-v1-primary: #F7F9FB;
+$color-v1-secondary: #95A4FC;
+
+$color-v2-black:  rgba(0, 0, 0, 0.8);
+$color-v2-white: rgba(255, 255, 255, 0.8);;
+$color-v2-primary: #95A4FC;
+$color-v2-secondary: #C6C7F8;
+
+$color-yellow: #FFE999;
+$color-red: #FF4747;
+$color-layer-style: #FFFFFF;
 
 // Grid System
 $sidebar-width: 220px;
@@ -17,4 +33,5 @@ $topbar-height: 60px;
 
 // Border
 $border-radius: 5px;
-
+$border-color: rgba(0, 0, 0, 0.1);
+$border-width: 1px;

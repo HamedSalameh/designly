@@ -3,9 +3,9 @@
 .client-jacket {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid $color-vl-4;
-    border-left: 1px solid $color-vl-4;
-    height: 100vh;
+    border-right: $border-width solid $border-color;
+    border-left: $border-width solid $border-color;
+    height: 100%;
 }
 
 .action-bar {
@@ -15,5 +15,5 @@
     align-items: center;
     margin-top: auto;
 
-    background-color: $color-vl-3;
+    background-color: $color-v1-white;
 }

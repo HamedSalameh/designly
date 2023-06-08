@@ -1,14 +1,20 @@
+@import "../../../../assets/scss/variables";
+
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  height: 100%;
+  background-color: $color-v1-white;
+  padding: 0px 20px 0px 20px;
 }
 
 .top-bar .module-name {
   font-weight: bold;
+  font-family: $font-family;
 }
 
 .top-bar .profile-icon {
   font-size: 20px;
-  color: #000000;
 }
