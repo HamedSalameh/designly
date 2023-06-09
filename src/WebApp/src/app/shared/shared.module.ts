@@ -4,11 +4,13 @@ import { IconButtonComponent } from './components/icon-button/icon-button.compon
 import { TableComponent } from './components/table/table.component';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormInputComponent } from './components/form-input/form-input.component';
 
 @NgModule({
   declarations: [
     IconButtonComponent,
     TableComponent,
+    FormInputComponent,
   ],
   imports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   exports: [
     IconButtonComponent,
     TableComponent,
+    FormInputComponent
   ]
 })
 export class SharedModule { }

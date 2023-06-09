@@ -65,6 +65,7 @@ export class ClientJacketGeneralinfoComponent implements OnInit {
       BasicInfo: this.formBuilder.group({
         FirstName: [this.selectedClient?.FirstName],
         FamilyName: [this.selectedClient?.FamilyName],
+        CustomControl: [this.selectedClient?.FirstName]
       }),
       ContactDetails: this.formBuilder.group({
         PrimaryPhoneNumber: [
@@ -79,5 +80,10 @@ export class ClientJacketGeneralinfoComponent implements OnInit {
         AddressLine1: [this.selectedClient?.Address?.AddressLines],
       }),
     });
+
+    this.ClientInfo.valueChanges.subscribe((val) => {
+      console.log(val);
+    }); 
+
   }
 }
