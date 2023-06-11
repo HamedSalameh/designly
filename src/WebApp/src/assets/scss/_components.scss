@@ -1,3 +1,5 @@
+@import "./variables";
+
 .form-container {
   padding: 20px;
   border-radius: $border-radius;
@@ -41,12 +43,12 @@
 }
 
 .a-input::placeholder {
-  color: $color-vl-3;
+  color: $color-v1-placeholder;
 }
 
 .a-input-label {
   font-family: $font-family;
   font-size: $font-size-default;
-  color: $color-vl-3;
+  color: $color-v2-black;
   margin-bottom: 5px;
 }
