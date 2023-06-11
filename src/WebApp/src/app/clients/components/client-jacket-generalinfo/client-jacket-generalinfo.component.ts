@@ -65,7 +65,7 @@ export class ClientJacketGeneralinfoComponent implements OnInit {
       BasicInfo: this.formBuilder.group({
         FirstName: [this.selectedClient?.FirstName],
         FamilyName: [this.selectedClient?.FamilyName],
-        CustomControl: [this.selectedClient?.FirstName]
+        // CustomControl: [this.selectedClient?.FirstName]
       }),
       ContactDetails: this.formBuilder.group({
         PrimaryPhoneNumber: [
