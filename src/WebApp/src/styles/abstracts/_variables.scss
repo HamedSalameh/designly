@@ -1,10 +1,9 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Open+Sans:wght@300&display=swap');
 
-// Typography
-$font-family: "Inter", open-sans, sans-serif;
-$font-size-medium: 18px;
-$font-size-default: 14px;
 
 // Color System
 $color-v1-black: #1C1C1C;
@@ -17,6 +16,7 @@ $color-v2-black:  rgba(0, 0, 0, 0.8);
 $color-v2-white: rgba(255, 255, 255, 0.8);;
 $color-v2-primary: #95A4FC;
 $color-v2-secondary: #C6C7F8;
+$color-v2-placeholder: #C6C7F8;
 
 $color-yellow: #FFE999;
 $color-red: #FF4747;

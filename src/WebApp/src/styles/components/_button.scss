@@ -1,29 +1,8 @@
-@import "./variables";
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the button component.
+// -----------------------------------------------------------------------------
+@import "abstracts/variables";
 
-.form-container {
-  padding: 20px;
-  border-radius: $border-radius;
-  background-color: $color-v1-white;
-  margin-bottom: 20px;
-}
-
-.form-section {
-  margin-bottom: 20px;
-}
-
-.form-section-divider {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ebedf2;
-}
-
-.form-row {
-  display: flex;
-  gap: 20px;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 20px;
-
-}
 
 .a-input {
 
