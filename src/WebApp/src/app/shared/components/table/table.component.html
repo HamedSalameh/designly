@@ -3,7 +3,7 @@
   styleClass=""
   selectionMode="single"
   [(selection)]="selectedItem"
-  dataKey="FirstName"
+  [dataKey]="this.key"
   (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
 >

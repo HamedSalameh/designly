@@ -24,8 +24,15 @@ export class TableComponent {
   @Input()
   cols: any[] = [];
 
+  @Input()
+  key: any = "";
+
   @Output()
   rowSelected: EventEmitter<any> = new EventEmitter();
 
-  constructor() {}
+  constructor() {
+    if (this.key === "") {
+      console.warn("key is empty!");
+    }
+  }
 }
