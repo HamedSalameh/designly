@@ -1,13 +1,20 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
 import { SelectClient, UnselectClient } from 'src/app/state/client-state/client-state.actions';
-import { ClientState } from 'src/app/state/client-state/client-state.state';
 
 @Component({
   selector: 'app-clients-management',
   templateUrl: './clients-management.component.html',
   styleUrls: ['./clients-management.component.scss'],
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class ClientsManagementComponent {
   clientId: string | null = null;

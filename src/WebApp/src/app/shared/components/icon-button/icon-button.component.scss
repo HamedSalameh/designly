@@ -24,8 +24,13 @@
     font-family: $font-family;
     font-size: $font-size-medium;
 
+    &:focus {
+        outline: none;
+        background-color: $color-v1-primary;
+    }
+
     &:not([disabled]):hover {
-        background-color: $color-v1-placeholder;
+        background-color: $color-v1-primary;
     }
 
     .icon {
