@@ -1,8 +1,11 @@
-.client-card {
+@import "main";
+
+.client-jacket {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
-    background-color: red;
+    border-right: $border-width solid $border-color;
+    border-left: $border-width solid $border-color;
+    height: 100%;
 }
 
 .action-bar {
@@ -12,5 +15,5 @@
     align-items: center;
     margin-top: auto;
 
-    background-color: purple;
+    background-color: $color-v1-white;
 }

@@ -2,16 +2,13 @@
     display: flex;
     flex-direction: row;
     flex-flow: row wrap;
-    height: 100vh;
   }
   
   .clients-list {
-    background-color: red;
     flex: 2; /* Updated */
   }
   
-  .clients-details {
-    background-color: blue;
+  .clients-jacket {
     flex: 1; /* Updated */
   }
   

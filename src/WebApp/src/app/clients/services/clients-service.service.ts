@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Client } from '../models/client.model';
 
 @Injectable({
@@ -15,6 +15,13 @@ export class ClientsServiceService {
 
   public getClients(): Observable<Client[]> {
     return this.httpClient.get<Client[]>(`${this.serviceAddress}/clients`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public getClient(clientId: string): Observable<Client> {
+    console.log(`getClient: ${clientId}`);
+    return this.httpClient.get<Client>(`${this.serviceAddress}/clients/${clientId}`).pipe(
       catchError(this.handleError)
     );
   }

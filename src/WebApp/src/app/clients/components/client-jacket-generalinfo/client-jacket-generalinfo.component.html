@@ -1,4 +1,66 @@
-<div class="app-card">
-    <!-- dispay client general information -->
-    {{ client | json }}
+<div class="app-card" *ngIf="this.selectedClient">
+    <!-- Edit Mode -->
+  <div class="form-container">
+    <ng-container [formGroup]="ClientInfo">
+      <div class="form-section">
+        <ng-container formGroupName="BasicInfo">
+          <div class="form-row">
+            <app-form-input
+              formControlName="FirstName"
+              [ControlPlaceholder]="localizedFirstName"
+              [ControlLabel]="localizedFirstName"
+            ></app-form-input>
+
+            <app-form-input
+              formControlName="FamilyName"
+              [ControlPlaceholder]="localizedFamilyName"
+              [ControlLabel]="localizedFamilyName"
+            ></app-form-input>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-section">
+        <ng-container formGroupName="AddressInfo">
+          <div class="form-row">
+            <app-form-input
+              formControlName="City"
+              [ControlPlaceholder]="localizedCity"
+              [ControlLabel]="localizedCity"
+            ></app-form-input>
+
+            <app-form-input
+              formControlName="Street"
+              [ControlPlaceholder]="localizedStreet"
+              [ControlLabel]="localizedStreet"
+            ></app-form-input>
+
+            <app-form-input
+              formControlName="BuildingNumber"
+              [ControlPlaceholder]="localizedBuildingNumber"
+              [ControlLabel]="localizedBuildingNumber"
+            ></app-form-input>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-section">
+        <ng-container formGroupName="ContactDetails">
+          <div class="form-row">
+            <app-form-input
+              formControlName="PrimaryPhoneNumber"
+              [ControlPlaceholder]="localizedPrimaryPhoneNumber"
+              [ControlLabel]="localizedPrimaryPhoneNumber"
+            ></app-form-input>
+
+            <app-form-input
+              formControlName="EmailAddress"
+              [ControlPlaceholder]="localizedEmailAddress"
+              [ControlLabel]="localizedEmailAddress"
+            ></app-form-input>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
 </div>

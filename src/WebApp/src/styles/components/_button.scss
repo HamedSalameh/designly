@@ -1,0 +1,33 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the button component.
+// -----------------------------------------------------------------------------
+@import "abstracts/variables";
+
+
+.a-input {
+
+  font-family: $font-family;
+  display: flex;
+  width: 100%;
+  height: 40px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.a-input:focus {
+  outline: none;
+  border-color: $color-v1-black;
+}
+
+.a-input::placeholder {
+  color: $color-v1-placeholder;
+}
+
+.a-input-label {
+  font-family: $font-family;
+  font-size: $font-size-default;
+  color: $color-v2-black;
+  margin-bottom: 5px;
+}

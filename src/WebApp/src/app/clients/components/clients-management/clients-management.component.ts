@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { UnselectClient } from 'src/app/state/client-state/client-state.actions';
+import { Observable, of } from 'rxjs';
+import { SelectClient, UnselectClient } from 'src/app/state/client-state/client-state.actions';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
-import { Client } from '../../models/client.model';
 
 @Component({
   selector: 'app-clients-management',
@@ -11,30 +10,19 @@ import { Client } from '../../models/client.model';
   styleUrls: ['./clients-management.component.scss'],
 })
 export class ClientsManagementComponent {
-  selectedClient$: Observable<Client | null> | null;
-  selectedClient: Client | null = null;
+  clientId: string | null = null;
 
   constructor(private store: Store) {
-    this.selectedClient$ = this.store.select(ClientState.selectedClient);
+  }
 
-    this.selectedClient$.subscribe((client) => {
-      this.selectedClient = client
-        ? {
-            ...client,
-            Address: { City: client?.Address?.City },
-            ContactDetails: {
-              PrimaryPhoneNumber: client?.ContactDetails?.PrimaryPhoneNumber,
-              EmailAddress: client?.ContactDetails?.EmailAddress,
-            },
-          }
-        : null;
-      console.log(
-        `ClientsManagementComponent: ${this.selectedClient?.FirstName}`
-      );
-    });
+  onSelectClient($event: string) {
+    const selectedClientId = $event as string;
+    this.clientId = selectedClientId;
+    this.store.dispatch(new SelectClient(selectedClientId));
   }
 
   onCloseClientJacket() {
+    this.clientId = null;
     this.store.dispatch(new UnselectClient());
   }
 }

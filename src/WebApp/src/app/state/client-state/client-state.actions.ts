@@ -4,7 +4,7 @@ import { Client } from 'src/app/clients/models/client.model';
 
 export class SelectClient {
   static readonly type = '[ClientState] SelectClient';
-  constructor(public payload: Client) {}
+  constructor(public payload: string) {}
 }
 
 export class UnselectClient {

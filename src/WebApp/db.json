@@ -3,14 +3,14 @@
   "clients": [
     {
       "Id": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
-      "FirstName": "David",
-      "FamilyName": "Cohen",
+      "FirstName": "דוד",
+      "FamilyName": "כהן",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Tel Aviv",
-        "Street": "Rothschild Boulevard",
+        "City": "תל אביב",
+        "Street": "שדרות רוטשילד",
         "BuildingNumber": "12",
-        "addressLines": ["Some address line 1", "Additional address line 2"]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -19,14 +19,14 @@
     },
     {
       "Id": "47d34394-5abf-4190-8fa1-f9aa8eeae34e",
-      "FirstName": "Sarah",
-      "FamilyName": "Levi",
+      "FirstName": "שרה",
+      "FamilyName": "לוי",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Jerusalem",
-        "Street": "King David Street",
+        "City": "ירושלים",
+        "Street": "רחוב המלך דוד",
         "BuildingNumber": "20",
-        "addressLines": ["Some address line 1", "Additional address line 2"]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -35,14 +35,14 @@
     },
     {
       "Id": "f0b0b2a0-4b0a-4b1e-8b0a-0b0b0b0b0b0b",
-      "FirstName": "Daniel",
-      "FamilyName": "Cohen",
+      "FirstName": "דניאל",
+      "FamilyName": "כהן",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Haifa",
-        "Street": "Ben Gurion Avenue",
+        "City": "חיפה",
+        "Street": "כביש בן גוריון",
         "BuildingNumber": "8",
-        "addressLines": ["Some address line 1", "Additional address line 2"]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -51,14 +51,14 @@
     },
     {
       "Id": "12e4ef84-8448-49d4-ae2a-1c4cdb3892cd",
-      "FirstName": "Rachel",
-      "FamilyName": "Levi",
+      "FirstName": "רחל",
+      "FamilyName": "לוי",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Tel Aviv",
-        "Street": "Allenby Street",
+        "City": "תל אביב",
+        "Street": "רחוב אלנבי",
         "BuildingNumber": "15",
-        "addressLines": ["Some address line 1", "Additional address line 2"]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -67,14 +67,14 @@
     },
     {
       "Id": "fa7dc3bb-0fc2-438d-b6ba-f847b92b6de3",
-      "FirstName": "Yakov",
-      "FamilyName": "Cohen",
+      "FirstName": "יעקב",
+      "FamilyName": "כהן",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Netanya",
-        "Street": "Herzl Street",
+        "City": "נתניה",
+        "Street": "רחוב הרצל",
         "BuildingNumber": "5",
-        "addressLines": ["Some address line 1", "Additional address line 2"]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -83,17 +83,14 @@
     },
     {
       "Id": "ddc8b08d-4cc1-4bab-b958-041461a195a8",
-      "FirstName": "Avigail",
-      "FamilyName": "Levine",
+      "FirstName": "אביגיל",
+      "FamilyName": "לוין",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Haifa",
-        "Street": "Dizengoff Street",
+        "City": "חיפה",
+        "Street": "רחוב דיזנגוף",
         "BuildingNumber": "25",
-        "addressLines": [
-          "Some address line 1",
-          "Additional address line 2"
-        ]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -102,17 +99,14 @@
     },
     {
       "Id": "33a981e6-2d1b-4881-b083-2c6fd59cfc14",
-      "FirstName": "Eitan",
-      "FamilyName": "Cohen",
+      "FirstName": "איתן",
+      "FamilyName": "כהן",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Tel Aviv",
-        "Street": "Ben Yehuda Street",
+        "City": "תל אביב",
+        "Street": "רחוב בן יהודה",
         "BuildingNumber": "7",
-        "addressLines": [
-          "Some address line 1",
-          "Additional address line 2"
-        ]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -121,17 +115,14 @@
     },
     {
       "Id": "42e5d6e6-604c-433e-aee0-091dcfca3a23",
-      "FirstName": "Noa",
-      "FamilyName": "Levi",
+      "FirstName": "נועה",
+      "FamilyName": "לוי",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Jerusalem",
-        "Street": "Jaffa Street",
+        "City": "ירושלים",
+        "Street": "רחוב יפו",
         "BuildingNumber": "10",
-        "addressLines": [
-          "Some address line 1",
-          "Additional address line 2"
-        ]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -140,17 +131,14 @@
     },
     {
       "Id": "84721fff-e0e9-4cc6-b22c-f33cbcfd07b2",
-      "FirstName": "Itamar",
-      "FamilyName": "Cohen",
+      "FirstName": "איתמר",
+      "FamilyName": "כהן",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Tel Aviv",
-        "Street": "Rabin Square",
+        "City": "תל אביב",
+        "Street": "כיכר רבין",
         "BuildingNumber": "18",
-        "addressLines": [
-          "Some address line 1",
-          "Additional address line 2"
-        ]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -159,17 +147,14 @@
     },
     {
       "Id": "9b955a2f-a79a-4d0f-bda3-273538798984",
-      "FirstName": "Maya",
-      "FamilyName": "Levine",
+      "FirstName": "מאיה",
+      "FamilyName": "לוין",
       "TenantId": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "Address": {
-        "City": "Haifa",
-        "Street": "Herzl Street",
+        "City": "חיפה",
+        "Street": "רחוב הרצל",
         "BuildingNumber": "9",
-        "addressLines": [
-          "Some address line 1",
-          "Additional address line 2"
-        ]
+        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",

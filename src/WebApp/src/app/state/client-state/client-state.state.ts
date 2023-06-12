@@ -8,7 +8,7 @@ import { ClientStateModel } from "./client-state.models";
 @State<ClientStateModel>({
     name: 'clientState',
     defaults: {
-        selectedClient: null
+        selectedClientId: null
     }
 })
 
@@ -17,14 +17,14 @@ export class ClientState {
 
     @Selector()
     static selectedClient(state: ClientStateModel) {
-        return state.selectedClient;
+        return state.selectedClientId;
     }
 
     @Action(SelectClient)
     Select({getState, patchState}: StateContext<ClientStateModel>, {payload}: SelectClient) {
         const state = getState();
         patchState({
-            selectedClient: payload
+            selectedClientId: payload
         });
     }
 
@@ -32,7 +32,7 @@ export class ClientState {
     Unselect({getState, patchState}: StateContext<ClientStateModel>, {payload}: SelectClient) {
         const state = getState();
         patchState({
-            selectedClient: payload
+            selectedClientId: null
         });
     }
 }

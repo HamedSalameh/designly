@@ -11,6 +11,11 @@ export class TableComponent {
     this.rowSelected.emit($event.data);
   }
 
+  onRowUnselect($event: any) {
+    console.log("onRowUnselect");
+    this.rowSelected.emit(null);
+  }
+
   selectedItem: any;
 
   @Input()

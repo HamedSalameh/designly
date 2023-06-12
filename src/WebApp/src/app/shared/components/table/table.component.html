@@ -1,14 +1,17 @@
 <p-table
   [value]="data"
-  styleClass="p-datatable-striped"
+  styleClass=""
   selectionMode="single"
   [(selection)]="selectedItem"
   dataKey="FirstName"
+  (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
 >
   <ng-template pTemplate="header">
     <tr>
-      <th *ngFor="let col of cols">{{ col.header }}</th>
+      <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+        {{ col.header }}
+        <p-sortIcon [field]="col.field"></p-sortIcon></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData>

@@ -1,0 +1,10 @@
+<div class="a-form-input">
+  <label class="a-input-label">{{ this.ControlLabel }}</label>
+  <input
+    type="text"
+    [placeholder]="this.ControlPlaceholder"
+    [ngModel]="this.ControlValue"
+    (ngModelChange)="onChange($event)"
+    class="a-input"
+  />
+</div>
