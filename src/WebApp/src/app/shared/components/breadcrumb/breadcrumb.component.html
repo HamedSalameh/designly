@@ -1,4 +1,3 @@
-<span *ngFor="let breadcrumb of breadcrumbs$ | async">
+<span *ngFor="let breadcrumb of breadcrumbs$ | async" class="breadcrumb-item">
   <a [href]="breadcrumb.url">{{ breadcrumb.label }}</a>
-  <span> | </span>
 </span>
