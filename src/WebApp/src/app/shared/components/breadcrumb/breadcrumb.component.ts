@@ -10,10 +10,10 @@ import { BreadcrumbService } from '../../services/breadcrumb.service';
 })
 export class BreadcrumbComponent {
 
-  breadcrumbs$: Observable<Breadcrumb[]>; 
+  breadcrumbs$: Observable<Breadcrumb[]> ; 
  
   constructor(private readonly breadcrumbService: BreadcrumbService) { 
-    this.breadcrumbs$ = breadcrumbService.breadcrumbs$; 
+    this.breadcrumbs$ = breadcrumbService.breadcrumbs$;
   } 
   
 }
