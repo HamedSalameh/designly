@@ -5,12 +5,14 @@ import { TableComponent } from './components/table/table.component';
 import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from './components/form-input/form-input.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
     IconButtonComponent,
     TableComponent,
     FormInputComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { FormInputComponent } from './components/form-input/form-input.component
   exports: [
     IconButtonComponent,
     TableComponent,
-    FormInputComponent
+    FormInputComponent,
+    BreadcrumbComponent
   ]
 })
 export class SharedModule { }

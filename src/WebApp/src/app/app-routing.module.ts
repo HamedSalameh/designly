@@ -4,12 +4,16 @@ import { AuthenticationGuard } from './authentication/authentication.guard';
 import { HomeModule } from './home/home.module';
 import { LoginComponent } from './login/components/login.component';
 
+
+const localizedHomeLabel = $localize`:@@Global.Nav.Home:Home`;
+
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: 'home',
     canActivate: [AuthenticationGuard],
+    data: { breadcrumb: localizedHomeLabel },
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule)
   },
   { path: '**', redirectTo: '/login' } // Optional: Redirect any unknown routes to the login page
