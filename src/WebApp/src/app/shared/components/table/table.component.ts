@@ -17,6 +17,7 @@ export class TableComponent {
   }
 
   selectedItem: any;
+  defaultRowsPerPage: number = 10;
 
   @Input()
   data: any[] = [];
@@ -26,6 +27,9 @@ export class TableComponent {
 
   @Input()
   key: any = "";
+
+  @Input()
+  RowsPerPageOptions: any[] = [5, 10, 20, 50];
 
   @Output()
   rowSelected: EventEmitter<any> = new EventEmitter();

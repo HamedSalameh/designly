@@ -4,6 +4,10 @@
   selectionMode="single"
   [(selection)]="selectedItem"
   [dataKey]="this.key"
+  [paginator]="true"
+  [rows]="this.defaultRowsPerPage"
+  [rowsPerPageOptions]="this.RowsPerPageOptions"
+
   (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
 >
