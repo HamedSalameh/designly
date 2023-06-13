@@ -1,0 +1,32 @@
+@import "main";
+
+.breadcrumb-item {
+  display: flex;
+  font-family: $font-family;
+  font-size: $font-size-medium;
+  
+  align-items: center;
+  cursor: pointer;
+  transition: all 1.3s ease-in-out;
+
+  a {
+    font-weight: $font-weight-regular;
+    text-decoration: none;
+    color: $color-v1-black;
+    &:hover {
+      color: $color-v1-black;
+    }
+  }
+
+  &:last-child {
+    a {
+      color: $color-v1-black;
+      cursor: default;
+    }
+  }
+}
+
+.separator {
+  margin-left: 10px;
+  margin-right: 10px;
+}

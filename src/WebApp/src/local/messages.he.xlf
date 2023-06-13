@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="Global.Nav.Home" datatype="html">
+        <source>Home</source>
+        <target>בית</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app-routing.module.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
         <target>שם פרטי</target>
@@ -64,7 +72,7 @@
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
         <source>PrimaryPhoneNumber</source>
-        <target>טלפון ראשי</target>
+        <target>מספר טלפון ראשי</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -76,10 +84,14 @@
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
         <source>EmailAddress</source>
-        <target>כתובת דוא"ל</target>
+        <target>כתובת אימייל</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
           <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
@@ -90,15 +102,31 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sideNav.Dashboard" datatype="html">
+      <trans-unit id="Global.Nav.Dashboard" datatype="html">
         <source>Dashboard</source>
         <target>לוח בקרה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home-routing.module.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sideNav.Projects" datatype="html">
+      <trans-unit id="Global.Nav.Clients" datatype="html">
+        <source>Clients</source>
+        <target>לקוחות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home-routing.module.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Nav.Projects" datatype="html">
         <source>Projects</source>
         <target>פרויקטים</target>
         <context-group purpose="location">
@@ -106,7 +134,7 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sideNav.Tasks" datatype="html">
+      <trans-unit id="Global.Nav.Tasks" datatype="html">
         <source>Tasks</source>
         <target>משימות</target>
         <context-group purpose="location">
@@ -114,15 +142,7 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sideNav.Clients" datatype="html">
-        <source>Clients</source>
-        <target>לקוחות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="sideNav.Communication" datatype="html">
+      <trans-unit id="Global.Nav.Communication" datatype="html">
         <source>Communication</source>
         <target>תקשורת</target>
         <context-group purpose="location">
@@ -130,7 +150,7 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sideNav.Analytics" datatype="html">
+      <trans-unit id="Global.Nav.Analytics" datatype="html">
         <source>Analytics</source>
         <target>ניתוחים</target>
         <context-group purpose="location">
