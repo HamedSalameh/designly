@@ -3,9 +3,27 @@
 // -----------------------------------------------------------------------------
 @import "abstracts/variables";
 
+.a-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 4px;
+
+  font-family: $font-family;
+  font-size: $font-size-default;
+  font-weight: $font-weight-bold;
+  color: $color-v1-white;
+  background-color: $color-v1-black;
+  border: none;
+  border-radius: $border-radius;
+  
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 
 .a-input {
-
   font-family: $font-family;
   display: flex;
   width: 100%;
