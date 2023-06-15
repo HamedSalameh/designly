@@ -1,4 +1,11 @@
+<div class="p-fluid">
+  <form [formGroup]="formGroup">
+      <p-chips formControlName="values" [placeholder]="this.FilterChipsPlaceholder"></p-chips>
+  </form>
+</div>
+
 <p-table
+  #dt1
   [value]="data"
   styleClass=""
   selectionMode="single"
@@ -7,7 +14,6 @@
   [paginator]="true"
   [rows]="this.defaultRowsPerPage"
   [rowsPerPageOptions]="this.RowsPerPageOptions"
-
   (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
 >
@@ -15,7 +21,8 @@
     <tr>
       <th *ngFor="let col of cols" [pSortableColumn]="col.field">
         {{ col.header }}
-        <p-sortIcon [field]="col.field"></p-sortIcon></th>
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData>

@@ -1,7 +1,10 @@
+@import "main";
+
 .clients-management-workspace {
     display: flex;
     flex-direction: row;
     flex-flow: row wrap;
+    gap: $gap-medium;
   }
   
   .clients-list {
