@@ -2,7 +2,7 @@
     <!-- Edit Mode -->
   <div class="form-container">
     <ng-container [formGroup]="ClientInfo">
-      <div class="form-section">
+      <div class="form-section basicInfo ">
         <ng-container formGroupName="BasicInfo">
           <div class="form-row">
             <app-form-input
@@ -20,7 +20,7 @@
         </ng-container>
       </div>
 
-      <div class="form-section">
+      <div class="form-section addressInfo ">
         <ng-container formGroupName="AddressInfo">
           <div class="form-row">
             <app-form-input
@@ -44,7 +44,7 @@
         </ng-container>
       </div>
 
-      <div class="form-section">
+      <div class="form-section contactInfo">
         <ng-container formGroupName="ContactDetails">
           <div class="form-row">
             <app-form-input
