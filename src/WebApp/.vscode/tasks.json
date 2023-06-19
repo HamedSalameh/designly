@@ -37,6 +37,14 @@
           }
         }
       }
-    }
+    },
+    {
+      "label": "start-with-mock",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "start-with-mock-api"],
+      "group": "build",
+      "problemMatcher": []
+    },
   ]
 }
