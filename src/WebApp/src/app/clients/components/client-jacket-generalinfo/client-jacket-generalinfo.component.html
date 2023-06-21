@@ -1,6 +1,41 @@
 <div class="app-card" *ngIf="this.selectedClient">
+  <div class="p-top-0 p-left-1 p-right-1">
+    <div class="form-row m-bottom-3">
+      <label class="h1"
+        >{{ this.selectedClient.FirstName }}
+        {{ this.selectedClient.FamilyName }}
+      </label>
+    </div>
+
+    <div class="form-section">
+      <div class="form-row">
+        <i class="fas fa-map-marker-alt"></i>
+        <label class="details"
+          >{{ this.selectedClient.Address.Street }}
+          {{ this.selectedClient.Address.BuildingNumber }},
+          {{ this.selectedClient.Address.City }}</label
+        >  
+      </div>
+      
+    </div>
+
+    <div class="form-section">
+      <div class="form-row">
+        <i class="fas fa-envelope"></i>
+        <label class="details">{{this.selectedClient.ContactDetails.EmailAddress}}</label>
+        
+      </div>
+      <div class="form-row">
+        <i class="fas fa-phone"></i>
+        <label class="details">{{this.selectedClient.ContactDetails.PrimaryPhoneNumber}}</label>
+
+      </div>
+    </div>
+
+    <div class="form-section-divider"></div>
+
     <!-- Edit Mode -->
-  <div class="form-container">
+    <!-- <div class="form-container">
     <ng-container [formGroup]="ClientInfo">
       <div class="form-section basicInfo ">
         <ng-container formGroupName="BasicInfo">
@@ -62,5 +97,6 @@
         </ng-container>
       </div>
     </ng-container>
+  </div> -->
   </div>
 </div>

@@ -1,3 +1,18 @@
 // -----------------------------------------------------------------------------
 // This file contains very basic styles.
 // -----------------------------------------------------------------------------
+
+@import "abstracts/variables";
+@import "base/typography";
+
+* {
+  box-sizing: border-box;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: $font-family;
+  color: $color-v1-black;
+}

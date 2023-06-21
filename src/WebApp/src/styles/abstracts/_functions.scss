@@ -1,3 +1,24 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass functions.
 // -----------------------------------------------------------------------------
+
+// Padding helper
+$spacer: 16px;
+$max: 5;
+
+@each $direction in (top, right, bottom, left) {
+  @for $i from 0 through $max {
+    .p-#{$direction}-#{$i} {
+      padding-#{$direction}: ($spacer * $i) !important;
+    }
+  }
+}
+
+// Margin helper
+@each $direction in (top, right, bottom, left) {
+  @for $i from 0 through $max {
+    .m-#{$direction}-#{$i} {
+      margin-#{$direction}: ($spacer * $i) !important;
+    }
+  }
+}

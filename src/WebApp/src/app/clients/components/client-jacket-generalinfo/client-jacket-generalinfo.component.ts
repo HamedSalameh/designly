@@ -40,7 +40,7 @@ export class ClientJacketGeneralinfoComponent implements OnInit {
       if (clientId) {
         this.clientsService.getClient(clientId).subscribe((client: Client) => {
           this.selectedClient = client;
-          this.createForm();
+          //this.createForm();
         });
       }
     });
@@ -60,30 +60,30 @@ export class ClientJacketGeneralinfoComponent implements OnInit {
     this.localizedEmailAddress =  $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
   }
 
-  createForm() {
-    this.ClientInfo = this.formBuilder.group({
-      BasicInfo: this.formBuilder.group({
-        FirstName: [this.selectedClient?.FirstName],
-        FamilyName: [this.selectedClient?.FamilyName],
-        // CustomControl: [this.selectedClient?.FirstName]
-      }),
-      ContactDetails: this.formBuilder.group({
-        PrimaryPhoneNumber: [
-          this.selectedClient?.ContactDetails?.PrimaryPhoneNumber,
-        ],
-        EmailAddress: [this.selectedClient?.ContactDetails?.EmailAddress],
-      }),
-      AddressInfo: this.formBuilder.group({
-        City: [this.selectedClient?.Address?.City],
-        Street: [this.selectedClient?.Address?.Street],
-        BuildingNumber: [this.selectedClient?.Address?.BuildingNumber],
-        AddressLine1: [this.selectedClient?.Address?.AddressLines],
-      }),
-    });
+  // createForm() {
+  //   this.ClientInfo = this.formBuilder.group({
+  //     BasicInfo: this.formBuilder.group({
+  //       FirstName: [this.selectedClient?.FirstName],
+  //       FamilyName: [this.selectedClient?.FamilyName],
+  //       // CustomControl: [this.selectedClient?.FirstName]
+  //     }),
+  //     ContactDetails: this.formBuilder.group({
+  //       PrimaryPhoneNumber: [
+  //         this.selectedClient?.ContactDetails?.PrimaryPhoneNumber,
+  //       ],
+  //       EmailAddress: [this.selectedClient?.ContactDetails?.EmailAddress],
+  //     }),
+  //     AddressInfo: this.formBuilder.group({
+  //       City: [this.selectedClient?.Address?.City],
+  //       Street: [this.selectedClient?.Address?.Street],
+  //       BuildingNumber: [this.selectedClient?.Address?.BuildingNumber],
+  //       AddressLine1: [this.selectedClient?.Address?.AddressLines],
+  //     }),
+  //   });
 
-    this.ClientInfo.valueChanges.subscribe((val) => {
-      console.log(val);
-    }); 
+  //   this.ClientInfo.valueChanges.subscribe((val) => {
+  //     console.log(val);
+  //   }); 
 
-  }
+  // }
 }

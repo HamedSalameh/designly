@@ -1,12 +1,5 @@
 @import "main";
 
-.form-section {
-  /* Set initial visibility and opacity */
-  opacity: 0;
-  visibility: hidden;
-  /* Add other necessary styling for the nested divs */
-}
-
 /* Apply animation to the first nested div */
 .basicInfo {
   animation: fade-in-bottom 0.3s ease-in-out forwards;
@@ -22,3 +15,4 @@
   animation: fade-in-bottom 0.3s ease-in-out forwards;
   animation-delay: 0.2s; /* Delay the animation by 1 second */
 }
+
