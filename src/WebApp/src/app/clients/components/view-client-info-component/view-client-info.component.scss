@@ -1,0 +1,7 @@
+@import "main";
+
+/* Apply animation to the first nested div */
+.ease-in-left {
+  animation: fade-in-left 0.3s ease-in-out forwards;
+}
+

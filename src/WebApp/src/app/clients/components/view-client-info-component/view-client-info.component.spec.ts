@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClientJacketGeneralinfoComponent } from './client-jacket-generalinfo.component';
+import { ViewClientInfoComponent } from './view-client-info.component';
 
 describe('ClientJacketGeneralinfoComponent', () => {
-  let component: ClientJacketGeneralinfoComponent;
-  let fixture: ComponentFixture<ClientJacketGeneralinfoComponent>;
+  let component: ViewClientInfoComponent;
+  let fixture: ComponentFixture<ViewClientInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClientJacketGeneralinfoComponent ]
+      declarations: [ ViewClientInfoComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClientJacketGeneralinfoComponent);
+    fixture = TestBed.createComponent(ViewClientInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

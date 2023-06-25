@@ -1,52 +1,75 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
+import { EditMode, ViewMode } from 'src/app/state/client-state/client-state.actions';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
   selector: 'app-client-jacket',
   templateUrl: './client-jacket.component.html',
-  styleUrls: ['./client-jacket.component.scss']
+  styleUrls: ['./client-jacket.component.scss'],
 })
-export class ClientJacketComponent {
-
-  clientId;
-  selectedClient$: Observable<Client | null> = of(null);
-  selectedClient: Client | null = null;
+export class ClientJacketComponent implements OnDestroy{
+  clientId: any;
+  editMode: boolean = false;
 
   @Input() client: Client | undefined;
-
   @Output() CloseClientJacket: EventEmitter<any> = new EventEmitter();
+
+  private unsubscribe$: Subject<void> = new Subject();
 
   constructor(
     private clientsService: ClientsServiceService,
     private store: Store
   ) {
-    this.clientId = this.store.select(ClientState.selectedClient).subscribe();
+    this.store
+      .select(ClientState.selectedClient)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((clientId: any) => {
+        if (clientId) {
+          this.clientId = clientId;
+          this.clientsService.getClient(clientId).subscribe((client: Client) => {
+            this.clientId = clientId;
+          });
+        }
+      });
 
-    // this.clientId.subscribe((clientId) => {
-    //   if (clientId) {
-    //     this.clientsService.getClient(clientId).subscribe((client) => {
-    //       this.client = client;
-    //       this.selectedClient = client
-    //         ? {
-    //             ...client,
-    //             Address: { City: client?.Address?.City },
-    //             ContactDetails: {
-    //               PrimaryPhoneNumber:
-    //                 client?.ContactDetails?.PrimaryPhoneNumber,
-    //               EmailAddress: client?.ContactDetails?.EmailAddress,
-    //             },
-    //           }
-    //         : null;
-    //     });
-    //   }
-    // });
+    this.store
+      .select(ClientState.applicationState)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((editMode: any) => {
+        this.editMode = editMode.editMode;
+      });
   }
 
-  onClose() {
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  onClose(): void {
+    console.debug('[ClientJacketComponent] [onClose]', this.clientId);
     this.client = undefined;
+    this.store.dispatch(new ViewMode());
     this.CloseClientJacket.emit();
+  }
+
+  onEdit(): void {
+    console.debug('[ClientJacketComponent] [onEdit]', this.clientId);
+    if (this.clientId) {
+      this.store.dispatch(new EditMode(this.clientId));
+    }
+  }
+
+  onCloseEditClient(): void {
+    console.debug('[ClientJacketComponent] [onCloseEditClient]', this.clientId);
+    this.store.dispatch(new ViewMode());
+  }
+
+  onShare(): void {
+    console.debug('[ClientJacketComponent] [onShare]', this.clientId);
   }
 }
