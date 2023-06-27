@@ -22,3 +22,7 @@
   font-weight: bold;
   font-size: $font-size-extra-large;
 }
+
+.is-invalid {
+  border: 1px solid $color-red !important;
+}

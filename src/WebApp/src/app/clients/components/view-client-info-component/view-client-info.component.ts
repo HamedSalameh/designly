@@ -37,6 +37,7 @@ export class ViewClientInfoComponent {
   }
 
   onClose() {
+    console.debug('[ViewClientInfoComponent] [onClose] ', this.clientId);
     this.CloseClient.emit();
   }
 
@@ -46,6 +47,7 @@ export class ViewClientInfoComponent {
   }
 
   onShare() {
+    console.debug('[ViewClientInfoComponent] [onShare] ', this.clientId);
     this.ShareClient.emit();
   }
 }

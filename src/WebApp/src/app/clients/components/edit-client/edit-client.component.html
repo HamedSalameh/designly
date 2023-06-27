@@ -6,17 +6,37 @@
       <div class="form-section basicInfo">
         <ng-container formGroupName="BasicInfo">
           <div class="form-row">
-            <app-form-input
-              formControlName="FirstName"
-              [ControlPlaceholder]="localizedFirstName"
-              [ControlLabel]="localizedFirstName"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedFirstName }}</label>
+              <input
+                formControlName="FirstName"
+                type="text"
+                class="a-input"
+                placeholder="{{ localizedFirstName }}"
+                [ngClass]="{
+                  'is-invalid':
+                    ClientInfo.get('BasicInfo.FirstName')?.invalid &&
+                    (ClientInfo.get('BasicInfo.FirstName')?.dirty ||
+                      ClientInfo.get('BasicInfo.FirstName')?.touched)
+                }"
+              />
+              <!-- Show validation errors -->
+              <div
+                *ngIf="
+                  ClientInfo.get('BasicInfo.FirstName')?.invalid &&
+                  (ClientInfo.get('BasicInfo.FirstName')?.dirty ||
+                    ClientInfo.get('BasicInfo.FirstName')?.touched)
+                ">
+                <!-- display any errors from the control validation -->
+                  {{ getValidationMessage('BasicInfo','FirstName') }}
+                  
+              </div>
+            </div>
 
-            <app-form-input
-              formControlName="FamilyName"
-              [ControlPlaceholder]="localizedFamilyName"
-              [ControlLabel]="localizedFamilyName"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedFamilyName }}</label>
+              <input type="text" class="a-input" formControlName="FamilyName" />
+            </div>
           </div>
         </ng-container>
       </div>
@@ -24,23 +44,53 @@
       <div class="form-section addressInfo">
         <ng-container formGroupName="AddressInfo">
           <div class="form-row">
-            <app-form-input
-              formControlName="City"
-              [ControlPlaceholder]="localizedCity"
-              [ControlLabel]="localizedCity"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedCity }}</label>
+              <input
+                type="text"
+                class="a-input"
+                formControlName="City"
+                [ngClass]="{
+                  'is-invalid':
+                    ClientInfo.get('AddressInfo.City')?.invalid &&
+                    (ClientInfo.get('AddressInfo.City')?.dirty ||
+                      ClientInfo.get('AddressInfo.City')?.touched)
+                }"
+              />
+              <!-- Show validation errors -->
+              <div
+                *ngIf="
+                  ClientInfo.get('AddressInfo.City')?.invalid &&
+                  (ClientInfo.get('AddressInfo.City')?.dirty ||
+                    ClientInfo.get('AddressInfo.City')?.touched)
+                ">
+                <!-- display any errors from the control validation -->
+                  {{ getValidationMessage('AddressInfo','City') }}
+              </div>
+            </div>
 
-            <app-form-input
-              formControlName="Street"
-              [ControlPlaceholder]="localizedStreet"
-              [ControlLabel]="localizedStreet"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedStreet }}</label>
+              <input type="text" class="a-input" formControlName="Street" />
+            </div>
 
-            <app-form-input
-              formControlName="BuildingNumber"
-              [ControlPlaceholder]="localizedBuildingNumber"
-              [ControlLabel]="localizedBuildingNumber"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedBuildingNumber }}</label>
+              <input
+                type="text"
+                class="a-input"
+                formControlName="BuildingNumber"
+              />
+            </div>
+
+            <div class="">
+              <label class="a-input-label">{{ localizedAddressLine1 }}</label>
+              <input
+                type="text"
+                class="a-input"
+                formControlName="AddressLine1"
+              />
+            </div>
           </div>
         </ng-container>
       </div>
@@ -48,17 +98,45 @@
       <div class="form-section contactInfo">
         <ng-container formGroupName="ContactDetails">
           <div class="form-row">
-            <app-form-input
-              formControlName="PrimaryPhoneNumber"
-              [ControlPlaceholder]="localizedPrimaryPhoneNumber"
-              [ControlLabel]="localizedPrimaryPhoneNumber"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{
+                localizedPrimaryPhoneNumber
+              }}</label>
+              <input
+                type="text"
+                class="a-input"
+                formControlName="PrimaryPhoneNumber"
+                [ngClass]="{
+                  'is-invalid':
+                    ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
+                      ?.invalid &&
+                    (ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
+                      ?.dirty ||
+                      ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
+                        ?.touched)
+                }"
+              />
+              <!-- Show validation errors -->
+              <div
+                *ngIf="
+                  ClientInfo.get('ContactDetails.PrimaryPhoneNumber')?.invalid &&
+                  (ClientInfo.get('ContactDetails.PrimaryPhoneNumber')?.dirty ||
+                    ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
+                      ?.touched)
+                ">
+                <!-- display any errors from the control validation -->
+                  {{ getValidationMessage('ContactDetails','PrimaryPhoneNumber') }}
+              </div>
+            </div>
 
-            <app-form-input
-              formControlName="EmailAddress"
-              [ControlPlaceholder]="localizedEmailAddress"
-              [ControlLabel]="localizedEmailAddress"
-            ></app-form-input>
+            <div class="">
+              <label class="a-input-label">{{ localizedEmailAddress }}</label>
+              <input
+                type="text"
+                class="a-input"
+                formControlName="EmailAddress"
+              />
+            </div>
           </div>
         </ng-container>
       </div>
@@ -66,7 +144,7 @@
       <div class="form-section-divider"></div>
 
       <div class="form-section">
-        <div class="form-row">
+        <div class="form-row flex-justify-end">
           <button
             class="btn btn-primary btn-normal"
             (click)="this.onSave()"
@@ -74,12 +152,14 @@
           >
             {{ localizedSave }}
           </button>
-          <button class="btn btn-secondary btn-normal" (click)="this.onCancel()">
+          <button
+            class="btn btn-secondary btn-normal"
+            (click)="this.onCancel()"
+          >
             {{ localizedCancel }}
           </button>
         </div>
       </div>
-
     </ng-container>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, of } from 'rxjs';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
@@ -12,8 +13,6 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   styleUrls: ['./edit-client.component.scss'],
 })
 export class EditClientComponent {
-
-  @Output() CloseClient: EventEmitter<any> = new EventEmitter();
 
   ClientInfo!: FormGroup;
   clientId;
@@ -34,10 +33,13 @@ export class EditClientComponent {
   localizedBuildingNumber!: string;
   localizedAddressLine1!: string;
 
+  validators = [Validators.required];
+
   constructor(
     private clientsService: ClientsServiceService,
     private formBuilder: FormBuilder,
-    private store: Store
+    private store: Store,
+    private ref: DynamicDialogRef
   ) {
     this.clientId = this.store.select(ClientState.selectedClient);
 
@@ -68,18 +70,18 @@ export class EditClientComponent {
   createForm() {
     this.ClientInfo = this.formBuilder.group({
       BasicInfo: this.formBuilder.group({
-        FirstName: [this.selectedClient?.FirstName],
+        FirstName: [this.selectedClient?.FirstName, [Validators.required]],
         FamilyName: [this.selectedClient?.FamilyName],
         // CustomControl: [this.selectedClient?.FirstName]
       }),
       ContactDetails: this.formBuilder.group({
         PrimaryPhoneNumber: [
-          this.selectedClient?.ContactDetails?.PrimaryPhoneNumber,
+          this.selectedClient?.ContactDetails?.PrimaryPhoneNumber, [Validators.required]
         ],
         EmailAddress: [this.selectedClient?.ContactDetails?.EmailAddress],
       }),
       AddressInfo: this.formBuilder.group({
-        City: [this.selectedClient?.Address?.City],
+        City: [this.selectedClient?.Address?.City, [Validators.required]],
         Street: [this.selectedClient?.Address?.Street],
         BuildingNumber: [this.selectedClient?.Address?.BuildingNumber],
         AddressLine1: [this.selectedClient?.Address?.AddressLines],
@@ -93,11 +95,21 @@ export class EditClientComponent {
 
   onCancel() {
     console.debug('[EditClientComponent] [onCancel]');
-    this.CloseClient.emit();
+    this.ref.close();
   }
 
   onSave() {
+    console.debug('[EditClientComponent] [onSave]');
     console.log('save');
+  }
+
+  getValidationMessage(formGroupName: string, formControlName: string) {
+    const controlName = `${formGroupName}.${formControlName}`;
+    const formControl = this.ClientInfo.get(controlName);
+    if (formControl?.hasError('required')) {
+      return $localize`:@@Global.Validation.Required:Required`;
+    }
+    return '';
   }
 
 }

@@ -1,12 +1,13 @@
 <div class="client-jacket" *ngIf="this.clientId">
   <!-- General information section -->
-  <app-view-client-info *ngIf="!this.editMode"
+  <app-view-client-info
   (CloseClient)="this.onClose()"
   (EditClient)="this.onEdit()"
   (ShareClient)="this.onShare()"
   ></app-view-client-info>
-  <app-edit-client 
+
+  <!-- <app-edit-client 
   (CloseClient)="this.onCloseEditClient()"
-  *ngIf="this.editMode" ></app-edit-client>
+  *ngIf="this.editMode" ></app-edit-client> -->
   <!-- Footer buttons section -->
 </div>
