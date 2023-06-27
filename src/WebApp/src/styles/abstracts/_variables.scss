@@ -7,16 +7,31 @@
 
 // Color System
 $color-v1-black: #1C1C1C;
+$color-v1-black-80: rgba(0, 0, 0, 0.8);
+$color-v1-black-40: rgba(0, 0, 0, 0.4);
+$color-v1-black-20: rgba(0, 0, 0, 0.2);
+$color-v1-black-10: rgba(0, 0, 0, 0.1);
+$color-v1-black-5: rgba(0, 0, 0, 0.05);
+
 $color-v1-white: #ffffff;
+$color-v1-white-80: rgba(255, 255, 255, 0.8);
+$color-v1-white-40: rgba(255, 255, 255, 0.4);
+$color-v1-white-20: rgba(255, 255, 255, 0.2);
+$color-v1-white-10: rgba(255, 255, 255, 0.1);
+$color-v1-white-5: rgba(255, 255, 255, 0.05);
+
+$color-v1-bacground: #F8F8F8;
 $color-v1-primary: #F7F9FB;
 $color-v1-secondary: #95A4FC;
 $color-v1-placeholder: #C6C7F8;
+$color-v1-error: #FF4747;
 
 $color-v2-black:  rgba(0, 0, 0, 0.8);
 $color-v2-white: rgba(255, 255, 255, 0.8);;
 $color-v2-primary: #95A4FC;
 $color-v2-secondary: #C6C7F8;
 $color-v2-placeholder: #C6C7F8;
+$color-v2-error: #FF4747;
 
 $color-yellow: #FFE999;
 $color-red: #FF4747;

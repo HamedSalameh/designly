@@ -1,0 +1,51 @@
+<div class="app-card" *ngIf="this.selectedClient">
+  <div class="p-top-0 p-left-1 p-right-1">
+    <div class="card-header form-row m-bottom-3">
+      <div class="card-title">
+        <label class="section-title"
+          >{{ this.selectedClient.FirstName }}
+          {{ this.selectedClient.FamilyName }}
+        </label>
+      </div>
+
+      <div class="card-buttons">
+        <!-- Icon button to share  -->
+        <button class="btn icon-btn" (click)="onShare()">
+          <i class="fas fa-share-alt"></i>
+        </button>
+        <!-- Icon button to edit  -->
+        <button class="btn icon-btn" (click)="onEdit()">
+          <i class="fas fa-edit"></i>
+        </button>
+        <!-- Icon button to close  -->
+        <button class="btn icon-btn" (click)="onClose()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <i class="fas fa-map-marker-alt"></i>
+      <label class="details"
+        >{{ this.selectedClient.Address.Street }}
+        {{ this.selectedClient.Address.BuildingNumber }},
+        {{ this.selectedClient.Address.City }}</label
+      >
+    </div>
+
+    <div class="form-row">
+      <i class="fas fa-envelope"></i>
+      <label class="details">{{
+        this.selectedClient.ContactDetails.EmailAddress
+      }}</label>
+    </div>
+    <div class="form-row">
+      <i class="fas fa-phone"></i>
+      <label class="details">{{
+        this.selectedClient.ContactDetails.PrimaryPhoneNumber
+      }}</label>
+    </div>
+
+    <div class="form-section-divider"></div>
+  </div>
+</div>

@@ -1,3 +1,82 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass functions.
 // -----------------------------------------------------------------------------
+
+// Padding helper
+$spacer: 16px;
+$max: 5;
+
+@each $direction in (top, right, bottom, left) {
+  @for $i from 0 through $max {
+    .p-#{$direction}-#{$i} {
+      padding-#{$direction}: ($spacer * $i) !important;
+    }
+  }
+}
+
+// Margin helper
+@each $direction in (top, right, bottom, left) {
+  @for $i from 0 through $max {
+    .m-#{$direction}-#{$i} {
+      margin-#{$direction}: ($spacer * $i) !important;
+    }
+  }
+}
+
+// Flex helper
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
+}
+
+.flex-fill {
+  flex: 1 1 auto;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+// Flex justify helper
+.flex-justify-start {
+  justify-content: flex-start;
+}
+
+.flex-justify-end {
+  justify-content: flex-end;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}

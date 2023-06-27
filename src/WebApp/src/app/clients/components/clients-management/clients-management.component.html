@@ -5,7 +5,7 @@
         ></app-clients>
     </div>
     
-    <div class="clients-jacket" *ngIf="this.clientId">
+    <div class="clients-jacket" [@fadeInLeft] *ngIf="this.clientId">
         <app-client-jacket (CloseClientJacket)="this.onCloseClientJacket()"
         ></app-client-jacket>
     </div>

@@ -11,3 +11,14 @@ export class UnselectClient {
   static readonly type = '[ClientState] UnselectClient';
   constructor() {}
 }
+
+// Sets the application in edit mode per the client Id
+export class EditMode {
+  static readonly type = '[ClientState] EditMode';
+  constructor(public payload: string) {}
+}
+
+export class ViewMode {
+  static readonly type = '[ClientState] CancelEditMode';
+  constructor() {}
+}

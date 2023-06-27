@@ -1,7 +1,70 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
-@import "abstracts/variables";
+
+
+// Button
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 4px;
+
+  font-family: $font-family;
+  font-size: $font-size-default;
+  font-weight: $font-weight-bold;
+  color: $color-v1-white;
+  border: none;
+  border-radius: $border-radius;
+  background-color: transparent;
+  color: $color-v1-black;
+
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-normal {
+  font-size: $font-size-default;
+  padding: 8px 16px;
+}
+
+.btn-medium {
+  font-size: $font-size-medium;
+  padding: 8px 16px;
+}
+
+.btn:hover {
+  background-color: $color-v1-black-80;
+  color: $color-v1-white;
+}
+
+.btn:active {
+  background-color: $color-v1-black-40;
+}
+
+.btn:disabled {
+  background-color: $color-v1-black-20;
+  color: $color-v1-black-40;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: $color-v1-black-80;
+  color: $color-v1-white;
+}
+
+.btn-secondary {
+  background-color: $color-v1-secondary;
+  color: $color-v1-white;
+}
+
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+}
 
 .a-button {
   display: flex;
@@ -23,29 +86,30 @@
   transition: all 0.3s ease-in-out;
 }
 
-.a-input {
-  font-family: $font-family;
-  display: flex;
-  width: 100%;
-  height: 40px;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  padding: 0 10px;
-  margin-bottom: 10px;
+
+// Headings
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $font-family; //   font-weight: $font-weight-bold;
 }
 
-.a-input:focus {
-  outline: none;
-  border-color: $color-v1-black;
+.h1 {
+  font-size: $font-size-extra-large;
+  line-height: 30px;
 }
 
-.a-input::placeholder {
-  color: $color-v1-placeholder;
+.h2 {
+  font-size: $font-size-large;
+  line-height: 20px;
 }
 
-.a-input-label {
-  font-family: $font-family;
-  font-size: $font-size-default;
-  color: $color-v2-black;
-  margin-bottom: 5px;
+.h3 {
+  font-size: $font-size-medium;
+  line-height: 20px;
+}
+
+// Icons, SVGs
+i {
+  font-size: 1 rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }

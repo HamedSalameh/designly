@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { IconButtonComponent } from './components/icon-button/icon-button.component';
 import { TableComponent } from './components/table/table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormInputComponent } from './components/form-input/form-input.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 import { TableModule } from 'primeng/table';
@@ -13,7 +12,6 @@ import { ChipsModule } from 'primeng/chips';
   declarations: [
     IconButtonComponent,
     TableComponent,
-    FormInputComponent,
     BreadcrumbComponent,
   ],
   imports: [
@@ -27,7 +25,6 @@ import { ChipsModule } from 'primeng/chips';
   exports: [
     IconButtonComponent,
     TableComponent,
-    FormInputComponent,
     BreadcrumbComponent
   ]
 })
