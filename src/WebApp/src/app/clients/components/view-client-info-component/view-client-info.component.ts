@@ -50,4 +50,14 @@ export class ViewClientInfoComponent {
     console.debug('[ViewClientInfoComponent] [onShare] ', this.clientId);
     this.ShareClient.emit();
   }
+
+  onDelete() {
+    console.debug('[ViewClientInfoComponent] [onDelete] ', this.clientId);
+    // Delete a clinet is allow only if :
+    // 1. The client is not assigned to any active project
+    // 2. The client is not assigned to any active project, but the user has the permission to delete clients
+    // 3. The client is not the current user's client
+    // 4. The server response for CanDelete is true
+    
+  }
 }

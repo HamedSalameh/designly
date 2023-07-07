@@ -148,7 +148,7 @@
           <button
             class="btn btn-primary btn-normal"
             (click)="this.onSave()"
-            [disabled]="!this.ClientInfo.valid"
+            [disabled]="!this.ClientInfo.valid || this.ClientInfo.pristine"
           >
             {{ localizedSave }}
           </button>

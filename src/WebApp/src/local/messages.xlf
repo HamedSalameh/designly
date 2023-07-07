@@ -9,80 +9,44 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="Clients.EditClient" datatype="html">
+        <source>Edit Client</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
         <source>FamilyName</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
         <source>City</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="Global.AddressInfo.Street" datatype="html">
-        <source>Street</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
-        <source>BuildingNumber</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">56</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
-        <source>AddressLine1</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
-        <source>PrimaryPhoneNumber</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
-        <source>EmailAddress</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket-generalinfo/client-jacket-generalinfo.component.ts</context>
-          <context context-type="linenumber">60</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
@@ -90,6 +54,70 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
+        <source>PrimaryPhoneNumber</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
+        <source>EmailAddress</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Save" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Cancel" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.Street" datatype="html">
+        <source>Street</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
+        <source>BuildingNumber</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
+        <source>AddressLine1</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Validation.Required" datatype="html">
+        <source>Required</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Dashboard" datatype="html">

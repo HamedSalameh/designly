@@ -2,7 +2,6 @@
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
 
-
 // Button
 .btn {
   display: flex;
@@ -64,6 +63,21 @@
 .icon-btn {
   width: 32px;
   height: 32px;
+}
+
+.icon-btn:hover {
+  background-color: $color-v1-black-80;
+  color: $color-v1-white;
+}
+
+.icon-btn:active {
+  background-color: $color-v1-black-40;
+}
+
+.icon-btn-medium {
+  width: 40px;
+  height: 40px;
+  font-size: $font-size-medium;
 }
 
 .a-button {
