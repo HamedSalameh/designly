@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { SideNavComponent } from './side-nav.component';
 
@@ -8,7 +9,8 @@ describe('SideNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SideNavComponent ]
+      declarations: [ SideNavComponent ],
+      imports: [ SharedModule ],
     })
     .compileComponents();
 
