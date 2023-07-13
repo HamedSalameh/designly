@@ -11,6 +11,7 @@ import { ClientsManagementComponent } from './components/clients-management/clie
 import { ViewClientInfoComponent } from './components/view-client-info-component/view-client-info.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditClientComponent } from './components/edit-client/edit-client.component';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { EditClientComponent } from './components/edit-client/edit-client.compon
     SharedModule,
 
     DynamicDialogModule,
+    MessagesModule
   ]
 })
 export class ClientsModule { }

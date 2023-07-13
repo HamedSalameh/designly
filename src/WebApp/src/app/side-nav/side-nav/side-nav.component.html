@@ -7,44 +7,50 @@
     </div>
   </div>
   <div class="modules-block">
+    
     <app-icon-button
-      icon="fa-solid fa-house"
+      *ngFor="let module of this.modules"
+      [icon]="module.icon"
+      [text]="module.title"
+      (buttonClick)="navigateToModule(module)"
+    ></app-icon-button>
+
+    <!-- <app-icon-button
+      icon="ph ph-house"
+      [text]="this.homeTitle">
+    </app-icon-button>
+
+    <app-icon-button
+      icon="ph ph-gauge"
       [text]="this.dashboardTitle"
       (buttonClick)="navigateToDashboard()"
     ></app-icon-button>
 
     <app-icon-button
-      icon="fa-solid fa-layer-group"
+      icon="ph ph-folder-notch"
       [text]="this.projectsTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
-      icon="fa-solid fa-list-check"
+      icon="ph ph-list-checks"
       [text]="this.tasksTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
-      icon="fa-solid fa-users"
+      icon="ph ph-users-three "
       [text]="this.clientsTitle"
       (buttonClick)="navigateToClient()"
     ></app-icon-button>
 
     <app-icon-button
-      icon="fa-solid fa-message"
+      icon="ph ph-envelope"
       [text]="this.communicationTitle"
       [disabled]="true"
       (buttonClick)="navigateToClient()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-chart-simple"
-      [text]="this.analyticsTitle"
-      [disabled]="true"
-      (buttonClick)="navigateToClient()"
-    ></app-icon-button>
+    ></app-icon-button> -->
   </div>
 </div>

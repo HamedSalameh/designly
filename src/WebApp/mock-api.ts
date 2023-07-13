@@ -40,6 +40,22 @@ server.get('/clients/:id', (req, res) => {
   }
 });
 
+server.get('/clients/:id/canDelete', (req, res) => {
+  const clientId = req.params.id;
+  
+  const client = router.db
+    .get('clients')
+    .find({ Id: clientId })
+    .value();
+
+  if (client) {
+    res.json({ canDelete: true, reason: '' });
+  } else {
+    res.status(404).json({ error: 'Client not found' });
+  }
+});
+
+
 // Use the custom routes
 server.use(router);
 

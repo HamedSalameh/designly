@@ -6,6 +6,8 @@
 
 <ng-container *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last">
   <span class="breadcrumb-item">
+    <!-- inject icon -->
+    <i *ngIf="breadcrumb.icon" class="{{ breadcrumb.icon }}"></i>
     <a [href]="breadcrumb.url">{{ breadcrumb.label }}</a>
   </span>
   <ng-container *ngIf="!last">

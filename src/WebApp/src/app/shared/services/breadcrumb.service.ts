@@ -45,15 +45,29 @@ export class BreadcrumbService {
       const routeUrl = parentUrl.concat(route.url.map((url) => url.path));
 
       // Add an element for the current route part
-      if (route.data['breadcrumb']) {
-        const breadcrumb = {
-          label: this.getLabel(route.data),
+      if(route.data['breadcrumb']) {
+        const routeBreadcrumb: Breadcrumb = {
+          label: route.data['breadcrumb'].label,
           url: '/' + routeUrl.join('/'),
+          icon: route.data['breadcrumb'].icon
         };
-        if (!breadcrumbs.some((b) => b.url === breadcrumb.url)) {
-          breadcrumbs.push(breadcrumb);
+
+        if (!breadcrumbs.some((b) => b.url === routeBreadcrumb.url)) {
+          breadcrumbs.push(routeBreadcrumb);
         }
+
+        console.log(route.data);
       }
+
+      // if (route.data['breadcrumb']) {
+      //   const breadcrumb = {
+      //     label: this.getLabel(route.data),
+      //     url: '/' + routeUrl.join('/'),
+      //   };
+      //   if (!breadcrumbs.some((b) => b.url === breadcrumb.url)) {
+      //     breadcrumbs.push(breadcrumb);
+      //   }
+      // }
 
       // Add another element for the next route part
       this.addBreadcrumb(route.firstChild, routeUrl, breadcrumbs);

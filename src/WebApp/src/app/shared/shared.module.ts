@@ -7,12 +7,15 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 
 import { TableModule } from 'primeng/table';
 import { ChipsModule } from 'primeng/chips';
+import { MessagesModule } from 'primeng/messages';
+import { InlineMessageComponent } from './components/inline-message/inline-message.component';
 
 @NgModule({
   declarations: [
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
+    InlineMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -21,11 +24,13 @@ import { ChipsModule } from 'primeng/chips';
 
     TableModule,
     ChipsModule,
+    MessagesModule
   ],
   exports: [
     IconButtonComponent,
     TableComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    InlineMessageComponent,
   ]
 })
 export class SharedModule { }

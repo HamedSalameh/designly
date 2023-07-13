@@ -1,0 +1,11 @@
+<div *ngIf="this.messages && this.messages.length > 0">
+    <div *ngFor="let message of this.messages" class="inline-message message-{{ message.severity }}">        
+        <span class="message-icon">
+                <i *ngIf="message.severity === 'success'" class="ph ph-check-circle"></i>
+                <i *ngIf="message.severity === 'error'" class="ph ph-x-circle"></i>
+                <i *ngIf="message.severity === 'warning'" class="ph ph-warning"></i>
+                <i *ngIf="message.severity === 'info'" class="ph ph-info"></i>
+        </span>
+        <span class="message-text">{{ message.detail }}</span>
+    </div>
+</div>

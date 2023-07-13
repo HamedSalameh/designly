@@ -17,6 +17,12 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EditClientComponent } from '../edit-client/edit-client.component';
+import { GetMessageFromCodeService } from '../../services/get-message-from-code.service';
+import { Strings } from 'src/app/shared/strings';
+import {
+  InlineMessage,
+  InlineMessageSeverity,
+} from 'src/app/shared/components/inline-message/inline-message.component';
 
 @Component({
   selector: 'app-client-jacket',
@@ -27,6 +33,8 @@ import { EditClientComponent } from '../edit-client/edit-client.component';
 export class ClientJacketComponent implements OnDestroy {
   clientId: any;
   editMode: boolean = false;
+  errorMessage: string = '';
+  message: InlineMessage[] = [];
 
   ref: DynamicDialogRef | undefined;
 
@@ -38,6 +46,7 @@ export class ClientJacketComponent implements OnDestroy {
   constructor(
     private clientsService: ClientsServiceService,
     private store: Store,
+    private messageFromCodeService: GetMessageFromCodeService,
     private dialogService: DialogService
   ) {
     this.store
@@ -73,6 +82,7 @@ export class ClientJacketComponent implements OnDestroy {
 
   onClose(): void {
     console.debug('[ClientJacketComponent] [onClose]', this.clientId);
+    this.message = [];
     this.client = undefined;
     this.store.dispatch(new ViewMode());
     this.CloseClientJacket.emit();
@@ -95,10 +105,39 @@ export class ClientJacketComponent implements OnDestroy {
 
   onCloseEditClient(): void {
     console.debug('[ClientJacketComponent] [onCloseEditClient]', this.clientId);
+    this.message = [];
     this.store.dispatch(new ViewMode());
   }
 
   onShare(): void {
     console.debug('[ClientJacketComponent] [onShare]', this.clientId);
+  }
+
+  onDelete(): void {
+    console.debug('[ClientJacketComponent] [onDelete]', this.clientId);
+
+    if (this.clientId) {
+      this.clientsService
+        .canDeleteClient(this.clientId)
+        .subscribe((canDelete: any) => {
+          console.log('canDelete: ', canDelete);
+          const canDeletePermission = canDelete['canDelete'];
+          const canDeleteReasonCode = canDelete['reasonCode'];
+          if (canDeletePermission === true) {
+            this.clientsService
+              .deleteClient(this.clientId)
+              .subscribe((client: Client) => {
+                this.onClose();
+              });
+          } else {
+            this.errorMessage = this.messageFromCodeService.getMessageFromCode(canDeleteReasonCode);
+            this.message.push({
+              severity: InlineMessageSeverity.ERROR,
+              summary: Strings.MessageTitle_Error,
+              detail: this.errorMessage,
+            });
+          }
+        });
+    }
   }
 }

@@ -166,6 +166,134 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
+       <trans-unit id="Yes" datatype="html">
+        <source>Yes</source>
+        <target>כן</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="No" datatype="html">
+        <source>No</source>
+        <target>לא</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Ok" datatype="html">
+        <source>Ok</source>
+        <target>אישור</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Cancel" datatype="html">
+        <source>Cancel</source>
+        <target>ביטול</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Save" datatype="html">
+        <source>Save</source>
+        <target>שמירה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Edit" datatype="html">
+        <source>Edit</source>
+        <target>עריכה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Delete" datatype="html">
+        <source>Delete</source>
+        <target>מחיקה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Share" datatype="html">
+        <source>Share</source>
+        <target>שיתוף</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Close" datatype="html">
+        <source>Close</source>
+        <target>סגירה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MessageTitle_Error" datatype="html">
+        <source>Error</source>
+        <target>שגיאה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MessageTitle_Warning" datatype="html">
+        <source>Warning</source>
+        <target>אזהרה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MessageTitle_Information" datatype="html">
+        <source>Information</source>
+        <target>מידע</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MessageTitle_Success" datatype="html">
+        <source>Success</source>
+        <target>הצלחה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFromCodeS001" datatype="html">
+        <source>CannotDeleteClient</source>
+        <target>לא ניתן למחוק לקוח זה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="messageFromCodeS002" datatype="html">
+        <source>RequiredField</source>
+        <target>שדה חובה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Modules.Clients" datatype="html">
+        <source>Clients</source>
+        <target>לקוחות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Global.Nav.Projects" datatype="html">
         <source>Projects</source>
         <target>פרויקטים</target>
