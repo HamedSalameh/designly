@@ -1,9 +1,13 @@
 <div class="client-jacket" *ngIf="this.clientId">
+  <!-- Notifications section -->
+  <app-inline-message [messages]="this.message"></app-inline-message>
+
   <!-- General information section -->
   <app-view-client-info
   (CloseClient)="this.onClose()"
   (EditClient)="this.onEdit()"
   (ShareClient)="this.onShare()"
+  (DeleteClient)="this.onDelete()"
   ></app-view-client-info>
 
   <!-- <app-edit-client 

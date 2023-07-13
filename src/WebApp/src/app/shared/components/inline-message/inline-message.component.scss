@@ -1,0 +1,42 @@
+@import "main.scss";
+
+.inline-message {
+  display: flex;
+  box-sizing: border-box;
+  padding: 8px 16px;
+  align-items: center;
+
+  font-family: $font-family;
+  font-size: $font-size-default;
+}
+
+.message-error {
+  // background-color should be less opaque
+  background-color: rgba($color-error, 40%);
+  // border color should more saturated than the background color
+  border-color: $color-error;
+  // saturate the text color to make it more visible
+}
+
+.message-success {
+  background-color: $color-success;
+}
+
+.message-info {
+  background-color: $color-info;
+}
+
+.message-warning {
+  background-color: $color-warning;
+}
+
+.message-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.message-text {
+
+}

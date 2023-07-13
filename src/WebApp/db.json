@@ -1,7 +1,6 @@
 {
   "signin": {},
-  "clients":
-  [
+  "clients": [
     {
       "Id": "560FB24A-BD68-4A1B-AA65-439B041DAF1D",
       "FirstName": "דוד",
@@ -11,7 +10,10 @@
         "City": "תל אביב",
         "Street": "שדרות רוטשילד",
         "BuildingNumber": "12",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -27,7 +29,10 @@
         "City": "ירושלים",
         "Street": "רחוב הגעתון",
         "BuildingNumber": "5",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "9876543210",
@@ -43,7 +48,10 @@
         "City": "חיפה",
         "Street": "שדרות התחייה",
         "BuildingNumber": "7",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "5556667777",
@@ -59,7 +67,10 @@
         "City": "נתניה",
         "Street": "רחוב הגליל",
         "BuildingNumber": "20",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "9998887777",
@@ -75,7 +86,10 @@
         "City": "חדרה",
         "Street": "שדרות הגשר",
         "BuildingNumber": "3",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1112223333",
@@ -91,7 +105,10 @@
         "City": "נהריה",
         "Street": "רחוב הנהר",
         "BuildingNumber": "8",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "4445556666",
@@ -107,7 +124,10 @@
         "City": "רעננה",
         "Street": "שדרות המסילה",
         "BuildingNumber": "15",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "7778889999",
@@ -123,7 +143,10 @@
         "City": "אשדוד",
         "Street": "רחוב החוף",
         "BuildingNumber": "9",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "2223334444",
@@ -139,7 +162,10 @@
         "City": "באר שבע",
         "Street": "רחוב התמר",
         "BuildingNumber": "6",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "8889990000",
@@ -155,7 +181,10 @@
         "City": "גבעתיים",
         "Street": "רחוב האור",
         "BuildingNumber": "18",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "3334445555",
@@ -171,7 +200,10 @@
         "City": "חולון",
         "Street": "רחוב הים",
         "BuildingNumber": "22",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "6667778888",
@@ -187,7 +219,10 @@
         "City": "עכו",
         "Street": "רחוב החוף",
         "BuildingNumber": "10",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "9990001111",
@@ -203,7 +238,10 @@
         "City": "תל אביב",
         "Street": "שדרות רוטשילד",
         "BuildingNumber": "12",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1234567890",
@@ -219,7 +257,10 @@
         "City": "רמת גן",
         "Street": "רחוב המסילה",
         "BuildingNumber": "25",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "7778889999",
@@ -235,7 +276,10 @@
         "City": "פתח תקווה",
         "Street": "רחוב הבנים",
         "BuildingNumber": "7",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "1112223333",
@@ -251,7 +295,10 @@
         "City": "חיפה",
         "Street": "רחוב התחייה",
         "BuildingNumber": "5",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "4445556666",
@@ -267,7 +314,10 @@
         "City": "נתניה",
         "Street": "רחוב הגליל",
         "BuildingNumber": "20",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "2223334444",
@@ -283,7 +333,10 @@
         "City": "רעננה",
         "Street": "שדרות המסילה",
         "BuildingNumber": "15",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "8889990000",
@@ -299,7 +352,10 @@
         "City": "גבעתיים",
         "Street": "רחוב האור",
         "BuildingNumber": "18",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "6667778888",
@@ -315,7 +371,10 @@
         "City": "עכו",
         "Street": "רחוב החוף",
         "BuildingNumber": "10",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "3334445555",
@@ -331,7 +390,10 @@
         "City": "תל אביב",
         "Street": "שדרות רוטשילד",
         "BuildingNumber": "12",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "7778889999",
@@ -347,7 +409,10 @@
         "City": "רמת גן",
         "Street": "רחוב המסילה",
         "BuildingNumber": "25",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "2223334444",
@@ -363,7 +428,10 @@
         "City": "פתח תקווה",
         "Street": "רחוב הבנים",
         "BuildingNumber": "7",
-        "addressLines": ["שורת כתובת נוספת 1", "שורת כתובת נוספת 2"]
+        "addressLines": [
+          "שורת כתובת נוספת 1",
+          "שורת כתובת נוספת 2"
+        ]
       },
       "ContactDetails": {
         "PrimaryPhoneNumber": "8889990000",

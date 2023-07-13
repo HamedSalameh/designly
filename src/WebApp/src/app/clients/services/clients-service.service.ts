@@ -20,8 +20,30 @@ export class ClientsServiceService {
   }
 
   public getClient(clientId: string): Observable<Client> {
-    console.log(`getClient: ${clientId}`);
+    console.log('[ClientsServiceService] [getClient] ', clientId);
     return this.httpClient.get<Client>(`${this.serviceAddress}/clients/${clientId}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public addClient(client: Client): Observable<Client> {
+    console.log('[ClientsServiceService] [addClient] ', client);
+    return this.httpClient.post<Client>(`${this.serviceAddress}/clients`, client).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  public deleteClient(clientId: string): Observable<Client> {
+    console.log('[ClientsServiceService] [deleteClient] ', clientId);
+    return this.httpClient.delete<Client>(`${this.serviceAddress}/clients/${clientId}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  // An API call to check if a client can be deleted
+  public canDeleteClient(clientId: string): Observable<boolean> {
+    console.log('[ClientsServiceService] [canDeleteClient] ', clientId);
+    return this.httpClient.get<boolean>(`${this.serviceAddress}/clients/${clientId}/canDelete`).pipe(
       catchError(this.handleError)
     );
   }

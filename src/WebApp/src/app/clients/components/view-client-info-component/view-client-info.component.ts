@@ -16,6 +16,7 @@ export class ViewClientInfoComponent {
   @Output() CloseClient: EventEmitter<any> = new EventEmitter();
   @Output() EditClient: EventEmitter<any> = new EventEmitter();
   @Output() ShareClient: EventEmitter<any> = new EventEmitter();
+  @Output() DeleteClient: EventEmitter<any> = new EventEmitter();
 
   clientId;
   selectedClient$: Observable<Client | null> = of(null);
@@ -53,11 +54,6 @@ export class ViewClientInfoComponent {
 
   onDelete() {
     console.debug('[ViewClientInfoComponent] [onDelete] ', this.clientId);
-    // Delete a clinet is allow only if :
-    // 1. The client is not assigned to any active project
-    // 2. The client is not assigned to any active project, but the user has the permission to delete clients
-    // 3. The client is not the current user's client
-    // 4. The server response for CanDelete is true
-    
+    this.DeleteClient.emit();
   }
 }

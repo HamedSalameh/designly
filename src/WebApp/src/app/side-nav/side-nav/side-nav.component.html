@@ -7,44 +7,12 @@
     </div>
   </div>
   <div class="modules-block">
+    
     <app-icon-button
-      icon="fa-solid fa-house"
-      [text]="this.dashboardTitle"
-      (buttonClick)="navigateToDashboard()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-layer-group"
-      [text]="this.projectsTitle"
-      [disabled]="true"
-      (buttonClick)="navigateToClient()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-list-check"
-      [text]="this.tasksTitle"
-      [disabled]="true"
-      (buttonClick)="navigateToClient()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-users"
-      [text]="this.clientsTitle"
-      (buttonClick)="navigateToClient()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-message"
-      [text]="this.communicationTitle"
-      [disabled]="true"
-      (buttonClick)="navigateToClient()"
-    ></app-icon-button>
-
-    <app-icon-button
-      icon="fa-solid fa-chart-simple"
-      [text]="this.analyticsTitle"
-      [disabled]="true"
-      (buttonClick)="navigateToClient()"
+      *ngFor="let module of this.modules"
+      [icon]="module.icon"
+      [text]="module.title"
+      (buttonClick)="navigateToModule(module)"
     ></app-icon-button>
   </div>
 </div>
