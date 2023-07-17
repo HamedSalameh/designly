@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApplicationModules } from 'src/app/shared/application-modules';
-
-export interface ApplicationModule {
-  title: string;
-  icon: string;
-  routing?: string;
-}
+import { ApplicationModule } from 'src/app/shared/models/application-module.model';
 
 @Component({
   selector: 'app-side-nav',
@@ -18,45 +13,20 @@ export class SideNavComponent {
 
   constructor(private router: Router) {
 
-    this.modules.push({
-      title: ApplicationModules.home.label,
-      icon: ApplicationModules.home.icon,
-      routing: ApplicationModules.home.fullRoute,
-    });
-
-    this.modules.push({
-      title: ApplicationModules.dashboard.label,
-      icon: ApplicationModules.dashboard.icon,
-      routing: ApplicationModules.dashboard.fullRoute,
-    });
-
-    this.modules.push({
-      title: ApplicationModules.clients.label,
-      icon: ApplicationModules.clients.icon,
-      routing: ApplicationModules.clients.fullRoute,
-    });
-
-    this.modules.push({
-      title: ApplicationModules.projects.label,
-      icon: ApplicationModules.projects.icon,
-      routing: ApplicationModules.projects.fullRoute,
-    });
-
-    this.modules.push({
-      title: ApplicationModules.tasks.label,
-      icon: ApplicationModules.tasks.icon,
-      routing: ApplicationModules.tasks.fullRoute,
-    });
-
-    this.modules.push({
-      title: ApplicationModules.communication.label,
-      icon: ApplicationModules.communication.icon,
-      routing: ApplicationModules.communication.fullRoute,
-    });
-
+    this.modules.push(ApplicationModules.home);
+    this.modules.push(ApplicationModules.dashboard);
+    this.modules.push(ApplicationModules.clients);
+    this.modules.push(ApplicationModules.projects);
+    this.modules.push(ApplicationModules.tasks);
+    this.modules.push(ApplicationModules.communication);  
   }
 
   navigateToModule(module: ApplicationModule) {
-    this.router.navigate([module.routing]);
+    if (module.fullRoute) {
+      this.router.navigate([module.fullRoute]);
+    } else {
+      console.error(`Module ${module.label} does not have a route defined.`);
+    }
+    
   }
 }

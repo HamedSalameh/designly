@@ -11,7 +11,7 @@
     <app-icon-button
       *ngFor="let module of this.modules"
       [icon]="module.icon"
-      [text]="module.title"
+      [text]="module.label"
       (buttonClick)="navigateToModule(module)"
     ></app-icon-button>
   </div>

@@ -23,6 +23,13 @@ $max: 5;
   }
 }
 
+//font-size helper
+@for $i from 0 through $max {
+  .font-size-#{$i} {
+    font-size: ($spacer * $i) !important;
+  }
+}
+
 // Flex helper
 .flex {
   display: flex;

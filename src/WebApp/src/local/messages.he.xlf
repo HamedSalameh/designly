@@ -2,20 +2,12 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="Global.Nav.Home" datatype="html">
-        <source>Home</source>
-        <target>בית</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/app-routing.module.ts</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="Clients.EditClient" datatype="html">
         <source>Edit Client</source>
         <target>עריכת פרטי לקוח</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
@@ -64,7 +56,7 @@
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
         <source>PrimaryPhoneNumber</source>
-        <target>מספר טלפון ראשי</target>
+        <target>מספר טלפון</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -134,28 +126,108 @@
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="Pages.Login.WelcomeMessage" datatype="html">
+        <source>Welcome to the Login Page!</source>
+        <target>היי! שניכנס?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.Username" datatype="html">
+        <source>Username</source>
+        <target>שם משתמש</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.Password" datatype="html">
+        <source>Password</source>
+        <target>סיסמא</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.SignIn" datatype="html">
+        <source>Sign In</source>
+        <target>התחברות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.SignUp" datatype="html">
+        <source>Sign Up</source>
+        <target>הרשמה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
+        <source>Sign In with Google</source>
+        <target>התחברות עם גוגל</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
+        <source>Request Password Reset</source>
+        <target>איפוס סיסמא</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Nav.Home" datatype="html">
+        <source>Home</source>
+        <target>בית</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Global.Nav.Dashboard" datatype="html">
         <source>Dashboard</source>
         <target>לוח בקרה</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/home/home-routing.module.ts</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Clients" datatype="html">
         <source>Clients</source>
         <target>לקוחות</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/home/home-routing.module.ts</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">23</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Nav.Projects" datatype="html">
+        <source>Projects</source>
+        <target>פרויקטים</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Nav.Tasks" datatype="html">
+        <source>Tasks</source>
+        <target>משימות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Global.Nav.Communication" datatype="html">
+        <source>Communication</source>
+        <target>תקשורת</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Placeholders.Search" datatype="html">
@@ -166,12 +238,12 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-       <trans-unit id="Yes" datatype="html">
+      <trans-unit id="Yes" datatype="html">
         <source>Yes</source>
         <target>כן</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="No" datatype="html">
@@ -179,7 +251,7 @@
         <target>לא</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Ok" datatype="html">
@@ -187,7 +259,7 @@
         <target>אישור</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Cancel" datatype="html">
@@ -195,7 +267,7 @@
         <target>ביטול</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Save" datatype="html">
@@ -203,7 +275,7 @@
         <target>שמירה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Edit" datatype="html">
@@ -211,7 +283,7 @@
         <target>עריכה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
@@ -219,7 +291,7 @@
         <target>מחיקה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Share" datatype="html">
@@ -227,7 +299,7 @@
         <target>שיתוף</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Close" datatype="html">
@@ -235,39 +307,35 @@
         <target>סגירה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Error" datatype="html">
         <source>Error</source>
-        <target>שגיאה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="MessageTitle_Warning" datatype="html">
-        <source>Warning</source>
-        <target>אזהרה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="MessageTitle_Information" datatype="html">
-        <source>Information</source>
-        <target>מידע</target>
+      <trans-unit id="MessageTitle_Warning" datatype="html">
+        <source>Warning</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="MessageTitle_Success" datatype="html">
-        <source>Success</source>
-        <target>הצלחה</target>
+      <trans-unit id="MessageTitle_Information" datatype="html">
+        <source>Information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="MessageTitle_Success" datatype="html">
+        <source>Success</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/strings.ts</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS001" datatype="html">
@@ -275,7 +343,7 @@
         <target>לא ניתן למחוק לקוח זה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS002" datatype="html">
@@ -283,47 +351,7 @@
         <target>שדה חובה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Modules.Clients" datatype="html">
-        <source>Clients</source>
-        <target>לקוחות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.Nav.Projects" datatype="html">
-        <source>Projects</source>
-        <target>פרויקטים</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.Nav.Tasks" datatype="html">
-        <source>Tasks</source>
-        <target>משימות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.Nav.Communication" datatype="html">
-        <source>Communication</source>
-        <target>תקשורת</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Global.Nav.Analytics" datatype="html">
-        <source>Analytics</source>
-        <target>ניתוחים</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/side-nav/side-nav/side-nav.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
     </body>

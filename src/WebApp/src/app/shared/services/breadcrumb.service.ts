@@ -58,17 +58,6 @@ export class BreadcrumbService {
 
         console.log(route.data);
       }
-
-      // if (route.data['breadcrumb']) {
-      //   const breadcrumb = {
-      //     label: this.getLabel(route.data),
-      //     url: '/' + routeUrl.join('/'),
-      //   };
-      //   if (!breadcrumbs.some((b) => b.url === breadcrumb.url)) {
-      //     breadcrumbs.push(breadcrumb);
-      //   }
-      // }
-
       // Add another element for the next route part
       this.addBreadcrumb(route.firstChild, routeUrl, breadcrumbs);
     }

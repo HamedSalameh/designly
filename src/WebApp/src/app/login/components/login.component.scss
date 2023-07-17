@@ -1,3 +1,5 @@
+@import "main";
+
 .login-container {
   display: grid;
   place-items: center;
@@ -12,23 +14,38 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-container {
-  display: grid;
-  grid-template-rows: repeat(5, min-content);
-  grid-auto-rows: 1fr;
-  padding: 2em;
-  // max-height: 500px;
-  }
-
 .background-image {
-  background-image: url('../../../assets/login-bg.jpg');
+  background-image: url('../../../assets/login-page-graphics.png');
   background-size: cover;
   background-repeat: no-repeat;
   // max-height: 500px;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-
+.input-with-icon-wrapper {
+  position: relative;
+  display: inline-flex;
 }
+
+.input-text {
+  padding: 10px 40px 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+}
+
+.form-button {
+  display: flex;
+  flex-grow: 1;
+  font-family: $font-family;
+}
+
+.title {
+  font-family: $font-family;
+  font-weight: 200;
+  font-size: $font-size-extra-large;
+
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+

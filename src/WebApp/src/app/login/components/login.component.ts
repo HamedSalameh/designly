@@ -11,6 +11,17 @@ import { SigninRequest } from 'src/app/authentication/models/signin-request.mode
 })
 export class LoginComponent {
 
+  loginPageWelcomeMessage = $localize`:@@Pages.Login.WelcomeMessage:Welcome to the Login Page!`;
+  usernameLabel = $localize`:@@Pages.Login.Username:Username`;
+  passwordLabel = $localize`:@@Pages.Login.Password:Password`;
+  signInLabel = $localize`:@@Pages.Login.SignIn:Sign In`;
+  signUpLabel = $localize`:@@Pages.Login.SignUp:Sign Up`;
+  signInWithGoogleLabel = $localize`:@@Pages.Login.SignInWithGoogle:Sign In with Google`;
+  requestPasswordResetLabel = $localize`:@@Pages.Login.RequestPasswordReset:Request Password Reset`;
+  localizedSigninWithSocialMediaLabel = $localize`:@@Pages.Login.SignInWithSocialMedia:Sign In with Social Media`;
+
+  localizedEmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
+  
   loginForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl('')
@@ -24,10 +35,6 @@ export class LoginComponent {
     });
   }
 
-  signUp() {
-    console.log('Signup is not yet implemented');
-  }
-
   signIn() {
     if (this.loginForm.valid) {
       const signinRequest = new SigninRequest();
@@ -39,13 +46,4 @@ export class LoginComponent {
       });
     }
   }
-
-  signInWithGoogle() {
-    console.log('Sign In with Google');
-  }
-
-  requestPasswordReset() {
-    console.log('Request Password Reset');
-  }
-
 }

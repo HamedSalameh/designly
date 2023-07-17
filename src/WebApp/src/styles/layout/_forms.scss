@@ -25,3 +25,21 @@
   
   }
   
+  .form-text {
+    display: flex;
+    font-family: $font-family;
+  }
+
+  // align text to the right
+  .form-text-right {
+    display: flex;
+    font-family: $font-family;
+    justify-content: flex-start;
+  }
+
+  // align text to the left
+  .form-text-left {
+    display: flex;
+    font-family: $font-family;
+    justify-content: flex-end;
+  }
