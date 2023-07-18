@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
         <source>PrimaryPhoneNumber</source>
-        <target>מספר טלפון</target>
+        <target>מספר טלפון ראשי</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -77,10 +77,14 @@
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="Global.Save" datatype="html">
         <source>Save</source>
-        <target>שמירה</target>
+        <target>שמור</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -126,12 +130,20 @@
           <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeMessage" datatype="html">
-        <source>Welcome to the Login Page!</source>
-        <target>היי! שניכנס?</target>
+      <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
+        <source>Hello there! Welcome back — we missed you!</source>
+        <target>היי! ברוכים השבים - התגעגענו !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
+        <source>Let&apos;s get you signed in</source>
+        <target>שנתחבר ?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Username" datatype="html">
@@ -139,7 +151,7 @@
         <target>שם משתמש</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Password" datatype="html">
@@ -147,15 +159,15 @@
         <target>סיסמא</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignIn" datatype="html">
         <source>Sign In</source>
-        <target>התחברות</target>
+        <target>כניסה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignUp" datatype="html">
@@ -163,23 +175,31 @@
         <target>הרשמה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
-        <target>התחברות עם גוגל</target>
+        <target>התחבר עם גוגל</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
         <source>Request Password Reset</source>
-        <target>איפוס סיסמא</target>
+        <target>שכחתי סיסמא</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
+        <source>Sign In with Social Media</source>
+        <target>התחבר עם רשתות חברתיות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Home" datatype="html">
