@@ -6,6 +6,7 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import {
   catchError,
   delay,
@@ -20,6 +21,7 @@ import {
   IApplicationError,
   IServerError,
 } from 'src/app/shared/types';
+import { AddNetworkError } from 'src/app/state/error-state/error-state.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +40,7 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     HttpResponseStatusCodes.VARIANT_ALSO_NEGOTIATES,
     HttpResponseStatusCodes.INSUFFICIENT_STORAGE,
     HttpResponseStatusCodes.NETWORK_AUTHENTICATION_REQUIRED,
+    HttpResponseStatusCodes.NOT_FOUND,
   ];
 
   // network connectivity errors
@@ -47,7 +50,6 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
   // These errors are returned by the server
   serverSideApplicationErrors = [
     HttpResponseStatusCodes.BAD_REQUEST,
-    HttpResponseStatusCodes.NOT_FOUND,
     HttpResponseStatusCodes.METHOD_NOT_ALLOWED,
     HttpResponseStatusCodes.NOT_ACCEPTABLE,
     HttpResponseStatusCodes.PROXY_AUTHENTICATION_REQUIRED,
@@ -71,7 +73,7 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     HttpResponseStatusCodes.FAILED_DEPENDENCY,
   ];
 
-  constructor() {}
+  constructor(private store: Store) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -118,6 +120,8 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
           return EMPTY;
         }
 
+        // Network error cannot be handled by the client
+        // Hence patch the application state for error handling
         if (this.isNetworkError(error)) {
           const networkServerError: IServerError = {
             message: 'Network error',
@@ -126,7 +130,9 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
             handled: true,
           };
 
-          return throwError(() => networkServerError);
+          //return throwError(() => networkServerError);
+          this.store.dispatch(new AddNetworkError(networkServerError));
+          return EMPTY;
         }
 
         console.debug('[HttpErrorsInterceptorService] [intercept] [catchError] Returning unknown error ',error);
