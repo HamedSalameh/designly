@@ -4,10 +4,22 @@
     <body>
       <trans-unit id="Clients.EditClient" datatype="html">
         <source>Edit Client</source>
-        <target>עריכת פרטי לקוח</target>
+        <target>עריכת לקוח</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Clients.DeleteClientError" datatype="html">
+        <source>DeleteClientError</source>
+        <target>לא ניתן למחוק לקוח זה</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
+          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
@@ -19,7 +31,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
@@ -31,7 +43,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
@@ -43,7 +55,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
@@ -63,7 +75,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
@@ -75,19 +87,19 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">78</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Save" datatype="html">
         <source>Save</source>
-        <target>שמור</target>
+        <target>שמירה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Cancel" datatype="html">
@@ -95,7 +107,7 @@
         <target>ביטול</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
@@ -103,15 +115,15 @@
         <target>רחוב</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
         <source>BuildingNumber</source>
-        <target>מספר בניין</target>
+        <target>מספר בית</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
@@ -119,7 +131,7 @@
         <target>כתובת</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Validation.Required" datatype="html">
@@ -127,23 +139,23 @@
         <target>שדה חובה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
         <source>Hello there! Welcome back — we missed you!</source>
-        <target>היי! ברוכים השבים - התגעגענו !</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
-        <source>Let&apos;s get you signed in</source>
-        <target>שנתחבר ?</target>
+        <target>היי! ברוכים הבאים חזרה - התגעגענו !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
+        <source>Let&apos;s get you signed in to unleash your creativity.</source>
+        <target>שנתחבר ונשחרר את היצירתיות שלך?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Username" datatype="html">
@@ -151,7 +163,7 @@
         <target>שם משתמש</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Password" datatype="html">
@@ -159,15 +171,15 @@
         <target>סיסמא</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignIn" datatype="html">
         <source>Sign In</source>
-        <target>כניסה</target>
+        <target>התחברות</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignUp" datatype="html">
@@ -175,31 +187,31 @@
         <target>הרשמה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
-        <target>התחבר עם גוגל</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
-        <source>Request Password Reset</source>
-        <target>שכחתי סיסמא</target>
+        <target>התחברות עם גוגל</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
-        <source>Sign In with Social Media</source>
-        <target>התחבר עם רשתות חברתיות</target>
+      <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
+        <source>Request Password Reset</source>
+        <target>איפוס סיסמא</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
+        <source>Sign In with Social Media</source>
+        <target>התחברות עם רשתות חברתיות</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Home" datatype="html">
@@ -256,6 +268,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Errors.NotFound" datatype="html">
+        <source>The requested resource was not found.</source>
+        <target>המשאב המבוקש לא נמצא.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Yes" datatype="html">
@@ -332,6 +352,7 @@
       </trans-unit>
       <trans-unit id="MessageTitle_Error" datatype="html">
         <source>Error</source>
+        <target>שגיאה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">16</context>
@@ -339,6 +360,7 @@
       </trans-unit>
       <trans-unit id="MessageTitle_Warning" datatype="html">
         <source>Warning</source>
+        <target>אזהרה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">17</context>
@@ -346,6 +368,7 @@
       </trans-unit>
       <trans-unit id="MessageTitle_Information" datatype="html">
         <source>Information</source>
+        <target>מידע</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">18</context>
@@ -353,6 +376,7 @@
       </trans-unit>
       <trans-unit id="MessageTitle_Success" datatype="html">
         <source>Success</source>
+        <target>הצלחה</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">19</context>
@@ -360,7 +384,7 @@
       </trans-unit>
       <trans-unit id="messageFromCodeS001" datatype="html">
         <source>CannotDeleteClient</source>
-        <target>לא ניתן למחוק לקוח זה</target>
+        <target>לא ניתן למחוק לקוח</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/strings.ts</context>
           <context context-type="linenumber">22</context>

@@ -6,6 +6,7 @@ import { SideNavModule } from '../side-nav/side-nav.module';
 import { HeaderModule } from '../header/header.module';
 import { ClientsModule } from '../clients/clients.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { DashboardModule } from '../dashboard/dashboard.module';
   imports: [
     HomeRoutingModule,
     CommonModule,
+    SharedModule,
 
     // Layout Modules
     SideNavModule,

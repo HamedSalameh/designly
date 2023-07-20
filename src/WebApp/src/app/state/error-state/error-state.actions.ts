@@ -7,7 +7,9 @@ export class AddApplicationError {
 
 export class AddNetworkError {
     static readonly type = '[Error] Add Network Error';
-    constructor(public payload: any) {}
+    constructor(public payload: any) {
+        console.debug('[ErrorState] [AddNetworkError] ', payload);
+    }
 }
 
 export class AddServerError {
