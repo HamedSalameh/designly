@@ -16,6 +16,9 @@ export interface IServerError {
   handled: boolean;
 }
 
+export interface INetworkError extends IServerError {
+}
+
 export enum HttpResponseStatusCodes {
   NETWORK_ERROR = 0,
   CONTINUE = 100,
