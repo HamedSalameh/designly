@@ -20,6 +20,7 @@ export class ErrorState {
 
     @Selector()
     static getNetworkError(state: ErrorStateModel) {
+        console.debug('[ErrorState] [getNetworkError] ', state.networkError);
         return state.networkError;
     }
 

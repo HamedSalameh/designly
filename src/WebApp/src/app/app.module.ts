@@ -14,6 +14,7 @@ import { NgxsModule } from '@ngxs/store';
 import { ClientState } from './state/client-state/client-state.state';
 import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
+import { ErrorState } from './state/error-state/error-state.state';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-in
     BrowserAnimationsModule,
     AppRoutingModule,
     NgxsModule.forRoot([
-      ClientState
+      ClientState,
+      ErrorState
     ]),
     NgxsLoggerPluginModule.forRoot(),
     CoreModule,

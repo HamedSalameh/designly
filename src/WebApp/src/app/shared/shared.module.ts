@@ -8,7 +8,10 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { TableModule } from 'primeng/table';
 import { ChipsModule } from 'primeng/chips';
 import { MessagesModule } from 'primeng/messages';
+import { ToastModule } from 'primeng/toast';
 import { InlineMessageComponent } from './components/inline-message/inline-message.component';
+import { MessageService } from 'primeng/api';
+import { ToastMessageService } from './services/toast-message-service.service';
 
 @NgModule({
   declarations: [
@@ -24,13 +27,19 @@ import { InlineMessageComponent } from './components/inline-message/inline-messa
 
     TableModule,
     ChipsModule,
-    MessagesModule
+    MessagesModule,
+    ToastModule,
   ],
   exports: [
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    InlineMessageComponent
+    InlineMessageComponent,
+    ToastModule
   ],
+  providers: [
+    MessageService,
+    ToastMessageService
+  ]
 })
 export class SharedModule {}
