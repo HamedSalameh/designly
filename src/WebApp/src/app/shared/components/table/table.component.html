@@ -16,6 +16,7 @@
   [rowsPerPageOptions]="this.RowsPerPageOptions"
   (onRowUnselect)="onRowUnselect($event)"
   (onRowSelect)="onRowSelect($event)"
+  [scrollable]="true" scrollHeight="80vh"
 >
   <ng-template pTemplate="header">
     <tr>

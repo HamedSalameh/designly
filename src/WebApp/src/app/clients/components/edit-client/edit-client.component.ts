@@ -1,8 +1,19 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
+import {
+  InlineMessage,
+  InlineMessageSeverity,
+} from 'src/app/shared/components/inline-message/inline-message.component';
+import { Strings } from 'src/app/shared/strings';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
@@ -12,8 +23,7 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   templateUrl: './edit-client.component.html',
   styleUrls: ['./edit-client.component.scss'],
 })
-export class EditClientComponent {
-
+export class EditClientComponent implements OnInit, OnDestroy {
   ClientInfo!: FormGroup;
   clientId;
   selectedClient$: Observable<Client | null> = of(null);
@@ -34,6 +44,7 @@ export class EditClientComponent {
   localizedAddressLine1!: string;
 
   validators = [Validators.required];
+  errorMessages: InlineMessage[] = [];
 
   constructor(
     private clientsService: ClientsServiceService,
@@ -65,6 +76,8 @@ export class EditClientComponent {
     // localize contact details labels
     this.localizedPrimaryPhoneNumber = $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`;
     this.localizedEmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
+
+    this.errorMessages = [];
   }
 
   createForm() {
@@ -76,7 +89,8 @@ export class EditClientComponent {
       }),
       ContactDetails: this.formBuilder.group({
         PrimaryPhoneNumber: [
-          this.selectedClient?.ContactDetails?.PrimaryPhoneNumber, [Validators.required]
+          this.selectedClient?.ContactDetails?.PrimaryPhoneNumber,
+          [Validators.required],
         ],
         EmailAddress: [this.selectedClient?.ContactDetails?.EmailAddress],
       }),
@@ -100,7 +114,44 @@ export class EditClientComponent {
 
   onSave() {
     console.debug('[EditClientComponent] [onSave]');
-    console.log('save');
+
+    const client: Client = {
+      Id: this.selectedClient?.Id!,
+      FirstName: this.ClientInfo.get('BasicInfo.FirstName')?.value,
+      FamilyName: this.ClientInfo.get('BasicInfo.FamilyName')?.value,
+      TenantId: this.selectedClient?.TenantId!,
+      ContactDetails: {
+        PrimaryPhoneNumber: this.ClientInfo.get(
+          'ContactDetails.PrimaryPhoneNumber'
+        )?.value,
+        EmailAddress: this.ClientInfo.get('ContactDetails.EmailAddress')?.value,
+      },
+      Address: {
+        City: this.ClientInfo.get('AddressInfo.City')?.value,
+        Street: this.ClientInfo.get('AddressInfo.Street')?.value,
+        BuildingNumber: this.ClientInfo.get('AddressInfo.BuildingNumber')
+          ?.value,
+        AddressLines: this.ClientInfo.get('AddressInfo.AddressLine1')?.value,
+      },
+    };
+
+    // subscribe to the updateClient observable with pipe for error handling
+    this.errorMessages = [];
+    this.clientsService.updateClient(client).subscribe(
+      (client: Client) => {
+        console.log(client);
+        this.ref.close();
+      },
+      (error) => {
+        // Handling server side errors
+        
+        this.errorMessages.push({
+          severity: InlineMessageSeverity.ERROR,
+          summary: Strings.MessageTitle_Error,
+          detail: `${error.originalError.status} : ${error.originalError.statusText}`,
+        });
+      }
+    );
   }
 
   getValidationMessage(formGroupName: string, formControlName: string) {
@@ -112,4 +163,8 @@ export class EditClientComponent {
     return '';
   }
 
+  ngOnDestroy(): void {
+    console.debug('[EditClientComponent] [ngOnDestroy]');
+    this.errorMessages = [];
+  }
 }

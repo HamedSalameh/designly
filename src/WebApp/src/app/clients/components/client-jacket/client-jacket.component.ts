@@ -13,12 +13,11 @@ import {
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { catchError, switchMap, takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EditClientComponent } from '../edit-client/edit-client.component';
-import { GetMessageFromCodeService } from '../../services/get-message-from-code.service';
-import { Strings } from 'src/app/shared/strings';
+import { IApplicationError } from '../../../shared/types'
 import {
   InlineMessage,
   InlineMessageSeverity,
@@ -46,7 +45,6 @@ export class ClientJacketComponent implements OnDestroy {
   constructor(
     private clientsService: ClientsServiceService,
     private store: Store,
-    private messageFromCodeService: GetMessageFromCodeService,
     private dialogService: DialogService
   ) {
     this.store
@@ -117,27 +115,56 @@ export class ClientJacketComponent implements OnDestroy {
     console.debug('[ClientJacketComponent] [onDelete]', this.clientId);
 
     if (this.clientId) {
-      this.clientsService
-        .canDeleteClient(this.clientId)
-        .subscribe((canDelete: any) => {
-          console.log('canDelete: ', canDelete);
-          const canDeletePermission = canDelete['canDelete'];
-          const canDeleteReasonCode = canDelete['reasonCode'];
-          if (canDeletePermission === true) {
+      this.clientsService.canDeleteClient(this.clientId).pipe
+      (
+        switchMap( () => this.clientsService.deleteClient(this.clientId)),
+        catchError( (error) => {
+
+          // Handling application logic errors
+          const message: InlineMessage = {
+            severity: InlineMessageSeverity.ERROR,
+            summary: $localize`:@@Clients.DeleteClientError:DeleteClientError`,
+            detail: `${error.originalError.status} : ${error.originalError.statusText}`,
+          };
+
+          return throwError( () => message);
+        }
+      )).subscribe({
+        next: (client: Client) => {
+          this.onClose();
+        }
+        ,error: (error) => {
+          this.message = [error];
+        }
+      });
+    }
+
+    return;
+
+    if (this.clientId) {
+      this.clientsService.canDeleteClient(this.clientId)
+      .subscribe({
+        next: () => {
             this.clientsService
               .deleteClient(this.clientId)
-              .subscribe((client: Client) => {
-                this.onClose();
-              });
-          } else {
-            this.errorMessage = this.messageFromCodeService.getMessageFromCode(canDeleteReasonCode);
-            this.message.push({
-              severity: InlineMessageSeverity.ERROR,
-              summary: Strings.MessageTitle_Error,
-              detail: this.errorMessage,
-            });
-          }
-        });
+              .subscribe({
+                next: (client: Client) => {
+                  this.onClose();
+                },
+                error: (error) => {                  
+                  this.message = [
+                    {
+                      severity: InlineMessageSeverity.ERROR,
+                      summary: $localize`:@@Clients.DeleteClientError:DeleteClientError`,
+                      detail: `${error.originalError.status} : ${error.originalError.statusText}`,
+                    },
+                  ];
+                }});
+              },
+        error: (error) => {
+          console.log('[Delete] [Error]: ', error);
+        }
+      });
     }
   }
 }

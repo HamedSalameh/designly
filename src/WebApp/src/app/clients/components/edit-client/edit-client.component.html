@@ -2,6 +2,12 @@
   <div class="p-top-0 p-left-1 p-right-1">
     <!-- Edit Mode -->
 
+    <div class="m-bottom-1" *ngIf="this.errorMessages && this.errorMessages.length > 0">
+      <app-inline-message      
+        [messages]="this.errorMessages"
+      ></app-inline-message>
+    </div>
+
     <ng-container [formGroup]="ClientInfo">
       <div class="form-section basicInfo">
         <ng-container formGroupName="BasicInfo">
@@ -22,14 +28,15 @@
               />
               <!-- Show validation errors -->
               <div
+                class="a-input-error"
                 *ngIf="
                   ClientInfo.get('BasicInfo.FirstName')?.invalid &&
                   (ClientInfo.get('BasicInfo.FirstName')?.dirty ||
                     ClientInfo.get('BasicInfo.FirstName')?.touched)
-                ">
+                "
+              >
                 <!-- display any errors from the control validation -->
-                  {{ getValidationMessage('BasicInfo','FirstName') }}
-                  
+                {{ getValidationMessage("BasicInfo", "FirstName") }}
               </div>
             </div>
 
@@ -63,9 +70,10 @@
                   ClientInfo.get('AddressInfo.City')?.invalid &&
                   (ClientInfo.get('AddressInfo.City')?.dirty ||
                     ClientInfo.get('AddressInfo.City')?.touched)
-                ">
+                "
+              >
                 <!-- display any errors from the control validation -->
-                  {{ getValidationMessage('AddressInfo','City') }}
+                {{ getValidationMessage("AddressInfo", "City") }}
               </div>
             </div>
 
@@ -119,13 +127,17 @@
               <!-- Show validation errors -->
               <div
                 *ngIf="
-                  ClientInfo.get('ContactDetails.PrimaryPhoneNumber')?.invalid &&
+                  ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
+                    ?.invalid &&
                   (ClientInfo.get('ContactDetails.PrimaryPhoneNumber')?.dirty ||
                     ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
                       ?.touched)
-                ">
+                "
+              >
                 <!-- display any errors from the control validation -->
-                  {{ getValidationMessage('ContactDetails','PrimaryPhoneNumber') }}
+                {{
+                  getValidationMessage("ContactDetails", "PrimaryPhoneNumber")
+                }}
               </div>
             </div>
 

@@ -30,7 +30,7 @@ import { InlineMessageComponent } from './components/inline-message/inline-messa
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    InlineMessageComponent,
-  ]
+    InlineMessageComponent
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

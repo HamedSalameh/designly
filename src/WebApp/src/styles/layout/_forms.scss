@@ -20,7 +20,9 @@
     display: flex;
     gap: $gap-normal;
     flex-direction: row;
-    align-items: center;
+    //align-items: center;
+    // align to base line of the text to allow validation error to be aligned
+    align-items: baseline;
     margin-bottom: 20px;
   
   }

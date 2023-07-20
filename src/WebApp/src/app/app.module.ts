@@ -13,6 +13,7 @@ import { HomeModule } from './home/home.module';
 import { NgxsModule } from '@ngxs/store';
 import { ClientState } from './state/client-state/client-state.state';
 import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -31,8 +32,10 @@ import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
     HomeModule,
     LoginModule
   ],
-  providers: [ 
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+  providers: [  
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorsInterceptorService, multi: true },
+    
   ],
   bootstrap: [AppComponent]
 })
