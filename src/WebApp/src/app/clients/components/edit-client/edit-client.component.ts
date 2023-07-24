@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -13,6 +7,7 @@ import {
   InlineMessage,
   InlineMessageSeverity,
 } from 'src/app/shared/components/inline-message/inline-message.component';
+import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
 import { Strings } from 'src/app/shared/strings';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
@@ -50,7 +45,8 @@ export class EditClientComponent implements OnInit, OnDestroy {
     private clientsService: ClientsServiceService,
     private formBuilder: FormBuilder,
     private store: Store,
-    private ref: DynamicDialogRef
+    private ref: DynamicDialogRef,
+    private errorTranslationService: ErrorTranslationService
   ) {
     this.clientId = this.store.select(ClientState.selectedClient);
 
@@ -143,12 +139,13 @@ export class EditClientComponent implements OnInit, OnDestroy {
         this.ref.close();
       },
       (error) => {
-        // Handling server side errors
-        
+        const errorMessage =
+          this.errorTranslationService.getTranslatedErrorMessage(error);
+
         this.errorMessages.push({
           severity: InlineMessageSeverity.ERROR,
           summary: Strings.MessageTitle_Error,
-          detail: `${error.originalError.status} : ${error.originalError.statusText}`,
+          detail: errorMessage,
         });
       }
     );

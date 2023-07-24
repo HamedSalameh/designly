@@ -12,6 +12,11 @@ export class AddNetworkError {
     }
 }
 
+export class AddUnknownError {
+    static readonly type = '[Error] Add Unknown Error';
+    constructor(public payload: any) {}
+}
+
 export class AddServerError {
     static readonly type = '[Error] Add Server Error';
     constructor(public payload: any) {}
@@ -29,5 +34,10 @@ export class ClearNetworkError {
 
 export class ClearServerError {
     static readonly type = '[Error] Clear Server Error';
+    constructor() {}
+}
+
+export class ClearUnknownError {
+    static readonly type = '[Error] Clear Unknown Error';
     constructor() {}
 }
