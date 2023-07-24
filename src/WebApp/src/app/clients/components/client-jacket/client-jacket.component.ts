@@ -17,11 +17,12 @@ import { Subject, throwError } from 'rxjs';
 import { catchError, switchMap, takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EditClientComponent } from '../edit-client/edit-client.component';
-import { IApplicationError } from '../../../shared/types'
+import { ErrorTypes, IApplicationError } from '../../../shared/types'
 import {
   InlineMessage,
   InlineMessageSeverity,
 } from 'src/app/shared/components/inline-message/inline-message.component';
+import { AddApplicationError } from 'src/app/state/error-state/error-state.actions';
 
 @Component({
   selector: 'app-client-jacket',
@@ -117,54 +118,18 @@ export class ClientJacketComponent implements OnDestroy {
     if (this.clientId) {
       this.clientsService.canDeleteClient(this.clientId).pipe
       (
-        switchMap( () => this.clientsService.deleteClient(this.clientId)),
-        catchError( (error) => {
-
-          // Handling application logic errors
-          const message: InlineMessage = {
-            severity: InlineMessageSeverity.ERROR,
-            summary: $localize`:@@Clients.DeleteClientError:DeleteClientError`,
-            detail: `${error.originalError.status} : ${error.originalError.statusText}`,
-          };
-
-          return throwError( () => message);
-        }
-      )).subscribe({
+        switchMap( () => this.clientsService.deleteClient(this.clientId))
+        // TODO: Should we catch error here?
+      ).subscribe({
         next: (client: Client) => {
           this.onClose();
-        }
-        ,error: (error) => {
-          this.message = [error];
+        },
+        error: (error: any) => {
+          this.store.dispatch(new AddApplicationError(error));
         }
       });
     }
 
     return;
-
-    if (this.clientId) {
-      this.clientsService.canDeleteClient(this.clientId)
-      .subscribe({
-        next: () => {
-            this.clientsService
-              .deleteClient(this.clientId)
-              .subscribe({
-                next: (client: Client) => {
-                  this.onClose();
-                },
-                error: (error) => {                  
-                  this.message = [
-                    {
-                      severity: InlineMessageSeverity.ERROR,
-                      summary: $localize`:@@Clients.DeleteClientError:DeleteClientError`,
-                      detail: `${error.originalError.status} : ${error.originalError.statusText}`,
-                    },
-                  ];
-                }});
-              },
-        error: (error) => {
-          console.log('[Delete] [Error]: ', error);
-        }
-      });
-    }
   }
 }

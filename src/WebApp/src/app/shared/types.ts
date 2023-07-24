@@ -1,22 +1,29 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-export interface IApplicationError {
+export enum ErrorTypes {
+  NetworkError = 'NetworkError',          // related to network issues
+  ServerError = 'ServerError',            // server side errors, like 50x
+  ApplicationError = 'ApplicationError',  // application logic errors, like 40x
+  UnknownError = 'UnknownError'           // unknown errors
+}
+
+export interface IError {
   message: string;
-  messageArg?: string;
-  title?: string;
   type: string;
   originalError?: HttpErrorResponse;
+  handled?: boolean;
+}
+
+export interface IApplicationError extends IError {
+  messageArg?: string;
+  title?: string;
   fatal?: boolean;
 }
 
-export interface IServerError {
-  originalError: HttpErrorResponse;
-  message?: string;
-  type: string;
-  handled: boolean;
+export interface INetworkError extends IError {
 }
 
-export interface INetworkError extends IServerError {
+export interface IServerError extends IError {
 }
 
 export enum HttpResponseStatusCodes {

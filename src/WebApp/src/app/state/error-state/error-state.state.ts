@@ -1,5 +1,5 @@
 import { Action, Actions, Selector, State, StateContext } from "@ngxs/store";
-import { AddApplicationError, AddNetworkError, AddServerError, ClearApplicationError, ClearNetworkError, ClearServerError } from "./error-state.actions";
+import { AddApplicationError, AddNetworkError, AddServerError, AddUnknownError, ClearApplicationError, ClearNetworkError, ClearServerError, ClearUnknownError } from "./error-state.actions";
 import { ErrorStateModel } from "./error-state.model";
 
 @State<ErrorStateModel>({
@@ -7,7 +7,8 @@ import { ErrorStateModel } from "./error-state.model";
     defaults: {
         applicationError: null,
         networkError: null,
-        serverError: null
+        serverError: null,
+        unknownError: null
     }
   })
 
@@ -53,6 +54,14 @@ export class ErrorState {
         });
     }
 
+    @Action(AddUnknownError)
+    AddUnknownError({getState, patchState}: StateContext<ErrorStateModel>, {payload}: AddUnknownError) {
+        const state = getState();
+        patchState({
+            unknownError: payload
+        });
+    }
+
     @Action(ClearApplicationError)
     ClearApplicationError({getState, patchState}: StateContext<ErrorStateModel>) {
         const state = getState();
@@ -74,6 +83,14 @@ export class ErrorState {
         const state = getState();
         patchState({
             serverError: null
+        });
+    }
+
+    @Action(ClearUnknownError)
+    ClearUnknownError({getState, patchState}: StateContext<ErrorStateModel>) {
+        const state = getState();
+        patchState({
+            unknownError: null
         });
     }
 }

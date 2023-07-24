@@ -2,10 +2,11 @@
   <div class="p-top-0 p-left-1 p-right-1">
     <!-- Edit Mode -->
 
-    <div class="m-bottom-1" *ngIf="this.errorMessages && this.errorMessages.length > 0">
-      <app-inline-message      
-        [messages]="this.errorMessages"
-      ></app-inline-message>
+    <div
+      class="m-bottom-1"
+      *ngIf="this.errorMessages && this.errorMessages.length > 0"
+    >
+      <app-inline-message [messages]="this.errorMessages"></app-inline-message>
     </div>
 
     <ng-container [formGroup]="ClientInfo">
@@ -36,7 +37,7 @@
                 "
               >
                 <!-- display any errors from the control validation -->
-                {{ getValidationMessage("BasicInfo", "FirstName") }}
+                {{ getValidationMessage('BasicInfo', 'FirstName') }}
               </div>
             </div>
 
@@ -73,7 +74,7 @@
                 "
               >
                 <!-- display any errors from the control validation -->
-                {{ getValidationMessage("AddressInfo", "City") }}
+                {{ getValidationMessage('AddressInfo', 'City') }}
               </div>
             </div>
 
@@ -136,7 +137,7 @@
               >
                 <!-- display any errors from the control validation -->
                 {{
-                  getValidationMessage("ContactDetails", "PrimaryPhoneNumber")
+                  getValidationMessage('ContactDetails', 'PrimaryPhoneNumber')
                 }}
               </div>
             </div>

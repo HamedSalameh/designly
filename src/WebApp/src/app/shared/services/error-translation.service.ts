@@ -8,10 +8,10 @@ export class ErrorTranslationService {
 
   constructor() { }
 
-  getTranslatedErrorMessage(error: INetworkError): string {
+  getTranslatedErrorMessage(error: any): string {
     let message = '';
 
-    switch (error.originalError.status) {
+    switch (error.originalError?.status) {
       case HttpResponseStatusCodes.NOT_FOUND:
         message = $localize`:@@Errors.NotFound:The requested resource was not found.`;
         break;
