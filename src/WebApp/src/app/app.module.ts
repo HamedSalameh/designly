@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -14,6 +14,8 @@ import { NgxsModule } from '@ngxs/store';
 import { ClientState } from './state/client-state/client-state.state';
 import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
+import { ErrorState } from './state/error-state/error-state.state';
+import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-in
     BrowserAnimationsModule,
     AppRoutingModule,
     NgxsModule.forRoot([
-      ClientState
+      ClientState,
+      ErrorState
     ]),
     NgxsLoggerPluginModule.forRoot(),
     CoreModule,
@@ -33,9 +36,9 @@ import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-in
     LoginModule
   ],
   providers: [  
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorsInterceptorService, multi: true },
-    
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })
