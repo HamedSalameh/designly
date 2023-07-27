@@ -13,15 +13,12 @@ import {
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
-import { Subject, throwError } from 'rxjs';
-import { catchError, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject, of, throwError } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EditClientComponent } from '../edit-client/edit-client.component';
-import { ErrorTypes, IApplicationError } from '../../../shared/types'
-import {
-  InlineMessage,
-  InlineMessageSeverity,
-} from 'src/app/shared/components/inline-message/inline-message.component';
+
+import { InlineMessage } from 'src/app/shared/components/inline-message/inline-message.component';
 import { AddApplicationError } from 'src/app/state/error-state/error-state.actions';
 
 @Component({
@@ -50,15 +47,20 @@ export class ClientJacketComponent implements OnDestroy {
   ) {
     this.store
       .select(ClientState.selectedClient)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        switchMap((clientId: any) => {
+          if (clientId) {
+            // If the client was selected, then get the client
+            return this.clientsService.getClient(clientId);
+          } else {
+            return of(null); // No client was selected, so return null
+          }
+        })
+      )
       .subscribe((clientId: any) => {
         if (clientId) {
           this.clientId = clientId;
-          this.clientsService
-            .getClient(clientId)
-            .subscribe((client: Client) => {
-              this.clientId = clientId;
-            });
         }
       });
 
@@ -97,9 +99,33 @@ export class ClientJacketComponent implements OnDestroy {
         baseZIndex: 10000,
         data: {
           clientId: this.clientId,
-        },
+        }
       });
     }
+  }
+
+  onSaveClientChanges(client: Client): void {
+    console.debug('[ClientJacketComponent] [onSaveClientChanges]', this.clientId);
+
+    this.clientsService.updateClient(client).subscribe(
+      (client: Client) => {
+        console.log(client);
+        this.ref?.close();
+      },
+      (error) => {
+        // const errorMessage =
+        //   this.errorTranslationService.getTranslatedErrorMessage(error);
+
+        // this.errorMessages.push({
+        //   severity: InlineMessageSeverity.ERROR,
+        //   summary: Strings.MessageTitle_Error,
+        //   detail: errorMessage,
+        // });
+      }
+    );
+
+    this.message = [];
+    this.store.dispatch(new ViewMode());
   }
 
   onCloseEditClient(): void {
@@ -116,18 +142,20 @@ export class ClientJacketComponent implements OnDestroy {
     console.debug('[ClientJacketComponent] [onDelete]', this.clientId);
 
     if (this.clientId) {
-      this.clientsService.canDeleteClient(this.clientId).pipe
-      (
-        switchMap( () => this.clientsService.deleteClient(this.clientId))
-        // TODO: Should we catch error here?
-      ).subscribe({
-        next: (client: Client) => {
-          this.onClose();
-        },
-        error: (error: any) => {
-          this.store.dispatch(new AddApplicationError(error));
-        }
-      });
+      this.clientsService
+        .canDeleteClient(this.clientId)
+        .pipe(
+          switchMap(() => this.clientsService.deleteClient(this.clientId))
+          // TODO: Should we catch error here?
+        )
+        .subscribe({
+          next: (client: Client) => {
+            this.onClose();
+          },
+          error: (error: any) => {
+            this.store.dispatch(new AddApplicationError(error));
+          },
+        });
     }
 
     return;

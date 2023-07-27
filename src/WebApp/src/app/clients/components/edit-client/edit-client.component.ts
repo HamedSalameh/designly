@@ -76,7 +76,43 @@ export class EditClientComponent implements OnInit, OnDestroy {
     this.errorMessages = [];
   }
 
-  createForm() {
+  onCancel() {
+    console.debug('[EditClientComponent] [onCancel]');
+    this.ref.close();
+  }
+
+  onSave() {
+    console.debug('[EditClientComponent] [onSave]');
+
+    const client: Client = this.createClientFromForm();
+
+    // subscribe to the updateClient observable with pipe for error handling
+    this.errorMessages = [];
+    this.clientsService.updateClient(client)
+    .subscribe({
+      next: (client: Client) => {
+        console.log(client);
+        this.ref.close();
+      },
+      error: (error) => {
+        const errorMessage =
+          this.errorTranslationService.getTranslatedErrorMessage(error);
+
+        this.errorMessages.push({
+          severity: InlineMessageSeverity.ERROR,
+          summary: Strings.MessageTitle_Error,
+          detail: errorMessage,
+        });
+      }}
+    );
+  }
+
+  ngOnDestroy(): void {
+    console.debug('[EditClientComponent] [ngOnDestroy]');
+    this.errorMessages = [];
+  }
+
+  private createForm() {
     this.ClientInfo = this.formBuilder.group({
       BasicInfo: this.formBuilder.group({
         FirstName: [this.selectedClient?.FirstName, [Validators.required]],
@@ -103,15 +139,8 @@ export class EditClientComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCancel() {
-    console.debug('[EditClientComponent] [onCancel]');
-    this.ref.close();
-  }
-
-  onSave() {
-    console.debug('[EditClientComponent] [onSave]');
-
-    const client: Client = {
+  private createClientFromForm(): Client {
+    return {
       Id: this.selectedClient?.Id!,
       FirstName: this.ClientInfo.get('BasicInfo.FirstName')?.value,
       FamilyName: this.ClientInfo.get('BasicInfo.FamilyName')?.value,
@@ -130,25 +159,6 @@ export class EditClientComponent implements OnInit, OnDestroy {
         AddressLines: this.ClientInfo.get('AddressInfo.AddressLine1')?.value,
       },
     };
-
-    // subscribe to the updateClient observable with pipe for error handling
-    this.errorMessages = [];
-    this.clientsService.updateClient(client).subscribe(
-      (client: Client) => {
-        console.log(client);
-        this.ref.close();
-      },
-      (error) => {
-        const errorMessage =
-          this.errorTranslationService.getTranslatedErrorMessage(error);
-
-        this.errorMessages.push({
-          severity: InlineMessageSeverity.ERROR,
-          summary: Strings.MessageTitle_Error,
-          detail: errorMessage,
-        });
-      }
-    );
   }
 
   getValidationMessage(formGroupName: string, formControlName: string) {
@@ -158,10 +168,5 @@ export class EditClientComponent implements OnInit, OnDestroy {
       return $localize`:@@Global.Validation.Required:Required`;
     }
     return '';
-  }
-
-  ngOnDestroy(): void {
-    console.debug('[EditClientComponent] [ngOnDestroy]');
-    this.errorMessages = [];
   }
 }

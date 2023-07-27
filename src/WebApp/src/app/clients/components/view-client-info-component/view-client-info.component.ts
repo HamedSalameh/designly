@@ -5,14 +5,12 @@ import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
 
-
 @Component({
   selector: 'app-view-client-info',
   templateUrl: './view-client-info.component.html',
-  styleUrls: ['./view-client-info.component.scss']
+  styleUrls: ['./view-client-info.component.scss'],
 })
 export class ViewClientInfoComponent {
-
   @Output() CloseClient: EventEmitter<any> = new EventEmitter();
   @Output() EditClient: EventEmitter<any> = new EventEmitter();
   @Output() ShareClient: EventEmitter<any> = new EventEmitter();
