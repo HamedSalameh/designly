@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InlineMessageComponent } from './inline-message.component';
+import { NotificationMessageComponent } from './notification-message.component';
 
 describe('InlineMessageComponent', () => {
-  let component: InlineMessageComponent;
-  let fixture: ComponentFixture<InlineMessageComponent>;
+  let component: NotificationMessageComponent;
+  let fixture: ComponentFixture<NotificationMessageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InlineMessageComponent ]
+      declarations: [ NotificationMessageComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InlineMessageComponent);
+    fixture = TestBed.createComponent(NotificationMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

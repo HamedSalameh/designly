@@ -13,13 +13,17 @@ import {
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
-import { Subject, of, throwError } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { EditClientComponent } from '../edit-client/edit-client.component';
 
-import { InlineMessage } from 'src/app/shared/components/inline-message/inline-message.component';
 import { AddApplicationError } from 'src/app/state/error-state/error-state.actions';
+import {
+  NotificationMessage,
+  NotificationMessageSeverity,
+} from 'src/app/shared/components/notification-message/notification-message.component';
+import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
+import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-client-jacket',
@@ -31,7 +35,7 @@ export class ClientJacketComponent implements OnDestroy {
   clientId: any;
   editMode: boolean = false;
   errorMessage: string = '';
-  message: InlineMessage[] = [];
+  errorMessages: NotificationMessage[] = [];
 
   ref: DynamicDialogRef | undefined;
 
@@ -43,7 +47,7 @@ export class ClientJacketComponent implements OnDestroy {
   constructor(
     private clientsService: ClientsServiceService,
     private store: Store,
-    private dialogService: DialogService
+    private errorTranslationService: ErrorTranslationService
   ) {
     this.store
       .select(ClientState.selectedClient)
@@ -83,7 +87,6 @@ export class ClientJacketComponent implements OnDestroy {
 
   onClose(): void {
     console.debug('[ClientJacketComponent] [onClose]', this.clientId);
-    this.message = [];
     this.client = undefined;
     this.store.dispatch(new ViewMode());
     this.CloseClientJacket.emit();
@@ -93,19 +96,14 @@ export class ClientJacketComponent implements OnDestroy {
     console.debug('[ClientJacketComponent] [onEdit]', this.clientId);
     if (this.clientId) {
       this.store.dispatch(new EditMode(this.clientId));
-      this.ref = this.dialogService.open(EditClientComponent, {
-        header: $localize`:@@Clients.EditClient:Edit Client`,
-        contentStyle: { 'max-height': '500px', overflow: 'auto' },
-        baseZIndex: 10000,
-        data: {
-          clientId: this.clientId,
-        }
-      });
     }
   }
 
   onSaveClientChanges(client: Client): void {
-    console.debug('[ClientJacketComponent] [onSaveClientChanges]', this.clientId);
+    console.debug(
+      '[ClientJacketComponent] [onSaveClientChanges]',
+      this.clientId
+    );
 
     this.clientsService.updateClient(client).subscribe(
       (client: Client) => {
@@ -115,7 +113,6 @@ export class ClientJacketComponent implements OnDestroy {
       (error) => {
         // const errorMessage =
         //   this.errorTranslationService.getTranslatedErrorMessage(error);
-
         // this.errorMessages.push({
         //   severity: InlineMessageSeverity.ERROR,
         //   summary: Strings.MessageTitle_Error,
@@ -124,13 +121,36 @@ export class ClientJacketComponent implements OnDestroy {
       }
     );
 
-    this.message = [];
     this.store.dispatch(new ViewMode());
   }
 
+  // EditClient component
+  onCancelEditClient(): void {
+    console.debug(
+      '[ClientJacketComponent] [onCancelEditClient]',
+      this.clientId
+    );
+    this.store.dispatch(new ViewMode());
+  }
+
+  onSaveEditClient(client: Client): void {
+    console.debug('[ClientJacketComponent] [onSaveEditClient]', this.clientId);
+
+    this.errorMessages = [];
+    this.clientsService.updateClient(client).subscribe({
+      next: (client: Client) => {
+        console.log(client);
+        this.store.dispatch(new ViewMode());
+      },
+      error: (error) => {
+        this.store.dispatch(new AddApplicationError(error));
+      },
+    });    
+  }
+
+  // ViewClient component
   onCloseEditClient(): void {
     console.debug('[ClientJacketComponent] [onCloseEditClient]', this.clientId);
-    this.message = [];
     this.store.dispatch(new ViewMode());
   }
 

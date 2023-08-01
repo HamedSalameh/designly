@@ -1,12 +1,12 @@
 <div class="app-card" *ngIf="this.selectedClient">
   <div class="p-top-0 p-left-1 p-right-1">
-    <!-- Edit Mode -->
-
-    <div
-      class="m-bottom-1"
-      *ngIf="this.errorMessages && this.errorMessages.length > 0"
-    >
-      <app-inline-message [messages]="this.errorMessages"></app-inline-message>
+      <div class="card-header form-row m-bottom-2">
+      <div class="card-title">
+        <label class="section-title"
+          >{{ this.selectedClient.FirstName }}
+          {{ this.selectedClient.FamilyName }}
+        </label>
+      </div>
     </div>
 
     <ng-container [formGroup]="ClientInfo">

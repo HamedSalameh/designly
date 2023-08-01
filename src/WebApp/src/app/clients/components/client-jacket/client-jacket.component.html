@@ -1,14 +1,23 @@
 <div class="client-jacket" *ngIf="this.clientId">
   <!-- Notifications section -->
-  <app-inline-message [messages]="this.message"></app-inline-message>
+
+  <div *ngIf="this.editMode">
+    <app-edit-client
+    (CancelEditClient)="this.onCancelEditClient()"
+    (SaveEditClient)="this.onSaveEditClient($event)"
+    ></app-edit-client>
+  </div>
 
   <!-- General information section -->
-  <app-view-client-info
-  (CloseClient)="this.onClose()"
-  (EditClient)="this.onEdit()"
-  (ShareClient)="this.onShare()"
-  (DeleteClient)="this.onDelete()"
+  <div *ngIf="!this.editMode">
+    <app-view-client-info
+    (CloseClient)="this.onClose()"
+    (EditClient)="this.onEdit()"
+    (ShareClient)="this.onShare()"
+    (DeleteClient)="this.onDelete()"
   ></app-view-client-info>
+  </div>
+  
 
   <!-- <app-edit-client 
   (CloseClient)="this.onCloseEditClient()"
