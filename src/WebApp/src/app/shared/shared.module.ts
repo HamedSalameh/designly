@@ -9,7 +9,7 @@ import { TableModule } from 'primeng/table';
 import { ChipsModule } from 'primeng/chips';
 import { MessagesModule } from 'primeng/messages';
 import { ToastModule } from 'primeng/toast';
-import { InlineMessageComponent } from './components/inline-message/inline-message.component';
+import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
 import { MessageService } from 'primeng/api';
 import { ToastMessageService } from './services/toast-message-service.service';
 
@@ -18,7 +18,7 @@ import { ToastMessageService } from './services/toast-message-service.service';
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    InlineMessageComponent,
+    NotificationMessageComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +34,7 @@ import { ToastMessageService } from './services/toast-message-service.service';
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    InlineMessageComponent,
+    NotificationMessageComponent,
     ToastModule
   ],
   providers: [

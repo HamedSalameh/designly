@@ -1,14 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, of, tap } from 'rxjs';
-import {
-  InlineMessage,
-  InlineMessageSeverity,
-} from 'src/app/shared/components/inline-message/inline-message.component';
-import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
-import { Strings } from 'src/app/shared/strings';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
@@ -18,7 +11,7 @@ import { ClientsServiceService } from '../../services/clients-service.service';
   templateUrl: './edit-client.component.html',
   styleUrls: ['./edit-client.component.scss'],
 })
-export class EditClientComponent implements OnInit, OnDestroy {
+export class EditClientComponent implements OnInit {
   ClientInfo!: FormGroup;
   clientId;
   selectedClient$: Observable<Client | null> = of(null);
@@ -39,14 +32,14 @@ export class EditClientComponent implements OnInit, OnDestroy {
   localizedAddressLine1!: string;
 
   validators = [Validators.required];
-  errorMessages: InlineMessage[] = [];
+
+  @Output() CancelEditClient: EventEmitter<any> = new EventEmitter();
+  @Output() SaveEditClient: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private clientsService: ClientsServiceService,
     private formBuilder: FormBuilder,
     private store: Store,
-    private ref: DynamicDialogRef,
-    private errorTranslationService: ErrorTranslationService
   ) {
     this.clientId = this.store.select(ClientState.selectedClient);
 
@@ -72,44 +65,17 @@ export class EditClientComponent implements OnInit, OnDestroy {
     // localize contact details labels
     this.localizedPrimaryPhoneNumber = $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`;
     this.localizedEmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
-
-    this.errorMessages = [];
   }
 
   onCancel() {
     console.debug('[EditClientComponent] [onCancel]');
-    this.ref.close();
+    this.CancelEditClient.emit();   
   }
 
   onSave() {
     console.debug('[EditClientComponent] [onSave]');
-
     const client: Client = this.createClientFromForm();
-
-    // subscribe to the updateClient observable with pipe for error handling
-    this.errorMessages = [];
-    this.clientsService.updateClient(client)
-    .subscribe({
-      next: (client: Client) => {
-        console.log(client);
-        this.ref.close();
-      },
-      error: (error) => {
-        const errorMessage =
-          this.errorTranslationService.getTranslatedErrorMessage(error);
-
-        this.errorMessages.push({
-          severity: InlineMessageSeverity.ERROR,
-          summary: Strings.MessageTitle_Error,
-          detail: errorMessage,
-        });
-      }}
-    );
-  }
-
-  ngOnDestroy(): void {
-    console.debug('[EditClientComponent] [ngOnDestroy]');
-    this.errorMessages = [];
+    this.SaveEditClient.emit(client);
   }
 
   private createForm() {
