@@ -8,6 +8,7 @@ import {
   ViewEncapsulation 
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { SearchSettingsModel, SelectionSettings, SelectionSettingsModel, ToolbarItems } from '@syncfusion/ej2-angular-grids';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -17,6 +18,11 @@ import { Table } from 'primeng/table';
   encapsulation: ViewEncapsulation.None // This is needed to override the default encapsulation of Angular
 })
 export class TableComponent implements OnInit {
+  // Syncfusion Grid Search Settings
+  public searchOptions?: SearchSettingsModel;
+  public toolbarOptions?: ToolbarItems[];
+  public selectionOptions: SelectionSettingsModel = { type: 'Single', mode: 'Row' };
+  
   onRowSelect($event: any) {
     this.rowSelected.emit($event.data);
   }
@@ -64,6 +70,15 @@ export class TableComponent implements OnInit {
       this.filterData(values);
       this.dt1.value = this.filterData(values);
     });
+
+    this.searchOptions = {
+      fields: this.cols.map((col) => col.field),
+      operator: 'contains',
+      ignoreCase: true,
+      key: '',
+    };
+
+    this.toolbarOptions = ['Search'];
   }
 
   clear(table: Table) {
