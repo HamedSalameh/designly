@@ -2,24 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="Clients.EditClient" datatype="html">
-        <source>Edit Client</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
-          <context context-type="linenumber">94</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Clients.DeleteClientError" datatype="html">
-        <source>DeleteClientError</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
-          <context context-type="linenumber">126</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/client-jacket/client-jacket.component.ts</context>
-          <context context-type="linenumber">158</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
         <context-group purpose="location">
@@ -28,7 +10,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
@@ -39,7 +21,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
@@ -50,7 +32,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
@@ -68,7 +50,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
@@ -79,7 +61,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
@@ -90,42 +72,42 @@
         <source>Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Cancel" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
         <source>Street</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
         <source>BuildingNumber</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
         <source>AddressLine1</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Global.Validation.Required" datatype="html">
         <source>Required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
@@ -237,7 +219,14 @@
         <source>Search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Buttons.AddNewClient" datatype="html">
+        <source>Add New Client</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Errors.NotFound" datatype="html">

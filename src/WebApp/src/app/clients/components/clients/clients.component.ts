@@ -68,6 +68,10 @@ export class ClientsComponent {
     this.SelectRow.emit(selectedClientId);
   }
 
+  onAddClient(): void {
+    console.debug('Add Client');
+  }
+
   private mapClientToTableData(client: any) {
     return {
       Id: client.Id,

@@ -4,25 +4,36 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
-  ViewEncapsulation 
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SearchSettingsModel, SelectionSettings, SelectionSettingsModel, ToolbarItems } from '@syncfusion/ej2-angular-grids';
+import {
+  SearchSettingsModel,
+  SelectionSettingsModel,
+} from '@syncfusion/ej2-angular-grids';
+import { ClickEventArgs } from '@syncfusion/ej2/navigations';
 import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  encapsulation: ViewEncapsulation.None // This is needed to override the default encapsulation of Angular
+  encapsulation: ViewEncapsulation.None, // This is needed to override the default encapsulation of Angular
 })
 export class TableComponent implements OnInit {
   // Syncfusion Grid Search Settings
+  defaultRowsPerPage: number = 10;
   public searchOptions?: SearchSettingsModel;
-  public toolbarOptions?: ToolbarItems[];
-  public selectionOptions: SelectionSettingsModel = { type: 'Single', mode: 'Row' };
-  
+  public toolbarOptions?: any[]; // ToolbarItems[];
+  public selectionOptions: SelectionSettingsModel = {
+    type: 'Single',
+    mode: 'Row',
+  };
+  public pageSettings: Object = {
+    pageSizes: true,
+    pageSize: this.defaultRowsPerPage,
+  };
+
   onRowSelect($event: any) {
     this.rowSelected.emit($event.data);
   }
@@ -32,13 +43,9 @@ export class TableComponent implements OnInit {
     this.rowSelected.emit(null);
   }
 
-  @ViewChild('dt1', { static: true }) dt1!: Table;
   selectedItem: any;
-  defaultRowsPerPage: number = 10;
-  globalFilter: string = '';
-  formGroup!: FormGroup;
-  filterValues: string[] = [];
-  FilterChipsPlaceholder: string = $localize`:@@Placeholders.Search:Search`;
+  SearchtextPlaceholder: string = $localize`:@@Placeholders.Search:Search`;
+  AddNewClient: string = $localize`:@@Buttons.AddNewClient:Add New Client`;
 
   @Input()
   data: any[] = [];
@@ -49,11 +56,11 @@ export class TableComponent implements OnInit {
   @Input()
   key: any = '';
 
-  @Input()
-  RowsPerPageOptions: any[] = [5, 10, 20, 50];
-
   @Output()
   rowSelected: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  addClient: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     if (this.key === '') {
@@ -62,15 +69,6 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formGroup = new FormGroup({
-      values: new FormControl<string[] | null>(null),
-    });
-    this.formGroup.get('values')?.valueChanges.subscribe((values) => {
-      this.filterValues = values;
-      this.filterData(values);
-      this.dt1.value = this.filterData(values);
-    });
-
     this.searchOptions = {
       fields: this.cols.map((col) => col.field),
       operator: 'contains',
@@ -78,36 +76,27 @@ export class TableComponent implements OnInit {
       key: '',
     };
 
-    this.toolbarOptions = ['Search'];
+    this.toolbarOptions = [
+      'Search',
+      {
+        text: this.AddNewClient,
+        tooltipText: 'Add',
+        prefixIcon: 'e-plus',
+        id: 'addClientAction',
+      },
+    ];
   }
 
-  clear(table: Table) {
-    table.clear();
-  }
-
-  filterData(values: string[]) {
-    const filteredData = this.data.filter(item => {
-      for (const value of values) {
-        let match = false;
-
-        // Check if the value exists in any property of the item
-        for (const key in item) {
-          if (item.hasOwnProperty(key) && typeof item[key] === 'string' &&
-              item[key].toLowerCase().includes(value.toLowerCase())) {
-            match = true;
-            break;
-          }
-        }
-
-        // If any value doesn't match, exclude the item from filtered data
-        if (!match) {
-          return false;
-        }
+  toolbarClickHandler(args: ClickEventArgs) {
+    if (args) {
+      const action = args.item?.id;
+      switch (action) {
+        case 'addClientAction':
+          this.addClient.emit();
+          break;
+        default:
+          break;
       }
-
-      // All values matched, include the item in filtered data
-      return true;
-    });
-    return filteredData;
+    }
   }
 }

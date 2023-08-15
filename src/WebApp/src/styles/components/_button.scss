@@ -14,10 +14,9 @@
   font-family: $font-family;
   font-size: $font-size-default;
   font-weight: $font-weight-bold;
-  color: $color-v1-white;
   border: none;
   border-radius: $border-radius;
-  background-color: $color-v1-bacground;
+  background-color: transparent;
   color: $color-v1-black;
 
   cursor: pointer;
@@ -51,12 +50,10 @@
 
 .btn-primary {
   background-color: $color-v1-black-80;
-  color: $color-v1-white;
 }
 
 .btn-secondary {
   background-color: $color-v1-secondary;
-  color: $color-v1-white;
 }
 
 

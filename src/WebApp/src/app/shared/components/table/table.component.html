@@ -3,8 +3,13 @@
   [searchSettings]="searchOptions"
   [toolbar]="toolbarOptions"
   [allowSorting]="true"
+  [allowPaging]='true'
+  
   [selectionSettings]="selectionOptions"
+  [pageSettings]="pageSettings"
+  
   (rowSelected)="onRowSelect($event)"
+  (toolbarClick)="toolbarClickHandler($event)"
   enableRtl="true"
 >
   <e-columns>

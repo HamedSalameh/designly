@@ -1,9 +1,3 @@
-<!-- loop with index on breadcrumbs-->
-<!-- <span *ngFor="let breadcrumb of breadcrumbs$ | async; let i = index" class="breadcrumb-item">
-  <a [href]="breadcrumb.url">{{ breadcrumb.label }}</a>
-<span *ngFor="let breadcrumb of breadcrumbs$ | async">
-</span> -->
-
 <ng-container *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last">
   <span class="breadcrumb-item">
     <!-- inject icon -->
