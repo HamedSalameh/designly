@@ -16,6 +16,7 @@ import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
 import { ErrorState } from './state/error-state/error-state.state';
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
+import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { GlobalErrorHandlerService } from './core/services/global-error-handler.
     CoreModule,
 
     HomeModule,
-    LoginModule
+    LoginModule,
+    GridModule, PagerModule
   ],
   providers: [  
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService },

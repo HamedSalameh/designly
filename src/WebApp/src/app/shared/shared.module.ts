@@ -12,6 +12,11 @@ import { ToastModule } from 'primeng/toast';
 import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
 import { MessageService } from 'primeng/api';
 import { ToastMessageService } from './services/toast-message-service.service';
+import { Edit, EditService, GridModule, PageService, SearchService, SortService, ToolbarService } from '@syncfusion/ej2-angular-grids';
+
+// Register Syncfusion license
+import { registerLicense } from '@syncfusion/ej2-base';
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
 @NgModule({
   declarations: [
@@ -29,6 +34,9 @@ import { ToastMessageService } from './services/toast-message-service.service';
     ChipsModule,
     MessagesModule,
     ToastModule,
+
+    // syncfusion
+    GridModule,
   ],
   exports: [
     IconButtonComponent,
@@ -39,7 +47,13 @@ import { ToastMessageService } from './services/toast-message-service.service';
   ],
   providers: [
     MessageService,
-    ToastMessageService
+    ToastMessageService,
+
+    // syncfusion
+    SearchService,
+    ToolbarService,
+    SortService,
+    PageService
   ]
 })
 export class SharedModule {}

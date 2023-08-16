@@ -1,4 +1,28 @@
-<div class="p-fluid m-bottom-1">
+<ejs-grid
+  [dataSource]="this.data"
+  [searchSettings]="searchOptions"
+  [toolbar]="toolbarOptions"
+  [allowSorting]="true"
+  [allowPaging]='true'
+  
+  [selectionSettings]="selectionOptions"
+  [pageSettings]="pageSettings"
+  
+  (rowSelected)="onRowSelect($event)"
+  (toolbarClick)="toolbarClickHandler($event)"
+  enableRtl="true"
+>
+  <e-columns>
+    <e-column
+      *ngFor="let col of this.cols"
+      [field]="col.field"
+      [headerText]="col.header"
+    >
+    </e-column>
+  </e-columns>
+</ejs-grid>
+
+<!-- <div class="p-fluid m-bottom-1">
   <form [formGroup]="formGroup">
       <p-chips formControlName="values" [placeholder]="this.FilterChipsPlaceholder"></p-chips>
   </form>
@@ -31,4 +55,4 @@
       <td *ngFor="let col of cols">{{ rowData[col.field] }}</td>
     </tr>
   </ng-template>
-</p-table>
+</p-table> -->
