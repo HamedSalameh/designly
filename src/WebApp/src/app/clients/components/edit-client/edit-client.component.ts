@@ -1,10 +1,17 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Observable, of, tap } from 'rxjs';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsServiceService } from '../../services/clients-service.service';
+import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-edit-client',
@@ -19,6 +26,7 @@ export class EditClientComponent implements OnInit {
 
   localizedSave = $localize`:@@Global.Save:Save`;
   localizedCancel = $localize`:@@Global.Cancel:Cancel`;
+  localizedNewClient = $localize`:@@Global.NewClient:NewClient`;
 
   localizedFirstName!: string;
   localizedFamilyName!: string;
@@ -39,17 +47,21 @@ export class EditClientComponent implements OnInit {
   constructor(
     private clientsService: ClientsServiceService,
     private formBuilder: FormBuilder,
-    private store: Store,
+    private store: Store
   ) {
     this.clientId = this.store.select(ClientState.selectedClient);
 
     this.clientId.subscribe((clientId: any) => {
-      if (clientId) {
-        this.clientsService.getClient(clientId).subscribe((client: Client) => {
-          this.selectedClient = client;
-          this.createForm();
-        });
+      if (!clientId || clientId === NEW_CLIENT_ID) {
+        this.selectedClient = this.createEmptyClient();
+        this.createForm();
+        return;
       }
+
+      this.clientsService.getClient(clientId).subscribe((client: Client) => {
+        this.selectedClient = client;
+        this.createForm();
+      });
     });
   }
 
@@ -69,13 +81,32 @@ export class EditClientComponent implements OnInit {
 
   onCancel() {
     console.debug('[EditClientComponent] [onCancel]');
-    this.CancelEditClient.emit();   
+    this.CancelEditClient.emit();
   }
 
   onSave() {
     console.debug('[EditClientComponent] [onSave]');
     const client: Client = this.createClientFromForm();
     this.SaveEditClient.emit(client);
+  }
+
+  private createEmptyClient(): Client {
+    return {
+      Id: NEW_CLIENT_ID,
+      FirstName: '',
+      FamilyName: '',
+      TenantId: '',
+      ContactDetails: {
+        PrimaryPhoneNumber: '',
+        EmailAddress: '',
+      },
+      Address: {
+        City: '',
+        Street: '',
+        BuildingNumber: '',
+        AddressLines: [],
+      },
+    };
   }
 
   private createForm() {

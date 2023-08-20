@@ -12,6 +12,7 @@ import { ClientsServiceService } from '../../services/clients-service.service';
 export class ClientsComponent {
 
   @Output() SelectRow: EventEmitter<string> = new EventEmitter<string>();
+  @Output() AddClient: EventEmitter<void> = new EventEmitter<void>();
 
   columnsDefinition = [
     {
@@ -69,7 +70,7 @@ export class ClientsComponent {
   }
 
   onAddClient(): void {
-    console.debug('Add Client');
+    this.AddClient.emit();
   }
 
   private mapClientToTableData(client: any) {

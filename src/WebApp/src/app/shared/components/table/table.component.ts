@@ -6,13 +6,11 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import {
   SearchSettingsModel,
   SelectionSettingsModel,
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2/navigations';
-import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-table',
@@ -34,6 +32,8 @@ export class TableComponent implements OnInit {
     pageSize: this.defaultRowsPerPage,
   };
 
+  private toolbarActions: Map<string, Function> = new Map();
+
   onRowSelect($event: any) {
     this.rowSelected.emit($event.data);
   }
@@ -53,20 +53,11 @@ export class TableComponent implements OnInit {
   @Input()
   cols: any[] = [];
 
-  @Input()
-  key: any = '';
-
   @Output()
   rowSelected: EventEmitter<any> = new EventEmitter();
 
   @Output()
   addClient: EventEmitter<any> = new EventEmitter();
-
-  constructor() {
-    if (this.key === '') {
-      console.warn('key is empty!');
-    }
-  }
 
   ngOnInit(): void {
     this.searchOptions = {
@@ -88,14 +79,10 @@ export class TableComponent implements OnInit {
   }
 
   toolbarClickHandler(args: ClickEventArgs) {
-    if (args) {
-      const action = args.item?.id;
-      switch (action) {
-        case 'addClientAction':
-          this.addClient.emit();
-          break;
-        default:
-          break;
+    const toolbarActionId = args.item?.id;
+    if (toolbarActionId) {
+      if (toolbarActionId === 'addClientAction') {
+        this.addClient.emit();
       }
     }
   }

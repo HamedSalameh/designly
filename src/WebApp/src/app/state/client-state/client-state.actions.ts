@@ -2,6 +2,11 @@
 
 import { Client } from 'src/app/clients/models/client.model';
 
+export class AddClient {
+  static readonly type = '[ClientState] AddClient';
+  constructor() {}
+}
+
 export class SelectClient {
   static readonly type = '[ClientState] SelectClient';
   constructor(public payload: string) {}

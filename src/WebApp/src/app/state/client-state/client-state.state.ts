@@ -1,8 +1,9 @@
 // client state class
 import { Select, State } from "@ngxs/store";
 import { Action, Selector, StateContext } from "@ngxs/store";
-import { EditMode, SelectClient, UnselectClient, ViewMode } from "./client-state.actions";
+import { AddClient, EditMode, SelectClient, UnselectClient, ViewMode } from "./client-state.actions";
 import { ClientStateModel } from "./client-state.models";
+import { NEW_CLIENT_ID } from "src/app/shared/constants";
 
 // the decorated class that holds the state for ClientStateModel
 @State<ClientStateModel>({
@@ -25,6 +26,15 @@ export class ClientState {
     @Selector()
     static selectedClient(state: ClientStateModel) {
         return state.selectedClientId;
+    }
+
+    @Action(AddClient)
+    Add({getState, patchState}: StateContext<ClientStateModel>) {
+        const state = getState();
+        patchState({
+            editMode: true,
+            selectedClientId: NEW_CLIENT_ID
+        });
     }
 
     @Action(EditMode)
