@@ -1,13 +1,12 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Client } from '../models/client.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ClientsServiceService {
+export class ClientsService {
   private serviceAddress = 'http://localhost:3000';
 
   constructor(private httpClient: HttpClient) {}

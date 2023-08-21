@@ -1,0 +1,1 @@
+export const NEW_CLIENT_ID = '-1';

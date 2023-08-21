@@ -1,12 +1,30 @@
 <div class="clients-management-workspace">
-
-  <div class="clients-list" [@fadeInUp] [ngClass]="{ 'EditModeLocking' : this.isInEditMode }">
-    <app-clients (SelectRow)="onSelectClient($event)"></app-clients>
+  <div
+    class="clients-list"
+    [@fadeInUp]
+    [ngClass]="{ EditModeLocking: this.editMode }"
+  >
+    <app-clients
+      (SelectRow)="onSelectClient($event)"
+      (AddClient)="onAddClient()"
+    ></app-clients>
   </div>
 
-  <div class="clients-jacket" [@fadeInLeft] *ngIf="this.clientId">
-    <app-client-jacket
-      (CloseClientJacket)="this.onCloseClientJacket()"
-    ></app-client-jacket>
+  <div class="client-panel" [@fadeInLeft] *ngIf="this.clientId">
+    <div *ngIf="this.editMode">
+      <app-edit-client
+        (CancelEditClient)="this.onCancelEditClient()"
+        (SaveEditClient)="this.onSaveEditClient($event)"
+      ></app-edit-client>
+    </div>
+
+    <div *ngIf="!this.editMode">
+      <app-view-client-info
+        (CloseClient)="this.onClose()"
+        (EditClient)="this.onEdit()"
+        (ShareClient)="this.onShare()"
+        (DeleteClient)="this.onDelete()"
+      ></app-view-client-info>
+    </div>
   </div>
 </div>

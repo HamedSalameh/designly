@@ -2,16 +2,17 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { map, tap } from 'rxjs';
-import { ClientsServiceService } from '../../services/clients-service.service';
+import { ClientsService } from '../../services/clients.service';
+import { TableData } from '../../models/table-data.model';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss']
+  styleUrls: ['./clients.component.scss'],
 })
 export class ClientsComponent {
-
   @Output() SelectRow: EventEmitter<string> = new EventEmitter<string>();
+  @Output() AddClient: EventEmitter<void> = new EventEmitter<void>();
 
   columnsDefinition = [
     {
@@ -40,27 +41,29 @@ export class ClientsComponent {
     },
   ];
 
-  tableData: any[] = [];
+  tableData: TableData[] = [];
 
-  tableColumns: any[] = this.columnsDefinition.map((column) => ({
-    field: column.DataField,
-    header: column.ColumnHeader,
-  }));
+  tableColumns: any[] = [];
 
-  constructor(
-    private clientsService: ClientsServiceService,
-  ) {}
+  constructor(private clientsService: ClientsService) {}
 
   ngOnInit(): void {
     this.clientsService
       .getClients()
       .pipe(
-        tap((clients) => console.log(clients)),
         map((clients) =>
+          // Map the clients to the table data
           clients.map((client) => this.mapClientToTableData(client))
         )
       )
-      .subscribe((clients) => (this.tableData = clients));
+      .subscribe((clients) => {
+        this.tableData = clients;
+        // Create table columns based on the columns definition
+        this.tableColumns = this.columnsDefinition.map((column) => ({
+          field: column.DataField,
+          header: column.ColumnHeader,
+        }));
+      });
   }
 
   onRowSelect(event: any): void {
@@ -69,7 +72,7 @@ export class ClientsComponent {
   }
 
   onAddClient(): void {
-    console.debug('Add Client');
+    this.AddClient.emit();
   }
 
   private mapClientToTableData(client: any) {
@@ -79,7 +82,7 @@ export class ClientsComponent {
       FirstName: client.FirstName,
       FamilyName: client.FamilyName,
       City: client.Address.City,
-      Address: `${client.Address.Street}, ${client.Address.BuildingNumber}`,
+      Address: `${client.Address?.Street || ''}, ${client.Address?.BuildingNumber || ''}`,
       primaryPhoneNumber: client.ContactDetails.PrimaryPhoneNumber,
       Email: client.ContactDetails.EmailAddress,
     };
