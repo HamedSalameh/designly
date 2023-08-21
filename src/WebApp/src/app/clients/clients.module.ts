@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-
 import { ClientsRoutingModule } from './clients-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ClientsComponent } from './components/clients/clients.component';
@@ -17,7 +15,7 @@ import { MessagesModule } from 'primeng/messages';
     ClientsComponent,
     ClientsManagementComponent,
     ViewClientInfoComponent,
-    EditClientComponent
+    EditClientComponent,
   ],
   imports: [
     ClientsRoutingModule,
@@ -25,8 +23,7 @@ import { MessagesModule } from 'primeng/messages';
     CommonModule,
     SharedModule,
 
-    DynamicDialogModule,
-    MessagesModule
-  ]
+    MessagesModule,
+  ],
 })
-export class ClientsModule { }
+export class ClientsModule {}

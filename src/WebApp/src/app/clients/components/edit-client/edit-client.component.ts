@@ -10,7 +10,7 @@ import { Store } from '@ngxs/store';
 import { Observable, of, tap } from 'rxjs';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
-import { ClientsServiceService } from '../../services/clients-service.service';
+import { ClientsService } from '../../services/clients.service';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 
 @Component({
@@ -45,7 +45,7 @@ export class EditClientComponent implements OnInit {
   @Output() SaveEditClient: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private clientsService: ClientsServiceService,
+    private clientsService: ClientsService,
     private formBuilder: FormBuilder,
     private store: Store
   ) {

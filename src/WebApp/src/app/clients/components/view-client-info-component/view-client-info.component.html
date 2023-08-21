@@ -1,10 +1,10 @@
-<div class="app-card" *ngIf="this.selectedClient">
+<div class="app-card" *ngIf="(this.selectedClient$ | async) as  selectedClient" >
   <div class="p-top-0 p-left-1 p-right-1">
     <div class="card-header form-row m-bottom-3">
       <div class="card-title">
         <label class="section-title"
-          >{{ this.selectedClient.FirstName }}
-          {{ this.selectedClient.FamilyName }}
+          >{{ selectedClient.FirstName }}
+          {{ selectedClient.FamilyName }}
         </label>
       </div>
 
@@ -31,23 +31,23 @@
     <div class="form-row">
       <i class="ph ph-map-pin"></i>
       <label class="details"
-        >{{ this.selectedClient.Address.Street }}
-        {{ this.selectedClient.Address.BuildingNumber }},
-        {{ this.selectedClient.Address.City }}</label
+        >{{ selectedClient.Address.Street }}
+        {{ selectedClient.Address.BuildingNumber }},
+        {{ selectedClient.Address.City }}</label
       >
     </div>
 
     <div class="form-row">
       <i class="ph ph-envelope"></i>
       <label class="details">{{
-        this.selectedClient.ContactDetails.EmailAddress
+        selectedClient.ContactDetails.EmailAddress
       }}</label>
     </div>
 
     <div class="form-row">
       <i class="ph ph-phone"></i>
       <label class="details">{{
-        this.selectedClient.ContactDetails.PrimaryPhoneNumber
+        selectedClient.ContactDetails.PrimaryPhoneNumber
       }}</label>
     </div>
 

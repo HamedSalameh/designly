@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subject, of, switchMap, takeUntil } from 'rxjs';
 import {
@@ -10,7 +10,7 @@ import {
   ViewMode,
 } from 'src/app/state/client-state/client-state.actions';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
-import { ClientsServiceService } from '../../services/clients-service.service';
+import { ClientsService } from '../../services/clients.service';
 import { Client } from '../../models/client.model';
 import { AddApplicationError } from 'src/app/state/error-state/error-state.actions';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
@@ -40,55 +40,53 @@ import { NEW_CLIENT_ID } from 'src/app/shared/constants';
     ]),
   ],
 })
-export class ClientsManagementComponent {
+export class ClientsManagementComponent implements OnDestroy {
   client: any;
   editMode: boolean = false;
   clientId: string | null = null;
   private unsubscribe$: Subject<void> = new Subject();
 
-  constructor(
-    private store: Store,
-    private clientsService: ClientsServiceService
-  ) {
-    this.store
-      .select(ClientState.selectedClient)
+  constructor(private store: Store, private clientsService: ClientsService) {
+    this.handleSelectedClient();
+    this.handleEditMode();
+
+    this.store.dispatch(new ViewMode());
+  }
+
+  private handleSelectedClient(): void {
+    this.store.select(ClientState.selectedClient)
       .pipe(
         takeUntil(this.unsubscribe$),
         switchMap((clientId: any) => {
           return clientId
             ? clientId === NEW_CLIENT_ID
-              ? of(NEW_CLIENT_ID) // New client
-              : this.clientsService.getClient(clientId) // Existing client
-            : of(null); // No client was selected
+              ? of(NEW_CLIENT_ID)
+              : this.clientsService.getClient(clientId)
+            : of(null);
         })
       )
       .subscribe((clientFromServer: any) => {
-        if (clientFromServer) {
-          this.client = clientFromServer;
-        } else {
-          this.client = null;
-        }
+        this.client = clientFromServer || null;
       });
-
-    this.store
-      .select(ClientState.applicationState)
+  }
+  
+  private handleEditMode(): void {
+    this.store.select(ClientState.applicationState)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((editMode: any) => {
-        this.editMode = editMode.editMode;
+      .subscribe(({ editMode }: any) => {
+        this.editMode = editMode;
       });
+  }
 
-    this.store.dispatch(new ViewMode());
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   onSelectClient($event: string) {
     const selectedClientId = $event as string;
     this.clientId = selectedClientId;
     this.store.dispatch(new SelectClient(selectedClientId));
-  }
-
-  onCloseClientJacket() {
-    this.clientId = null;
-    this.store.dispatch(new UnselectClient());
   }
 
   onAddClient() {
@@ -138,7 +136,6 @@ export class ClientsManagementComponent {
   }
 
   // Edit client event handlers
-  // EditClient component
   onCancelEditClient(): void {
     console.debug('[ClientJacketComponent] [onCancelEditClient]', this.client);
     this.store.dispatch(new ViewMode());
