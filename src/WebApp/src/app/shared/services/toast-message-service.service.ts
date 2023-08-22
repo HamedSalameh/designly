@@ -1,46 +1,31 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ToastComponent } from '../components/toast/toast.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastMessageService {
-  constructor(private messageService: MessageService) {}
+  private toastComponent: ToastComponent | undefined;
 
-  // shows toast message wrapping Prmieng's MessageService
-  // https://www.primefaces.org/primeng/showcase/#/toast
-  // https://www.primefaces.org/primeng/showcase/#/message
-  // https://www.primefaces.org/primeng/showcase/#/messageService
+  constructor() {}
+
+  setToastComponent(component: ToastComponent): void {
+    this.toastComponent = component;
+  }
 
   showSuccess(message: string, title?: string) {
-    this.messageService.add({
-      severity: 'success',
-      summary: title || 'Success',
-      detail: message,
-    });
+    this.toastComponent?.showSuccess(message, title);
   }
 
   showInfo(message: string, title?: string) {
-    this.messageService.add({
-      severity: 'info',
-      summary: title || 'Info',
-      detail: message,
-    });
+    this.toastComponent?.showInfo(message, title);
   }
 
   showWarn(message: string, title?: string) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: title || 'Warn',
-      detail: message,
-    });
+    this.toastComponent?.showWarn(message, title);
   }
 
   showError(message: string, title?: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: title || 'Error',
-      detail: message,
-    });
+    this.toastComponent?.showError(message, title);
   }
 }
