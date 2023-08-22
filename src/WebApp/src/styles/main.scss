@@ -1,7 +1,12 @@
 @charset 'UTF-8';
 
-// Include pre-compiled Syncfusion theme
+// add the styling of SyncFusion components
+@import "@syncfusion/ej2-base/styles/fluent.css";
+// add the icons
+@import "@syncfusion/ej2-icons/styles/fluent.css";
 
+
+// Include pre-compiled Syncfusion theme
 
 // 1. Configuration and helpers
 @import "abstracts/variables", "abstracts/functions", "abstracts/mixins", "abstracts/animations";

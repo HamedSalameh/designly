@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IdentityService\IdentityService.Interfaces\IdentityService.Interfaces.csproj" />
     <ProjectReference Include="..\Clients.Domain\Clients.Domain.csproj" />
     <ProjectReference Include="..\Clients.Infrastructure\Clients.Infrastructure.csproj" />
   </ItemGroup>

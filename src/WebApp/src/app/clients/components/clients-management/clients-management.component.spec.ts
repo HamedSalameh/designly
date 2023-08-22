@@ -4,10 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { ChipsModule } from 'primeng/chips';
-import { TableModule } from 'primeng/table';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
-import { ClientsModule } from '../../clients.module';
 import { ClientsComponent } from '../clients/clients.component';
 import { ClientsManagementComponent } from './clients-management.component';
 
@@ -26,7 +24,6 @@ describe('ClientsManagementComponent', () => {
         NgxsModule.forRoot([ClientState]),
         HttpClientTestingModule,
         ChipsModule,
-        TableModule,
         BrowserAnimationsModule,
         ReactiveFormsModule
       ],

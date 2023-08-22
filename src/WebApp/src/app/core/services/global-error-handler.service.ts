@@ -1,8 +1,6 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { State, Store } from '@ngxs/store';
-import { EMPTY } from 'rxjs';
-import { IError } from 'src/app/shared/types';
-import { AddApplicationError, AddUnknownError } from 'src/app/state/error-state/error-state.actions';
+import { Store } from '@ngxs/store';
+import { AddUnknownError } from 'src/app/state/error-state/error-state.actions';
 
 @Injectable({
   providedIn: 'root'

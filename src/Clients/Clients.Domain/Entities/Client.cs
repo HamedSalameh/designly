@@ -1,5 +1,4 @@
-﻿
-using Clients.Domain.ValueObjects;
+﻿using Clients.Domain.ValueObjects;
 using System.Text;
 
 namespace Clients.Domain.Entities
@@ -53,6 +52,9 @@ namespace Clients.Domain.Entities
             {
                 throw new ArgumentException($"Invlaid value for {nameof(client)}");
             }
+            
+            FirstName = client.FirstName;
+            FamilyName = client.FamilyName;
 
             if (client?.ContactDetails != null)
             {
@@ -63,11 +65,6 @@ namespace Clients.Domain.Entities
             {
                 UpdateAddress(client.Address);
             }
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            FirstName = client.FirstName;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            FamilyName = client.FamilyName;
 
             return this;
         }

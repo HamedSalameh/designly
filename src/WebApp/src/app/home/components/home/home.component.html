@@ -1,20 +1,18 @@
 <div class="wrapper">
+  
+  <app-toast></app-toast>
+  
+  <div class="left-nav">
+    <app-side-nav></app-side-nav>
+  </div>
 
-  <!-- set the position pbased on page direction -->
-  <p-toast position="top-left"></p-toast>
+  <!-- Top Main Bar -->
+  <div class="top-bar">
+    <app-header></app-header>
+  </div>
 
-    <div class="left-nav">
-        <app-side-nav></app-side-nav>
-      </div>
-      
-      <!-- Top Main Bar -->
-      <div class="top-bar">
-        <app-header></app-header>
-      </div>
-      
-      <!-- Main Content Area -->
-      <div class="main-content">
-        <router-outlet></router-outlet>
-      </div>
-      
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
