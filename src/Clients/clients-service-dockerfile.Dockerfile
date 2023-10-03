@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 
 WORKDIR /src
 
+ARG PACKAGE_TOKEN
+
 # Get the dependencies
 
 # Build the project layers
@@ -16,14 +18,14 @@ COPY . .
 
 # Restore nuget
 RUN dotnet restore "Clients.API/clients.api.csproj" --configfile "nuget.config"
-RUN dotnet restore "Clients.Application/clients.application.csproj" --configfile "./NuGet.Config"
-RUN dotnet restore "Clients.Domain/clients.domain.csproj" --configfile "./NuGet.Config"
-RUN dotnet restore "Clients.Infrastructure/clients.infrastructure.csproj" --configfile "./NuGet.Config"
+RUN dotnet restore "Clients.Application/Clients.Application.csproj" --configfile "nuget.config"
+RUN dotnet restore "Clients.Domain/Clients.Domain.csproj" --configfile "nuget.config"
+RUN dotnet restore "Clients.Infrastructure/Clients.Infrastructure.csproj" --configfile "nuget.config"
 
 
 RUN find ./
 # Build depedencies
-RUN dotnet build "ClientsService.API/ClientsService.API.csproj" -c Release -o /app/build
+RUN dotnet build "Clients.API/clients.api.csproj" -c Release -o /app/build
 
 COPY . .
 FROM build-env AS publish
@@ -40,4 +42,4 @@ COPY --from=build-env /app/build .
 EXPOSE 80
 EXPOSE 443
 
-ENTRYPOINT ["dotnet", "ClientsService.API.dll"]
+ENTRYPOINT ["dotnet", "clients.api.dll"]
