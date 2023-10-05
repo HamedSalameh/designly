@@ -7,6 +7,7 @@ using Serilog;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
+using Clients.API.Middleware;
 
 public class Program
 {
@@ -71,6 +72,9 @@ public class Program
                 ui.OAuthUsePkce();
             });
         }
+        
+        // Register the custom middleware
+        app.UseMiddleware<ValidationExceptionHandingMiddleware>();
 
         // Configure CORS middleware
         app.UseCors("DevelopmentCors");
