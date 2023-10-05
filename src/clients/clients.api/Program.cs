@@ -7,6 +7,7 @@ using Serilog;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
+using Clients.API.Middleware;
 
 public class Program
 {
@@ -64,13 +65,16 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(ui =>
+            app.UseSwaggerUI(options =>
             {
-                ui.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 // Enable the "Authorize" button in the Swagger UI
-                ui.OAuthUsePkce();
+                options.OAuthUsePkce();
             });
         }
+        
+        // Register the custom middleware
+        app.UseMiddleware<ValidationExceptionHandingMiddleware>();
 
         // Configure CORS middleware
         app.UseCors("DevelopmentCors");

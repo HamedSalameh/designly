@@ -1,15 +1,19 @@
-﻿using Clients.Domain.ValueObjects;
+﻿using System.ComponentModel.DataAnnotations;
+using Clients.Domain.ValueObjects;
 using System.Text;
 
 namespace Clients.Domain.Entities
 {
     public class Client : Entity
     {
+        [Required]
         public string FirstName { get; set; }
         public string FamilyName { get; set; }
 
+        [Required]
         public Address Address { get; set; }
 
+        [Required]
         public ContactDetails ContactDetails { get; set; }
 
         public Client(string firstName, string familyName, Address address, ContactDetails contactDetails, Guid TenantId)
