@@ -30,6 +30,11 @@ export class ErrorState {
         return state.serverError;
     }
 
+    @Selector()
+    static getUnknownError(state: ErrorStateModel) {
+        return state.unknownError;
+    }
+
     @Action(AddNetworkError)
     AddNetworkError({getState, patchState}: StateContext<ErrorStateModel>, {payload}: AddNetworkError) {
         const state = getState();

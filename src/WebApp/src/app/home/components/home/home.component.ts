@@ -14,6 +14,7 @@ import { Strings } from '../../../shared/strings';
 export class HomeComponent {
   networkErrorState;
   applicationErrorState;
+  unknownErrorState;
 
   constructor(
     private store: Store,
@@ -21,15 +22,16 @@ export class HomeComponent {
     private errorTranslationService: ErrorTranslationService
   ) {
     this.networkErrorState = this.store.select(ErrorState.getNetworkError);
-    this.applicationErrorState = this.store.select(
-      ErrorState.getApplicationError
+    this.applicationErrorState = this.store.select(ErrorState.getApplicationError
     );
+    this.unknownErrorState = this.store.select(ErrorState.getUnknownError);
 
     // subscribe to multuple observables
     let subscription = combineLatest([
       this.networkErrorState,
       this.applicationErrorState,
-    ]).subscribe(([networkError, applicationError]) => {
+      this.unknownErrorState,
+    ]).subscribe(([networkError, applicationError, unknownError]) => {
       const messageTitle = Strings.MessageTitle_Error;
 
       // Future enhancement: add a switch statement to handle different types of errors
@@ -40,6 +42,11 @@ export class HomeComponent {
       }
       if (applicationError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(applicationError);
+        toastMessageService.showError(message, messageTitle);
+        return;
+      }
+      if (unknownError) {
+        const message = this.errorTranslationService.getTranslatedErrorMessage(unknownError);
         toastMessageService.showError(message, messageTitle);
         return;
       }

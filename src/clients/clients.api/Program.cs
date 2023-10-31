@@ -54,7 +54,12 @@ public class Program
         // Configure Health checks
         builder.Services.AddHealthChecks();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            }
+            );
 
         var app = builder.Build();
 
@@ -65,11 +70,11 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(ui =>
+            app.UseSwaggerUI(options =>
             {
-                ui.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 // Enable the "Authorize" button in the Swagger UI
-                ui.OAuthUsePkce();
+                options.OAuthUsePkce();
             });
         }
         

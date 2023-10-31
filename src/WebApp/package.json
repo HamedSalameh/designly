@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start:mock-api": "node mock-api.ts",
-    "start-with-mock-api": "concurrently \"npm run start\" \"npm run start:mock-api\""
+    "start-with-mock-api": "concurrently \"npm run start\" \"npm run start:mock-api\"",
+    "proxy": "ng serve --proxy-config proxy.conf.json"
   },
   "private": true,
   "dependencies": {

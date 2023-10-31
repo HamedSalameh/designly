@@ -4,6 +4,9 @@ using Clients.Infrastructure;
 using Clients.Infrastructure.Interfaces;
 using RestSharp;
 using Serilog;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -71,7 +74,30 @@ do
     {
         Console.WriteLine("Sending all generated user to persistance");
 
-
+        // use httpclient to send the generated users to the API
+        var client = new HttpClient();
+        client.BaseAddress = new Uri("https://localhost:7246");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+                       new MediaTypeWithQualityHeaderValue("application/json"));
+        foreach(var generatedUser in generatedClients)
+        {
+            try
+            {
+                var res = client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/v1/clients")
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(generatedUser), Encoding.UTF8, "application/json")
+                }).ContinueWith( _ =>
+                {
+                    Console.WriteLine($"User {generatedUser} sent to persistance");
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending user {generatedUser} to persistance : {ex.Message}");
+                throw;
+            }
+        }
     }
     else if (string.Equals(userInput?.Trim(), "n", StringComparison.OrdinalIgnoreCase))
     {

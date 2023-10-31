@@ -8,7 +8,7 @@ namespace Clients.API.Extentions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clients API", Version = "v1" });
 
                 // Enable JWT Bearer authorization
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

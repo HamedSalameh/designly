@@ -7,13 +7,13 @@ import { Client } from '../models/client.model';
   providedIn: 'root',
 })
 export class ClientsService {
-  private serviceAddress = 'http://localhost:3000';
+  private serviceAddress = '/api/v1';
 
   constructor(private httpClient: HttpClient) {}
 
   public getClients(): Observable<Client[]> {
     return this.httpClient
-      .get<Client[]>(`${this.serviceAddress}/clients`)
+      .post<Client[]>(`${this.serviceAddress}/clients/search`, {})
   }
 
   public getClient(clientId: string): Observable<Client> {

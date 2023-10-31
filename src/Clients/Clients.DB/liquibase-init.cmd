@@ -1,1 +1,1 @@
-liquibase clearchecksums & liquibase --changeLogFile=db.changelog-master.xml update
+liquibase clearCheckSums & liquibase update --changeLogFile=db.changelog-master.xml
