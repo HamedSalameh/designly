@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
+using System.Runtime.CompilerServices;
 
 namespace Clients.API.Controllers
 {
@@ -122,19 +123,6 @@ namespace Clients.API.Controllers
             return Ok(clientDtos);
         }
 
-        //[HttpGet]
-        //[Consumes(MediaTypeNames.Application.Json)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[Authorize(Policy = "CanViewClients")]
-        //public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-        //{
-        //    var clients = await mediator.Send(new GetAllClientsQuery(), cancellationToken).ConfigureAwait(false);
-        //    var clientDtos = mapper.Map<IEnumerable<ClientDto>>(clients);
-        //    return Ok(clientDtos);
-        //}
-
         [HttpDelete("{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -154,6 +142,26 @@ namespace Clients.API.Controllers
             await mediator.Send(deleteClientCommand, cancellationToken).ConfigureAwait(false);
 
             return Ok();
+        }
+
+        [HttpGet("{id}/canDelete")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CanDelete(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == default || id == Guid.Empty)
+            {
+                logger.LogError("Invalid value for {id} : {id}", nameof(id));
+                return BadRequest(id);
+            }
+
+            var canDeleteClientQuery = new CanDeleteClientQuery(id);
+
+            var canDelete = await mediator.Send(canDeleteClientQuery, cancellationToken).ConfigureAwait(false);
+
+            return Ok(canDelete);
         }
 
         protected string BuildResourceLocation<T>(T Id)

@@ -54,7 +54,12 @@ public class Program
         // Configure Health checks
         builder.Services.AddHealthChecks();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            }
+            );
 
         var app = builder.Build();
 

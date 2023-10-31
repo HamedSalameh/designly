@@ -117,14 +117,16 @@ export class ClientsManagementComponent implements OnDestroy {
 
     if (this.client) {
       this.clientsService
-        .canDeleteClient(this.client)
+        .canDeleteClient(this.client.Id)
         .pipe(
-          switchMap(() => this.clientsService.deleteClient(this.client))
+          switchMap(() => this.clientsService.deleteClient(this.client.Id))
           // TODO: Should we catch error here?
         )
         .subscribe({
           next: (client: Client) => {
             this.onClose();
+            // after successful delete, unselect the client and update the state
+            this.store.dispatch(new UnselectClient());
           },
           error: (error: any) => {
             this.store.dispatch(new AddApplicationError(error));

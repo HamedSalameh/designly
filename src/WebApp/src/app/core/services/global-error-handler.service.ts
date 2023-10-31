@@ -15,6 +15,9 @@ export class GlobalErrorHandlerService implements ErrorHandler {
   constructor(private store: Store) { }
   
   handleError(error: any): void {
+    // general error handling
+
+    // case - unknown error
     this.store.dispatch(new AddUnknownError(error));
     console.debug('[GlobalErrorHandler] [handleError] ', error);
 
