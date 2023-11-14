@@ -1,12 +1,11 @@
 ﻿using Bogus;
 using Clients.Domain.Entities;
-using Clients.Infrastructure;
-using Clients.Infrastructure.Interfaces;
-using RestSharp;
 using Serilog;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+
+Guid DevelopmentTenant = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -25,7 +24,7 @@ var _modelFaker = new Faker<Client>()
         f.Phone.PhoneNumber("(###) ###-####"),
         f.Random.Bool() ? f.Phone.PhoneNumber("(###) ###-####") : string.Empty,
         f.Internet.Email()),
-    Guid.NewGuid()))
+    DevelopmentTenant))
     .RuleFor(c => c.Id, f => Guid.NewGuid())
     //.RuleFor(c => c.FirstName, f => f.Name.FirstName())
     //.RuleFor(c => c.FamilyName, f => f.Name.LastName())
@@ -33,6 +32,7 @@ var _modelFaker = new Faker<Client>()
     //.RuleFor(c => c.ContactDetails, f => new Domain.ValueObjects.ContactDetails(f.Phone.PhoneNumber("(###) ###-####"), f.Phone.PhoneNumber("(###) ###-####"), f.Internet.Email()))
     .FinishWith((f, u) =>
     {
+        // force default dev tenant
         Console.WriteLine($"Generated a user: {u}");
     });
 
@@ -44,25 +44,7 @@ int.TryParse(countIput, out int count);
 var generatedClients = new List<Client>();
 string? userInput = "";
 
-do {
-    Console.WriteLine(Environment.NewLine);
-    Console.WriteLine($"{count} will be generated. Proceed? [Y/n]");
-    userInput = Console.ReadLine();
-
-    if (string.Equals(userInput?.Trim(), "y", StringComparison.OrdinalIgnoreCase))
-    {
-        generatedClients = _modelFaker.Generate(count);
-    }
-    else if (string.Equals(userInput?.Trim(), "n", StringComparison.OrdinalIgnoreCase))
-    {
-        return;
-    }
-    else
-    {
-        Console.WriteLine("Invalid input, please type Y or N");
-    }
-}
-while (userInput is null || !userInput.Trim().ToLower().Equals("y", StringComparison.OrdinalIgnoreCase) && !userInput.Trim().ToLower().Equals("n", StringComparison.OrdinalIgnoreCase));
+generatedClients = _modelFaker.Generate(count);
 
 Console.WriteLine(Environment.NewLine);
 Console.WriteLine("Do you want to save the generated users? [Y/N]");
@@ -84,13 +66,14 @@ do
         {
             try
             {
-                var res = client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/v1/clients")
+                await Task.Delay(50);
+
+                var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/v1/clients")
                 {
                     Content = new StringContent(JsonSerializer.Serialize(generatedUser), Encoding.UTF8, "application/json")
-                }).ContinueWith( _ =>
-                {
-                    Console.WriteLine($"User {generatedUser} sent to persistance");
-                });
+                }).ConfigureAwait(false);
+
+                Console.WriteLine($"User {generatedUser} sent to persistance : {response.StatusCode}");
             }
             catch (Exception ex)
             {

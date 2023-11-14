@@ -8,6 +8,7 @@
 	<!--<include file="\Changesets\1_create_patients_table.sql" />-->
 	<include file="\changesets\changeset-01-dbcreation.sql"/>
 	<include file="\changesets\changeset-02-create-clients-table.sql"/>
-	<include file="\changesets\changeset-03-update_client.sql"/>
+	<include file="\changesets\changeset-03-create_client.sql"/>
+  <include file="\changesets\changeset-04-update_client.sql"/>
 	
 </databaseChangeLog>

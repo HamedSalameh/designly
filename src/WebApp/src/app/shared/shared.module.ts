@@ -7,8 +7,6 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
 import { ToastMessageService } from './services/toast-message-service.service';
 
-import { ChipsModule } from 'primeng/chips';
-
 // SyncFusion
 import { GridModule, PageService, SearchService, SortService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 // Register Syncfusion license

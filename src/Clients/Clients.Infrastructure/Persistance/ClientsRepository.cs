@@ -49,6 +49,44 @@ namespace Clients.Infrastructure.Persistance
             return client.Id;
         }
 
+        // Create a new client with Dapper
+        public async Task<Guid> CreateClientAsyncWithDapper(Client client, CancellationToken cancellationToken)
+        {
+            if (client == null) throw new ArgumentNullException(nameof(client));
+
+            var parameters = new DynamicParameters();
+            parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
+            parameters.Add("p_first_name", client.FirstName, DbType.String);
+            parameters.Add("p_family_name", client.FamilyName, DbType.String);
+            parameters.Add("p_city", client.Address.City, DbType.String);
+            parameters.Add("p_street", client.Address.Street, DbType.String);
+            parameters.Add("p_building_number", client.Address.BuildingNumber, DbType.String);
+            parameters.Add("p_address_lines", JsonConvert.SerializeObject(client.Address.AddressLines));
+            parameters.Add("p_primary_phone_number", client.ContactDetails.PrimaryPhoneNumber, DbType.String);
+            parameters.Add("p_secondary_phone_number", client.ContactDetails.SecondaryPhoneNumber, DbType.String);
+            parameters.Add("p_email_address", client.ContactDetails.EmailAddress, DbType.String);
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync("create_client", parameters,
+                                               transaction: transaction, commandType: CommandType.StoredProcedure);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Could not create client entity due to error : {exception.Message}");
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+
+            return client.Id;
+        }
+
         public async Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken)
         {
             if (client == default || client == null)

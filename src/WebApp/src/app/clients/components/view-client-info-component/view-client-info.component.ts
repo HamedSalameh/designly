@@ -1,36 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { Observable, of, switchMap } from 'rxjs';
-import { ClientState } from 'src/app/state/client-state/client-state.state';
-import { Client } from '../../models/client.model';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Observable, Subject, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../../services/clients.service';
+import { ClientSelector, SelectedClientIdSelector } from 'src/app/state/client-state/x-selectors.state';
+import { getClient } from 'src/app/state/client-state/x-actions.state';
+import { Store, select } from '@ngrx/store';
+import { IApplicationState } from 'src/app/shared/models/application-state.interface.';
 
 @Component({
   selector: 'app-view-client-info',
   templateUrl: './view-client-info.component.html',
   styleUrls: ['./view-client-info.component.scss'],
 })
-export class ViewClientInfoComponent {
+export class ViewClientInfoComponent implements OnDestroy{
   @Output() CloseClient: EventEmitter<any> = new EventEmitter();
   @Output() EditClient: EventEmitter<any> = new EventEmitter();
   @Output() ShareClient: EventEmitter<any> = new EventEmitter();
   @Output() DeleteClient: EventEmitter<any> = new EventEmitter();
 
-  selectedClient$: Observable<Client | null> = of(null);
+  selectedClient$: Observable<any | null> = of(null);
+  private unsubscribe$: Subject<void> = new Subject();
 
   constructor(
-    private clientsService: ClientsService,
-    private store: Store
+    private xStore: Store<IApplicationState>
   ) {
-    this.selectedClient$ = this.store.select(ClientState.selectedClient)
-    .pipe(
-      switchMap((clientId: any) => {
-        if (clientId) {
-          return this.clientsService.getClient(clientId);
-        }
-        return of(null);
-      })
-    )
+    this.selectedClient$ =  this.xStore.pipe(select(ClientSelector));
   }
 
   onClose() {
@@ -47,5 +40,10 @@ export class ViewClientInfoComponent {
 
   onDelete() {
     this.DeleteClient.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

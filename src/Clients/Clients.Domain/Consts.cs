@@ -2,6 +2,9 @@
 {
     public static class Consts
     {
+        // Development only
+        public static Guid DevelopmentTenant = Guid.Parse("00000000-0000-0000-0000-000000000001");
+
         //https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
         public const short MaxUrlLength = 2048;
 

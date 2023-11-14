@@ -39,7 +39,7 @@ BEGIN
 		primary_phone_number = p_primary_phone_number,
 		secondary_phone_number = p_secondary_phone_number,
 		email_address = p_email_address,
-        updated_at = NOW()
+        modified_at = NOW()
     WHERE id = p_id AND tenant_id = p_tenant_id;
 
 END;'

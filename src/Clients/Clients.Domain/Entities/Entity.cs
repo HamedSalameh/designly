@@ -3,18 +3,19 @@ namespace Clients.Domain.Entities
 {
     public abstract class Entity
     {
-        public DateTime Created { get; }
-        public DateTime Modified { get; set; }
+        public DateTime CreatedAt { get; set;  }
+        public DateTime ModifiedAt { get; set; }
 
         int? _requestedHashCode;
         public virtual Guid Id { get; set; }
-        public virtual Guid TenantId { get; }
+        public virtual Guid TenantId { get; set; }
 
-        protected Entity() : this(Guid.NewGuid())
+        protected Entity()
         {
+            
         }
 
-        protected Entity(Guid TenantId)
+        protected Entity(Guid TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
             if (TenantId == Guid.Empty || TenantId == default)
@@ -23,8 +24,8 @@ namespace Clients.Domain.Entities
             }
             
             this.TenantId = TenantId;
-            Created = DateTime.UtcNow;
-            Modified = DateTime.UtcNow;
+            CreatedAt = DateTime.UtcNow;
+            ModifiedAt = DateTime.UtcNow;
         }
 
         public bool IsTransient()

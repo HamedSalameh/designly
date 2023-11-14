@@ -6,12 +6,15 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { Observable, of, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, of, switchMap, tap } from 'rxjs';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
 import { ClientsService } from '../../services/clients.service';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
+import { ClientSelector, SelectedClientIdSelector } from 'src/app/state/client-state/x-selectors.state';
+import { Store, select } from '@ngrx/store';
+import { IApplicationState } from 'src/app/shared/models/application-state.interface.';
+import { getClient } from 'src/app/state/client-state/x-actions.state';
 
 @Component({
   selector: 'app-edit-client',
@@ -20,7 +23,7 @@ import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 })
 export class EditClientComponent implements OnInit {
   ClientInfo!: FormGroup;
-  clientId;
+  clientId: Observable<string | null> | undefined;
   selectedClient$: Observable<Client | null> = of(null);
   selectedClient: Client | null = null;
 
@@ -47,22 +50,21 @@ export class EditClientComponent implements OnInit {
   constructor(
     private clientsService: ClientsService,
     private formBuilder: FormBuilder,
-    private store: Store
+    private store: Store<IApplicationState>
   ) {
-    this.clientId = this.store.select(ClientState.selectedClient);
-
-    this.clientId.subscribe((clientId: any) => {
-      if (!clientId || clientId === NEW_CLIENT_ID) {
-        this.selectedClient = this.createEmptyClient();
+      this.store.pipe(select(ClientSelector)).pipe(
+      switchMap((selectedClientModel) => {
+        if (!selectedClientModel || selectedClientModel.Id === NEW_CLIENT_ID) {
+          this.selectedClient = this.createEmptyClient();
+          this.createForm();
+          return of(); // Return an observable that completes immediately
+        }
+        console.log('[EditClientComponent] creating form for existing client ... ');
+        this.selectedClient = selectedClientModel;
         this.createForm();
-        return;
-      }
-
-      this.clientsService.getClient(clientId).subscribe((client: Client) => {
-        this.selectedClient = client;
-        this.createForm();
-      });
-    });
+        return EMPTY; // Return an empty observable or another observable if needed
+      })
+    ).subscribe();
   }
 
   ngOnInit(): void {

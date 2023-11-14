@@ -2,12 +2,12 @@
 using Clients.API.DTO;
 using Clients.Application.Commands;
 using Clients.Application.Queries;
+using Clients.Domain;
 using Clients.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
-using System.Runtime.CompilerServices;
 
 namespace Clients.API.Controllers
 {
@@ -46,6 +46,9 @@ namespace Clients.API.Controllers
             var draftClient = mapper.Map<Client>(clientDto);
 
             // TODO: Set the tenant Id from the logged in user context tenant
+            // In production, the tenant Id will be set from the logged in user context
+            logger.LogWarning("Setting the tenant Id to the development tenant");
+            draftClient.TenantId = Consts.DevelopmentTenant;
 
             var createClientCommand = new CreateClientCommand(draftClient);
 
@@ -62,22 +65,22 @@ namespace Clients.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateClient(Guid Id, [FromBody] ClientDto clientDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateClient(Guid id, [FromBody] ClientDto clientDto, CancellationToken cancellationToken)
         {
-            if (Id == default)
+            if (id == default)
             {
-                logger.LogError("Invalid value of Id : ", Id);
-                return BadRequest(Id);
+                logger.LogError("Invalid value of Id : ", id);
+                return BadRequest(id);
             }
 
-            clientDto.Id = Id;
+            clientDto.Id = id;
             var client = mapper.Map<Client>(clientDto);
 
             var updateClientCommand = new UpdateClientCommand(client);
 
-            var clientId = await mediator.Send(updateClientCommand, cancellationToken).ConfigureAwait(false);
+            var updatedClient = await mediator.Send(updateClientCommand, cancellationToken).ConfigureAwait(false);
 
-            return Ok(BuildResourceLocation(clientId.Id));
+            return Ok(BuildResourceLocation(updatedClient.Id));
         }
 
         [HttpGet("{id}")]

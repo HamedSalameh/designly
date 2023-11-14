@@ -1,4 +1,4 @@
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -17,6 +17,10 @@ import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-in
 import { ErrorState } from './state/error-state/error-state.state';
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
 
 @NgModule({
   declarations: [
@@ -31,11 +35,13 @@ import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
       ErrorState
     ]),
     NgxsLoggerPluginModule.forRoot(),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot(),
     CoreModule,
-
+    
     HomeModule,
     LoginModule,
-    GridModule, PagerModule
+    GridModule, PagerModule, StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [  
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService },

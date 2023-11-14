@@ -24,8 +24,8 @@ namespace Clients.Infrastructure.Persistance
 
             builder.Property(p => p.FamilyName).HasColumnName("family_name");
 
-            builder.Property(p => p.Created).HasColumnName("created_at");
-            builder.Property(p => p.Modified).HasColumnName("updated_at");
+            builder.Property(p => p.CreatedAt).HasColumnName("created_at");
+            builder.Property(p => p.ModifiedAt).HasColumnName("updated_at");
 
             // Address value object mapping
             builder.OwnsOne(o => o.Address)
