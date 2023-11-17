@@ -6,7 +6,6 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { catchError, delay,
   EMPTY,
   Observable,
@@ -17,34 +16,18 @@ import { catchError, delay,
 import {
   ErrorTypes,
   HttpResponseStatusCodes,
-  IApplicationError,
-  INetworkError,
-  IServerError,
+  IError,
+  INetworkError
 } from 'src/app/shared/types';
-import { AddNetworkError } from 'src/app/state/error-state/error-state.actions';
-import { GlobalErrorHandlerService } from '../services/global-error-handler.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpErrorsInterceptorService implements HttpInterceptor {
-  /* This category includes status codes that represent errors related to network interactions. 
-  These errors typically occur when the client sends a request to the server, but the server refuses
-   the request, requires authentication, or takes too long to respond.
-  */
-  networkErrors = [
+  httpErrors = [
     HttpResponseStatusCodes.FORBIDDEN,
     HttpResponseStatusCodes.REQUEST_TIMEOUT,
-    HttpResponseStatusCodes.NETWORK_AUTHENTICATION_REQUIRED,    
-  ];
-
-  // network connectivity errors
-  networkConnectivityErrors = [HttpResponseStatusCodes.NETWORK_ERROR];
-
-  /* server side application errors 
-  these errors are returned by the server, are typically caused by incorrect client requests or internal issues on the server.
-  */ 
-  serverSideApplicationErrors = [
+    HttpResponseStatusCodes.NETWORK_AUTHENTICATION_REQUIRED,
     HttpResponseStatusCodes.UNAUTHORIZED,
     HttpResponseStatusCodes.INTERNAL_SERVER_ERROR,
     HttpResponseStatusCodes.BAD_GATEWAY,
@@ -61,9 +44,10 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     HttpResponseStatusCodes.UNSUPPORTED_MEDIA_TYPE,
     HttpResponseStatusCodes.PROCESSING,
     HttpResponseStatusCodes.PERMANENT_REDIRECT,
+    HttpResponseStatusCodes.NETWORK_ERROR
   ];
 
-  constructor(private store: Store, private globalErrorHandler: GlobalErrorHandlerService) {}
+  constructor() {}
 
   intercept(
     req: HttpRequest<any>,
@@ -79,8 +63,8 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
           tap((error) => {
             if (
               // In some cases, we should retry the request
-              (this.networkErrors.includes(error.status) && count == 0) || count >= numberOfRetries) {
-              console.error(error.message);
+              (this.httpErrors.includes(error.status) && count == 0) || count >= numberOfRetries) {
+              console.debug('[HttpErrorsInterceptorService] [intercept] [retryWhen] ', error);
               throw error;
             }
 
@@ -91,48 +75,26 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
       ),
       catchError((error: HttpErrorResponse) => {
         console.debug('[HttpErrorsInterceptorService] [intercept] [catchError] ');
-
-        // Handle errors nased on status code: networkErrors, networkConnectivityErrors, serverSideApplicationErrors
-        if (this.isServerSideApplicationError(error)) {
-          // This should be forwarded to an application error handler
-          const serverOrApplicationError: IApplicationError = {
-            message: 'Server side application error',
-            originalError: error,
-            type: ErrorTypes.ApplicationError,
-            handled: false,
-          };
-          return throwError(() => serverOrApplicationError);
-        }
-
-        if (this.isNetworkConnectivityError(error)) {
-          return EMPTY;
-        }
-
-        // Network error cannot be handled by the client
-        // Hence patch the application state for error handling
         if (this.isNetworkError(error)) {
-          const networkServerError: INetworkError = {
+          const networkError: INetworkError = {
             message: 'Network error',
             originalError: error,
             type: ErrorTypes.NetworkError,
             handled: true,
           };
 
-          return throwError( () => networkServerError);
-          //this.store.dispatch(new AddNetworkError(networkServerError));
+          return throwError( () => networkError);
           return EMPTY;
         }
 
-        console.debug('[HttpErrorsInterceptorService] [intercept] [catchError] Returning unknown error ',error);
-
-        const serverError: IServerError = {
+        const unknownError: IError = {
           message: 'Unhandled error',
           originalError: error,
           type: ErrorTypes.UnknownError,
           handled: false,
         };
 
-        return throwError(() => serverError);
+        return throwError(() => unknownError);
       })
     );
   }
@@ -141,18 +103,8 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  private isServerSideApplicationError(error: HttpErrorResponse): boolean {
-    // Check if error status code is one of the server side application errors
-    return this.serverSideApplicationErrors.includes(error.status);
-  }
-
-  private isNetworkConnectivityError(error: HttpErrorResponse): boolean {
-    // Check if error status code is one of the network connectivity errors
-    return this.networkConnectivityErrors.includes(error.status);
-  }
-
   private isNetworkError(error: HttpErrorResponse): boolean {
     // Check if error status code is one of the network errors
-    return this.networkErrors.includes(error.status);
+    return this.httpErrors.includes(error.status);
   }
 }

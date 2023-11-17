@@ -9,10 +9,10 @@ import { ViewClientInfoComponent } from './components/view-client-info-component
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditClientComponent } from './components/edit-client/edit-client.component';
 import { StoreModule } from '@ngrx/store';
-import { xClientStateReducer } from '../state/client-state/x-reducers.state';
+import { xClientStateReducer } from './client-state/x-reducers.state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { ClientsEffects } from '../state/client-state/x-effects.state';
+import { ClientsEffects } from './client-state/x-effects.state';
 
 @NgModule({
   declarations: [

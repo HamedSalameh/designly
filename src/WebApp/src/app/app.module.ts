@@ -10,11 +10,7 @@ import { LoginModule } from './login/login.module';
 import { AuthInterceptorService } from './authentication/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HomeModule } from './home/home.module';
-import { NgxsModule } from '@ngxs/store';
-import { ClientState } from './state/client-state/client-state.state';
-import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
-import { ErrorState } from './state/error-state/error-state.state';
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -30,11 +26,6 @@ import { EffectsModule } from '@ngrx/effects';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NgxsModule.forRoot([
-      ClientState,
-      ErrorState
-    ]),
-    NgxsLoggerPluginModule.forRoot(),
     StoreModule.forRoot({}),
     EffectsModule.forRoot(),
     CoreModule,

@@ -1,21 +1,16 @@
 import {
   Component,
   EventEmitter,
-  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EMPTY, Observable, catchError, of, switchMap, tap } from 'rxjs';
-import { ClientState } from 'src/app/state/client-state/client-state.state';
 import { Client } from '../../models/client.model';
-import { ClientsService } from '../../services/clients.service';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { ClientSelector, SelectedClientIdSelector } from 'src/app/state/client-state/x-selectors.state';
+import { ClientSelector, SelectedClientIdSelector } from 'src/app/clients/client-state/x-selectors.state';
 import { Store, select } from '@ngrx/store';
-import { IApplicationState } from 'src/app/shared/models/application-state.interface.';
-import { getClient } from 'src/app/state/client-state/x-actions.state';
-
+import { IApplicationState } from 'src/app/shared/state/app.state';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -48,7 +43,6 @@ export class EditClientComponent implements OnInit {
   @Output() SaveEditClient: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private clientsService: ClientsService,
     private formBuilder: FormBuilder,
     private store: Store<IApplicationState>
   ) {

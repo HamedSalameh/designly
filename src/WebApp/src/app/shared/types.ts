@@ -23,9 +23,6 @@ export interface IApplicationError extends IError {
 export interface INetworkError extends IError {
 }
 
-export interface IServerError extends IError {
-}
-
 export enum HttpResponseStatusCodes {
   NETWORK_ERROR = 0,
   CONTINUE = 100,

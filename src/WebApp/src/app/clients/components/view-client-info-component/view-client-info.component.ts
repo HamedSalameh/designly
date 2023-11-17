@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, Subject, of, switchMap, take, takeUntil, tap } from 'rxjs';
-import { ClientsService } from '../../services/clients.service';
-import { ClientSelector, SelectedClientIdSelector } from 'src/app/state/client-state/x-selectors.state';
-import { getClient } from 'src/app/state/client-state/x-actions.state';
+import { ClientSelector } from 'src/app/clients/client-state/x-selectors.state';
 import { Store, select } from '@ngrx/store';
-import { IApplicationState } from 'src/app/shared/models/application-state.interface.';
+import { IApplicationState } from 'src/app/shared/state/app.state';
 
 @Component({
   selector: 'app-view-client-info',
