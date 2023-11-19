@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Client } from '../models/client.model';
@@ -41,9 +41,18 @@ export class ClientsService {
       .get<boolean>(`${this.serviceAddress}/clients/${clientId}/canDelete`)
   }
 
-  public updateClient(client: Client): Observable<Client> {
-    console.log('[ClientsServiceService] [updateClient] ', client);
-    return this.httpClient
-      .put<Client>(`${this.serviceAddress}/clients/${client.Id}`, client);
+  public updateClient(client: Client): Observable<string> {
+    // Define headers and response type
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    const responseType: 'text' = 'text';
+
+    // Create options
+    const options = { headers, responseType };
+
+    // Make the call
+    const response = this.httpClient
+    .put(`${this.serviceAddress}/clients/${client.Id}`, client, options)
+
+    return response;
   }
 }

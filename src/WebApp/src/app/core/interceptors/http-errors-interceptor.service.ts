@@ -8,10 +8,14 @@ import {
 import { Injectable } from '@angular/core';
 import { catchError, delay,
   EMPTY,
+  merge,
+  mergeMap,
   Observable,
+  of,
   retryWhen,
   tap,
   throwError,
+  timer,
 } from 'rxjs';
 import {
   ErrorTypes,
@@ -53,26 +57,20 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.debug('[HttpErrorsInterceptorService] [intercept] ', req.url);
     const numberOfRetries = 3;
     let count = 0;
 
-    return next.handle(req).pipe(
-      retryWhen((errors) =>
-        errors.pipe(
-          tap((error) => {
-            if (
-              // In some cases, we should retry the request
-              (this.httpErrors.includes(error.status) && count == 0) || count >= numberOfRetries) {
-              console.debug('[HttpErrorsInterceptorService] [intercept] [retryWhen] ', error);
-              throw error;
-            }
-
+    return next.handle(req)
+    .pipe(
+      retryWhen(errors => errors.pipe(
+        mergeMap((error: HttpErrorResponse) => {
+          if (this.isNetworkError(error) && count < numberOfRetries) {
             count++;
-          }),
-          delay(count * 1000 + this.randomInteger(1, 100))
-        )
-      ),
+            return timer(count * 1000 + this.randomInteger(1, 100));
+          }
+          return throwError(error);
+        })
+      )),
       catchError((error: HttpErrorResponse) => {
         console.debug('[HttpErrorsInterceptorService] [intercept] [catchError] ');
         if (this.isNetworkError(error)) {
@@ -84,7 +82,6 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
           };
 
           return throwError( () => networkError);
-          return EMPTY;
         }
 
         const unknownError: IError = {

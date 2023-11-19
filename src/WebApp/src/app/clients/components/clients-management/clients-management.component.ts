@@ -5,7 +5,7 @@ import { Subject, of, switchMap, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../../services/clients.service';
 import { Client } from '../../models/client.model';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { getClient, AddClient, EditMode, SelectClient, UnselectClient, ViewMode, UpdateClient } from 'src/app/clients/client-state/x-actions.state';
+import { GetClientRequest, AddClientRequest, EditModeActivated, ClientSelectedEvent, UnselectClientEvent, ViewModeActivated, UpdateClientRequest } from 'src/app/clients/client-state/x-actions.state';
 import { getApplicationState } from 'src/app/clients/client-state/x-selectors.state';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 
@@ -45,7 +45,7 @@ export class ClientsManagementComponent implements OnDestroy {
     private clientsService: ClientsService) {
     this.handleEditMode();
 
-    this.xStore.dispatch(ViewMode());
+    this.xStore.dispatch(ViewModeActivated());
   }
 
   private handleEditMode(): void {
@@ -67,27 +67,27 @@ export class ClientsManagementComponent implements OnDestroy {
     this.clientId = selectedClientId;
 
     if (selectedClientId) {
-      this.xStore.dispatch(SelectClient({ payload: selectedClientId }));
-      this.xStore.dispatch(getClient({ clientId: selectedClientId }))
+      this.xStore.dispatch(ClientSelectedEvent({ payload: selectedClientId }));
+      this.xStore.dispatch(GetClientRequest({ clientId: selectedClientId }))
     }
   }
 
   onAddClient() {
     this.clientId = NEW_CLIENT_ID;
-    this.xStore.dispatch(UnselectClient());
-    this.xStore.dispatch(EditMode({ payload: this.clientId }));
+    this.xStore.dispatch(UnselectClientEvent());
+    this.xStore.dispatch(EditModeActivated({ payload: this.clientId }));
   }
 
   // View Client Event Handlers
   onClose(): void {
     this.clientId = null;
-    this.xStore.dispatch(ViewMode());
+    this.xStore.dispatch(ViewModeActivated());
   }
 
   onEdit(): void {
     if (this.clientId) {
-      this.xStore.dispatch(SelectClient({ payload: this.clientId }));
-      this.xStore.dispatch(EditMode({ payload: this.clientId }));
+      this.xStore.dispatch(ClientSelectedEvent({ payload: this.clientId }));
+      this.xStore.dispatch(EditModeActivated({ payload: this.clientId }));
     }
   }
 
@@ -107,7 +107,7 @@ export class ClientsManagementComponent implements OnDestroy {
           next: (client: Client) => {
             this.onClose();
             // after successful delete, unselect the client and update the state
-            this.xStore.dispatch(UnselectClient());
+            this.xStore.dispatch(UnselectClientEvent());
             //this.store.dispatch(new UnselectClient());
           },
           error: (error: any) => {
@@ -124,7 +124,7 @@ export class ClientsManagementComponent implements OnDestroy {
   onCancelEditClient(): void {
     console.debug('[ClientJacketComponent] [onCancelEditClient]', this.client);
     
-    this.xStore.dispatch(ViewMode());
+    this.xStore.dispatch(ViewModeActivated());
     //this.store.dispatch(new ViewMode());
     if (this.clientId === NEW_CLIENT_ID) this.clientId = '';
   }
@@ -133,11 +133,9 @@ export class ClientsManagementComponent implements OnDestroy {
 
     // instead of the direct call to the service, we dispatch an action (effect) to the store
     client.Id === NEW_CLIENT_ID
-      ? this.xStore.dispatch(AddClient({ draftClient: client }))
-      : this.xStore.dispatch(UpdateClient({ clientModel: client }));
-
-    console.debug('[ClientJacketComponent] [onSaveEditClient]', this.client);
-
+      ? this.xStore.dispatch(AddClientRequest({ draftClient: client }))
+      : this.xStore.dispatch(UpdateClientRequest({ clientModel: client }));
+      
     // const onComplete = (client: Client) => {
     //   console.debug('[ClientJacketComponent] [onSaveEditClient]', client);
     //   this.xStore.dispatch(ViewMode());
@@ -149,10 +147,10 @@ export class ClientsManagementComponent implements OnDestroy {
     //   this.store.dispatch(new AddApplicationError(error));
     // };
 
-    const saveObersable =
-      client.Id === NEW_CLIENT_ID
-        ? this.clientsService.addClient(client)
-        : this.clientsService.updateClient(client);
+    // const saveObersable =
+    //   client.Id === NEW_CLIENT_ID
+    //     ? this.clientsService.addClient(client)
+    //     : this.clientsService.updateClient(client);
 
     // saveObersable.subscribe({
     //   next: onComplete,
