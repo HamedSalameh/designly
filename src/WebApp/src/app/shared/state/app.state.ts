@@ -1,4 +1,4 @@
-import { IClientState } from "src/app/clients/client-state/x-types.state";
+import { IClientState } from "src/app/clients/client-state/clients.state";
 import { IErrorState } from "./error-state/error.state";
 
 export interface IApplicationState {

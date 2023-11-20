@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { IClientState } from './x-types.state';
+import { IClientState } from './clients.state';
 
 export const CLIENTS_STATE_NAME = 'clients';
 

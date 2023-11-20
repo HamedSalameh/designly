@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, Subject, of, switchMap, take, takeUntil, tap } from 'rxjs';
-import { ClientSelector } from 'src/app/clients/client-state/x-selectors.state';
+import { ClientSelector } from 'src/app/clients/client-state/clients.selectors';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 

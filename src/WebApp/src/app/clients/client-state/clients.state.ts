@@ -7,7 +7,7 @@ export interface IClientState {
   selectedClientModel: Client | null | undefined;
 }
 
-export const xInitialClientsState: IClientState = {
+export const InitialClientsState: IClientState = {
   selectedClientId: null,
   editMode: false,
   draftEntity: null,

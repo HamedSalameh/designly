@@ -9,10 +9,10 @@ import { ViewClientInfoComponent } from './components/view-client-info-component
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditClientComponent } from './components/edit-client/edit-client.component';
 import { StoreModule } from '@ngrx/store';
-import { xClientStateReducer } from './client-state/x-reducers.state';
+import { ClientStateReducer } from './client-state/clients.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { ClientsEffects } from './client-state/x-effects.state';
+import { ClientsEffects } from './client-state/clients.effects';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { ClientsEffects } from './client-state/x-effects.state';
     ReactiveFormsModule,
     CommonModule,
     SharedModule,
-    StoreModule.forFeature('clients', xClientStateReducer),
+    StoreModule.forFeature('clients', ClientStateReducer),
     EffectsModule.forFeature([ClientsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

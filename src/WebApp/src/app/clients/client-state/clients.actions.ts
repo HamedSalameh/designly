@@ -10,16 +10,16 @@ export const ViewModeActivated = createAction('[ClientState] ViewMode');
 
 // Action to get client via api
 export const GetClientRequest = createAction('[ClientState] GetClient', props<{ clientId: string; }>());
-export const GetClientRequestSuccess = createAction('[ClientState] GetClientSuccess', props<{ payload: any; }>());
 
 // Action to create new client via api
 export const AddClientRequest = createAction('[ClientState] AddClient', props<{ draftClient: Client; }>());
 export const AddClientRequestSuccess = createAction('[ClientState] AddClientSuccess', props<{ payload: any; }>());
 
 // Action to update client via api
-export const UpdateClientRequest = createAction('[ClientState] UpdateClient', props<{ clientModel: Client; }>());
-export const UpdateClientRequestSuccess = createAction('[ClientState] UpdateClientSuccess', props<{ payload: any; }>());
+export const ClientUpdatedEvent = createAction('[ClientState] UpdateClient', props<{ clientModel: Client; }>());
 
 // Action to delete client via api
 export const DeleteClient = createAction('[ClientState] DeleteClient', props<{ clientId: string; }>());
 export const DeleteClientSuccess = createAction('[ClientState] DeleteClientSuccess', props<{ payload: any; }>());
+
+export const UpdateSelectedClientModel = createAction('[ClientState] PatchSelectedClientModel', props<{ payload: Client; }>());

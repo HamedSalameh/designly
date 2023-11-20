@@ -5,11 +5,10 @@ import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import {
   UnselectClientEvent,
   GetClientRequest,
-  GetClientRequestSuccess,
-  UpdateClientRequest,
-  UpdateClientRequestSuccess,
+  ClientUpdatedEvent,
   ViewModeActivated,
-} from './x-actions.state';
+  UpdateSelectedClientModel,
+} from './clients.actions';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import { Store } from '@ngrx/store';
 import { raiseNetworkError } from 'src/app/shared/state/error-state/error.actions';
@@ -30,7 +29,7 @@ export class ClientsEffects {
         return this.clientsService.getClient(action.clientId).pipe(
           map((client) => {
             console.log('getClient effect - OK', client);
-            return GetClientRequestSuccess({ payload: client });
+            return UpdateSelectedClientModel({ payload: client });
           }),
           catchError((error) => {
             console.log('getClient effect - ERROR', error);
@@ -45,14 +44,14 @@ export class ClientsEffects {
   // update client effect
   updateClient$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(UpdateClientRequest),
+      ofType(ClientUpdatedEvent),
       mergeMap((action) => {
         return this.clientsService.updateClient(action.clientModel).pipe(
           map((client) => {
             console.debug('updateClient effect - OK', client);
             // on effect success, dispatch an action to update the store
             this.store.dispatch(ViewModeActivated()); // Exit edit mode
-            return UpdateClientRequestSuccess({ payload: action.clientModel });
+            return UpdateSelectedClientModel({ payload: action.clientModel });
           }),
           catchError((error) => {
             console.debug('updateClient effect - ERROR', error);
