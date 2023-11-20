@@ -2,22 +2,22 @@ import { IClientState, InitialClientsState } from './clients.state';
 
 import { createReducer, on } from '@ngrx/store';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { AddClientRequest, EditModeActivated, ViewModeActivated, ClientSelectedEvent, UnselectClientEvent, UpdateSelectedClientModel } from './clients.actions';
+import { addClientRequest, activateEditMode, activateViewMode, selectClient, unselectClient, updateSelectedClientModel } from './clients.actions';
 // Reducer
 
 export const ClientStateReducer = createReducer<IClientState>(
   InitialClientsState,
-  on(AddClientRequest, (state) => ({ ...state, editMode: true, selectedClientId: NEW_CLIENT_ID })),
-  on(EditModeActivated, (state, { payload }) => ({ ...state, editMode: true, draftEntity: payload })),
-  on(ViewModeActivated, (state) => ({ ...state, editMode: false, draftEntity: null })),
-  on(ClientSelectedEvent, (state, { payload }) => {    
+  on(addClientRequest, (state) => ({ ...state, editMode: true, selectedClientId: NEW_CLIENT_ID })),
+  on(activateEditMode, (state, { payload }) => ({ ...state, editMode: true, draftEntity: payload })),
+  on(activateViewMode, (state) => ({ ...state, editMode: false, draftEntity: null })),
+  on(selectClient, (state, { payload }) => {    
     return { ...state, selectedClientId: payload };
   }),
-  on(UnselectClientEvent, (state) => ({ ...state, 
+  on(unselectClient, (state) => ({ ...state, 
     selectedClientModel: null,
     selectedClientId: null })),
 
-  on(UpdateSelectedClientModel, (state, { payload }) => {
+  on(updateSelectedClientModel, (state, { payload }) => {
     return { ...state, selectedClientModel: payload };
   })
 );

@@ -2,24 +2,23 @@ import { createAction, props } from '@ngrx/store';
 import { Client } from 'src/app/clients/models/client.model';
 
 
-// Actions (Actions are basically events that are dispatched to the store)
-export const ClientSelectedEvent = createAction('[ClientState] SelectClient', props<{ payload: string; }>());
-export const UnselectClientEvent = createAction('[ClientState] UnselectClient');
-export const EditModeActivated = createAction('[ClientState] EditMode', props<{ payload: string; }>());
-export const ViewModeActivated = createAction('[ClientState] ViewMode');
+// Client selection
+export const selectClient = createAction('[ClientState] SelectClient', props<{ payload: string; }>());
+export const unselectClient = createAction('[ClientState] UnselectClient');
 
-// Action to get client via api
-export const GetClientRequest = createAction('[ClientState] GetClient', props<{ clientId: string; }>());
+export const updateSelectedClientModel = createAction('[ClientState] PatchSelectedClientModel', props<{ payload: Client; }>());
 
-// Action to create new client via api
-export const AddClientRequest = createAction('[ClientState] AddClient', props<{ draftClient: Client; }>());
-export const AddClientRequestSuccess = createAction('[ClientState] AddClientSuccess', props<{ payload: any; }>());
+// Edit/View modes
+export const activateEditMode = createAction('[ClientState] EditMode', props<{ payload: string; }>());
+export const activateViewMode = createAction('[ClientState] ViewMode');
 
-// Action to update client via api
-export const ClientUpdatedEvent = createAction('[ClientState] UpdateClient', props<{ clientModel: Client; }>());
+// API Calls 
+export const getClientRequest = createAction('[ClientState] GetClient', props<{ clientId: string; }>());
 
-// Action to delete client via api
-export const DeleteClient = createAction('[ClientState] DeleteClient', props<{ clientId: string; }>());
-export const DeleteClientSuccess = createAction('[ClientState] DeleteClientSuccess', props<{ payload: any; }>());
+export const addClientRequest = createAction('[ClientState] AddClient', props<{ draftClient: Client; }>());
+export const addClientRequestSuccess = createAction('[ClientState] AddClientSuccess', props<{ payload: any; }>());
 
-export const UpdateSelectedClientModel = createAction('[ClientState] PatchSelectedClientModel', props<{ payload: Client; }>());
+export const deleteClient = createAction('[ClientState] DeleteClient', props<{ clientId: string; }>());
+export const deleteClientSuccess = createAction('[ClientState] DeleteClientSuccess', props<{ payload: any; }>());
+
+export const updateClientRequest = createAction('[ClientState] UpdateClient', props<{ clientModel: Client; }>());

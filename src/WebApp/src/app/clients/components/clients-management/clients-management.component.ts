@@ -5,7 +5,7 @@ import { Subject, of, switchMap, takeUntil, tap } from 'rxjs';
 import { ClientsService } from '../../services/clients.service';
 import { Client } from '../../models/client.model';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { GetClientRequest, AddClientRequest, EditModeActivated, ClientSelectedEvent, UnselectClientEvent, ViewModeActivated, ClientUpdatedEvent } from 'src/app/clients/client-state/clients.actions';
+import { getClientRequest, addClientRequest, activateEditMode, selectClient, unselectClient, activateViewMode, updateClientRequest } from 'src/app/clients/client-state/clients.actions';
 import { getApplicationState } from 'src/app/clients/client-state/clients.selectors';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 
@@ -45,7 +45,7 @@ export class ClientsManagementComponent implements OnDestroy {
     private clientsService: ClientsService) {
     this.handleEditMode();
 
-    this.store.dispatch(ViewModeActivated());
+    this.store.dispatch(activateViewMode());
   }
 
   private handleEditMode(): void {
@@ -67,27 +67,27 @@ export class ClientsManagementComponent implements OnDestroy {
     this.clientId = selectedClientId;
 
     if (selectedClientId) {
-      this.store.dispatch(ClientSelectedEvent({ payload: selectedClientId }));
-      this.store.dispatch(GetClientRequest({ clientId: selectedClientId }))
+      this.store.dispatch(selectClient({ payload: selectedClientId }));
+      this.store.dispatch(getClientRequest({ clientId: selectedClientId }))
     }
   }
 
   onAddClient() {
     this.clientId = NEW_CLIENT_ID;
-    this.store.dispatch(UnselectClientEvent());
-    this.store.dispatch(EditModeActivated({ payload: this.clientId }));
+    this.store.dispatch(unselectClient());
+    this.store.dispatch(activateEditMode({ payload: this.clientId }));
   }
 
   // View Client Event Handlers
   onClose(): void {
     this.clientId = null;
-    this.store.dispatch(ViewModeActivated());
+    this.store.dispatch(activateViewMode());
   }
 
   onEdit(): void {
     if (this.clientId) {
-      this.store.dispatch(ClientSelectedEvent({ payload: this.clientId }));
-      this.store.dispatch(EditModeActivated({ payload: this.clientId }));
+      this.store.dispatch(selectClient({ payload: this.clientId }));
+      this.store.dispatch(activateEditMode({ payload: this.clientId }));
     }
   }
 
@@ -105,7 +105,7 @@ export class ClientsManagementComponent implements OnDestroy {
         .subscribe({
           next: (client: Client) => {
             this.onClose();
-            this.store.dispatch(UnselectClientEvent());
+            this.store.dispatch(unselectClient());
           },
           error: (error: any) => {
             alert(error.message);
@@ -120,14 +120,14 @@ export class ClientsManagementComponent implements OnDestroy {
   onCancelEditClient(): void {
     console.debug('[ClientJacketComponent] [onCancelEditClient]', this.client);
     
-    this.store.dispatch(ViewModeActivated());
+    this.store.dispatch(activateViewMode());
     //this.store.dispatch(new ViewMode());
     if (this.clientId === NEW_CLIENT_ID) this.clientId = '';
   }
 
   onSaveEditClient(client: Client): void {
     client.Id === NEW_CLIENT_ID
-      ? this.store.dispatch(AddClientRequest({ draftClient: client }))
-      : this.store.dispatch(ClientUpdatedEvent({ clientModel: client }));
+      ? this.store.dispatch(addClientRequest({ draftClient: client }))
+      : this.store.dispatch(updateClientRequest({ clientModel: client }));
   }
 }

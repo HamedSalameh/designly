@@ -22,10 +22,16 @@ export class ClientsService {
       .get<Client>(`${this.serviceAddress}/clients/${clientId}`)
   }
 
-  public addClient(client: Client): Observable<Client> {
+  public addClient(client: Client): Observable<string> {
     console.log('[ClientsServiceService] [addClient] ', client);
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    const responseType: 'text' = 'text';
+
+    // Create options
+    const options = { headers, responseType };
+
     return this.httpClient
-      .post<Client>(`${this.serviceAddress}/clients`, client)
+      .post(`${this.serviceAddress}/clients`, client, options);
   }
 
   public deleteClient(clientId: string): Observable<Client> {
