@@ -10,7 +10,7 @@
     ></app-clients>
   </div>
 
-  <div class="client-panel" [@fadeInLeft] *ngIf="this.clientId">
+  <div class="client-panel" [@fadeInLeft] *ngIf="this.activeClient">
     <div *ngIf="this.editMode">
       <app-edit-client
         (CancelEditClient)="this.onCancelEditClient()"

@@ -19,7 +19,7 @@ export class HomeComponent {
 
   constructor(
     private store: Store<IApplicationState>,
-    toastMessageService: ToastMessageService,
+    private toastMessageService: ToastMessageService,
     private errorTranslationService: ErrorTranslationService
   ) {
     this.networkErrorState = this.store.pipe(select(getNetworkError));
@@ -37,17 +37,17 @@ export class HomeComponent {
       // Future enhancement: add a switch statement to handle different types of errors
       if (networkError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(networkError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastMessageService.showError(message, messageTitle);
         return;
       }
       if (applicationError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(applicationError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastMessageService.showError(message, messageTitle);
         return;
       }
       if (unknownError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(unknownError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastMessageService.showError(message, messageTitle);
         return;
       }
     });

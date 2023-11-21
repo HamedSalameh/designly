@@ -5,12 +5,13 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EMPTY, Observable, catchError, of, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
 import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { ClientSelector, SelectedClientIdSelector } from 'src/app/clients/client-state/clients.selectors';
+import { getSelectedClientFromState, getSelectedClientIdFromState } from 'src/app/clients/client-state/clients.selectors';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
+import { swapBounds } from '@syncfusion/ej2/diagrams';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -46,19 +47,24 @@ export class EditClientComponent implements OnInit {
     private formBuilder: FormBuilder,
     private store: Store<IApplicationState>
   ) {
-      this.store.pipe(select(ClientSelector)).pipe(
-      switchMap((selectedClientModel) => {
-        if (!selectedClientModel || selectedClientModel.Id === NEW_CLIENT_ID) {
+    this.store.select(getSelectedClientIdFromState).pipe(
+      switchMap((selectedClientId) => {
+        if (!selectedClientId || selectedClientId === NEW_CLIENT_ID) {
           this.selectedClient = this.createEmptyClient();
           this.createForm();
-          return of(); // Return an observable that completes immediately
+          return of(null); // Return an observable that completes immediately
         }
-        console.log('[EditClientComponent] creating form for existing client ... ');
-        this.selectedClient = selectedClientModel;
-        this.createForm();
-        return EMPTY; // Return an empty observable or another observable if needed
-      })
+        console.debug('[EditClientComponent] creating form for existing client ... ');
+        return this.store.select(getSelectedClientFromState).pipe(
+          tap((client) => {
+            this.selectedClient = client || null;
+            this.createForm();
+          })
+        );
+      }),
+      take(1) // Ensure the observable completes after the first emission
     ).subscribe();
+    
   }
 
   ngOnInit(): void {

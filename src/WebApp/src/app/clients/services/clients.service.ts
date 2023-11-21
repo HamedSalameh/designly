@@ -34,10 +34,10 @@ export class ClientsService {
       .post(`${this.serviceAddress}/clients`, client, options);
   }
 
-  public deleteClient(clientId: string): Observable<Client> {
+  public deleteClient(clientId: string): Observable<boolean> {
     console.log('[ClientsServiceService] [deleteClient] ', clientId);
     return this.httpClient
-      .delete<Client>(`${this.serviceAddress}/clients/${clientId}`)
+      .delete<boolean>(`${this.serviceAddress}/clients/${clientId}`)
   }
 
   // An API call to check if a client can be deleted

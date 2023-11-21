@@ -7,15 +7,25 @@ import { addClientRequest, activateEditMode, activateViewMode, selectClient, uns
 
 export const ClientStateReducer = createReducer<IClientState>(
   InitialClientsState,
-  on(addClientRequest, (state) => ({ ...state, editMode: true, selectedClientId: NEW_CLIENT_ID })),
-  on(activateEditMode, (state, { payload }) => ({ ...state, editMode: true, draftEntity: payload })),
-  on(activateViewMode, (state) => ({ ...state, editMode: false, draftEntity: null })),
-  on(selectClient, (state, { payload }) => {    
+  on(addClientRequest, (state) => ({
+    ...state,
+    editMode: true,
+    selectedClientId: NEW_CLIENT_ID,
+  })),
+  on(activateEditMode, (state, { payload }) => ({
+    ...state,
+    editMode: true,
+    selectedClientId: payload,
+  })),
+  on(activateViewMode, (state) => ({ ...state, editMode: false })),
+  on(selectClient, (state, { payload }) => {
     return { ...state, selectedClientId: payload };
   }),
-  on(unselectClient, (state) => ({ ...state, 
+  on(unselectClient, (state) => ({
+    ...state,
     selectedClientModel: null,
-    selectedClientId: null })),
+    selectedClientId: null,
+  })),
 
   on(updateSelectedClientModel, (state, { payload }) => {
     return { ...state, selectedClientModel: payload };

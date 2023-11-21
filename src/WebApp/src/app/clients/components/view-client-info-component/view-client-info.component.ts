@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, Subject, of, switchMap, take, takeUntil, tap } from 'rxjs';
-import { ClientSelector } from 'src/app/clients/client-state/clients.selectors';
+import { getSelectedClientFromState } from 'src/app/clients/client-state/clients.selectors';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 
@@ -21,7 +21,7 @@ export class ViewClientInfoComponent implements OnDestroy{
   constructor(
     private xStore: Store<IApplicationState>
   ) {
-    this.selectedClient$ =  this.xStore.pipe(select(ClientSelector));
+    this.selectedClient$ =  this.xStore.pipe(select(getSelectedClientFromState));
   }
 
   onClose() {

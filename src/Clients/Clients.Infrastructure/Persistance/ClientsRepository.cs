@@ -141,18 +141,28 @@ namespace Clients.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var policy = PollyPolicyFactory.WrappedAsyncPolicies();
-            var entity = await _dbContext.Clients
-                .FindAsync(new object?[] { id, cancellationToken }, cancellationToken: cancellationToken);
+            // use dapper to delete client
+            var parameters = new DynamicParameters();
+            parameters.Add("id", id, DbType.Guid);
 
-            if (entity == null)
+            var sqlCommand = "DELETE FROM clients WHERE id=@id";
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
-                throw new EntityNotFoundException(id.ToString());
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync(sqlCommand, parameters, transaction: transaction, commandType: CommandType.Text);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Could not delete client entity due to error : {exception.Message}");
+                    transaction.Rollback();
+                    throw;
+                }
             }
-
-            _dbContext.Remove(entity);
-            _ = policy.ExecuteAsync(async () => await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false));
-            _logger.LogDebug("Delete client: {id}", id);
         }
 
         public async Task<Client?> GetClientAsyncNoTracking(Guid id, CancellationToken cancellationToken)

@@ -10,14 +10,20 @@ export const getApplicationState = createSelector(
   (state: IClientState) => state
 );
 
-export const SelectedClientIdSelector = createSelector(
+export const getSelectedClientIdFromState = createSelector(
   ClientState,
   (state: IClientState) => {
     console.log('getSelectClient selector', state.selectedClientId);
     return state.selectedClientId;
   }
 );
-export const ClientSelector = createSelector(
+
+export const getSelectedClientFromState = createSelector(
   ClientState,
   (state: IClientState) => state.selectedClientModel
+);
+
+export const getViewModeFromState = createSelector(
+  ClientState,
+  (state: IClientState) => state.editMode
 );

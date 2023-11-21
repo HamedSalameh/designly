@@ -1,12 +1,25 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject, of, switchMap, takeUntil, tap } from 'rxjs';
-import { ClientsService } from '../../services/clients.service';
+import { Subject, takeUntil } from 'rxjs';
 import { Client } from '../../models/client.model';
-import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { getClientRequest, addClientRequest, activateEditMode, selectClient, unselectClient, activateViewMode, updateClientRequest } from 'src/app/clients/client-state/clients.actions';
-import { getApplicationState } from 'src/app/clients/client-state/clients.selectors';
+import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
+import {
+  getClientRequest,
+  addClientRequest,
+  activateEditMode,
+  selectClient,
+  unselectClient,
+  activateViewMode,
+  updateClientRequest,
+  deleteClientRequest,
+  updateSelectedClientModel,
+} from 'src/app/clients/client-state/clients.actions';
+import {
+  getApplicationState,
+  getSelectedClientFromState,
+  getViewModeFromState,
+} from 'src/app/clients/client-state/clients.selectors';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 
 @Component({
@@ -37,24 +50,38 @@ import { IApplicationState } from 'src/app/shared/state/app.state';
 export class ClientsManagementComponent implements OnDestroy {
   client: any;
   editMode: boolean = false;
-  clientId: string | null = null;
+  //clientId: string | null = null;
+  activeClient: any;
+  //activeClientId: any;
   private unsubscribe$: Subject<void> = new Subject();
 
-  constructor(
-    private store: Store<IApplicationState>,
-    private clientsService: ClientsService) {
+  constructor(private store: Store<IApplicationState>) {
     this.handleEditMode();
 
     this.store.dispatch(activateViewMode());
+
+    this.store
+      .select(getViewModeFromState)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((viewMode: any) => {
+        this.editMode = viewMode;
+      });
+
+    this.store
+      .select(getSelectedClientFromState)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((client: any) => {
+        this.activeClient = client;
+      });
   }
 
   private handleEditMode(): void {
-    this.store.select(getApplicationState)
+    this.store
+      .select(getApplicationState)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(({ editMode }: any) => {
         this.editMode = editMode;
-      }
-    );
+      });
   }
 
   ngOnDestroy(): void {
@@ -64,30 +91,35 @@ export class ClientsManagementComponent implements OnDestroy {
 
   onSelectClient($event: string) {
     const selectedClientId = $event as string;
-    this.clientId = selectedClientId;
 
     if (selectedClientId) {
       this.store.dispatch(selectClient({ payload: selectedClientId }));
-      this.store.dispatch(getClientRequest({ clientId: selectedClientId }))
+      this.store.dispatch(getClientRequest({ clientId: selectedClientId }));
     }
   }
 
   onAddClient() {
-    this.clientId = NEW_CLIENT_ID;
-    this.store.dispatch(unselectClient());
-    this.store.dispatch(activateEditMode({ payload: this.clientId }));
+    if (this.activeClient) {
+      this.activeClient = { ...this.activeClient, Id: NEW_CLIENT_ID };
+    } else {
+      this.activeClient = { Id: NEW_CLIENT_ID };
+    }
+
+    this.store.dispatch(updateSelectedClientModel({ payload: this.activeClient }));
+    this.store.dispatch(activateEditMode({ payload: this.activeClient.Id }));
   }
 
   // View Client Event Handlers
   onClose(): void {
-    this.clientId = null;
+    console.debug('[ClientJacketComponent] [onClose]');
+    this.store.dispatch(unselectClient());
     this.store.dispatch(activateViewMode());
   }
 
   onEdit(): void {
-    if (this.clientId) {
-      this.store.dispatch(selectClient({ payload: this.clientId }));
-      this.store.dispatch(activateEditMode({ payload: this.clientId }));
+    console.debug('[ClientJacketComponent] [onEdit]');
+    if (this.activeClient) {
+      this.store.dispatch(activateEditMode({ payload: this.activeClient.Id }));
     }
   }
 
@@ -96,33 +128,21 @@ export class ClientsManagementComponent implements OnDestroy {
   }
 
   onDelete(): void {
-    if (this.client) {
-      this.clientsService
-        .canDeleteClient(this.client.Id)
-        .pipe(
-          switchMap(() => this.clientsService.deleteClient(this.client.Id))
-        )
-        .subscribe({
-          next: (client: Client) => {
-            this.onClose();
-            this.store.dispatch(unselectClient());
-          },
-          error: (error: any) => {
-            alert(error.message);
-          },
-        });
-    }
-
-    return;
+    if (this.activeClient)
+      this.store.dispatch(
+        deleteClientRequest({ clientId: this.activeClient.Id })
+      );
   }
 
   // Edit client event handlers
   onCancelEditClient(): void {
     console.debug('[ClientJacketComponent] [onCancelEditClient]', this.client);
-    
+
     this.store.dispatch(activateViewMode());
-    //this.store.dispatch(new ViewMode());
-    if (this.clientId === NEW_CLIENT_ID) this.clientId = '';
+
+    if (this.activeClient?.Id === NEW_CLIENT_ID) {
+      this.store.dispatch(unselectClient());
+    }
   }
 
   onSaveEditClient(client: Client): void {

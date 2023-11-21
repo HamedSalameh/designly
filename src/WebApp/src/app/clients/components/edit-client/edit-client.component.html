@@ -1,12 +1,12 @@
-<div class="app-card" *ngIf="this.selectedClient">
+<div class="app-card">
   <div class="p-top-0 p-left-1 p-right-1">
       <div class="card-header form-row m-bottom-2">
       <div class="card-title">
-        <label *ngIf="this.selectedClient.Id !== '-1'" class="section-title"
-          >{{ this.selectedClient.FirstName }}
-          {{ this.selectedClient.FamilyName }}
+        <label *ngIf="this.selectedClient?.Id !== '-1'" class="section-title"
+          >{{ this.selectedClient?.FirstName }}
+          {{ this.selectedClient?.FamilyName }}
         </label>
-        <label *ngIf="this.selectedClient.Id === '-1'"> {{ this.localizedNewClient }} </label>
+        <label *ngIf="this.selectedClient?.Id === '-1'"> {{ this.localizedNewClient }} </label>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import {
   unselectClient,
   getClientRequest,
@@ -9,17 +9,20 @@ import {
   activateViewMode,
   updateSelectedClientModel,
   addClientRequest,
+  deleteClientRequest,
 } from './clients.actions';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import { Store } from '@ngrx/store';
 import { raiseNetworkError } from 'src/app/shared/state/error-state/error.actions';
+import { ToastMessageService } from 'src/app/shared/services/toast-message-service.service';
 
 @Injectable()
 export class ClientsEffects {
   constructor(
     private store: Store,
     private actions$: Actions,
-    private clientsService: ClientsService
+    private clientsService: ClientsService,
+    private toastMessageService: ToastMessageService
   ) {}
 
   getClient$ = createEffect(() =>
@@ -27,7 +30,7 @@ export class ClientsEffects {
       tap((action) => console.log('getClient effect', action)),
       ofType(getClientRequest),
       mergeMap((action) => {
-        return this.clientsService.getClient(action.clientId).pipe(
+        return this.clientsService.getClient(action.clientId + '1').pipe(
           map((client) => {
             console.log('getClient effect - OK', client);
             return updateSelectedClientModel({ payload: client });
@@ -35,6 +38,7 @@ export class ClientsEffects {
           catchError((error) => {
             console.log('getClient effect - ERROR', error);
             this.store.dispatch(unselectClient());
+            this.toastMessageService.showWarn("Some warning", "warning");
             return of(raiseNetworkError({ payload: error }));
           })
         );
@@ -91,4 +95,25 @@ export class ClientsEffects {
       })
     )
   );
+
+  deleteClient$ = createEffect( () => 
+    this.actions$.pipe(
+      ofType(deleteClientRequest),
+      mergeMap((action) => {
+        return this.clientsService.deleteClient(action.clientId).pipe(
+          map( () => {
+            console.debug('deleteClient effect - OK');
+            return unselectClient();
+          }),
+          catchError((error) => {
+            console.debug('deleteClient effect - ERROR', error);
+            return of(
+              raiseNetworkError({
+                payload: { message: 'Network error', originalError: error },
+              })
+            );
+          })
+        );
+      })
+    ));
 }
