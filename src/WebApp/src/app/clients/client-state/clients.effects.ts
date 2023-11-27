@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import {
   unselectClient,
   getClientRequest,
@@ -14,7 +14,8 @@ import {
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import { Store } from '@ngrx/store';
 import { raiseNetworkError } from 'src/app/shared/state/error-state/error.actions';
-import { ToastMessageService } from 'src/app/shared/services/toast-message-service.service';
+import { ToastrService } from 'ngx-toastr';
+import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
 
 @Injectable()
 export class ClientsEffects {
@@ -22,23 +23,23 @@ export class ClientsEffects {
     private store: Store,
     private actions$: Actions,
     private clientsService: ClientsService,
-    private toastMessageService: ToastMessageService
+    private toastr: ToastrService
   ) {}
 
-  getClient$ = createEffect(() =>
+    getClient$ = createEffect(() =>
     this.actions$.pipe(
       tap((action) => console.log('getClient effect', action)),
       ofType(getClientRequest),
       mergeMap((action) => {
-        return this.clientsService.getClient(action.clientId + '1').pipe(
+        return this.clientsService.getClient(action.clientId).pipe(
           map((client) => {
             console.log('getClient effect - OK', client);
+            this.toastr.success($localize`:@@ClientActions.ClientLoaded: Client loaded successfully`, '', toastOptionsFactory());
             return updateSelectedClientModel({ payload: client });
           }),
           catchError((error) => {
             console.log('getClient effect - ERROR', error);
             this.store.dispatch(unselectClient());
-            this.toastMessageService.showWarn("Some warning", "warning");
             return of(raiseNetworkError({ payload: error }));
           })
         );
@@ -56,6 +57,7 @@ export class ClientsEffects {
             console.debug('addClient effect - OK', client);
             // on effect success, dispatch an action to update the store
             this.store.dispatch(activateViewMode()); // Exit edit mode
+            this.toastr.success($localize`:@@ClientActions.ClientAdded: Client added successfully`, '', toastOptionsFactory());
             return updateSelectedClientModel({ payload: action.draftClient });
           }),
           catchError((error) => {
@@ -81,6 +83,7 @@ export class ClientsEffects {
             console.debug('updateClient effect - OK', client);
             // on effect success, dispatch an action to update the store
             this.store.dispatch(activateViewMode()); // Exit edit mode
+            this.toastr.success($localize`:@@ClientActions.ClientUpdated: Client updated successfully`, '', toastOptionsFactory());
             return updateSelectedClientModel({ payload: action.clientModel });
           }),
           catchError((error) => {
@@ -102,7 +105,8 @@ export class ClientsEffects {
       mergeMap((action) => {
         return this.clientsService.deleteClient(action.clientId).pipe(
           map( () => {
-            console.debug('deleteClient effect - OK');
+            console.debug('deleteClient effect - OK');            
+            this.toastr.success($localize`:@@ClientActions.ClientDeleted: Client deleted successfully`, '', toastOptionsFactory());
             return unselectClient();
           }),
           catchError((error) => {

@@ -5,14 +5,12 @@ import { TableComponent } from './components/table/table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { NotificationMessageComponent } from './components/notification-message/notification-message.component';
-import { ToastMessageService } from './services/toast-message-service.service';
 
 // SyncFusion
 import { GridModule, PageService, SearchService, SortService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 // Register Syncfusion license
 import { registerLicense } from '@syncfusion/ej2-base';
 import { ToastModule } from '@syncfusion/ej2-angular-notifications';
-import { ToastComponent } from './components/toast/toast.component';
 import { ERROR_STATE_NAME } from './state/error-state/error.selectors';
 import { ErrorStateReducer } from './state/error-state/error.reducer';
 import { StoreModule } from '@ngrx/store';
@@ -24,7 +22,6 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,
-    ToastComponent,
   ],
   imports: [
     CommonModule,
@@ -40,13 +37,9 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    NotificationMessageComponent,
-    ToastComponent,
-    
+    NotificationMessageComponent,    
   ],
   providers: [
-    ToastMessageService,
-
     // syncfusion
     SearchService,
     ToolbarService,

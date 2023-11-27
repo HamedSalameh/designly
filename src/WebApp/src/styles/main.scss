@@ -11,8 +11,9 @@
 // 1. Configuration and helpers
 @import "abstracts/variables", "abstracts/functions", "abstracts/mixins", "abstracts/animations";
 
-// 2. Vendors
+// 2. Vendors and 3rd party stuff
 // @import "vendors/...";
+@import "vendors/3rdparty";
 
 // 3. Base stuff
 @import "base/base", "base/fonts", "base/typography", "base/helpers";
@@ -28,3 +29,4 @@
 
 // 7. Themes
 @import "themes/default";
+

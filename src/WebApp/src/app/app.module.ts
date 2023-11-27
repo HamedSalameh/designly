@@ -16,6 +16,7 @@ import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { EffectsModule } from '@ngrx/effects';
     
     HomeModule,
     LoginModule,
+    ToastrModule.forRoot(),
     GridModule, PagerModule, StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [  

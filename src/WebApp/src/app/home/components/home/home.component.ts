@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
-import { ToastMessageService } from 'src/app/shared/services/toast-message-service.service';
 import { Strings } from '../../../shared/strings';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { getNetworkError, getApplicationError, getUnknownError } from 'src/app/shared/state/error-state/error.selectors';
+import { ToastrService } from 'ngx-toastr';
+import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent {
 
   constructor(
     private store: Store<IApplicationState>,
-    private toastMessageService: ToastMessageService,
+    private toastr: ToastrService,
     private errorTranslationService: ErrorTranslationService
   ) {
     this.networkErrorState = this.store.pipe(select(getNetworkError));
@@ -37,17 +38,18 @@ export class HomeComponent {
       // Future enhancement: add a switch statement to handle different types of errors
       if (networkError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(networkError);
-        this.toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
+        
         return;
       }
       if (applicationError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(applicationError);
-        this.toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
         return;
       }
       if (unknownError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(unknownError);
-        this.toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
         return;
       }
     });
