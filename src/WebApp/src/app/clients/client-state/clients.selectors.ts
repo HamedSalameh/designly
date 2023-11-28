@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { IClientState } from './clients.state';
+import { ClientsAdapter, IClientState } from './clients.state';
 
 export const CLIENTS_STATE_NAME = 'clients';
 
@@ -18,12 +18,26 @@ export const getSelectedClientIdFromState = createSelector(
   }
 );
 
-export const getSelectedClientFromState = createSelector(
-  ClientState,
-  (state: IClientState) => state.selectedClientModel
-);
+// export const getSelectedClientFromState = createSelector(
+//   ClientState,
+//   (state: IClientState) => state.selectedClientModel
+// );
 
 export const getViewModeFromState = createSelector(
   ClientState,
   (state: IClientState) => state.editMode
 );
+
+///////////////////////////////////////////////////////////
+// refactor using NGRX Entity
+export const clientsSelector = ClientsAdapter.getSelectors();
+
+export const getClients = createSelector(ClientState, clientsSelector.selectAll);
+export const getClientsEntities = createSelector(ClientState, clientsSelector.selectEntities);
+export const getSingleClient = createSelector(
+  getClientsEntities,
+  getSelectedClientIdFromState,
+  (clients, clientId) => {
+    return clientId ? clients[clientId] : null;
+  }
+)

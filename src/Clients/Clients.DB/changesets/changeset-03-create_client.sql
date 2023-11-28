@@ -14,7 +14,8 @@ CREATE OR REPLACE PROCEDURE create_client(
     p_address_lines text,
     p_primary_phone_number VARCHAR(255),
     p_secondary_phone_number VARCHAR(255),
-    p_email_address VARCHAR(255)
+    p_email_address VARCHAR(255),
+	OUT p_client_id UUID
 )
 LANGUAGE plpgsql AS '
     DECLARE
@@ -46,7 +47,8 @@ LANGUAGE plpgsql AS '
             p_primary_phone_number,
             p_secondary_phone_number,
             p_email_address
-        );
+        )
+	RETURNING id INTO p_client_id;
     EXCEPTION WHEN unique_violation THEN
         RAISE EXCEPTION ''A client with the provided ID already exists.'';
     END;

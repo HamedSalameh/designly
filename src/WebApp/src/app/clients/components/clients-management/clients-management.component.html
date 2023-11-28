@@ -2,7 +2,7 @@
   <div
     class="clients-list"
     [@fadeInUp]
-    [ngClass]="{ EditModeLocking: this.editMode }"
+    [ngClass]="{ EditModeLocking: this.editMode$ | async }"
   >
     <app-clients
       (SelectRow)="onSelectClient($event)"
@@ -10,21 +10,19 @@
     ></app-clients>
   </div>
 
-  <div class="client-panel" [@fadeInLeft] *ngIf="this.activeClient">
-    <div *ngIf="this.editMode">
-      <app-edit-client
-        (CancelEditClient)="this.onCancelEditClient()"
-        (SaveEditClient)="this.onSaveEditClient($event)"
-      ></app-edit-client>
-    </div>
+  <div class="client-panel" *ngIf="!(this.editMode$ | async) && this.activeClient?.Id" [@fadeInLeft]>
+    <app-view-client-info
+      (CloseClient)="this.onClose()"
+      (EditClient)="this.onEdit()"
+      (ShareClient)="this.onShare()"
+      (DeleteClient)="this.onDelete()"
+    ></app-view-client-info>
+  </div>
 
-    <div *ngIf="!this.editMode">
-      <app-view-client-info
-        (CloseClient)="this.onClose()"
-        (EditClient)="this.onEdit()"
-        (ShareClient)="this.onShare()"
-        (DeleteClient)="this.onDelete()"
-      ></app-view-client-info>
-    </div>
+  <div class="client-panel" *ngIf=" this.editMode$ | async" [@fadeInLeft]>
+    <app-edit-client
+      (CancelEditClient)="this.onCancelEditClient()"
+      (SaveEditClient)="this.onSaveEditClient($event)"
+    ></app-edit-client>
   </div>
 </div>

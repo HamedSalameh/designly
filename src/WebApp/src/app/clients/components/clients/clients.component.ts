@@ -1,9 +1,14 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { map, tap } from 'rxjs';
 import { ClientsService } from '../../services/clients.service';
 import { TableData } from '../../models/table-data.model';
+import { Thickness } from '@syncfusion/ej2/diagrams';
+import { IApplicationState } from 'src/app/shared/state/app.state';
+import { Store } from '@ngrx/store';
+import { getClientsRequest } from '../../client-state/clients.actions';
+import { Client } from '../../models/client.model';
+import { getClients } from '../../client-state/clients.selectors';
 
 @Component({
   selector: 'app-clients',
@@ -45,25 +50,19 @@ export class ClientsComponent {
 
   tableColumns: any[] = [];
 
-  constructor(private clientsService: ClientsService) {}
+  constructor(private store: Store<IApplicationState>) {}
 
-  ngOnInit(): void {
-    this.clientsService
-      .getClients()
-      .pipe(
-        map((clients) =>
-          // Map the clients to the table data
-          clients.map((client) => this.mapClientToTableData(client))
-        )
-      )
-      .subscribe((clients) => {
-        this.tableData = clients;
-        // Create table columns based on the columns definition
-        this.tableColumns = this.columnsDefinition.map((column) => ({
-          field: column.DataField,
-          header: column.ColumnHeader,
-        }));
-      });
+  ngOnInit(): void { 
+
+    this.store.dispatch(getClientsRequest());
+
+    this.store.select(getClients).subscribe((clients) => {
+      this.tableData = clients.map((client) => this.mapClientToTableData(client));
+      this.tableColumns = this.columnsDefinition.map((column) => ({
+        field: column.DataField,
+        header: column.ColumnHeader,
+      }));
+    });
   }
 
   onRowSelect(event: any): void {

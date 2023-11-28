@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^16.0.6",
     "@angular/router": "^16.0.6",
     "@ngrx/effects": "^16.3.0",
+    "@ngrx/entity": "^16.3.0",
     "@ngrx/store": "^16.3.0",
     "@ngrx/store-devtools": "^16.3.0",
     "@ngxs/logger-plugin": "^3.8.1",

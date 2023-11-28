@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EMPTY, Observable, catchError, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
 import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { getSelectedClientFromState, getSelectedClientIdFromState } from 'src/app/clients/client-state/clients.selectors';
+import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { swapBounds } from '@syncfusion/ej2/diagrams';
@@ -22,6 +22,7 @@ export class EditClientComponent implements OnInit {
   clientId: Observable<string | null> | undefined;
   selectedClient$: Observable<Client | null> = of(null);
   selectedClient: Client | null = null;
+  newClientDraftId = NEW_CLIENT_ID;
 
   localizedSave = $localize`:@@Global.Save:Save`;
   localizedCancel = $localize`:@@Global.Cancel:Cancel`;
@@ -54,8 +55,8 @@ export class EditClientComponent implements OnInit {
           this.createForm();
           return of(null); // Return an observable that completes immediately
         }
-        console.debug('[EditClientComponent] creating form for existing client ... ');
-        return this.store.select(getSelectedClientFromState).pipe(
+        
+        return this.store.select(getSingleClient).pipe(
           tap((client) => {
             this.selectedClient = client || null;
             this.createForm();

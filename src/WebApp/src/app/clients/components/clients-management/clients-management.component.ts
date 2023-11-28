@@ -3,9 +3,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { Client } from '../../models/client.model';
-import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
+import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 import {
-  getClientRequest,
   addClientRequest,
   activateEditMode,
   selectClient,
@@ -16,8 +15,7 @@ import {
   updateSelectedClientModel,
 } from 'src/app/clients/client-state/clients.actions';
 import {
-  getApplicationState,
-  getSelectedClientFromState,
+  getSingleClient,
   getViewModeFromState,
 } from 'src/app/clients/client-state/clients.selectors';
 import { IApplicationState } from 'src/app/shared/state/app.state';
@@ -49,38 +47,22 @@ import { IApplicationState } from 'src/app/shared/state/app.state';
 })
 export class ClientsManagementComponent implements OnDestroy {
   client: any;
-  editMode: boolean = false;
-  //clientId: string | null = null;
-  activeClient: any;
-  //activeClientId: any;
+  editMode$: any;
+  activeClient: any;  
   private unsubscribe$: Subject<void> = new Subject();
 
   constructor(private store: Store<IApplicationState>) {
-    this.handleEditMode();
-
     this.store.dispatch(activateViewMode());
 
-    this.store
-      .select(getViewModeFromState)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((viewMode: any) => {
-        this.editMode = viewMode;
-      });
+    this.editMode$ = this.store.select(getViewModeFromState).pipe(
+      takeUntil(this.unsubscribe$)
+    );
 
     this.store
-      .select(getSelectedClientFromState)
+      .select(getSingleClient)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((client: any) => {
         this.activeClient = client;
-      });
-  }
-
-  private handleEditMode(): void {
-    this.store
-      .select(getApplicationState)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(({ editMode }: any) => {
-        this.editMode = editMode;
       });
   }
 
@@ -91,10 +73,9 @@ export class ClientsManagementComponent implements OnDestroy {
 
   onSelectClient($event: string) {
     const selectedClientId = $event as string;
-
-    if (selectedClientId) {
+    if (selectedClientId)
+    {
       this.store.dispatch(selectClient({ payload: selectedClientId }));
-      this.store.dispatch(getClientRequest({ clientId: selectedClientId }));
     }
   }
 

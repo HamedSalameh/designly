@@ -65,6 +65,7 @@ namespace Clients.Infrastructure.Persistance
             parameters.Add("p_primary_phone_number", client.ContactDetails.PrimaryPhoneNumber, DbType.String);
             parameters.Add("p_secondary_phone_number", client.ContactDetails.SecondaryPhoneNumber, DbType.String);
             parameters.Add("p_email_address", client.ContactDetails.EmailAddress, DbType.String);
+            parameters.Add("p_client_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
@@ -74,6 +75,11 @@ namespace Clients.Infrastructure.Persistance
                 {
                     await connection.ExecuteAsync("create_client", parameters,
                                                transaction: transaction, commandType: CommandType.StoredProcedure);
+
+                    // Retrieve the returned ID from the output parameter
+                    var insertedId = parameters.Get<Guid>("p_client_id");
+                    client.Id = insertedId;
+
                     transaction.Commit();
                 }
                 catch (Exception exception)

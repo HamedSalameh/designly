@@ -1,17 +1,13 @@
-import { IClientState, InitialClientsState } from './clients.state';
+import { ClientsAdapter, IClientState, InitialClientsState } from './clients.state';
 
 import { createReducer, on } from '@ngrx/store';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { addClientRequest, activateEditMode, activateViewMode, selectClient, unselectClient, updateSelectedClientModel } from './clients.actions';
+import { addClientRequest, activateEditMode, activateViewMode, selectClient, unselectClient, updateSelectedClientModel, getClientsRequestSuccess, getClientsRequestError, addClientRequestSuccess, updateClientRequestSuccess, deleteClientRequestSuccess } from './clients.actions';
 // Reducer
 
 export const ClientStateReducer = createReducer<IClientState>(
   InitialClientsState,
-  on(addClientRequest, (state) => ({
-    ...state,
-    editMode: true,
-    selectedClientId: NEW_CLIENT_ID,
-  })),
+
   on(activateEditMode, (state, { payload }) => ({
     ...state,
     editMode: true,
@@ -29,5 +25,23 @@ export const ClientStateReducer = createReducer<IClientState>(
 
   on(updateSelectedClientModel, (state, { payload }) => {
     return { ...state, selectedClientModel: payload };
-  })
+  }),
+
+  // GET CLIENTS
+  on(getClientsRequestSuccess, (state, { payload }) => {
+    return ClientsAdapter.setAll(payload, state);
+  }),
+  on(getClientsRequestError, (state, { payload }) => {
+    return { ...state, error: payload };
+  }),
+
+  // DELETE CLIENT
+  on(deleteClientRequestSuccess, (state, { payload }) => {
+    return ClientsAdapter.removeOne(payload.id, state);
+  }),
+
+  // ADD CLIENT
+  on(addClientRequestSuccess, (state, { payload }) => {
+    return ClientsAdapter.addOne(payload, state);
+  }),
 );
