@@ -7,19 +7,22 @@ import {
   getClientRequest,
   updateClientRequest,
   activateViewMode,
-  updateSelectedClientModel,
   addClientRequest,
   deleteClientRequest,
   getClientsRequest,
   getClientsRequestSuccess,
   deleteClientRequestSuccess,
   addClientRequestSuccess,
+  updateClientRequestSuccess,
+  selectClient,
 } from './clients.actions';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import { Store } from '@ngrx/store';
 import { raiseNetworkError } from 'src/app/shared/state/error-state/error.actions';
 import { ToastrService } from 'ngx-toastr';
 import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
+import { Update } from '@ngrx/entity';
+import { Client } from '../models/client.model';
 
 @Injectable()
 export class ClientsEffects {
@@ -54,7 +57,7 @@ export class ClientsEffects {
         return this.clientsService.getClient(action.clientId).pipe(
           map((client) => {
             this.toastr.success($localize`:@@ClientActions.ClientLoaded: Client loaded successfully`, '', toastOptionsFactory());
-            return updateSelectedClientModel({ payload: client });
+            return selectClient({ clientId: client.Id });
           }),
           catchError((error) => {
             this.store.dispatch(unselectClient());
@@ -70,14 +73,14 @@ export class ClientsEffects {
     this.actions$.pipe(
       ofType(addClientRequest),
       mergeMap((action) => {
-        return this.clientsService.addClient(action.draftClient).pipe(
+        return this.clientsService.addClient(action.draftClientModel).pipe(
           map((response) => {
             console.debug('addresponse effect - OK', response);
             // on effect success, dispatch an action to update the store
             this.store.dispatch(activateViewMode()); // Exit edit mode
             this.toastr.success($localize`:@@ClientActions.ClientAdded: Client added successfully`, '', toastOptionsFactory());
             const id = this.extractIdFromUrl(response);
-            const newClient = { ...action.draftClient, Id: id };
+            const newClient = { ...action.draftClientModel, Id: id };
             return addClientRequestSuccess({ payload: newClient });
           }),
           catchError((error) => {
@@ -104,7 +107,13 @@ export class ClientsEffects {
             // on effect success, dispatch an action to update the store
             this.store.dispatch(activateViewMode()); // Exit edit mode
             this.toastr.success($localize`:@@ClientActions.ClientUpdated: Client updated successfully`, '', toastOptionsFactory());
-            return updateSelectedClientModel({ payload: action.clientModel });
+            const updatedClient: Update<Client> = {
+              id: action.clientModel.Id,
+              changes: {
+                ...action.clientModel,
+              }
+            };
+            return updateClientRequestSuccess({ client: updatedClient });
           }),
           catchError((error) => {
             console.debug('updateClient effect - ERROR', error);

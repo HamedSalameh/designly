@@ -12,13 +12,13 @@ import {
   activateViewMode,
   updateClientRequest,
   deleteClientRequest,
-  updateSelectedClientModel,
 } from 'src/app/clients/client-state/clients.actions';
 import {
   getSingleClient,
   getViewModeFromState,
 } from 'src/app/clients/client-state/clients.selectors';
 import { IApplicationState } from 'src/app/shared/state/app.state';
+import { CreateDraftClient } from '../../factories/client.factory';
 
 @Component({
   selector: 'app-clients-management',
@@ -52,12 +52,13 @@ export class ClientsManagementComponent implements OnDestroy {
   private unsubscribe$: Subject<void> = new Subject();
 
   constructor(private store: Store<IApplicationState>) {
+    // The default view mode is activated when the component is initialized
     this.store.dispatch(activateViewMode());
-
+    // The edit mode is activated when the user clicks on the edit button
     this.editMode$ = this.store.select(getViewModeFromState).pipe(
       takeUntil(this.unsubscribe$)
     );
-
+    // The active client is retrieved from the store so it can be viewed or edited in the panel
     this.store
       .select(getSingleClient)
       .pipe(takeUntil(this.unsubscribe$))
@@ -75,32 +76,26 @@ export class ClientsManagementComponent implements OnDestroy {
     const selectedClientId = $event as string;
     if (selectedClientId)
     {
-      this.store.dispatch(selectClient({ payload: selectedClientId }));
+      this.store.dispatch(selectClient({ clientId: selectedClientId }));
     }
   }
 
   onAddClient() {
-    if (this.activeClient) {
-      this.activeClient = { ...this.activeClient, Id: NEW_CLIENT_ID };
-    } else {
-      this.activeClient = { Id: NEW_CLIENT_ID };
-    }
+    const draftClient = CreateDraftClient();
 
-    this.store.dispatch(updateSelectedClientModel({ payload: this.activeClient }));
-    this.store.dispatch(activateEditMode({ payload: this.activeClient.Id }));
+    this.store.dispatch(selectClient({ clientId: draftClient.Id }));
+    this.store.dispatch(activateEditMode({ clientId: draftClient.Id }));
   }
 
   // View Client Event Handlers
   onClose(): void {
-    console.debug('[ClientJacketComponent] [onClose]');
     this.store.dispatch(unselectClient());
     this.store.dispatch(activateViewMode());
   }
 
   onEdit(): void {
-    console.debug('[ClientJacketComponent] [onEdit]');
     if (this.activeClient) {
-      this.store.dispatch(activateEditMode({ payload: this.activeClient.Id }));
+      this.store.dispatch(activateEditMode({ clientId: this.activeClient.Id }));
     }
   }
 
@@ -117,8 +112,6 @@ export class ClientsManagementComponent implements OnDestroy {
 
   // Edit client event handlers
   onCancelEditClient(): void {
-    console.debug('[ClientJacketComponent] [onCancelEditClient]', this.client);
-
     this.store.dispatch(activateViewMode());
 
     if (this.activeClient?.Id === NEW_CLIENT_ID) {
@@ -128,7 +121,7 @@ export class ClientsManagementComponent implements OnDestroy {
 
   onSaveEditClient(client: Client): void {
     client.Id === NEW_CLIENT_ID
-      ? this.store.dispatch(addClientRequest({ draftClient: client }))
+      ? this.store.dispatch(addClientRequest({ draftClientModel: client }))
       : this.store.dispatch(updateClientRequest({ clientModel: client }));
   }
 }

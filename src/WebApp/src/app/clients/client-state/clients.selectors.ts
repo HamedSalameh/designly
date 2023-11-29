@@ -12,24 +12,14 @@ export const getApplicationState = createSelector(
 
 export const getSelectedClientIdFromState = createSelector(
   ClientState,
-  (state: IClientState) => {
-    console.log('getSelectClient selector', state.selectedClientId);
-    return state.selectedClientId;
-  }
+  (state: IClientState) => state.selectedClientId
 );
-
-// export const getSelectedClientFromState = createSelector(
-//   ClientState,
-//   (state: IClientState) => state.selectedClientModel
-// );
 
 export const getViewModeFromState = createSelector(
   ClientState,
   (state: IClientState) => state.editMode
 );
 
-///////////////////////////////////////////////////////////
-// refactor using NGRX Entity
 export const clientsSelector = ClientsAdapter.getSelectors();
 
 export const getClients = createSelector(ClientState, clientsSelector.selectAll);

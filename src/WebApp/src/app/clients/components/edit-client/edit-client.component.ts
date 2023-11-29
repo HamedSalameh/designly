@@ -12,6 +12,7 @@ import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/c
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { swapBounds } from '@syncfusion/ej2/diagrams';
+import { CreateDraftClient } from '../../factories/client.factory';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -51,7 +52,7 @@ export class EditClientComponent implements OnInit {
     this.store.select(getSelectedClientIdFromState).pipe(
       switchMap((selectedClientId) => {
         if (!selectedClientId || selectedClientId === NEW_CLIENT_ID) {
-          this.selectedClient = this.createEmptyClient();
+          this.selectedClient = CreateDraftClient();
           this.createForm();
           return of(null); // Return an observable that completes immediately
         }
@@ -91,25 +92,6 @@ export class EditClientComponent implements OnInit {
     console.debug('[EditClientComponent] [onSave]');
     const client: Client = this.createClientFromForm();
     this.SaveEditClient.emit(client);
-  }
-
-  private createEmptyClient(): Client {
-    return {
-      Id: NEW_CLIENT_ID,
-      FirstName: '',
-      FamilyName: '',
-      TenantId: DEVELOPMENT_TENANT_ID,
-      ContactDetails: {
-        PrimaryPhoneNumber: '',
-        EmailAddress: '',
-      },
-      Address: {
-        City: '',
-        Street: '',
-        BuildingNumber: '',
-        AddressLines: [],
-      },
-    };
   }
 
   private createForm() {
