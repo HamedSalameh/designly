@@ -24,7 +24,8 @@ namespace Clients.Application.Commands
 
             try
             {
-                var clientId = await _unitOfWork.ClientsRepository.CreateClientAsync(client, cancellationToken).ConfigureAwait(false);
+                //var clientId = await _unitOfWork.ClientsRepository.CreateClientAsync(client, cancellationToken).ConfigureAwait(false);
+                var clientId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug("Created client: {clientId}", clientId);
 
                 return clientId;

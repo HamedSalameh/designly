@@ -11,5 +11,6 @@ namespace Clients.Infrastructure.Interfaces
         Task DeleteClientAsync(Guid id, CancellationToken cancellationToken);
         Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken);
         Task<IEnumerable<Client>> SearchClientsAsync(string firstName, string familyName, string city, CancellationToken cancellationToken);
+        Task<Guid> CreateClientAsyncWithDapper(Client client, CancellationToken cancellationToken);
     }
 }

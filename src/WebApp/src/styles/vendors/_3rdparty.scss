@@ -1,0 +1,15 @@
+// regular style toast
+@import 'ngx-toastr/toastr';
+
+/* Default style for LTR */
+.ngx-toastr {
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: ltr; /* Set default direction to left-to-right */
+}
+
+/* Style for RTL */
+[dir='rtl'] .ngx-toastr {
+    text-align: right;
+    direction: rtl; /* Set direction to right-to-left for RTL */
+}

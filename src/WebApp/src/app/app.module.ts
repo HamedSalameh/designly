@@ -1,4 +1,4 @@
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -10,13 +10,14 @@ import { LoginModule } from './login/login.module';
 import { AuthInterceptorService } from './authentication/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HomeModule } from './home/home.module';
-import { NgxsModule } from '@ngxs/store';
-import { ClientState } from './state/client-state/client-state.state';
-import { NgxsLoggerPlugin, NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { HttpErrorsInterceptorService } from './core/interceptors/http-errors-interceptor.service';
-import { ErrorState } from './state/error-state/error-state.state';
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -26,16 +27,14 @@ import { GridModule, PagerModule } from '@syncfusion/ej2-angular-grids';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NgxsModule.forRoot([
-      ClientState,
-      ErrorState
-    ]),
-    NgxsLoggerPluginModule.forRoot(),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot(),
     CoreModule,
-
+    
     HomeModule,
     LoginModule,
-    GridModule, PagerModule
+    ToastrModule.forRoot(),
+    GridModule, PagerModule, StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [  
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService },

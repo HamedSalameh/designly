@@ -1,18 +1,18 @@
 import {
   Component,
   EventEmitter,
-  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { Observable, of, tap } from 'rxjs';
-import { ClientState } from 'src/app/state/client-state/client-state.state';
+import { EMPTY, Observable, catchError, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
-import { ClientsService } from '../../services/clients.service';
-import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-
+import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
+import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
+import { Store, select } from '@ngrx/store';
+import { IApplicationState } from 'src/app/shared/state/app.state';
+import { swapBounds } from '@syncfusion/ej2/diagrams';
+import { CreateDraftClient } from '../../factories/client.factory';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -20,9 +20,10 @@ import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 })
 export class EditClientComponent implements OnInit {
   ClientInfo!: FormGroup;
-  clientId;
+  clientId: Observable<string | null> | undefined;
   selectedClient$: Observable<Client | null> = of(null);
   selectedClient: Client | null = null;
+  newClientDraftId = NEW_CLIENT_ID;
 
   localizedSave = $localize`:@@Global.Save:Save`;
   localizedCancel = $localize`:@@Global.Cancel:Cancel`;
@@ -45,24 +46,27 @@ export class EditClientComponent implements OnInit {
   @Output() SaveEditClient: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private clientsService: ClientsService,
     private formBuilder: FormBuilder,
-    private store: Store
+    private store: Store<IApplicationState>
   ) {
-    this.clientId = this.store.select(ClientState.selectedClient);
-
-    this.clientId.subscribe((clientId: any) => {
-      if (!clientId || clientId === NEW_CLIENT_ID) {
-        this.selectedClient = this.createEmptyClient();
-        this.createForm();
-        return;
-      }
-
-      this.clientsService.getClient(clientId).subscribe((client: Client) => {
-        this.selectedClient = client;
-        this.createForm();
-      });
-    });
+    this.store.select(getSelectedClientIdFromState).pipe(
+      switchMap((selectedClientId) => {
+        if (!selectedClientId || selectedClientId === NEW_CLIENT_ID) {
+          this.selectedClient = CreateDraftClient();
+          this.createForm();
+          return of(null); // Return an observable that completes immediately
+        }
+        
+        return this.store.select(getSingleClient).pipe(
+          tap((client) => {
+            this.selectedClient = client || null;
+            this.createForm();
+          })
+        );
+      }),
+      take(1) // Ensure the observable completes after the first emission
+    ).subscribe();
+    
   }
 
   ngOnInit(): void {
@@ -88,25 +92,6 @@ export class EditClientComponent implements OnInit {
     console.debug('[EditClientComponent] [onSave]');
     const client: Client = this.createClientFromForm();
     this.SaveEditClient.emit(client);
-  }
-
-  private createEmptyClient(): Client {
-    return {
-      Id: NEW_CLIENT_ID,
-      FirstName: '',
-      FamilyName: '',
-      TenantId: '',
-      ContactDetails: {
-        PrimaryPhoneNumber: '',
-        EmailAddress: '',
-      },
-      Address: {
-        City: '',
-        Street: '',
-        BuildingNumber: '',
-        AddressLines: [],
-      },
-    };
   }
 
   private createForm() {

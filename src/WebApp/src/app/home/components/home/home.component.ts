@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { combineLatest } from 'rxjs';
 import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
-import { ToastMessageService } from 'src/app/shared/services/toast-message-service.service';
-import { ErrorState } from 'src/app/state/error-state/error-state.state';
 import { Strings } from '../../../shared/strings';
+import { Store, select } from '@ngrx/store';
+import { IApplicationState } from 'src/app/shared/state/app.state';
+import { getNetworkError, getApplicationError, getUnknownError } from 'src/app/shared/state/error-state/error.selectors';
+import { ToastrService } from 'ngx-toastr';
+import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
 
 @Component({
   selector: 'app-home',
@@ -17,14 +19,13 @@ export class HomeComponent {
   unknownErrorState;
 
   constructor(
-    private store: Store,
-    toastMessageService: ToastMessageService,
+    private store: Store<IApplicationState>,
+    private toastr: ToastrService,
     private errorTranslationService: ErrorTranslationService
   ) {
-    this.networkErrorState = this.store.select(ErrorState.getNetworkError);
-    this.applicationErrorState = this.store.select(ErrorState.getApplicationError
-    );
-    this.unknownErrorState = this.store.select(ErrorState.getUnknownError);
+    this.networkErrorState = this.store.pipe(select(getNetworkError));
+    this.applicationErrorState = this.store.pipe(select(getApplicationError));
+    this.unknownErrorState = this.store.pipe(select(getUnknownError));
 
     // subscribe to multuple observables
     let subscription = combineLatest([
@@ -37,17 +38,18 @@ export class HomeComponent {
       // Future enhancement: add a switch statement to handle different types of errors
       if (networkError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(networkError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
+        
         return;
       }
       if (applicationError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(applicationError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
         return;
       }
       if (unknownError) {
         const message = this.errorTranslationService.getTranslatedErrorMessage(unknownError);
-        toastMessageService.showError(message, messageTitle);
+        this.toastr.error(message, messageTitle, toastOptionsFactory());
         return;
       }
     });

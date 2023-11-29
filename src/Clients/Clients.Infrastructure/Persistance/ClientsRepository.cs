@@ -49,6 +49,50 @@ namespace Clients.Infrastructure.Persistance
             return client.Id;
         }
 
+        // Create a new client with Dapper
+        public async Task<Guid> CreateClientAsyncWithDapper(Client client, CancellationToken cancellationToken)
+        {
+            if (client == null) throw new ArgumentNullException(nameof(client));
+
+            var parameters = new DynamicParameters();
+            parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
+            parameters.Add("p_first_name", client.FirstName, DbType.String);
+            parameters.Add("p_family_name", client.FamilyName, DbType.String);
+            parameters.Add("p_city", client.Address.City, DbType.String);
+            parameters.Add("p_street", client.Address.Street, DbType.String);
+            parameters.Add("p_building_number", client.Address.BuildingNumber, DbType.String);
+            parameters.Add("p_address_lines", JsonConvert.SerializeObject(client.Address.AddressLines));
+            parameters.Add("p_primary_phone_number", client.ContactDetails.PrimaryPhoneNumber, DbType.String);
+            parameters.Add("p_secondary_phone_number", client.ContactDetails.SecondaryPhoneNumber, DbType.String);
+            parameters.Add("p_email_address", client.ContactDetails.EmailAddress, DbType.String);
+            parameters.Add("p_client_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync("create_client", parameters,
+                                               transaction: transaction, commandType: CommandType.StoredProcedure);
+
+                    // Retrieve the returned ID from the output parameter
+                    var insertedId = parameters.Get<Guid>("p_client_id");
+                    client.Id = insertedId;
+
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Could not create client entity due to error : {exception.Message}");
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+
+            return client.Id;
+        }
+
         public async Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken)
         {
             if (client == default || client == null)
@@ -103,18 +147,28 @@ namespace Clients.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var policy = PollyPolicyFactory.WrappedAsyncPolicies();
-            var entity = await _dbContext.Clients
-                .FindAsync(new object?[] { id, cancellationToken }, cancellationToken: cancellationToken);
+            // use dapper to delete client
+            var parameters = new DynamicParameters();
+            parameters.Add("id", id, DbType.Guid);
 
-            if (entity == null)
+            var sqlCommand = "DELETE FROM clients WHERE id=@id";
+
+            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
-                throw new EntityNotFoundException(id.ToString());
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync(sqlCommand, parameters, transaction: transaction, commandType: CommandType.Text);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, $"Could not delete client entity due to error : {exception.Message}");
+                    transaction.Rollback();
+                    throw;
+                }
             }
-
-            _dbContext.Remove(entity);
-            _ = policy.ExecuteAsync(async () => await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false));
-            _logger.LogDebug("Delete client: {id}", id);
         }
 
         public async Task<Client?> GetClientAsyncNoTracking(Guid id, CancellationToken cancellationToken)

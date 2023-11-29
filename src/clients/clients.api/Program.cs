@@ -22,7 +22,7 @@ public class Program
 
         builder.Host.UseSerilog((ctx, lc) => lc
             .WriteTo.Console()  // TODO: Read from configuration
-            .MinimumLevel.Debug()
+            .MinimumLevel.Error()
             );
 
         // Api versioning
@@ -40,7 +40,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
 
         // Enabled authentication
-        builder.Services.AddJwtBearerConfig(configuration);
+        //builder.Services.AddJwtBearerConfig(configuration);
         builder.Services.AddAuthorization();
 
         // Configure Swagger

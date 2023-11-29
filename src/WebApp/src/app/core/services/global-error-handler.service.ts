@@ -1,6 +1,4 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { AddUnknownError } from 'src/app/state/error-state/error-state.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +10,11 @@ import { AddUnknownError } from 'src/app/state/error-state/error-state.actions';
 */
 export class GlobalErrorHandlerService implements ErrorHandler {
 
-  constructor(private store: Store) { }
-  
+  constructor() { }
+
   handleError(error: any): void {
-    // general error handling
+    
+    console.log('GlobalErrorHandlerService: ', error);
 
-    // case - unknown error
-    this.store.dispatch(new AddUnknownError(error));
-    console.debug('[GlobalErrorHandler] [handleError] ', error);
-
-  }
+  }  
 }
