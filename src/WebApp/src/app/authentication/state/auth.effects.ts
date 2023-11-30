@@ -6,11 +6,12 @@ import {
   loginFailed,
   loginStart,
   loginSuccess,
-  logout,
-  setToken,
+  logout
 } from './auth.actions';
 import { AuthenticationService } from '../authentication-service.service';
 import { Router } from '@angular/router';
+import { SigninResponse } from '../models/signin-response.model';
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -26,8 +27,12 @@ export class AuthenitcationEffects {
       mergeMap((action) => {
         const signInRequest = action.signInRequest;
         return this.authenticationService.signIn(signInRequest).pipe(
-          map((response) => {
-            return loginSuccess({ user: 'TBA', token: response, redirect: true });
+          map((response: SigninResponse) => {
+            const accessToken = response.accessToken;
+            const idToken = response.idToken;
+            const expiresIn = response.expiresIn;
+            const expiresAt = moment().add(response.idToken, 'second');
+            return loginSuccess({ user: signInRequest.username, accessToken, idToken, expiresIn, expiresAt, redirect: true });          
           }),
           catchError((error) => {
             return of(loginFailed({ error }));
@@ -63,4 +68,5 @@ export class AuthenitcationEffects {
       ),
     { dispatch: false }
   );
+
 }
