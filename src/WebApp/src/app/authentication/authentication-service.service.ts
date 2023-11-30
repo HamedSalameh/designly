@@ -13,8 +13,8 @@ export const expires_at_key = 'expires_at';
   providedIn: 'root',
 })
 export class AuthenticationService {
-  //serviceAddress: string = "https://localhost:7246";
-  serviceAddress: string = 'http://localhost:3000/api';
+  serviceAddress: string = "https://localhost:7119/api/v1/Identity";
+  //serviceAddress: string = '/auth/v1/Identity';
 
   private isUserAuthenticated: boolean = false;
 
@@ -35,12 +35,12 @@ export class AuthenticationService {
       .post<SigninResponse>(
         `${this.serviceAddress}/signin`,
         formData,
-        httpOptions
-      )
-      .pipe(
-        tap((res) => this.setSession(res)),
-        shareReplay()
-      );
+        httpOptions);
+      // )
+      // .pipe(
+      //   tap((res) => this.setSession(res)),
+      //   shareReplay()
+      // );
   }
 
   public isAuthenticated() {

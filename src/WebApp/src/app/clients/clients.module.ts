@@ -13,6 +13,7 @@ import { ClientStateReducer } from './client-state/clients.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ClientsEffects } from './client-state/clients.effects';
+import { CLIENTS_STATE_NAME } from './client-state/clients.selectors';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { ClientsEffects } from './client-state/clients.effects';
     ReactiveFormsModule,
     CommonModule,
     SharedModule,
-    StoreModule.forFeature('clients', ClientStateReducer),
+    StoreModule.forFeature(CLIENTS_STATE_NAME, ClientStateReducer),
     EffectsModule.forFeature([ClientsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
