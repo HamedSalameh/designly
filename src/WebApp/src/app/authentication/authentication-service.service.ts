@@ -14,7 +14,7 @@ export const expires_at_key = 'expires_at';
 })
 export class AuthenticationService {
   serviceAddress: string = "https://localhost:7119/api/v1/Identity";
-  //serviceAddress: string = '/auth/v1/Identity';
+  //serviceAddress: string = '/auth';
   constructor(private httpClient: HttpClient) {}
 
   public signIn(signinRequest: SigninRequest): Observable<any> {

@@ -12,13 +12,16 @@ import { AuthenticationService } from '../authentication-service.service';
 import { Router } from '@angular/router';
 import { SigninResponse } from '../models/signin-response.model';
 import * as moment from 'moment';
+import { Store } from '@ngrx/store';
+import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 
 @Injectable()
 export class AuthenitcationEffects {
   constructor(
     private actions$: Actions,
     private authenticationService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   login$ = createEffect(() =>
@@ -32,6 +35,7 @@ export class AuthenitcationEffects {
             const idToken = response.idToken;
             const expiresIn = response.expiresIn;
             const expiresAt = moment().add(response.idToken, 'second');
+            this.store.dispatch(SetLoading(false));
             return loginSuccess({ user: signInRequest.username, accessToken, idToken, expiresIn, expiresAt, redirect: true });          
           }),
           catchError((error) => {
