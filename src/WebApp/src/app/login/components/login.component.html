@@ -15,9 +15,9 @@
 
       <div class="flex flex-justify-center flex-column formWrapper">
         <!-- Login form -->
-        <div class="spinner" *ngIf="this.isLoading$ | async">
-          <span class="loader"></span>
-        </div>
+        <ng-container  *ngIf="this.isLoading$ | async">
+          <app-loading-spinner></app-loading-spinner>
+        </ng-container>
         
         <div class="loginFormContainer" *ngIf="!(this.isLoading$ | async)">
           

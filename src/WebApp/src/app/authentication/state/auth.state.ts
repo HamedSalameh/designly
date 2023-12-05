@@ -1,17 +1,17 @@
 export interface AuthenticationState {
     User: any;
-    Token: string;
-
+    IdToken: string;
     AccessToken: string;
     RefreshToken: string;
     ExpiresIn: string;
+    ExpiresAt: string;
 }
 
 export const InitialAuthenticationState: AuthenticationState = {
     User: null,
-    Token: '',
-
+    IdToken: '',
     AccessToken: '',
     RefreshToken: '',
-    ExpiresIn: ''
+    ExpiresIn: '',
+    ExpiresAt: ''
 };

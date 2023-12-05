@@ -1,0 +1,43 @@
+<!-- profile-menu.component.html -->
+<div class="profile-menu" (click)="toggleMenu()">
+  <div class="profile-menu-main">
+    <div class="user-details m-left-1">
+      <span class="user-name"> {{ this.loggedUser }} </span>
+    </div>
+    <img
+      class="user-image"
+      src="../../../assets/sample-profile.jpg"
+      alt="user image"
+    />
+  </div>
+
+  <div *ngIf="this.isMenuOpen" [@inOutAnimation] class="profile-menu-body">
+    <div class="menu-header">
+      <div class="user-image">
+        <img
+          class="user-image"
+          src="../../../assets/sample-profile.jpg"
+          alt="user image"
+        />
+      </div>
+      <div class="user-details">
+        <span class="user-name"> {{ this.loggedUser }} </span>
+      </div>
+    </div>
+
+    <div class="menu-body">
+      <ul>
+        <li (click)="this.logout()">
+          <i class="ph ph-user-circle"></i>
+          <span>עריכת פרופיל</span>
+        </li>
+        <li (click)="this.logout()">
+          <i class="ph ph-sign-out"></i>
+          <span>התנתקות</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>

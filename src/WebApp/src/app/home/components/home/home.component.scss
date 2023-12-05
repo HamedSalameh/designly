@@ -2,6 +2,7 @@
 
 /* Wrapper */
 .wrapper {
+    overflow: hidden;
     display: grid;
     grid-template-columns: $sidebar-width 1fr;
     grid-template-rows: $topbar-height 1fr;

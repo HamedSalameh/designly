@@ -14,6 +14,7 @@ import { SigninResponse } from '../models/signin-response.model';
 import * as moment from 'moment';
 import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
+import { Buffer } from 'buffer';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -36,7 +37,14 @@ export class AuthenitcationEffects {
             const expiresIn = response.expiresIn;
             const expiresAt = moment().add(response.idToken, 'second');
             this.store.dispatch(SetLoading(false));
-            return loginSuccess({ user: signInRequest.username, accessToken, idToken, expiresIn, expiresAt, redirect: true });          
+            return loginSuccess({
+              User: this.decodeIdToken(idToken),
+              IdToken: idToken,
+              AccessToken: accessToken,
+              RefreshToken: '',
+              ExpiresIn: expiresIn,
+              ExpiresAt: expiresAt,
+              redirect: true });
           }),
           catchError((error) => {
             return of(loginFailed({ error }));
@@ -72,5 +80,14 @@ export class AuthenitcationEffects {
       ),
     { dispatch: false }
   );
+
+  
+
+  private decodeIdToken(idToken: string) {
+    const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
+    const firstName = JSON.parse(decodedToken).given_name;
+    const lastName = JSON.parse(decodedToken).family_name;
+    return firstName + ' ' + lastName;
+  }
 
 }

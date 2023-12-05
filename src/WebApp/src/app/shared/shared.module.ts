@@ -16,6 +16,7 @@ import { ErrorStateReducer } from './state/error-state/error.reducer';
 import { StoreModule } from '@ngrx/store';
 import { SHARED_STATE_NAME } from './state/shared/shared.selectors';
 import { SharedStateReducer } from './state/shared/shared.reducers';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
 @NgModule({
@@ -24,6 +25,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
-    NotificationMessageComponent,    
+    NotificationMessageComponent,   
+    LoadingSpinnerComponent 
   ],
   providers: [
     // syncfusion

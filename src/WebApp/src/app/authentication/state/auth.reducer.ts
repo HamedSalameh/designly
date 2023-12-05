@@ -8,10 +8,13 @@ const _authenticationReducer = createReducer(
     on(loginSuccess, (state, action) => {
         return {
             ...state,
-            User: action.user,
-            AccessToken: action.accessToken,
-            RefreshToken: action.idToken,
-            ExpiresIn: action.expiresIn
+            User: action.User,
+            IdToken: action.IdToken,
+            AccessToken: action.AccessToken,
+            RefreshToken: action.RefreshToken,
+            ExpiresIn: action.ExpiresIn,
+            ExpiresAt: action.ExpiresAt
+
         }
     
     })

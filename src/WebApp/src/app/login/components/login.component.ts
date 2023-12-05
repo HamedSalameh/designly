@@ -52,11 +52,6 @@ export class LoginComponent {
       
       this.store.dispatch(loginStart({ signInRequest: signinRequest }));
       this.store.dispatch(SetLoading( true));
-      // this.authenticationService.signIn(signinRequest) .subscribe(response => {
-      //   // upon success naviate to the home page
-      //   console.log(response);
-      //   this.router.navigate(['/home']);
-      // });
     }
   }
 }

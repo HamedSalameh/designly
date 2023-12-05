@@ -19,11 +19,12 @@ export const CLEAR_ERROR = '[Auth] Clear Error';
 
 export const loginStart = createAction(LOGIN_START, props<{ signInRequest: SigninRequest }>());
 export const loginSuccess = createAction(LOGIN_SUCCESS, props<{ 
-    user: string,
-    accessToken: string,
-    idToken: string,
-    expiresIn: string,
-    expiresAt: any,
+    User: string,
+    IdToken: string,
+    AccessToken: string,
+    RefreshToken: string,
+    ExpiresIn: any,
+    ExpiresAt: any,
     redirect: boolean }>());
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
 
