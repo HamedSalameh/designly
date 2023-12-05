@@ -33,6 +33,7 @@
     "@syncfusion/ej2-angular-notifications": "^22.2.5",
     "@syncfusion/ej2-icons": "^22.2.5",
     "@syncfusion/ej2-material-theme": "~22.2.8",
+    "buffer": "^6.0.3",
     "json-server": "^0.17.3",
     "moment": "^2.29.4",
     "ngx-toastr": "^18.0.0",

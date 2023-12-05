@@ -1,4 +1,4 @@
-<div class="login-container">
+<div class="login-container"> 
   <div class="login-content">
     <div class="background-image"></div>
     <div class="form-container flex flex-justify-center flex-column">
@@ -13,8 +13,14 @@
         <span >{{ loginPageWelcomeMessageLine2 }}</span>
       </div>
 
-      <div class="flex flex-justify-center">
+      <div class="flex flex-justify-center flex-column formWrapper">
         <!-- Login form -->
+        <ng-container  *ngIf="this.isLoading$ | async">
+          <app-loading-spinner></app-loading-spinner>
+        </ng-container>
+        
+        <div class="loginFormContainer" *ngIf="!(this.isLoading$ | async)">
+          
         <form [formGroup]="loginForm" (ngSubmit)="signIn()" novalidate>
           <div class="form-row flex-justify-center">
             <div class="">
@@ -98,6 +104,8 @@
             </button>
           </div>
         </form>
+        </div>
+
       </div>
     </div>
   </div>

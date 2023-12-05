@@ -4,5 +4,12 @@
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
+    },
+
+    "/auth": {
+        "target": "https://127.0.0.1:7119/api/v1/Identity",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
     }
 }

@@ -2,8 +2,13 @@ import { ParseSourceFile } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { tap, pipe } from 'rxjs';
 import { AuthenticationService } from 'src/app/authentication/authentication-service.service';
 import { SigninRequest } from 'src/app/authentication/models/signin-request.model';
+import { loginStart } from 'src/app/authentication/state/auth.actions';
+import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
+import { isLoading } from 'src/app/shared/state/shared/shared.selectors';
 
 @Component({
   selector: 'app-login',
@@ -29,9 +34,10 @@ export class LoginComponent {
     password: new FormControl('')
   });
 
-  constructor(private formBuilder: FormBuilder, 
-    private authenticationService: AuthenticationService,
-    private router: Router) {
+  isLoading$ = this.store.select(isLoading);
+
+  constructor(private formBuilder: FormBuilder,
+    private store: Store) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -44,11 +50,8 @@ export class LoginComponent {
       signinRequest.username = this.loginForm.value.username || '';
       signinRequest.password = this.loginForm.value.password || '';
       
-      this.authenticationService.signIn(signinRequest) .subscribe(response => {
-        // upon success naviate to the home page
-        console.log(response);
-        this.router.navigate(['/home']);
-      });
+      this.store.dispatch(loginStart({ signInRequest: signinRequest }));
+      this.store.dispatch(SetLoading( true));
     }
   }
 }
