@@ -57,7 +57,7 @@ export class HttpErrorsInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const numberOfRetries = 3;
+    const numberOfRetries = 1;
     let count = 0;
 
     return next.handle(req)

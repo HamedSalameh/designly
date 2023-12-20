@@ -5,386 +5,226 @@
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
         <target>שם פרטי</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
         <source>FamilyName</source>
         <target>שם משפחה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
         <source>City</source>
         <target>עיר</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">61</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
         <source>Address</source>
         <target>כתובת</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
         <source>PrimaryPhoneNumber</source>
         <target>מספר טלפון ראשי</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">66</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
         <source>EmailAddress</source>
         <target>כתובת דוא&quot;ל</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Save" datatype="html">
         <source>Save</source>
         <target>שמירה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Cancel" datatype="html">
         <source>Cancel</source>
         <target>ביטול</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
         <source>Street</source>
         <target>רחוב</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
         <source>BuildingNumber</source>
         <target>מספר בית</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
         <source>AddressLine1</source>
         <target>כתובת פרטית</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Validation.Required" datatype="html">
         <source>Required</source>
         <target>שדה חובה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">134</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
         <source>Hello there! Welcome back — we missed you!</source>
         <target>שלום! חזרת? התגעגענו!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
         <source>Let&apos;s get you signed in to unleash your creativity.</source>
         <target>בוא נתחיל ונתחבר כדי לשחרר את היצירתיות שלך.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Username" datatype="html">
         <source>Username</source>
         <target>שם משתמש</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Password" datatype="html">
         <source>Password</source>
         <target>סיסמה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignIn" datatype="html">
         <source>Sign In</source>
         <target>התחברות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignUp" datatype="html">
         <source>Sign Up</source>
         <target>הרשמה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
         <target>התחברות עם Google</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
         <source>Request Password Reset</source>
         <target>איפוס סיסמה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
         <source>Sign In with Social Media</source>
         <target>התחברות עם רשתות חברתיות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Home" datatype="html">
         <source>Home</source>
         <target>בית</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Dashboard" datatype="html">
         <source>Dashboard</source>
         <target>לוח בקרה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Clients" datatype="html">
         <source>Clients</source>
         <target>לקוחות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Projects" datatype="html">
         <source>Projects</source>
         <target>פרויקטים</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Tasks" datatype="html">
         <source>Tasks</source>
         <target>משימות</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Communication" datatype="html">
         <source>Communication</source>
         <target>תקשורת</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Placeholders.Search" datatype="html">
         <source>Search</source>
         <target>חיפוש</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Buttons.AddNewClient" datatype="html">
         <source>Add New Client</source>
         <target>הוספת לקוח חדש</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Errors.NotFound" datatype="html">
         <source>The requested resource was not found.</source>
         <target>המשאב המבוקש לא נמצא.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Yes" datatype="html">
         <source>Yes</source>
         <target>כן</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="No" datatype="html">
         <source>No</source>
         <target>לא</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Ok" datatype="html">
         <source>Ok</source>
         <target>אישור</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Cancel" datatype="html">
         <source>Cancel</source>
         <target>ביטול</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Save" datatype="html">
         <source>Save</source>
         <target>שמירה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">9</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Edit" datatype="html">
         <source>Edit</source>
         <target>עריכה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
         <target>מחיקה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Share" datatype="html">
         <source>Share</source>
         <target>שיתוף</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Close" datatype="html">
         <source>Close</source>
         <target>סגירה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Error" datatype="html">
         <source>Error</source>
         <target>שגיאה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Warning" datatype="html">
         <source>Warning</source>
         <target>אזהרה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Information" datatype="html">
         <source>Information</source>
         <target>מידע</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Success" datatype="html">
         <source>Success</source>
         <target>הצלחה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS001" datatype="html">
         <source>CannotDeleteClient</source>
         <target>לא ניתן למחוק לקוח זה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS002" datatype="html">
         <source>RequiredField</source>
         <target>שדה חובה</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="ClientActions.ClientLoaded" datatype="html">
+        <source> Client loaded successfully</source>
+        <target state="new"> Client loaded successfully</target>
+      </trans-unit>
+      <trans-unit id="ClientActions.ClientAdded" datatype="html">
+        <source> Client added successfully</source>
+        <target state="new"> Client added successfully</target>
+      </trans-unit>
+      <trans-unit id="ClientActions.ClientUpdated" datatype="html">
+        <source> Client updated successfully</source>
+        <target state="new"> Client updated successfully</target>
+      </trans-unit>
+      <trans-unit id="ClientActions.ClientDeleted" datatype="html">
+        <source> Client deleted successfully</source>
+        <target state="new"> Client deleted successfully</target>
+      </trans-unit>
+      <trans-unit id="Global.NewClient" datatype="html">
+        <source>NewClient</source>
+        <target state="new">NewClient</target>
+      </trans-unit>
+      <trans-unit id="Shared.Loading" datatype="html">
+        <source>Loading...</source>
+        <target state="new">Loading...</target>
+      </trans-unit>
+      <trans-unit id="Errors.InternalServerError" datatype="html">
+        <source>An error occurred while processing your request.</source>
+        <target state="new">An error occurred while processing your request.</target>
+      </trans-unit>
+      <trans-unit id="Errors.BadRequest" datatype="html">
+        <source>The request was invalid.</source>
+        <target state="new">The request was invalid.</target>
+      </trans-unit>
+      <trans-unit id="Errors.Unauthorized" datatype="html">
+        <source>You are not authorized to perform this action.</source>
+        <target state="new">You are not authorized to perform this action.</target>
+      </trans-unit>
+      <trans-unit id="Errors.Forbidden" datatype="html">
+        <source>You are not authorized to perform this action.</source>
+        <target state="new">You are not authorized to perform this action.</target>
+      </trans-unit>
+      <trans-unit id="Errors.Client.UnableToLoadClients" datatype="html">
+        <source>We were unable to load the clients list. Please try again.</source>
+        <target state="new">לא הצלחנו לטעון את רשימת הלקוחות מהשרת. אנא נסה שנית</target>
       </trans-unit>
     </body>
   </file>

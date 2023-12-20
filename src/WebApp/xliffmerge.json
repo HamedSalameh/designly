@@ -1,0 +1,19 @@
+{
+    "xliffmergeOptions": {
+      "src": [
+        "locale/messages.xlf"
+      ],
+      "genDir": "local",
+      "languages": [
+        {
+          "label": "he",
+          "xliffmergeOptions": {
+            "src": [
+              "local/messages.he.xlf"
+            ]
+          }
+        }
+      ]
+    }
+  }
+  

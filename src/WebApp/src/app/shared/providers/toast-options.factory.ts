@@ -8,7 +8,7 @@ export function toastOptionsFactory() {
       // Adjust positionClass based on text direction
       positionClass: isRtl ? 'toast-top-left' : 'toast-top-right',
       // Add other options as needed
-      // timeOut: 1000,
+      timeOut: 5000,
       // extendedTimeOut: 1000,
       // enableHtml: true,
       // preventDuplicates: true,

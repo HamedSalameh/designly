@@ -4,405 +4,171 @@
     <body>
       <trans-unit id="ClientActions.ClientLoaded" datatype="html">
         <source> Client loaded successfully</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/client-state/clients.effects.ts</context>
-          <context context-type="linenumber">36</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="ClientActions.ClientAdded" datatype="html">
-        <source> Client created successfully</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/client-state/clients.effects.ts</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
+        <source> Client added successfully</source>
       </trans-unit>
       <trans-unit id="ClientActions.ClientUpdated" datatype="html">
         <source> Client updated successfully</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/client-state/clients.effects.ts</context>
-          <context context-type="linenumber">85</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="ClientActions.ClientDeleted" datatype="html">
         <source> Client deleted successfully</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/client-state/clients.effects.ts</context>
-          <context context-type="linenumber">108</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
         <source>FirstName</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
         <source>FamilyName</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
         <source>City</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Address" datatype="html">
         <source>Address</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
         <source>PrimaryPhoneNumber</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
         <source>EmailAddress</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/clients/clients.component.ts</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Save" datatype="html">
         <source>Save</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Cancel" datatype="html">
         <source>Cancel</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.NewClient" datatype="html">
         <source>NewClient</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
         <source>Street</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
         <source>BuildingNumber</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
         <source>AddressLine1</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Validation.Required" datatype="html">
         <source>Required</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/clients/components/edit-client/edit-client.component.ts</context>
-          <context context-type="linenumber">167</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
         <source>Hello there! Welcome back — we missed you!</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
         <source>Let&apos;s get you signed in to unleash your creativity.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Username" datatype="html">
         <source>Username</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.Password" datatype="html">
         <source>Password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignIn" datatype="html">
         <source>Sign In</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignUp" datatype="html">
         <source>Sign Up</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
         <source>Request Password Reset</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
         <source>Sign In with Social Media</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/components/login.component.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Home" datatype="html">
         <source>Home</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Dashboard" datatype="html">
         <source>Dashboard</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Clients" datatype="html">
         <source>Clients</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Projects" datatype="html">
         <source>Projects</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Tasks" datatype="html">
         <source>Tasks</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Global.Nav.Communication" datatype="html">
         <source>Communication</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/application-modules.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="Shared.Loading" datatype="html">
+        <source>Loading...</source>
       </trans-unit>
       <trans-unit id="Placeholders.Search" datatype="html">
         <source>Search</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Buttons.AddNewClient" datatype="html">
         <source>Add New Client</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/table/table.component.ts</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Errors.NotFound" datatype="html">
-        <source>The requested resource was not found.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Errors.BadRequest" datatype="html">
-        <source>The request was invalid.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Errors.Unauthorized" datatype="html">
-        <source>You are not authorized to perform this action.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Errors.Forbidden" datatype="html">
-        <source>You are not authorized to perform this action.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Errors.InternalServerError" datatype="html">
         <source>An error occurred while processing your request.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/error-translation.service.ts</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="Errors.NotFound" datatype="html">
+        <source>The requested resource was not found.</source>
+      </trans-unit>
+      <trans-unit id="Errors.BadRequest" datatype="html">
+        <source>The request was invalid.</source>
+      </trans-unit>
+      <trans-unit id="Errors.Unauthorized" datatype="html">
+        <source>You are not authorized to perform this action.</source>
+      </trans-unit>
+      <trans-unit id="Errors.Forbidden" datatype="html">
+        <source>You are not authorized to perform this action.</source>
       </trans-unit>
       <trans-unit id="Yes" datatype="html">
         <source>Yes</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="No" datatype="html">
         <source>No</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Ok" datatype="html">
         <source>Ok</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Cancel" datatype="html">
         <source>Cancel</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Save" datatype="html">
         <source>Save</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">9</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Edit" datatype="html">
         <source>Edit</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Share" datatype="html">
         <source>Share</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="Close" datatype="html">
         <source>Close</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Error" datatype="html">
         <source>Error</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Warning" datatype="html">
         <source>Warning</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Information" datatype="html">
         <source>Information</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="MessageTitle_Success" datatype="html">
         <source>Success</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS001" datatype="html">
         <source>CannotDeleteClient</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="messageFromCodeS002" datatype="html">
         <source>RequiredField</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/strings.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
+      </trans-unit>
+      <trans-unit id="Errors.Client.UnableToLoadClients" datatype="html">
+        <source>We were unable to load the clients list. Please try again.</source>
       </trans-unit>
     </body>
   </file>

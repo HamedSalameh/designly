@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpResponseStatusCodes, INetworkError } from '../types';
-
+import { HttpResponseStatusCodes, IError, INetworkError } from '../types';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorTranslationService {
+  constructor() {}
 
-  constructor() { }
+  getErrorMessage(error: IError): string {
+    if (error.message) {   
+      return error.message;
+    }
 
-  getTranslatedErrorMessage(error: any): string {
+    return this.getErrorMessageByErrorStatus(error);
+  }
+
+  private getErrorMessageByErrorStatus(error: any): string {
     let message = '';
 
     switch (error.originalError?.status) {
@@ -30,7 +36,7 @@ export class ErrorTranslationService {
       default:
         message = 'An error occurred while processing your request.';
         break;
-    };
+    }
 
     return message;
   }

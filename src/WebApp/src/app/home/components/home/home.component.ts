@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { Subject, combineLatest, takeUntil } from 'rxjs';
 import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
 import { Strings } from '../../../shared/strings';
 import { Store, select } from '@ngrx/store';
@@ -17,6 +17,7 @@ export class HomeComponent {
   networkErrorState;
   applicationErrorState;
   unknownErrorState;
+  private unsubscribe$: Subject<void> = new Subject();
 
   constructor(
     private store: Store<IApplicationState>,
@@ -26,32 +27,39 @@ export class HomeComponent {
     this.networkErrorState = this.store.pipe(select(getNetworkError));
     this.applicationErrorState = this.store.pipe(select(getApplicationError));
     this.unknownErrorState = this.store.pipe(select(getUnknownError));
+  }
 
-    // subscribe to multuple observables
-    let subscription = combineLatest([
+  ngOnInit() {
+    combineLatest([
       this.networkErrorState,
       this.applicationErrorState,
       this.unknownErrorState,
-    ]).subscribe(([networkError, applicationError, unknownError]) => {
-      const messageTitle = Strings.MessageTitle_Error;
+    ])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([networkError, applicationError, unknownError]) => {
+        const messageTitle = Strings.MessageTitle_Error;
 
-      // Future enhancement: add a switch statement to handle different types of errors
-      if (networkError) {
-        const message = this.errorTranslationService.getTranslatedErrorMessage(networkError);
-        this.toastr.error(message, messageTitle, toastOptionsFactory());
-        
-        return;
-      }
-      if (applicationError) {
-        const message = this.errorTranslationService.getTranslatedErrorMessage(applicationError);
-        this.toastr.error(message, messageTitle, toastOptionsFactory());
-        return;
-      }
-      if (unknownError) {
-        const message = this.errorTranslationService.getTranslatedErrorMessage(unknownError);
-        this.toastr.error(message, messageTitle, toastOptionsFactory());
-        return;
-      }
-    });
+        if (networkError) {
+          console.log('networkError', networkError);
+          const message = this.errorTranslationService.getErrorMessage(networkError);
+          this.toastr.error(message, messageTitle, toastOptionsFactory());
+        }
+        if (applicationError) {
+          console.log('applicationError', applicationError);
+          const message = this.errorTranslationService.getErrorMessage(applicationError);
+          this.toastr.error(message, messageTitle, toastOptionsFactory());
+        }
+        if (unknownError) {
+          console.log('unknownError', unknownError);
+          const message = this.errorTranslationService.getErrorMessage(unknownError);
+          this.toastr.error(message, messageTitle, toastOptionsFactory());
+        }
+      });
   }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
 }

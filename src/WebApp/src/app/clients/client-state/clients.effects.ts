@@ -18,11 +18,12 @@ import {
 } from './clients.actions';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import { Store } from '@ngrx/store';
-import { raiseNetworkError } from 'src/app/shared/state/error-state/error.actions';
 import { ToastrService } from 'ngx-toastr';
 import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
 import { Update } from '@ngrx/entity';
 import { Client } from '../models/client.model';
+import { ErrorTranslationService } from 'src/app/shared/services/error-handling.service';
+import { Strings } from 'src/app/shared/strings';
 
 @Injectable()
 export class ClientsEffects {
@@ -30,7 +31,8 @@ export class ClientsEffects {
     private store: Store,
     private actions$: Actions,
     private clientsService: ClientsService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private errorHandlingService: ErrorTranslationService
   ) {}
 
     getClientsList$ = createEffect(() => 
@@ -42,8 +44,10 @@ export class ClientsEffects {
             return getClientsRequestSuccess({ payload: clients });
           }),
           catchError((error) => {
-            return of(raiseNetworkError({ payload: error }));
-          })
+            error.message = Strings.UnableToLoadClientsList;
+            this.errorHandlingService.handleError(error);
+            return of();
+            })
         );
       })
     ));
@@ -61,7 +65,8 @@ export class ClientsEffects {
           }),
           catchError((error) => {
             this.store.dispatch(unselectClient());
-            return of(raiseNetworkError({ payload: error }));
+            this.errorHandlingService.handleError(error);
+            return of();
           })
         );
       })
@@ -84,12 +89,8 @@ export class ClientsEffects {
             return addClientRequestSuccess({ payload: newClient });
           }),
           catchError((error) => {
-            console.debug('addClient effect - ERROR', error);
-            return of(
-              raiseNetworkError({
-                payload: { message: 'Network error', originalError: error },
-              })
-            );
+            this.errorHandlingService.handleError(error);
+            return of();
           })
         );
       })
@@ -116,12 +117,8 @@ export class ClientsEffects {
             return updateClientRequestSuccess({ client: updatedClient });
           }),
           catchError((error) => {
-            console.debug('updateClient effect - ERROR', error);
-            return of(
-              raiseNetworkError({
-                payload: { message: 'Network error', originalError: error },
-              })
-            );
+            this.errorHandlingService.handleError(error);
+            return of();            
           })
         );
       })
@@ -140,12 +137,8 @@ export class ClientsEffects {
             return deleteClientRequestSuccess({ payload: { id: action.clientId } });
           }),
           catchError((error) => {
-            console.debug('deleteClient effect - ERROR', error);
-            return of(
-              raiseNetworkError({
-                payload: { message: 'Network error', originalError: error },
-              })
-            );
+            this.errorHandlingService.handleError(error);
+            return of();
           })
         );
       })

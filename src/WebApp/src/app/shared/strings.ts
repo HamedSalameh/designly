@@ -21,5 +21,8 @@ export class Strings {
     // Message codes from server
     static messageFromCodeS001 = $localize`:@@messageFromCodeS001:CannotDeleteClient`;
     static messageFromCodeS002 = $localize`:@@messageFromCodeS002:RequiredField`;
+
+    // Error messages
+    static UnableToLoadClientsList = $localize`:@@Errors.Client.UnableToLoadClients:We were unable to load the clients list. Please try again.`;
 }
 
