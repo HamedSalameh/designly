@@ -15,6 +15,7 @@ import * as moment from 'moment';
 import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { Buffer } from 'buffer';
+import { User } from './auth.state';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -83,11 +84,21 @@ export class AuthenitcationEffects {
 
   
 
-  private decodeIdToken(idToken: string) {
+  private decodeIdToken(idToken: string) : User {
     const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
-    const firstName = JSON.parse(decodedToken).given_name;
-    const lastName = JSON.parse(decodedToken).family_name;
-    return firstName + ' ' + lastName;
-  }
+    const parsedToken = JSON.parse(decodedToken);
 
+    const user: User = {
+      email : parsedToken.email,
+      family_name : parsedToken.family_name,
+      given_name : parsedToken.given_name,
+      name : parsedToken.given_name + ' ' + parsedToken.family_name,
+      tenant_id : parsedToken['cognito:groups']?.[0] || "",
+      profile_image : parsedToken.profile_image || "",
+      roles : parsedToken.roles || [],
+      permissions : parsedToken.permissions || []
+    }
+
+    return user;
+  }
 }

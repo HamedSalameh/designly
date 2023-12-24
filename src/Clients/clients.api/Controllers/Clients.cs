@@ -13,21 +13,14 @@ namespace Clients.API.Controllers
 {
 
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class ClientsController : ControllerBase
+    public class ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator) : ControllerBase
     {
-        private readonly ILogger<ClientsController> logger;
-        private readonly IMapper mapper;
-        private readonly IMediator mediator;
-
-        public ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        }
+        private readonly ILogger<ClientsController> logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IMapper mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        private readonly IMediator mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -69,7 +62,7 @@ namespace Clients.API.Controllers
         {
             if (id == default)
             {
-                logger.LogError("Invalid value of Id : ", id);
+                logger.LogError($"Invalid value of Id : {id}");
                 return BadRequest(id);
             }
 
@@ -94,7 +87,7 @@ namespace Clients.API.Controllers
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError("Invalid value for {nameof(id)} : {id}", id);
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
                 return BadRequest(id);
             }
 
@@ -105,7 +98,7 @@ namespace Clients.API.Controllers
             return Ok(clientDto);
         }
 
-        [HttpPost("search")]    
+        [HttpPost("search")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -136,7 +129,7 @@ namespace Clients.API.Controllers
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError("Invalid value for {id} : {id}", nameof(id));
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
                 return BadRequest(id);
             }
 
@@ -156,7 +149,7 @@ namespace Clients.API.Controllers
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError("Invalid value for {id} : {id}", nameof(id));
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
                 return BadRequest(id);
             }
 

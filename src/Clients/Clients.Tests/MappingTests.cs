@@ -3,8 +3,6 @@ using Clients.API.DTO;
 using Clients.API.Mappers;
 using Clients.Domain.Entities;
 using Clients.Domain.ValueObjects;
-using NuGet.Frameworks;
-using System.Collections.Generic;
 
 namespace Clients.Tests
 {
@@ -17,7 +15,7 @@ namespace Clients.Tests
         readonly string street = "SomeStreet";
         readonly string city = "cityName";
         readonly string buildingNumber = "bn-05";
-        readonly List<string> addressLines = new() { "address line1", "address line2" };
+        readonly List<string> addressLines = ["address line1", "address line2"];
         readonly string primaryPhoneNumer = "123-9222333";
         readonly string secondaryNumberNumber = "12-9987878";
         readonly string emailAddress = "someaddress@mailserver.com";
@@ -74,7 +72,7 @@ namespace Clients.Tests
                 Assert.That(addressDto.City, Is.EqualTo(address.City));
                 Assert.That(addressDto.Street, Is.EqualTo(address.Street));
                 Assert.That(addressDto.BuildingNumber, Is.EqualTo(address.BuildingNumber));
-                Assert.That(addressDto.AddressLines?.Any(), Is.True);
+                Assert.That(addressDto.AddressLines?.Count, Is.Not.EqualTo(0));
                 Assert.That(addressDto.AddressLines, Is.EquivalentTo(address.AddressLines));
             });
         }

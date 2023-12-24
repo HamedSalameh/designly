@@ -6,16 +6,10 @@ namespace Clients.Application.Commands
 {
     public record DeleteClientCommand(Guid Id) : IRequest;
     
-    public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
+    public class DeleteClientCommandHandler(ILogger<DeleteClientCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<DeleteClientCommand>
     {
-        private readonly ILogger<DeleteClientCommandHandler> logger;
-        private readonly IUnitOfWork unitOfWork;
-
-        public DeleteClientCommandHandler(ILogger<DeleteClientCommandHandler> logger, IUnitOfWork unitOfWork)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        }
+        private readonly ILogger<DeleteClientCommandHandler> logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
         public async Task<Unit> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {

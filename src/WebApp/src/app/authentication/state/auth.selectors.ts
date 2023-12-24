@@ -20,6 +20,10 @@ export const isAuthenticated = createSelector(
     authenticationFeatureSelector,
     (state: AuthenticationState) => !!state.AccessToken && !isTokenExpired(state.AccessToken)
 )
+export const getAccessToken = createSelector(
+    authenticationFeatureSelector,
+    (state: AuthenticationState) => state.AccessToken
+)
 
 function isTokenExpired(token: string) {
     const decodedToken = Buffer.from(token.split('.')[1], 'base64').toString();

@@ -26,7 +26,8 @@ export class ProfileMenuComponent {
   loggedUser: string = '';
 
   constructor(private store: Store) {
-    this.loggedUser$.subscribe((user) => (this.loggedUser = user));
+    this.loggedUser$.subscribe((user) => (
+      this.loggedUser = `${user?.given_name} ${user?.family_name}` ));
   }
 
   toggleMenu() {

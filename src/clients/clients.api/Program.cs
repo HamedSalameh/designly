@@ -8,6 +8,9 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
 using Clients.API.Middleware;
+using Clients.API.Identity;
+using Polly;
+using Microsoft.AspNetCore.Authorization;
 
 public class Program
 {
@@ -40,8 +43,9 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
 
         // Enabled authentication
-        //builder.Services.AddJwtBearerConfig(configuration);
-        builder.Services.AddAuthorization();
+        builder.Services.AddJwtBearerConfig(configuration);
+
+        RegisterAuthorizationAndPolicyHandlers(builder);
 
         // Configure Swagger
         builder.Services.ConfigureSecuredSwagger();
@@ -77,7 +81,7 @@ public class Program
                 options.OAuthUsePkce();
             });
         }
-        
+
         // Register the custom middleware
         app.UseMiddleware<ValidationExceptionHandingMiddleware>();
 
@@ -92,7 +96,6 @@ public class Program
         app.UseEndpoints(endpoints =>
         {
             ConfigureHealthChecksRouting(endpoints);
-
             endpoints.MapControllers();
         });
 
@@ -121,5 +124,20 @@ public class Program
                     }
                 });
         }
+    }
+
+    private static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(IdentityData.AdminUserPolicyName,
+                policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()));
+
+            options.AddPolicy(IdentityData.AccountOwnerPolicyName,
+                policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
+        });
+
+        builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
     }
 }

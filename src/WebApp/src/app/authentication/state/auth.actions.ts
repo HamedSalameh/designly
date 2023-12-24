@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { SigninRequest } from "../models/signin-request.model";
+import { User } from "./auth.state";
 
 export const LOGIN_START = '[Auth] Login Start';
 export const LOGIN_SUCCESS = '[Auth] Login Success';
@@ -19,7 +20,7 @@ export const CLEAR_ERROR = '[Auth] Clear Error';
 
 export const loginStart = createAction(LOGIN_START, props<{ signInRequest: SigninRequest }>());
 export const loginSuccess = createAction(LOGIN_SUCCESS, props<{ 
-    User: string,
+    User: User | null,
     IdToken: string,
     AccessToken: string,
     RefreshToken: string,
