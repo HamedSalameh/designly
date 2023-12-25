@@ -1,4 +1,4 @@
-import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
+import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 import { Client } from '../models/client.model';
 
 export function CreateDraftClient(): Client {
@@ -6,7 +6,7 @@ export function CreateDraftClient(): Client {
     Id: NEW_CLIENT_ID,
     FirstName: '',
     FamilyName: '',
-    TenantId: DEVELOPMENT_TENANT_ID,
+    TenantId: '',
     ContactDetails: {
       PrimaryPhoneNumber: '',
       EmailAddress: '',

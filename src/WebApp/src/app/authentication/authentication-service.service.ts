@@ -34,4 +34,8 @@ export class AuthenticationService {
         formData,
         httpOptions);
   }
+
+  public signOut(): Observable<any> {
+    return this.httpClient.post(`${this.serviceAddress}/signout`, null);
+  }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Clients.API.DTO;
+using Clients.API.Identity;
 using Clients.Application.Commands;
 using Clients.Application.Queries;
 using Clients.Domain;
@@ -13,21 +14,15 @@ namespace Clients.API.Controllers
 {
 
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class ClientsController : ControllerBase
+    public class ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator, IAuthorizationProvider authorizationProvider) : ControllerBase
     {
-        private readonly ILogger<ClientsController> logger;
-        private readonly IMapper mapper;
-        private readonly IMediator mediator;
-
-        public ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        }
+        private readonly ILogger<ClientsController> logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IMapper mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        private readonly IMediator mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        private readonly IAuthorizationProvider authroizationProvider = authorizationProvider ?? throw new ArgumentNullException(nameof(authroizationProvider));
 
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -43,12 +38,15 @@ namespace Clients.API.Controllers
                 return BadRequest($"The submitted client object is not valid or empty");
             }
 
-            var draftClient = mapper.Map<Client>(clientDto);
+            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
+            if (tenantId is null || Guid.Empty == tenantId)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)}");
+                return BadRequest($"The submitted tenant Id is not valid or empty");
+            }
 
-            // TODO: Set the tenant Id from the logged in user context tenant
-            // In production, the tenant Id will be set from the logged in user context
-            logger.LogWarning("Setting the tenant Id to the development tenant");
-            draftClient.TenantId = Consts.DevelopmentTenant;
+            var draftClient = mapper.Map<Client>(clientDto);
+            draftClient.TenantId = tenantId.Value;
 
             var createClientCommand = new CreateClientCommand(draftClient);
 
@@ -69,8 +67,15 @@ namespace Clients.API.Controllers
         {
             if (id == default)
             {
-                logger.LogError("Invalid value of Id : ", id);
+                logger.LogError($"Invalid value of Id : {id}");
                 return BadRequest(id);
+            }
+
+            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
+            if (tenantId is null || Guid.Empty == tenantId)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)}");
+                return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
             clientDto.Id = id;
@@ -94,18 +99,25 @@ namespace Clients.API.Controllers
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError("Invalid value for {nameof(id)} : {id}", id);
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
                 return BadRequest(id);
             }
 
-            var client = await mediator.Send(new GetClientQuery(id), cancellationToken).ConfigureAwait(false);
+            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
+            if (tenantId is null || Guid.Empty == tenantId)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)}");
+                return BadRequest($"The submitted tenant Id is not valid or empty");
+            }
+
+            var client = await mediator.Send(new GetClientQuery(tenantId.Value, id), cancellationToken).ConfigureAwait(false);
 
             var clientDto = mapper.Map<ClientDto>(client);
 
             return Ok(clientDto);
         }
 
-        [HttpPost("search")]    
+        [HttpPost("search")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -119,7 +131,14 @@ namespace Clients.API.Controllers
                 return BadRequest($"The submitted search object is not valid or empty");
             }
 
-            var clientSearchQuery = new SearchClientsQuery(clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
+            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
+            if (tenantId is null || Guid.Empty == tenantId)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)}");
+                return BadRequest($"The submitted tenant Id is not valid or empty");
+            }
+
+            var clientSearchQuery = new SearchClientsQuery(tenantId.Value, clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
             var clients = await mediator.Send(clientSearchQuery, cancellationToken).ConfigureAwait(false);
             var clientDtos = mapper.Map<IEnumerable<ClientDto>>(clients);
             
@@ -136,35 +155,22 @@ namespace Clients.API.Controllers
         {
             if (id == default || id == Guid.Empty)
             {
-                logger.LogError("Invalid value for {id} : {id}", nameof(id));
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
                 return BadRequest(id);
             }
 
-            var deleteClientCommand = new DeleteClientCommand(id);
+            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
+            if (tenantId is null || Guid.Empty == tenantId)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)}");
+                return BadRequest($"The submitted tenant Id is not valid or empty");
+            }
+
+            var deleteClientCommand = new DeleteClientCommand(tenantId.Value, id);
 
             await mediator.Send(deleteClientCommand, cancellationToken).ConfigureAwait(false);
 
             return Ok();
-        }
-
-        [HttpGet("{id}/canDelete")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CanDelete(Guid id, CancellationToken cancellationToken)
-        {
-            if (id == default || id == Guid.Empty)
-            {
-                logger.LogError("Invalid value for {id} : {id}", nameof(id));
-                return BadRequest(id);
-            }
-
-            var canDeleteClientQuery = new CanDeleteClientQuery(id);
-
-            var canDelete = await mediator.Send(canDeleteClientQuery, cancellationToken).ConfigureAwait(false);
-
-            return Ok(canDelete);
         }
 
         protected string BuildResourceLocation<T>(T Id)

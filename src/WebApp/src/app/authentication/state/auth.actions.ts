@@ -1,11 +1,13 @@
 import { createAction, props } from "@ngrx/store";
 import { SigninRequest } from "../models/signin-request.model";
+import { User } from "./auth.state";
 
 export const LOGIN_START = '[Auth] Login Start';
 export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAILED = '[Auth] Login Failed';
 
 export const LOGOUT = '[Auth] Logout';
+export const REVOKE_TOKENS = '[Auth] Revoke Tokens';
 
 export const CLEAR_ERROR = '[Auth] Clear Error';
 // Signup is not supported in MVP
@@ -19,7 +21,7 @@ export const CLEAR_ERROR = '[Auth] Clear Error';
 
 export const loginStart = createAction(LOGIN_START, props<{ signInRequest: SigninRequest }>());
 export const loginSuccess = createAction(LOGIN_SUCCESS, props<{ 
-    User: string,
+    User: User | null,
     IdToken: string,
     AccessToken: string,
     RefreshToken: string,
@@ -29,3 +31,4 @@ export const loginSuccess = createAction(LOGIN_SUCCESS, props<{
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
 
 export const logout = createAction(LOGOUT);
+export const revokeTokens = createAction(REVOKE_TOKENS);

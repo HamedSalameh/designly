@@ -140,18 +140,24 @@ namespace Clients.Infrastructure.Persistance
             return client;
         }
 
-        public async Task DeleteClientAsync(Guid id, CancellationToken cancellationToken)
+        public async Task DeleteClientAsync(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (id == default || id == Guid.Empty)
+            if (clientId == default || clientId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentNullException(nameof(clientId));
+            }
+
+            if (TenantId == default || TenantId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(TenantId));
             }
 
             // use dapper to delete client
             var parameters = new DynamicParameters();
-            parameters.Add("id", id, DbType.Guid);
+            parameters.Add("id", clientId, DbType.Guid);
+            parameters.Add("tenant_id", TenantId, DbType.Guid);
 
-            var sqlCommand = "DELETE FROM clients WHERE id=@id";
+            var sqlCommand = "DELETE FROM clients WHERE id=@id AND tenant_id=@tenant_id";
 
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
@@ -171,26 +177,13 @@ namespace Clients.Infrastructure.Persistance
             }
         }
 
-        public async Task<Client?> GetClientAsyncNoTracking(Guid id, CancellationToken cancellationToken)
+        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid id, CancellationToken cancellationToken)
         {
-            if (id == default || id == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            var client = await _dbContext.Clients.AsNoTracking()
-                .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken)
-                .ConfigureAwait(false);
-
-            return client;
-        }
-
-        public async Task<Client?> GetClientAsyncWithDapper(Guid id, CancellationToken cancellationToken)
-        {
-            var sqlCommand = "SELECT * FROM clients WHERE id=@id";
+            var sqlCommand = "SELECT * FROM clients WHERE id=@id AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();
             dynamic.Add(nameof(id), id);
+            dynamic.Add(nameof(TenantId), TenantId);
 
             _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
@@ -216,10 +209,13 @@ namespace Clients.Infrastructure.Persistance
             };
         }
 
-        public async Task<IEnumerable<Client>> SearchClientsAsync(string firstName, string familyName, string city, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Client>> SearchClientsAsync(Guid tenantId, string firstName, string familyName, string city, CancellationToken cancellationToken)
         {
             var query = new Query("clients")
                 .Select();
+
+            // TentantId is a must operator
+            query.Where("tenant_id", tenantId);
 
             if (!string.IsNullOrEmpty(firstName))
             {

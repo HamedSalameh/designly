@@ -7,12 +7,13 @@ import {
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EMPTY, Observable, catchError, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
-import { DEVELOPMENT_TENANT_ID, NEW_CLIENT_ID } from 'src/app/shared/constants';
+import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { swapBounds } from '@syncfusion/ej2/diagrams';
 import { CreateDraftClient } from '../../factories/client.factory';
+import { getTenantId } from 'src/app/authentication/state/auth.selectors';
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -24,6 +25,7 @@ export class EditClientComponent implements OnInit {
   selectedClient$: Observable<Client | null> = of(null);
   selectedClient: Client | null = null;
   newClientDraftId = NEW_CLIENT_ID;
+  tenantId = '';
 
   localizedSave = $localize`:@@Global.Save:Save`;
   localizedCancel = $localize`:@@Global.Cancel:Cancel`;
@@ -70,6 +72,9 @@ export class EditClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.select(getTenantId).subscribe((tenantId) => {
+      this.tenantId = tenantId || '';
+    });
     // localize basic info labels
     this.localizedFirstName = $localize`:@@Global.BasicInfo.FirstName:FirstName`;
     this.localizedFamilyName = $localize`:@@Global.BasicInfo.FamilyName:FamilyName`;
@@ -91,6 +96,8 @@ export class EditClientComponent implements OnInit {
   onSave() {
     console.debug('[EditClientComponent] [onSave]');
     const client: Client = this.createClientFromForm();
+    client.TenantId = this.tenantId;
+    
     this.SaveEditClient.emit(client);
   }
 

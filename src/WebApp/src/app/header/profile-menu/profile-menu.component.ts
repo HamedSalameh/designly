@@ -1,6 +1,7 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { logout } from 'src/app/authentication/state/auth.actions';
 import { getUser } from 'src/app/authentication/state/auth.selectors';
 
 @Component({
@@ -26,7 +27,8 @@ export class ProfileMenuComponent {
   loggedUser: string = '';
 
   constructor(private store: Store) {
-    this.loggedUser$.subscribe((user) => (this.loggedUser = user));
+    this.loggedUser$.subscribe((user) => (
+      this.loggedUser = `${user?.given_name} ${user?.family_name}` ));
   }
 
   toggleMenu() {
@@ -34,7 +36,7 @@ export class ProfileMenuComponent {
   }
 
   logout() {
-    throw new Error('Method not implemented.');
+    this.store.dispatch(logout());
   }
 
   

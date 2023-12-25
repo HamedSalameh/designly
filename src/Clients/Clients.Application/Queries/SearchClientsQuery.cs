@@ -5,30 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Queries
 {
-    public class SearchClientsQuery : IRequest<IEnumerable<Client>>
+    public class SearchClientsQuery(Guid tenantId, string? firstName, string? familyName, string? city) : IRequest<IEnumerable<Client>>
     {
-        public string? FirstName { get; }
-        public string? FamilyName { get; }
-        public string? City { get; }
-
-        public SearchClientsQuery(string? firstName, string? familyName, string? city)
-        {
-            FirstName = firstName;
-            FamilyName = familyName;
-            City = city;
-        }
+        public Guid TenantId { get; } = tenantId;
+        public string? FirstName { get; } = firstName;
+        public string? FamilyName { get; } = familyName;
+        public string? City { get; } = city;
     }
 
-    public class SearchClientsQueryHandler : IRequestHandler<SearchClientsQuery, IEnumerable<Client>>
+    public class SearchClientsQueryHandler(ILogger<SearchClientsQueryHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<SearchClientsQuery, IEnumerable<Client>>
     {
-        private readonly ILogger<SearchClientsQueryHandler> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public SearchClientsQueryHandler(ILogger<SearchClientsQueryHandler> logger, IUnitOfWork unitOfWork)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        }
+        private readonly ILogger<SearchClientsQueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
         public async Task<IEnumerable<Client>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
         {
@@ -37,12 +25,17 @@ namespace Clients.Application.Queries
                 _logger.LogError($"Invalid value for {nameof(request)}: {request}");
                 throw new ArgumentException($"Invalid value of request object");
             }
+            var tenantId = request.TenantId;
+            var firstName = request.FirstName ?? string.Empty;
+            var familyName = request.FamilyName ?? string.Empty;
+            var city = request.City ?? string.Empty;
 
             _logger.LogDebug($"Search clients: firstName={request?.FirstName}, familyName={request?.FamilyName}, City={request?.City})");
             var clients = await _unitOfWork.ClientsRepository.SearchClientsAsync(
-                request.FirstName ?? string.Empty,
-                request.FamilyName ?? string.Empty, 
-                request.City ?? string.Empty, 
+                tenantId,
+                firstName,
+                familyName,
+                city,
                 cancellationToken).ConfigureAwait(false);
             
             return clients;
