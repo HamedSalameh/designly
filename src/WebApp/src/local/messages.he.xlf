@@ -208,7 +208,7 @@
       </trans-unit>
       <trans-unit id="Errors.InternalServerError" datatype="html">
         <source>An error occurred while processing your request.</source>
-        <target state="new">An error occurred while processing your request.</target>
+        <target state="new">משהו טוב בצד שלנו, אנא נסה שנית</target>
       </trans-unit>
       <trans-unit id="Errors.BadRequest" datatype="html">
         <source>The request was invalid.</source>
@@ -216,15 +216,23 @@
       </trans-unit>
       <trans-unit id="Errors.Unauthorized" datatype="html">
         <source>You are not authorized to perform this action.</source>
-        <target state="new">You are not authorized to perform this action.</target>
+        <target state="new">אין לך הרשאה לבצע את הפעולה</target>
       </trans-unit>
       <trans-unit id="Errors.Forbidden" datatype="html">
         <source>You are not authorized to perform this action.</source>
-        <target state="new">You are not authorized to perform this action.</target>
+        <target state="new">אינך מורשה לבצע את הפעולה</target>
       </trans-unit>
       <trans-unit id="Errors.Client.UnableToLoadClients" datatype="html">
         <source>We were unable to load the clients list. Please try again.</source>
         <target state="new">לא הצלחנו לטעון את רשימת הלקוחות מהשרת. אנא נסה שנית</target>
+      </trans-unit>
+      <trans-unit id="Errors.ServiceUnavailable" datatype="html">
+        <source>The service is currently unavailable. Please try again later.</source>
+        <target state="new">השרת אינו זמין כעת. נא לנסות שנית יותר מאוחר.</target>
+      </trans-unit>
+      <trans-unit id="Errors.UnexpectedError" datatype="html">
+        <source>An unexpected error occurred. Please try again later.</source>
+        <target state="new">An unexpected error occurred. Please try again later.</target>
       </trans-unit>
     </body>
   </file>

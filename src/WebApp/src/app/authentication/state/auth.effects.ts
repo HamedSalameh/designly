@@ -6,7 +6,8 @@ import {
   loginFailed,
   loginStart,
   loginSuccess,
-  logout
+  logout,
+  revokeTokens
 } from './auth.actions';
 import { AuthenticationService } from '../authentication-service.service';
 import { Router } from '@angular/router';
@@ -70,30 +71,46 @@ export class AuthenitcationEffects {
     { dispatch: false }
   );
 
-  logout$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(logout),
+  logoutRedirect$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(...[logout]),
         tap(() => {
-          //this.cookieService.remove("token");
-          this.router.navigateByUrl('/login');
+          this.router.navigate(['/login']);
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
+  logout$ = createEffect( () =>
+    this.actions$.pipe(
+      ofType(logout),
+      mergeMap(() => {
+        return this.authenticationService.signOut().pipe(
+          map(() => {
+            return revokeTokens();
+          }),
+          catchError((error) => {
+            return of(loginFailed({ error }));
+          })
+        );
+      })
+  ));
   
-
   private decodeIdToken(idToken: string) : User {
     const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
     const parsedToken = JSON.parse(decodedToken);
+
+    const tenantClaim = parsedToken['cognito:groups']?.find((group: string) => group.startsWith('tenant_'));
+    const tenant_id: string | undefined = tenantClaim?.substring('tenant_'.length);
 
     const user: User = {
       email : parsedToken.email,
       family_name : parsedToken.family_name,
       given_name : parsedToken.given_name,
       name : parsedToken.given_name + ' ' + parsedToken.family_name,
-      tenant_id : parsedToken['cognito:groups']?.[0] || "",
+      tenant_id : tenant_id || "",
       profile_image : parsedToken.profile_image || "",
       roles : parsedToken.roles || [],
       permissions : parsedToken.permissions || []

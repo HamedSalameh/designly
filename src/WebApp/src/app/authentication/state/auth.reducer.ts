@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from "@ngrx/store";
 import { AuthenticationState, InitialAuthenticationState } from "./auth.state";
-import { loginSuccess} from "./auth.actions";
+import { loginSuccess, revokeTokens} from "./auth.actions";
 
 const _authenticationReducer = createReducer(
     InitialAuthenticationState,
@@ -16,7 +16,17 @@ const _authenticationReducer = createReducer(
             ExpiresAt: action.ExpiresAt
 
         }
-    
+    }),
+    on(revokeTokens, (state) => {
+        return {
+            ...state,
+            User: null,
+            IdToken: '',
+            AccessToken: '',
+            RefreshToken: '',
+            ExpiresIn: '',
+            ExpiresAt: ''
+        }
     })
 );
 

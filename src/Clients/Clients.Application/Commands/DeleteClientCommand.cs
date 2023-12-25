@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Commands
 {
-    public record DeleteClientCommand(Guid Id) : IRequest;
+    public record DeleteClientCommand(Guid TenantId, Guid clientId) : IRequest;
     
     public class DeleteClientCommandHandler(ILogger<DeleteClientCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<DeleteClientCommand>
     {
@@ -15,14 +15,17 @@ namespace Clients.Application.Commands
         {
             ArgumentNullException.ThrowIfNull(nameof(request));
 
-            if (request.Id == Guid.Empty) {
-                throw new ArgumentException(nameof(request.Id));
+            if (request.clientId == Guid.Empty) {
+                throw new ArgumentException(nameof(request.clientId));
             }
 
+            var clientId = request.clientId;
+            var tenantId = request.TenantId;
+
             await unitOfWork.ClientsRepository.
-                DeleteClientAsync(request.Id, cancellationToken).
+                DeleteClientAsync(tenantId, clientId, cancellationToken).
                 ConfigureAwait(false);
-            logger.LogDebug("Deleted client {request.Id}", request.Id);
+            logger.LogDebug("Deleted client {request.Id}", clientId);
 
             return Unit.Value;
         }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthInterceptorService } from './auth-interceptor.service';
 import { AuthenticationReduce } from './state/auth.reducer';
 import { StoreModule } from '@ngrx/store';
 import { AUTH_STATE_NAME } from './state/auth.selectors';
@@ -17,8 +16,7 @@ import { AuthenitcationEffects } from './state/auth.effects';
     EffectsModule.forFeature([AuthenitcationEffects]),
     StoreModule.forFeature(AUTH_STATE_NAME, AuthenticationReduce),
   ],
-  providers: [
-    AuthInterceptorService
+  providers: [    
   ]
 })
 export class AuthenticationModule { }

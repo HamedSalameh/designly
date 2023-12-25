@@ -7,6 +7,7 @@ export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAILED = '[Auth] Login Failed';
 
 export const LOGOUT = '[Auth] Logout';
+export const REVOKE_TOKENS = '[Auth] Revoke Tokens';
 
 export const CLEAR_ERROR = '[Auth] Clear Error';
 // Signup is not supported in MVP
@@ -30,3 +31,4 @@ export const loginSuccess = createAction(LOGIN_SUCCESS, props<{
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
 
 export const logout = createAction(LOGOUT);
+export const revokeTokens = createAction(REVOKE_TOKENS);

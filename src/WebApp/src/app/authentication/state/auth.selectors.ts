@@ -25,6 +25,11 @@ export const getAccessToken = createSelector(
     (state: AuthenticationState) => state.AccessToken
 )
 
+export const getTenantId = createSelector(
+    authenticationFeatureSelector,
+    (state: AuthenticationState) => state.User?.tenant_id
+)
+
 function isTokenExpired(token: string) {
     const decodedToken = Buffer.from(token.split('.')[1], 'base64').toString();
     const expiry = JSON.parse(decodedToken).exp;

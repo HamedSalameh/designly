@@ -170,6 +170,12 @@
       <trans-unit id="Errors.Client.UnableToLoadClients" datatype="html">
         <source>We were unable to load the clients list. Please try again.</source>
       </trans-unit>
+      <trans-unit id="Errors.ServiceUnavailable" datatype="html">
+        <source>The service is currently unavailable. Please try again later.</source>
+      </trans-unit>
+      <trans-unit id="Errors.UnexpectedError" datatype="html">
+        <source>An unexpected error occurred. Please try again later.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

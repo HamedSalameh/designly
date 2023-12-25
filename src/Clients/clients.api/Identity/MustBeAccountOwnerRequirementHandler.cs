@@ -35,8 +35,8 @@ namespace Clients.API.Identity
             try
             {
                 var isAccountOwnerUser = context.User.Claims.FirstOrDefault(claim =>
-                                       claim.Type == IdentityData.CognitoGroupsClaimType &&
-                                                              claim.Value == IdentityData.CognitoAccountOwnerGroup);
+                                       claim.Type == IdentityData.JwtClaimType &&
+                                                              claim.Value == IdentityData.AccountOwnerGroup);
 
                 return isAccountOwnerUser != null;
             }

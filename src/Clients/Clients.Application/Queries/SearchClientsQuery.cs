@@ -5,8 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Queries
 {
-    public class SearchClientsQuery(string? firstName, string? familyName, string? city) : IRequest<IEnumerable<Client>>
+    public class SearchClientsQuery(Guid tenantId, string? firstName, string? familyName, string? city) : IRequest<IEnumerable<Client>>
     {
+        public Guid TenantId { get; } = tenantId;
         public string? FirstName { get; } = firstName;
         public string? FamilyName { get; } = familyName;
         public string? City { get; } = city;
@@ -24,12 +25,14 @@ namespace Clients.Application.Queries
                 _logger.LogError($"Invalid value for {nameof(request)}: {request}");
                 throw new ArgumentException($"Invalid value of request object");
             }
+            var tenantId = request.TenantId;
             var firstName = request.FirstName ?? string.Empty;
             var familyName = request.FamilyName ?? string.Empty;
             var city = request.City ?? string.Empty;
 
             _logger.LogDebug($"Search clients: firstName={request?.FirstName}, familyName={request?.FamilyName}, City={request?.City})");
             var clients = await _unitOfWork.ClientsRepository.SearchClientsAsync(
+                tenantId,
                 firstName,
                 familyName,
                 city,

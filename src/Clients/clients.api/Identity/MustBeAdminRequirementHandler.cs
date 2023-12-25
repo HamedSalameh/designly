@@ -37,8 +37,8 @@ namespace Clients.API.Identity
             try
             {
                 var isAdminUser = context.User.Claims.FirstOrDefault(claim =>
-                        claim.Type == IdentityData.CognitoGroupsClaimType &&
-                        claim.Value == IdentityData.CognitoAdminGroup);
+                        claim.Type == IdentityData.JwtClaimType &&
+                        claim.Value == IdentityData.AdminGroup);
 
                 return isAdminUser != null;
             }

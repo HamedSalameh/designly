@@ -54,6 +54,7 @@ public class Program
         // Configure Services
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
         builder.Services.AddApplication(configuration);
+        builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
 
         // Configure Health checks
         builder.Services.AddHealthChecks();
