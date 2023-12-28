@@ -17,29 +17,19 @@
   border: none;
   border-radius: $border-radius;
   background-color: transparent;
-  color: $color-v1-black;
 
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
-.btn-normal {
+.btn-size-normal {
   font-size: $font-size-default;
   padding: 8px 16px;
 }
 
-.btn-medium {
+.btn-size-medium {
   font-size: $font-size-medium;
   padding: 8px 16px;
-}
-
-.btn:hover {
-  background-color: $color-v1-black-80;
-  color: $color-v1-white;
-}
-
-.btn:active {
-  background-color: $color-v1-black-40;
 }
 
 .btn:disabled {
@@ -49,13 +39,26 @@
 }
 
 .btn-primary {
-  background-color: $color-v1-black-80;
+  background-color: $primary-600;
+  color: white;
+  box-shadow: $shadow-xs;
+}
+
+.btn-primary:not(:disabled):hover {
+  background-color: $primary-700;
 }
 
 .btn-secondary {
-  background-color: $color-v1-secondary;
+  background-color: white;
+  color: $grey-800;
+  box-shadow: $shadow-sm;
 }
 
+.btn-secondary:hover {
+  background-color: $grey-50;
+}
+
+// Icon Button
 
 .icon-btn {
   width: 32px;

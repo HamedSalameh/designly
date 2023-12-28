@@ -9,11 +9,12 @@
   border-radius: $border-radius;
   padding: 0 10px;
   margin-bottom: 10px;
+  box-shadow: $shadow-xs;
 }
 
 .a-input:focus {
   outline: none;
-  border-color: $color-v1-black;
+  border-color: $grey-100;
 }
 
 .a-input::placeholder {

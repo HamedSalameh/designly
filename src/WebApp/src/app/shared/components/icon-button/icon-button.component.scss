@@ -33,5 +33,10 @@
 
     .icon {
         margin: 0 0.5em;
+
+        i {
+            font-size: $font-size-extra-large;
+            font-weight: 100;
+        }
     }
 }

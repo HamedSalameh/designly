@@ -4,6 +4,7 @@ import { HomeComponent } from '../home/components/home/home.component';
 import { RouteConfiguration } from '../shared/models/route-configuration.model';
 import { RouteFactory } from '../shared/providers/route-provider.factory';
 import { ApplicationModules } from '../shared/application-modules';
+import { AuthenticationGuard } from '../authentication/authentication.guard';
 
 const ModuleRoutes = new Map<string, RouteConfiguration>();
 
@@ -30,6 +31,7 @@ const routes: Routes = [
     children: [
       {
         path: ModuleRoutes.get('dashboard')?.path, // 'dashboard
+        canActivate: [AuthenticationGuard],
         data: { breadcrumb: ModuleRoutes.get('dashboard')?.breadcrumb },
         loadChildren: () =>
           import('../dashboard/dashboard.module').then(
@@ -38,6 +40,7 @@ const routes: Routes = [
       },
       {
         path: ModuleRoutes.get('clients')?.path, // 'clients
+        canActivate: [AuthenticationGuard],
         data: { breadcrumb: ModuleRoutes.get('clients')?.breadcrumb },
         loadChildren: () =>
           import('../clients/clients.module').then((m) => m.ClientsModule),

@@ -19,7 +19,6 @@
     grid-area: left-nav;
     max-width: 100%;
     height: 100%;
-    background-color: $color-v1-bacground;
     border: $border-width solid $border-color;
   }
   
@@ -39,7 +38,7 @@
   /* Main Content Area */
   .main-content {
     grid-area: main-content;
-    background-color: $color-v1-white;
+    background-color: $grey-50;
     padding: 20px;
   }
   

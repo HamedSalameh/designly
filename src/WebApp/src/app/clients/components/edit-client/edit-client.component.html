@@ -1,4 +1,4 @@
-<div class="app-card">
+<div class="a-card">
   <div class="p-top-0 p-left-1 p-right-1">
       <div class="card-header form-row m-bottom-2">
       <div class="card-title">
@@ -160,14 +160,14 @@
       <div class="form-section">
         <div class="form-row flex-justify-end">
           <button
-            class="btn btn-primary btn-normal"
+            class="btn btn-primary btn-size-normal p-right-2 p-left-2" 
             (click)="this.onSave()"
             [disabled]="!this.ClientInfo.valid || this.ClientInfo.pristine"
           >
             {{ localizedSave }}
           </button>
           <button
-            class="btn btn-secondary btn-normal"
+            class="btn btn-secondary btn-size-normal p-right-2 p-left-2"
             (click)="this.onCancel()"
           >
             {{ localizedCancel }}
