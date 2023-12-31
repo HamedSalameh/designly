@@ -3,7 +3,11 @@
 // -----------------------------------------------------------------------------
 
 // Typography
-$font-family: "Inter", open-sans, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Noto+Sans+Hebrew&family=Open+Sans:wght@300&display=swap');
+
+// $font-family: "Inter", open-sans, sans-serif;
+$font-family: "Noto Sans Hebrew", open-sans, sans-serif;
+
 
 $font-size-small: 12px;
 $font-size-default: 14px;

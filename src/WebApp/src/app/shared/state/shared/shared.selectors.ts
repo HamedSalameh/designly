@@ -9,3 +9,8 @@ export const isLoading = createSelector(
     SharedStateFeatureSelector,
     (state: SharedState) => state.loading
 );
+
+export const activeModule = createSelector(
+    SharedStateFeatureSelector,
+    (state: SharedState) => state.activeModule
+);

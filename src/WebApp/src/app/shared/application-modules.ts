@@ -8,7 +8,7 @@ export class ApplicationModules {
     path: 'home',
     icon: Icons.home,
     route: '/home',
-    fullRoute: '/home',
+    fullRoute: '/home'
   };
 
   static dashboard: ApplicationModule = {

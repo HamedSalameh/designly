@@ -9,15 +9,22 @@
   border-radius: $border-radius;
   padding: 0 10px;
   margin-bottom: 10px;
+  box-shadow: $shadow-xs;
 }
 
 .a-input:focus {
   outline: none;
-  border-color: $color-v1-black;
+  box-shadow: $focus-ring;
 }
 
 .a-input::placeholder {
-  color: $color-v1-placeholder;
+  color: $grey-500;
+}
+
+.a-input:disabled {
+  background-color: $grey-100;
+  color: $grey-500;
+  cursor: not-allowed;
 }
 
 .a-input-label {

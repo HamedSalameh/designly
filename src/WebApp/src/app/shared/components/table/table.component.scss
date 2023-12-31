@@ -1,7 +1,15 @@
-@import "main.scss";
+@import 'main.scss';
 
 .p-inputtext {
-    border-radius: $border-radius;
-    border: 1px solid $border-color;    
-    background-color: $color-v1-primary;
-  }
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  background-color: $color-v1-primary;
+}
+
+ejs-grid {
+  box-shadow: $shadow-md;
+}
+
+.e-grid * {
+  font-size: $font-size-default !important;
+}

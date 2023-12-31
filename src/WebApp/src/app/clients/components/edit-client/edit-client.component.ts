@@ -5,13 +5,12 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EMPTY, Observable, catchError, of, switchMap, take, tap } from 'rxjs';
+import { Observable, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
 import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
-import { swapBounds } from '@syncfusion/ej2/diagrams';
 import { CreateDraftClient } from '../../factories/client.factory';
 import { getTenantId } from 'src/app/authentication/state/auth.selectors';
 @Component({
