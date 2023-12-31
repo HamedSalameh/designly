@@ -27,9 +27,15 @@ export class ProfileMenuComponent {
   loggedUser: string = '';
 
   constructor(private store: Store) {
-    this.loggedUser$.subscribe((user) => (
-      this.loggedUser = `${user?.given_name} ${user?.family_name}` ));
-  }
+    this.loggedUser$.subscribe((user) => {
+      // if the user is not undefined, set the loggedUser to the user's name
+      if (!user) {
+        this.loggedUser = '';
+        this.store.dispatch(logout());
+      } 
+      this.loggedUser = `${user?.given_name} ${user?.family_name}` });
+    }
+  
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;

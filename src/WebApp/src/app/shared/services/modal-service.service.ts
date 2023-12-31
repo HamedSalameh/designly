@@ -28,6 +28,7 @@ export class ModalService {
 
     modalComponent.instance.title = config?.title;
     modalComponent.instance.content = config?.content;
+
     modalComponent.instance.closeEvent.subscribe(() => {
       this.closeModal();
     });

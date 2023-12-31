@@ -46,8 +46,8 @@ export class ViewClientInfoComponent implements OnDestroy{
 
   onDelete() {
     this.modalService.open(this.modalTemplate, {
-      title: ClientStrings.DeleteClientMessage,
-      content: ClientStrings.DeleteClientTitle,
+      title: ClientStrings.DeleteClientTitle,
+      content: ClientStrings.DeleteClientMessage,
       }).subscribe( action => {
         console.log(action);
         if (action === 'confirm') {
