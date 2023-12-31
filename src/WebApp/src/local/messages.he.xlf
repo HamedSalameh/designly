@@ -200,7 +200,7 @@
       </trans-unit>
       <trans-unit id="Global.NewClient" datatype="html">
         <source>NewClient</source>
-        <target state="new">NewClient</target>
+        <target state="new">לקוח חדש</target>
       </trans-unit>
       <trans-unit id="Shared.Loading" datatype="html">
         <source>Loading...</source>

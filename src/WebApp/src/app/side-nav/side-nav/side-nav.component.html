@@ -7,12 +7,27 @@
     </div>
   </div>
   <div class="modules-block">
+
+    <ng-container *ngFor="let module of modules" >
+      <button
+        (click)="handleClick(module)"
+        [ngClass]="{ 'active': isActiveModule(module.path) }"
+        class="module-button"
+      >
+        <span class="icon">
+          <i class="fa-solid {{ module.icon }}"></i>
+        </span>
+        <span class="mr-2">{{ module.label }}</span>
+      </button>
+    </ng-container>
     
-    <app-icon-button
+
+    <!-- <app-icon-button
       *ngFor="let module of this.modules"
       [icon]="module.icon"
       [text]="module.label"
+      [path]="module.path"
       (buttonClick)="navigateToModule(module)"
-    ></app-icon-button>
+    ></app-icon-button> -->
   </div>
 </div>

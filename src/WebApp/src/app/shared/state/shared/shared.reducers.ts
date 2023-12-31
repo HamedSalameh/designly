@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from "@ngrx/store";
 import { InitialSharedState, SharedState } from "./shared.state";
-import { SetLoading } from "./shared.actions";
+import { SetActiveModule, SetLoading } from "./shared.actions";
 
 const _sharedStateReducer = createReducer(
     InitialSharedState,
@@ -10,8 +10,14 @@ const _sharedStateReducer = createReducer(
             ...state,
             loading: action.payload
         }
-    })
-)
+    }),
+    on(SetActiveModule, (state, action) => {
+        return {
+            ...state,
+            activeModule: action.payload
+        }
+    }
+    ));
 
 export function SharedStateReducer(state: SharedState | undefined, action: Action) {
     return _sharedStateReducer(state, action)

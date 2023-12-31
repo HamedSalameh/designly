@@ -1,13 +1,13 @@
 <div class="a-card">
-  <div class="p-top-0 p-left-1 p-right-1">
-      <div class="card-header form-row m-bottom-2">
-      <div class="card-title">
-        <label *ngIf="this.selectedClient?.Id !== this.newClientDraftId" class="section-title"
-          >{{ this.selectedClient?.FirstName }}
-          {{ this.selectedClient?.FamilyName }}
-        </label>
-        <label *ngIf="this.selectedClient?.Id === this.newClientDraftId"> {{ this.localizedNewClient }} </label>
-      </div>
+  <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
+      <div class="card-header form-row m-bottom-3">
+        <div class="card-title">
+          <label *ngIf="this.selectedClient?.Id !== this.newClientDraftId" class="section-title"
+            >{{ this.selectedClient?.FirstName }}
+            {{ this.selectedClient?.FamilyName }}
+          </label>
+          <label *ngIf="this.selectedClient?.Id === this.newClientDraftId"> {{ localizedNewClient }} </label>
+        </div>
     </div>
 
     <ng-container [formGroup]="ClientInfo">
@@ -158,16 +158,16 @@
       <div class="form-section-divider"></div>
 
       <div class="form-section">
-        <div class="form-row flex-justify-end">
+        <div class="flex flex-row flex-justify-end">
           <button
-            class="btn btn-primary btn-size-normal p-right-2 p-left-2" 
+            class="btn btn-primary btn-size-normal p-right-2 p-left-2 m-right-1 m-left-1" 
             (click)="this.onSave()"
             [disabled]="!this.ClientInfo.valid || this.ClientInfo.pristine"
           >
             {{ localizedSave }}
           </button>
           <button
-            class="btn btn-secondary btn-size-normal p-right-2 p-left-2"
+            class="btn btn-secondary btn-size-normal p-right-2 p-left-2 m-right-1 m-left-1"
             (click)="this.onCancel()"
           >
             {{ localizedCancel }}

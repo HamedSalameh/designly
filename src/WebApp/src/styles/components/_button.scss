@@ -63,15 +63,11 @@
 .icon-btn {
   width: 32px;
   height: 32px;
+  color: $primary-500;;
 }
 
 .icon-btn:hover {
-  background-color: $color-v1-black-80;
-  color: $color-v1-white;
-}
-
-.icon-btn:active {
-  background-color: $color-v1-black-40;
+  background-color: $grey-100;
 }
 
 .icon-btn-medium {

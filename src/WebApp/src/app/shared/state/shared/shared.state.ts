@@ -1,8 +1,10 @@
 export interface SharedState {
-    loading: boolean;    
+    loading: boolean;
+    activeModule: string;
 }
 
 export const InitialSharedState: SharedState = {
-    loading: false
+    loading: false,
+    activeModule: ''
 };
 

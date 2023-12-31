@@ -14,11 +14,17 @@
 
 .a-input:focus {
   outline: none;
-  border-color: $grey-100;
+  box-shadow: $focus-ring;
 }
 
 .a-input::placeholder {
-  color: $color-v1-placeholder;
+  color: $grey-500;
+}
+
+.a-input:disabled {
+  background-color: $grey-100;
+  color: $grey-500;
+  cursor: not-allowed;
 }
 
 .a-input-label {

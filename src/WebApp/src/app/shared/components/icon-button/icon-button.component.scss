@@ -7,6 +7,10 @@
     flex-basis: 0;
 }
 
+.active {
+    background-color: red;
+  }
+
 .module-button {
     display: flex;
     flex-direction: row;
@@ -24,11 +28,16 @@
 
     &:focus {
         outline: none;
-        background-color: $color-v1-primary;
     }
 
     &:not([disabled]):hover {
-        background-color: $color-v1-black-40;
+        color: $primary-500;
+    }
+
+    &.selected {
+        color: white;
+        background-color: $primary-500;
+        font-weight: bold;
     }
 
     .icon {
