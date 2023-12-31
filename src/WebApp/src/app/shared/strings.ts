@@ -10,6 +10,10 @@ export class Strings {
   static Share = $localize`:@@Share:Share`;
   static Close = $localize`:@@Close:Close`;
 
+  // Global Basic Info
+  static FirstName = $localize`:@@Global.BasicInfo.FirstName:FirstName`;
+  static FamilyName = $localize`:@@Global.BasicInfo.FamilyName:FamilyName`;
+
   // Message titles
   static MessageTitle_Error = $localize`:@@MessageTitle_Error:Error`;
   static MessageTitle_Warning = $localize`:@@MessageTitle_Warning:Warning`;

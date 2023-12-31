@@ -176,6 +176,12 @@
       <trans-unit id="Errors.UnexpectedError" datatype="html">
         <source>An unexpected error occurred. Please try again later.</source>
       </trans-unit>
+      <trans-unit id="Clients.Actions.DeleteClientMessage" datatype="html">
+        <source>Are you sure you want to delete this client?</source>
+      </trans-unit>
+      <trans-unit id="Clients.Actions.DeleteClientTitle" datatype="html">
+        <source>Delete Client</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

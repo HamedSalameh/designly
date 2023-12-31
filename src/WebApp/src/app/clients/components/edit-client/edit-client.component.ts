@@ -13,6 +13,9 @@ import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { CreateDraftClient } from '../../factories/client.factory';
 import { getTenantId } from 'src/app/authentication/state/auth.selectors';
+import { ClientStrings } from '../../strings';
+import { Strings } from 'src/app/shared/strings';
+
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -75,8 +78,8 @@ export class EditClientComponent implements OnInit {
       this.tenantId = tenantId || '';
     });
     // localize basic info labels
-    this.localizedFirstName = $localize`:@@Global.BasicInfo.FirstName:FirstName`;
-    this.localizedFamilyName = $localize`:@@Global.BasicInfo.FamilyName:FamilyName`;
+    this.localizedFirstName = Strings.FirstName;
+    this.localizedFamilyName = Strings.FamilyName;
     // localize address details labels
     this.localizedCity = $localize`:@@Global.AddressInfo.City:City`;
     this.localizedStreet = $localize`:@@Global.AddressInfo.Street:Street`;

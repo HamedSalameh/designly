@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subject, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { getSingleClient } from 'src/app/clients/client-state/clients.selectors';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
+import { ModalService } from 'src/app/shared/services/modal-service.service';
+import { ClientStrings } from '../../strings';
+import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-view-client-info',
@@ -18,8 +21,13 @@ export class ViewClientInfoComponent implements OnDestroy{
   selectedClient$: Observable<any | null> = of(null);
   private unsubscribe$: Subject<void> = new Subject();
 
+  // element ref for modelTemplate
+  @ViewChild('modalTemplate')
+  modalTemplate!: TemplateRef<any>;
+
   constructor(
-    private xStore: Store<IApplicationState>
+    private xStore: Store<IApplicationState>,
+    private modalService: ModalService
   ) {
     this.selectedClient$ = this.xStore.select(getSingleClient);
   }
@@ -37,7 +45,16 @@ export class ViewClientInfoComponent implements OnDestroy{
   }
 
   onDelete() {
-    this.DeleteClient.emit();
+    this.modalService.open(this.modalTemplate, {
+      title: ClientStrings.DeleteClientMessage,
+      content: ClientStrings.DeleteClientTitle,
+      }).subscribe( action => {
+        console.log(action);
+        if (action === 'confirm') {
+          this.DeleteClient.emit();
+        }
+      });
+
   }
 
   ngOnDestroy(): void {
