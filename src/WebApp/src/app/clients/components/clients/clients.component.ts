@@ -1,14 +1,11 @@
-import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { map, tap } from 'rxjs';
-import { ClientsService } from '../../services/clients.service';
 import { TableData } from '../../models/table-data.model';
-import { Thickness } from '@syncfusion/ej2/diagrams';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { Store } from '@ngrx/store';
 import { getClientsRequest } from '../../client-state/clients.actions';
-import { Client } from '../../models/client.model';
 import { getClients } from '../../client-state/clients.selectors';
+import { Strings } from 'src/app/shared/strings';
+import { ClientStrings } from '../../strings';
 
 @Component({
   selector: 'app-clients',
@@ -21,38 +18,48 @@ export class ClientsComponent {
 
   columnsDefinition = [
     {
-      ColumnHeader: $localize`:@@Global.BasicInfo.FirstName:FirstName`,
+      ColumnHeader: Strings.FirstName,
       DataField: 'FirstName',
     },
     {
-      ColumnHeader: $localize`:@@Global.BasicInfo.FamilyName:FamilyName`,
+      ColumnHeader: Strings.FamilyName,
       DataField: 'FamilyName',
     },
     {
-      ColumnHeader: $localize`:@@Global.AddressInfo.City:City`,
+      ColumnHeader: Strings.City,
       DataField: 'City',
     },
     {
-      ColumnHeader: $localize`:@@Global.AddressInfo.Address:Address`,
+      ColumnHeader: Strings.Address,
       DataField: 'Address',
     },
     {
-      ColumnHeader: $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`,
+      ColumnHeader: Strings.PrimaryPhoneNumer,
       DataField: 'primaryPhoneNumber',
     },
     {
-      ColumnHeader: $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`,
+      ColumnHeader: Strings.EmailAddress,
       DataField: 'Email',
     },
   ];
 
   tableData: TableData[] = [];
-
   tableColumns: any[] = [];
+  tableToolbarItems : any[] = [];
 
   constructor(private store: Store<IApplicationState>) {}
 
   ngOnInit(): void { 
+
+    this.tableToolbarItems = [
+      'Search',
+      {
+        text: ClientStrings.NewClient,
+        tooltipText: 'Add',
+        prefixIcon: 'e-plus',
+        id: 'addClientAction',
+      },
+    ]
 
     this.store.dispatch(getClientsRequest());
 

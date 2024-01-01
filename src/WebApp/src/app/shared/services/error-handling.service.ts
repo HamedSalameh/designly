@@ -17,6 +17,9 @@ export class ErrorTranslationService {
     var serverResponse = error.originalError?.status;
     // switch case for server response status
     switch (serverResponse) {
+      case 400:
+        error.message = Strings.BadRequest;
+        break;
       case 401:
         error.message = Strings.Unauthorized;
         // redirect to login page

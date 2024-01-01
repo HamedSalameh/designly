@@ -53,6 +53,9 @@ export class TableComponent implements OnInit {
   @Input()
   cols: any[] = [];
 
+  @Input()
+  toolbarItems: any[] = [];
+
   @Output()
   rowSelected: EventEmitter<any> = new EventEmitter();
 
@@ -67,15 +70,16 @@ export class TableComponent implements OnInit {
       key: '',
     };
 
-    this.toolbarOptions = [
-      'Search',
-      {
-        text: this.AddNewClient,
-        tooltipText: 'Add',
-        prefixIcon: 'e-plus',
-        id: 'addClientAction',
-      },
-    ];
+    if (this.toolbarItems) {
+      this.toolbarOptions = this.toolbarItems.map((item) => {
+        return {
+          text: item.text,
+          tooltipText: item.tooltipText,
+          prefixIcon: item.prefixIcon,
+          id: item.id,
+        };
+      });
+    }
   }
 
   toolbarClickHandler(args: ClickEventArgs) {

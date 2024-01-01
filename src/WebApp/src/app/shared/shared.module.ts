@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconButtonComponent } from './components/icon-button/icon-button.component';
 import { TableComponent } from './components/table/table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
@@ -17,15 +16,18 @@ import { StoreModule } from '@ngrx/store';
 import { SHARED_STATE_NAME } from './state/shared/shared.selectors';
 import { SharedStateReducer } from './state/shared/shared.reducers';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { ModalComponent } from './components/modal-component/modal-component.component';
+import { ModalService } from './services/modal-service.service';
+
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
 @NgModule({
   declarations: [
-    IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,
     LoadingSpinnerComponent,
+    ModalComponent,
   ],
   imports: [
     CommonModule,
@@ -39,18 +41,19 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     ToastModule
   ],
   exports: [
-    IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,   
-    LoadingSpinnerComponent 
+    LoadingSpinnerComponent,
+    ModalComponent
   ],
   providers: [
     // syncfusion
     SearchService,
     ToolbarService,
     SortService,
-    PageService
+    PageService,
+    ModalService
   ]
 })
 export class SharedModule {}

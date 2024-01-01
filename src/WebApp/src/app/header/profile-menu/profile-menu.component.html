@@ -29,11 +29,11 @@
       <ul>
         <li (click)="this.logout()">
           <i class="ph ph-user-circle"></i>
-          <span>עריכת פרופיל</span>
+          <span>{{ this.localizedEditProfile }}</span>
         </li>
         <li (click)="this.logout()">
           <i class="ph ph-sign-out"></i>
-          <span>התנתקות</span>
+          <span> {{ this.localizedLogout }} </span>
         </li>
       </ul>
     </div>

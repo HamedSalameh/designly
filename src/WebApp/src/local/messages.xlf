@@ -15,10 +15,10 @@
         <source> Client deleted successfully</source>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FirstName" datatype="html">
-        <source>FirstName</source>
+        <source>First Name</source>
       </trans-unit>
       <trans-unit id="Global.BasicInfo.FamilyName" datatype="html">
-        <source>FamilyName</source>
+        <source>Family Name</source>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.City" datatype="html">
         <source>City</source>
@@ -27,57 +27,51 @@
         <source>Address</source>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.PrimaryPhoneNumber" datatype="html">
-        <source>PrimaryPhoneNumber</source>
+        <source>Primary Phone Number</source>
       </trans-unit>
       <trans-unit id="Global.ContactInfo.EmailAddress" datatype="html">
-        <source>EmailAddress</source>
+        <source>Email Address</source>
       </trans-unit>
-      <trans-unit id="Global.Save" datatype="html">
-        <source>Save</source>
-      </trans-unit>
-      <trans-unit id="Global.Cancel" datatype="html">
-        <source>Cancel</source>
-      </trans-unit>
-      <trans-unit id="Global.NewClient" datatype="html">
-        <source>NewClient</source>
+      <trans-unit id="Clients.NewClient" datatype="html">
+        <source>New Client</source>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
         <source>Street</source>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.BuildingNumber" datatype="html">
-        <source>BuildingNumber</source>
+        <source>Building Number</source>
       </trans-unit>
       <trans-unit id="Global.AddressInfo.AddressLine1" datatype="html">
-        <source>AddressLine1</source>
+        <source>Address Line</source>
       </trans-unit>
       <trans-unit id="Global.Validation.Required" datatype="html">
-        <source>Required</source>
+        <source>Required Field</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
+      <trans-unit id="Login.WelcomeLine1" datatype="html">
         <source>Hello there! Welcome back — we missed you!</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
+      <trans-unit id="Login.WelcomeLine2" datatype="html">
         <source>Let&apos;s get you signed in to unleash your creativity.</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.Username" datatype="html">
+      <trans-unit id="Global.Username" datatype="html">
         <source>Username</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.Password" datatype="html">
+      <trans-unit id="Global.Password" datatype="html">
         <source>Password</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignIn" datatype="html">
+      <trans-unit id="Login.SignIn" datatype="html">
         <source>Sign In</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignUp" datatype="html">
+      <trans-unit id="Login.SignUp" datatype="html">
         <source>Sign Up</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
+      <trans-unit id="Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
+      <trans-unit id="Login.RequestPasswordReset" datatype="html">
         <source>Request Password Reset</source>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
+      <trans-unit id="Login.SignInWithSocialMedia" datatype="html">
         <source>Sign In with Social Media</source>
       </trans-unit>
       <trans-unit id="Global.Nav.Home" datatype="html">
@@ -162,10 +156,10 @@
         <source>Success</source>
       </trans-unit>
       <trans-unit id="messageFromCodeS001" datatype="html">
-        <source>CannotDeleteClient</source>
+        <source>Cannot Delete Client</source>
       </trans-unit>
       <trans-unit id="messageFromCodeS002" datatype="html">
-        <source>RequiredField</source>
+        <source>Required Field</source>
       </trans-unit>
       <trans-unit id="Errors.Client.UnableToLoadClients" datatype="html">
         <source>We were unable to load the clients list. Please try again.</source>
@@ -175,6 +169,21 @@
       </trans-unit>
       <trans-unit id="Errors.UnexpectedError" datatype="html">
         <source>An unexpected error occurred. Please try again later.</source>
+      </trans-unit>
+      <trans-unit id="Clients.Actions.DeleteClientMessage" datatype="html">
+        <source>Are you sure you want to delete this client?</source>
+      </trans-unit>
+      <trans-unit id="Clients.Actions.DeleteClientTitle" datatype="html">
+        <source>Delete Client</source>
+      </trans-unit>
+      <trans-unit id="Global.Login" datatype="html">
+        <source>Login</source>
+      </trans-unit>
+      <trans-unit id="Global.Logout" datatype="html">
+        <source>Logout</source>
+      </trans-unit>
+      <trans-unit id="Header.EditProfile" datatype="html">
+        <source>Edit Profile</source>
       </trans-unit>
     </body>
   </file>

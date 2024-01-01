@@ -99,10 +99,6 @@ export class ClientsManagementComponent implements OnDestroy {
     }
   }
 
-  onShare(): void {
-    console.debug('[ClientJacketComponent] [onShare]', this.client);
-  }
-
   onDelete(): void {
     if (this.activeClient)
       this.store.dispatch(

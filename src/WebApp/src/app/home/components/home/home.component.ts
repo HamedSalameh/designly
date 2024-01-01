@@ -29,7 +29,7 @@ export class HomeComponent {
     this.unknownErrorState = this.store.pipe(select(getUnknownError));
   }
 
-  ngOnInit() {
+  ngOnInit() {  
     combineLatest([
       this.networkErrorState,
       this.applicationErrorState,

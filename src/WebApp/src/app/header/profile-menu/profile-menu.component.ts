@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { logout } from 'src/app/authentication/state/auth.actions';
 import { getUser } from 'src/app/authentication/state/auth.selectors';
+import { HeaderStrings } from '../strings';
+import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-profile-menu',
@@ -22,14 +24,24 @@ import { getUser } from 'src/app/authentication/state/auth.selectors';
   ],
 })
 export class ProfileMenuComponent {
+
+  localizedEditProfile = HeaderStrings.EditProfile;
+  localizedLogout = Strings.Logout;
+
   isMenuOpen: boolean = false;
   loggedUser$ = this.store.select(getUser);
   loggedUser: string = '';
 
   constructor(private store: Store) {
-    this.loggedUser$.subscribe((user) => (
-      this.loggedUser = `${user?.given_name} ${user?.family_name}` ));
-  }
+    this.loggedUser$.subscribe((user) => {
+      // if the user is not undefined, set the loggedUser to the user's name
+      if (!user) {
+        this.loggedUser = '';
+        this.store.dispatch(logout());
+      } 
+      this.loggedUser = `${user?.given_name} ${user?.family_name}` });
+    }
+  
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
