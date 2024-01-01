@@ -1,12 +1,15 @@
 import { ClientsAdapter, IClientState, InitialClientsState } from './clients.state';
 
 import { createReducer, on } from '@ngrx/store';
-import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { addClientRequest, activateEditMode, activateViewMode, selectClient, unselectClient, getClientsRequestSuccess, getClientsRequestError, addClientRequestSuccess, updateClientRequestSuccess, deleteClientRequestSuccess } from './clients.actions';
+import { activateEditMode, activateViewMode, selectClient, unselectClient, getClientsRequestSuccess, getClientsRequestError, addClientRequestSuccess, updateClientRequestSuccess, deleteClientRequestSuccess, resetClientsState } from './clients.actions';
+import { globalResetState } from 'src/app/shared/state/shared/shared.actions';
 // Reducer
 
 export const ClientStateReducer = createReducer<IClientState>(
   InitialClientsState,
+
+  on(resetClientsState, (state) => ({ ...state, ...InitialClientsState })),
+  on(globalResetState, (state) => ({ ...state, ...InitialClientsState })),
 
   on(activateEditMode, (state, { clientId: payload }) => ({
     ...state,

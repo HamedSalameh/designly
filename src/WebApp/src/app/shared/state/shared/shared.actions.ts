@@ -8,6 +8,9 @@ export const SetLoading = createAction(
     (payload: boolean) => ({ payload })
 )
 
+export const resetSharedState = createAction('[Shared] Reset State');
+export const globalResetState = createAction('[Global] Reset State');
+
 export const SetActiveModule = createAction(
     SET_ACTIVE_MODULE,
     (payload: string) => ({ payload })

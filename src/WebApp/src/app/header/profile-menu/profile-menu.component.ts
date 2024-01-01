@@ -5,6 +5,8 @@ import { logout } from 'src/app/authentication/state/auth.actions';
 import { getUser } from 'src/app/authentication/state/auth.selectors';
 import { HeaderStrings } from '../strings';
 import { Strings } from 'src/app/shared/strings';
+import { resetClientsState } from 'src/app/clients/client-state/clients.actions';
+import { globalResetState, resetSharedState } from 'src/app/shared/state/shared/shared.actions';
 
 @Component({
   selector: 'app-profile-menu',
@@ -48,6 +50,9 @@ export class ProfileMenuComponent {
   }
 
   logout() {
+    this.store.dispatch(globalResetState());
+    //this.store.dispatch(resetSharedState());
+    //this.store.dispatch(resetClientsState());
     this.store.dispatch(logout());
   }
 

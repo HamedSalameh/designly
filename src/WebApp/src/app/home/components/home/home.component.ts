@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Subject, combineLatest, takeUntil } from 'rxjs';
-import { ErrorTranslationService } from 'src/app/shared/services/error-translation.service';
 import { Strings } from '../../../shared/strings';
 import { Store, select } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
@@ -21,8 +20,7 @@ export class HomeComponent {
 
   constructor(
     private store: Store<IApplicationState>,
-    private toastr: ToastrService,
-    private errorTranslationService: ErrorTranslationService
+    private toastr: ToastrService
   ) {
     this.networkErrorState = this.store.pipe(select(getNetworkError));
     this.applicationErrorState = this.store.pipe(select(getApplicationError));
@@ -41,17 +39,17 @@ export class HomeComponent {
 
         if (networkError) {
           console.log('networkError', networkError);
-          const message = this.errorTranslationService.getErrorMessage(networkError);
+          const message = networkError.message;
           this.toastr.error(message, messageTitle, toastOptionsFactory());
         }
         if (applicationError) {
           console.log('applicationError', applicationError);
-          const message = this.errorTranslationService.getErrorMessage(applicationError);
+          const message = applicationError.message;
           this.toastr.error(message, messageTitle, toastOptionsFactory());
         }
         if (unknownError) {
           console.log('unknownError', unknownError);
-          const message = this.errorTranslationService.getErrorMessage(unknownError);
+          const message = unknownError.message;
           this.toastr.error(message, messageTitle, toastOptionsFactory());
         }
       });

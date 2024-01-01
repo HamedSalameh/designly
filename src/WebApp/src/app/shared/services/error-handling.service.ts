@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Strings } from '../strings';
 import { raiseApplicationError } from '../state/error-state/error.actions';
 import { Router } from '@angular/router';
+import { globalResetState } from '../state/shared/shared.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class ErrorTranslationService {
       case 401:
         error.message = Strings.Unauthorized;
         // redirect to login page
+        this.store.dispatch(globalResetState());
         this.router.navigateByUrl('/login');
         return;
       case 403:
