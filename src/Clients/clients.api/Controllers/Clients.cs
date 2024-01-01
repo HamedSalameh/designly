@@ -113,7 +113,7 @@ namespace Clients.API.Controllers
             var client = await mediator.Send(new GetClientQuery(tenantId.Value, id), cancellationToken).ConfigureAwait(false);
 
             var clientDto = mapper.Map<ClientDto>(client);
-
+            
             return Ok(clientDto);
         }
 

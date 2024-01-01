@@ -9,6 +9,8 @@ export const selectClient = createAction(
 );
 export const unselectClient = createAction('[ClientState] UnselectClient');
 
+export const resetClientsState = createAction('[ClientState] ResetState');
+
 // Edit/View modes
 export const activateEditMode = createAction(
   '[ClientState] EditMode',
