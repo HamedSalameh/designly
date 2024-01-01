@@ -13,8 +13,8 @@ import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { CreateDraftClient } from '../../factories/client.factory';
 import { getTenantId } from 'src/app/authentication/state/auth.selectors';
-import { ClientStrings } from '../../strings';
 import { Strings } from 'src/app/shared/strings';
+import { ClientStrings } from '../../strings';
 
 @Component({
   selector: 'app-edit-client',
@@ -29,9 +29,9 @@ export class EditClientComponent implements OnInit {
   newClientDraftId = NEW_CLIENT_ID;
   tenantId = '';
 
-  localizedSave = $localize`:@@Global.Save:Save`;
-  localizedCancel = $localize`:@@Global.Cancel:Cancel`;
-  localizedNewClient = $localize`:@@Global.NewClient:NewClient`;
+  localizedSave = Strings.Save;
+  localizedCancel = Strings.Cancel;
+  localizedNewClient = ClientStrings.NewClient;
 
   localizedFirstName!: string;
   localizedFamilyName!: string;
@@ -81,13 +81,13 @@ export class EditClientComponent implements OnInit {
     this.localizedFirstName = Strings.FirstName;
     this.localizedFamilyName = Strings.FamilyName;
     // localize address details labels
-    this.localizedCity = $localize`:@@Global.AddressInfo.City:City`;
-    this.localizedStreet = $localize`:@@Global.AddressInfo.Street:Street`;
-    this.localizedBuildingNumber = $localize`:@@Global.AddressInfo.BuildingNumber:BuildingNumber`;
-    this.localizedAddressLine1 = $localize`:@@Global.AddressInfo.AddressLine1:AddressLine1`;
+    this.localizedCity = Strings.City;
+    this.localizedStreet = Strings.Street;
+    this.localizedBuildingNumber = Strings.BuildingNumber;
+    this.localizedAddressLine1 = Strings.AddressLine1;
     // localize contact details labels
-    this.localizedPrimaryPhoneNumber = $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`;
-    this.localizedEmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
+    this.localizedPrimaryPhoneNumber = Strings.PrimaryPhoneNumer;
+    this.localizedEmailAddress = Strings.EmailAddress;
   }
 
   onCancel() {
@@ -156,7 +156,7 @@ export class EditClientComponent implements OnInit {
     const controlName = `${formGroupName}.${formControlName}`;
     const formControl = this.ClientInfo.get(controlName);
     if (formControl?.hasError('required')) {
-      return $localize`:@@Global.Validation.Required:Required`;
+      return Strings.RequiredField;
     }
     return '';
   }

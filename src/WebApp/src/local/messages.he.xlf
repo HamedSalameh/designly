@@ -26,14 +26,6 @@
         <source>EmailAddress</source>
         <target>כתובת דוא&quot;ל</target>
       </trans-unit>
-      <trans-unit id="Global.Save" datatype="html">
-        <source>Save</source>
-        <target>שמירה</target>
-      </trans-unit>
-      <trans-unit id="Global.Cancel" datatype="html">
-        <source>Cancel</source>
-        <target>ביטול</target>
-      </trans-unit>
       <trans-unit id="Global.AddressInfo.Street" datatype="html">
         <source>Street</source>
         <target>רחוב</target>
@@ -50,39 +42,39 @@
         <source>Required</source>
         <target>שדה חובה</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeLine1" datatype="html">
+      <trans-unit id="Login.WelcomeLine1" datatype="html">
         <source>Hello there! Welcome back — we missed you!</source>
-        <target>שלום! חזרת? התגעגענו!</target>
+        <target>היי! ברוכים השבים! התגעגענו!</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.WelcomeLine2" datatype="html">
+      <trans-unit id="Login.WelcomeLine2" datatype="html">
         <source>Let&apos;s get you signed in to unleash your creativity.</source>
-        <target>בוא נתחיל ונתחבר כדי לשחרר את היצירתיות שלך.</target>
+        <target>בוא נתחבר למערכת כדי לשחרר את היצירתיות שלך.</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.Username" datatype="html">
+      <trans-unit id="Global.Username" datatype="html">
         <source>Username</source>
         <target>שם משתמש</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.Password" datatype="html">
+      <trans-unit id="Global.Password" datatype="html">
         <source>Password</source>
         <target>סיסמה</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignIn" datatype="html">
+      <trans-unit id="Login.SignIn" datatype="html">
         <source>Sign In</source>
         <target>התחברות</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignUp" datatype="html">
+      <trans-unit id="Login.SignUp" datatype="html">
         <source>Sign Up</source>
         <target>הרשמה</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignInWithGoogle" datatype="html">
+      <trans-unit id="Login.SignInWithGoogle" datatype="html">
         <source>Sign In with Google</source>
-        <target>התחברות עם Google</target>
+        <target>התחברות עם גוגל</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.RequestPasswordReset" datatype="html">
+      <trans-unit id="Login.RequestPasswordReset" datatype="html">
         <source>Request Password Reset</source>
         <target>איפוס סיסמה</target>
       </trans-unit>
-      <trans-unit id="Pages.Login.SignInWithSocialMedia" datatype="html">
+      <trans-unit id="Login.SignInWithSocialMedia" datatype="html">
         <source>Sign In with Social Media</source>
         <target>התחברות עם רשתות חברתיות</target>
       </trans-unit>
@@ -92,7 +84,7 @@
       </trans-unit>
       <trans-unit id="Global.Nav.Dashboard" datatype="html">
         <source>Dashboard</source>
-        <target>לוח בקרה</target>
+        <target>לוח שליטה</target>
       </trans-unit>
       <trans-unit id="Global.Nav.Clients" datatype="html">
         <source>Clients</source>
@@ -184,21 +176,21 @@
       </trans-unit>
       <trans-unit id="ClientActions.ClientLoaded" datatype="html">
         <source> Client loaded successfully</source>
-        <target state="new"> Client loaded successfully</target>
+        <target state="new"> יופי, הלקוח מוכן</target>
       </trans-unit>
       <trans-unit id="ClientActions.ClientAdded" datatype="html">
         <source> Client added successfully</source>
-        <target state="new"> Client added successfully</target>
+        <target state="new"> יופי! הלקוח נוצר</target>
       </trans-unit>
       <trans-unit id="ClientActions.ClientUpdated" datatype="html">
         <source> Client updated successfully</source>
-        <target state="new"> Client updated successfully</target>
+        <target state="new"> פרטי הלקוח עודכנו</target>
       </trans-unit>
       <trans-unit id="ClientActions.ClientDeleted" datatype="html">
         <source> Client deleted successfully</source>
-        <target state="new"> Client deleted successfully</target>
+        <target state="new"> הלקוח נמחק </target>
       </trans-unit>
-      <trans-unit id="Global.NewClient" datatype="html">
+      <trans-unit id="Clients.NewClient" datatype="html">
         <source>NewClient</source>
         <target state="new">לקוח חדש</target>
       </trans-unit>
@@ -208,11 +200,11 @@
       </trans-unit>
       <trans-unit id="Errors.InternalServerError" datatype="html">
         <source>An error occurred while processing your request.</source>
-        <target state="new">משהו טוב בצד שלנו, אנא נסה שנית</target>
+        <target state="new">משהו לא טוב קרה בצד שלנו, אנא נסה שנית</target>
       </trans-unit>
       <trans-unit id="Errors.BadRequest" datatype="html">
         <source>The request was invalid.</source>
-        <target state="new">The request was invalid.</target>
+        <target state="new">הפעולה לא הייתה תקינה</target>
       </trans-unit>
       <trans-unit id="Errors.Unauthorized" datatype="html">
         <source>You are not authorized to perform this action.</source>
@@ -241,6 +233,18 @@
       <trans-unit id="Clients.Actions.DeleteClientTitle" datatype="html">
         <source>Delete Client</source>
         <target state="new">מחיקת לקוח</target>
+      </trans-unit>
+      <trans-unit id="Header.EditProfile" datatype="html">
+        <source>Edit Profile</source>
+        <target state="new">עדכון פרופיל</target>
+      </trans-unit>
+      <trans-unit id="Global.Logout" datatype="html">
+        <source>Logout</source>
+        <target state="new">התנתקות</target>
+      </trans-unit>
+      <trans-unit id="Global.Login" datatype="html">
+        <source>Login</source>
+        <target state="new">התחברות</target>
       </trans-unit>
     </body>
   </file>

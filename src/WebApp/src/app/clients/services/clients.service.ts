@@ -17,13 +17,13 @@ export class ClientsService {
   }
 
   public getClient(clientId: string): Observable<Client> {
-    console.log('[ClientsServiceService] [getClient] ', clientId);
+    console.debug('[ClientsServiceService] [getClient] ', clientId);
     return this.httpClient
       .get<Client>(`${this.serviceAddress}/clients/${clientId}`)
   }
 
   public addClient(client: Client): Observable<string> {
-    console.log('[ClientsServiceService] [addClient] ', client);
+    console.debug('[ClientsServiceService] [addClient] ', client);
     const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     const responseType: 'text' = 'text';
 
@@ -35,14 +35,14 @@ export class ClientsService {
   }
 
   public deleteClient(clientId: string): Observable<boolean> {
-    console.log('[ClientsServiceService] [deleteClient] ', clientId);
+    console.debug('[ClientsServiceService] [deleteClient] ', clientId);
     return this.httpClient
       .delete<boolean>(`${this.serviceAddress}/clients/${clientId}`)
   }
 
   // An API call to check if a client can be deleted
   public canDeleteClient(clientId: string): Observable<boolean> {
-    console.log('[ClientsServiceService] [canDeleteClient] ', clientId);
+    console.debug('[ClientsServiceService] [canDeleteClient] ', clientId);
     return this.httpClient
       .get<boolean>(`${this.serviceAddress}/clients/${clientId}/canDelete`)
   }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconButtonComponent } from './components/icon-button/icon-button.component';
 import { TableComponent } from './components/table/table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
@@ -24,7 +23,6 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
 
 @NgModule({
   declarations: [
-    IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,
@@ -43,7 +41,6 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     ToastModule
   ],
   exports: [
-    IconButtonComponent,
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,   

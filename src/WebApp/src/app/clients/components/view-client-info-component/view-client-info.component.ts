@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { ModalService } from 'src/app/shared/services/modal-service.service';
 import { ClientStrings } from '../../strings';
-import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-view-client-info',
@@ -54,7 +53,6 @@ export class ViewClientInfoComponent implements OnDestroy{
           this.DeleteClient.emit();
         }
       });
-
   }
 
   ngOnDestroy(): void {

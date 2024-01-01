@@ -68,6 +68,7 @@
               />
               <!-- Show validation errors -->
               <div
+                class="a-input-error"
                 *ngIf="
                   ClientInfo.get('AddressInfo.City')?.invalid &&
                   (ClientInfo.get('AddressInfo.City')?.dirty ||
@@ -128,6 +129,7 @@
               />
               <!-- Show validation errors -->
               <div
+                class="a-input-error"
                 *ngIf="
                   ClientInfo.get('ContactDetails.PrimaryPhoneNumber')
                     ?.invalid &&

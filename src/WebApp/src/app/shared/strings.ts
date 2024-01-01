@@ -10,9 +10,26 @@ export class Strings {
   static Share = $localize`:@@Share:Share`;
   static Close = $localize`:@@Close:Close`;
 
+  static Logout = $localize`:@@Global.Logout:Logout`;
+  static Login = $localize`:@@Global.Login:Login`;
+  static Username = $localize`:@@Global.Username:Username`;
+  static Password = $localize`:@@Global.Password:Password`;
+
+  // Form validation
+  static RequiredField = $localize`:@@Global.Validation.Required:Required`;
+
   // Global Basic Info
   static FirstName = $localize`:@@Global.BasicInfo.FirstName:FirstName`;
   static FamilyName = $localize`:@@Global.BasicInfo.FamilyName:FamilyName`;
+
+  // Global Address Info
+  static City = $localize`:@@Global.AddressInfo.City:City`;
+  static Street = $localize`:@@Global.AddressInfo.Street:Street`;
+  static BuildingNumber = $localize`:@@Global.AddressInfo.BuildingNumber:BuildingNumber`;
+  static Address = $localize`:@@Global.AddressInfo.Address:Address`;
+  static PrimaryPhoneNumer = $localize`:@@Global.ContactInfo.PrimaryPhoneNumber:PrimaryPhoneNumber`;
+  static AddressLine1 = $localize`:@@Global.AddressInfo.AddressLine1:AddressLine1`;
+  static EmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
 
   // Message titles
   static MessageTitle_Error = $localize`:@@MessageTitle_Error:Error`;
@@ -27,6 +44,7 @@ export class Strings {
   // Error messages
   static UnableToLoadClientsList = $localize`:@@Errors.Client.UnableToLoadClients:We were unable to load the clients list. Please try again.`;
 
+  static BadRequest: string = $localize`:@@Errors.BadRequest:Your request is invalid.`;
   static Unauthorized: string = $localize`:@@Errors.Unauthorized:You are not authorized to perform this action.`;
   static Forbidden: string = $localize`:@@Errors.Forbidden:You are not authorized to perform this action.`;
   static NotFound: string = $localize`:@@Errors.NotFound:We were unable to find the requested resource.`;
