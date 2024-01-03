@@ -1,5 +1,5 @@
 ﻿using Clients.Application.Commands;
-using Clients.Domain.ValueObjects;
+using Designly.Shared.ValueObjects;
 using FluentValidation;
 
 namespace Clients.Application.Validators

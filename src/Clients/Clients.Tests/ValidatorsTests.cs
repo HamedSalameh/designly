@@ -1,7 +1,7 @@
 ﻿using Clients.Application.Commands;
 using Clients.Application.Validators;
 using Clients.Domain.Entities;
-using Clients.Domain.ValueObjects;
+using Designly.Shared.ValueObjects;
 using FluentValidation.TestHelper;
 
 namespace Clients.Tests

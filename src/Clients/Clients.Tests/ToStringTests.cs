@@ -1,6 +1,6 @@
 using AutoMapper;
 using Clients.API.Mappers;
-using Clients.Domain.ValueObjects;
+using Designly.Shared.ValueObjects;
 
 namespace Clients.Tests
 {

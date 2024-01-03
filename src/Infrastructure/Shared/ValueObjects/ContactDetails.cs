@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Clients.Domain.ValueObjects
+namespace Designly.Shared.ValueObjects
 {
     public class ContactDetails
     {
@@ -26,7 +26,7 @@ namespace Clients.Domain.ValueObjects
             EmailAddress = emailAddress;
         }
 
-        private ContactDetails() 
+        private ContactDetails()
         {
             PrimaryPhoneNumber = Consts.Strings.ValueNotSet;
         }

@@ -1,7 +1,7 @@
 ﻿using Clients.Application.Commands;
 using Clients.Domain.Entities;
-using Clients.Domain.ValueObjects;
 using Clients.Infrastructure.Interfaces;
+using Designly.Shared.ValueObjects;
 using Microsoft.Extensions.Logging;
 using Moq;
 

@@ -1,5 +1,5 @@
 using Clients.Application.Commands;
-using Clients.Domain.ValueObjects;
+using Designly.Shared.ValueObjects;
 using FluentValidation;
 
 public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>

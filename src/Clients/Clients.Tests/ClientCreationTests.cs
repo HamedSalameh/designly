@@ -1,5 +1,5 @@
 ﻿using Clients.Domain.Entities;
-using Clients.Domain.ValueObjects;
+using Designly.Shared.ValueObjects;
 
 namespace Clients.Tests
 {

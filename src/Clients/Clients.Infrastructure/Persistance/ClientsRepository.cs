@@ -1,9 +1,9 @@
 ﻿using Clients.Domain;
 using Clients.Domain.Entities;
-using Clients.Domain.ValueObjects;
 using Clients.Infrastructure.Interfaces;
 using Clients.Infrastructure.Polly;
 using Dapper;
+using Designly.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
