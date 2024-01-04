@@ -4,7 +4,7 @@
     {
         public required string Name { get; set; }
         public required Guid ProjectId { get; set; }
-        public required Project Project { get; set; }
+        public required BasicProject Project { get; set; }
         public List<TaskItem> Tasks { get; set; }
 
         public TaskGroup(Guid TenantId, Guid ProjectId, string Name) : base(TenantId)
