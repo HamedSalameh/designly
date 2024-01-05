@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace Clients.Application.Behaviors
+namespace Projects.Application.Behaviors
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -26,17 +26,17 @@ namespace Clients.Application.Behaviors
             {
                 return await next().ConfigureAwait(false);
             }
-            
+
             var context = new ValidationContext<TRequest>(request);
             var validationResults =
                 await Task.WhenAll(_validators.Select(validator => validator.ValidateAsync(context, cancellationToken))).ConfigureAwait(false);
             var failures = validationResults.SelectMany(validationResult => validationResult.Errors).Where(failure => failure != null).ToList();
-            
-            if (failures.Count == 0)
+
+            if (!failures.Any())
             {
                 return await next().ConfigureAwait(false);
             }
-            
+
             // convert the List<ValidationFailure> to a List<Key, Value> where Key is the name of the property and Value is the error message
             var errors = failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage);
 

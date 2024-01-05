@@ -43,15 +43,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{EE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.API", "Projects\Projects.API\Projects.API.csproj", "{1DDD93D2-5756-430B-BCE0-361BA2014B96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projects.Application", "Projects\Projects.Application\Projects.Application.csproj", "{C50BA916-92D6-46A0-862C-D4B2FF98B570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.Application", "Projects\Projects.Application\Projects.Application.csproj", "{C50BA916-92D6-46A0-862C-D4B2FF98B570}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.DB", "Projects\Projects.DB\Projects.DB.csproj", "{49EFAB2D-951C-421E-891D-772ADCA163E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projects.Domain", "Projects\Projects.Domain\Projects.Domain.csproj", "{D87443DF-C1A2-493F-B682-5ECF563F1D09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.Domain", "Projects\Projects.Domain\Projects.Domain.csproj", "{D87443DF-C1A2-493F-B682-5ECF563F1D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projects.Infrastructure", "Projects\Projects.Infrastructure\Projects.Infrastructure.csproj", "{2798F121-BF69-499A-AA5E-7689DA9CD0BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.Infrastructure", "Projects\Projects.Infrastructure\Projects.Infrastructure.csproj", "{2798F121-BF69-499A-AA5E-7689DA9CD0BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projects.Tests", "Projects\Projects.Tests\Projects.Tests.csproj", "{9A1F44CF-0DB7-46B4-A262-E88DFF5603B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projects.Tests", "Projects\Projects.Tests\Projects.Tests.csproj", "{9A1F44CF-0DB7-46B4-A262-E88DFF5603B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Clients.API.Identity
+namespace Designly.Shared.Identity
 {
     public class MustBeAdminRequirement : IAuthorizationRequirement
     {

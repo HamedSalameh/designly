@@ -1,5 +1,5 @@
 ﻿using Clients.API.Middleware;
-using Clients.Domain.Exceptions;
+using Designly.Shared.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;

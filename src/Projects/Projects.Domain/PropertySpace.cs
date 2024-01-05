@@ -28,5 +28,5 @@
             this.CeilingHeight = CeilingHeight;
             this.MeasuredArea = MeasuredArea;
         }
-    }   
+    }
 }

@@ -1,5 +1,7 @@
-﻿using Projects.Domain;
+﻿#pragma warning disable CS8600
+#pragma warning disable CS8604
 
+using Projects.Domain;
 
 namespace Projects.Tests
 {
@@ -20,16 +22,19 @@ namespace Projects.Tests
 
             // Assert
             Assert.That(basicProject, Is.Not.Null);
-            Assert.That(basicProject.TenantId, Is.EqualTo(tenantId));
-            Assert.That(basicProject.ProjectLeadId, Is.EqualTo(projectLeadId));
-            Assert.That(basicProject.ClientId, Is.EqualTo(clientId));
-            Assert.That(basicProject.Name, Is.EqualTo(projectName));
-            Assert.That(basicProject.Description, Is.EqualTo(string.Empty));
-            Assert.That(basicProject.TaskItems, Is.Not.Null);
-            Assert.That(basicProject.TaskItems.Count, Is.EqualTo(0));
-            Assert.That(basicProject.StartDate, Is.Null);
-            Assert.That(basicProject.Deadline, Is.Null);
-            Assert.That(basicProject.CompletedAt, Is.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(basicProject.TenantId, Is.EqualTo(tenantId));
+                Assert.That(basicProject.ProjectLeadId, Is.EqualTo(projectLeadId));
+                Assert.That(basicProject.ClientId, Is.EqualTo(clientId));
+                Assert.That(basicProject.Name, Is.EqualTo(projectName));
+                Assert.That(basicProject.Description, Is.EqualTo(string.Empty));
+                Assert.That(basicProject.TaskItems, Is.Not.Null);
+                Assert.That(basicProject.TaskItems, Is.Empty);
+                Assert.That(basicProject.StartDate, Is.Null);
+                Assert.That(basicProject.Deadline, Is.Null);
+                Assert.That(basicProject.CompletedAt, Is.Null);
+            });
         }
 
         [Test]

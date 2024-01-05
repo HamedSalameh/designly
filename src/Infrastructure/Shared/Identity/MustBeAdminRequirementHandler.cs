@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
-namespace Clients.API.Identity
+namespace Designly.Shared.Identity
 {
 
     public class MustBeAdminRequirementHandler : AuthorizationHandler<MustBeAdminRequirement>

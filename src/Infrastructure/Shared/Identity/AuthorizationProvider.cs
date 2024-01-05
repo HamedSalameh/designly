@@ -1,8 +1,6 @@
-﻿using Polly;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
-namespace Clients.API.Identity
+namespace Designly.Shared.Identity
 {
     public class AuthorizationProvider : IAuthorizationProvider
     {

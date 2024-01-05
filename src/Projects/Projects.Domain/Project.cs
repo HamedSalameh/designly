@@ -1,5 +1,4 @@
 ﻿using Designly.Shared;
-using Designly.Shared.ValueObjects;
 
 namespace Projects.Domain
 {
@@ -45,12 +44,12 @@ namespace Projects.Domain
 
         // Protected and Private fields
         protected ProjectStatus _status;
-        
+
         /// <summary>
         /// List of task items for the project, general tasks
         /// </summary>
         public List<TaskItem> TaskItems { get; set; }
-        
+
         public BasicProject(Guid tenantId, Guid projectLeadId, Guid clientId, string projectName) : base(tenantId)
         {
             if (string.IsNullOrEmpty(projectName))
@@ -86,7 +85,7 @@ namespace Projects.Domain
             {
                 throw new ArgumentException($"{nameof(projectName)} : must not be null or empty");
             }
-            this.Name = projectName;
+            Name = projectName;
         }
 
         public void SetDescription(string Description)
@@ -100,7 +99,7 @@ namespace Projects.Domain
             {
                 throw new ArgumentException($"{nameof(projectLeadId)} : must not be empty");
             }
-            this.ProjectLeadId = projectLeadId;
+            ProjectLeadId = projectLeadId;
         }
     }
 
@@ -135,8 +134,8 @@ namespace Projects.Domain
 
         public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
         {
-            this.PropertyList = new List<Property>();
-            this.TaskGroups = new List<TaskGroup>();
+            PropertyList = new List<Property>();
+            TaskGroups = new List<TaskGroup>();
         }
     }
 }

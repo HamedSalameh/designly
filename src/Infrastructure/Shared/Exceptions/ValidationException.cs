@@ -1,4 +1,4 @@
-﻿namespace Clients.Domain.Exceptions
+﻿namespace Designly.Shared.Exceptions
 {
     [Serializable]
     public class ValidationException : Exception
@@ -9,15 +9,15 @@
         public ValidationException(string message)
             : base(message)
         {
-            this.Errors = new Dictionary<string, string>();
+            Errors = new Dictionary<string, string>();
         }
 
         public ValidationException(string message, Exception inner)
             : base(message, inner)
         {
-            this.Errors = new Dictionary<string, string>();
+            Errors = new Dictionary<string, string>();
         }
-        
+
         public ValidationException(string message, IDictionary<string, string> errors)
             : base(message)
         {
@@ -27,9 +27,9 @@
         public ValidationException(IDictionary<string, string> errors) : this(
             "One or more validation failures have occurred.")
         {
-            this.Errors = errors;
+            Errors = errors;
         }
-        
+
         public IDictionary<string, string> Errors { get; }
     }
 }

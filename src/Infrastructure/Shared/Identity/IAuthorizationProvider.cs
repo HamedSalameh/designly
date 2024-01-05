@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 
-namespace Clients.API.Identity
+namespace Designly.Shared.Identity
 {
     public interface IAuthorizationProvider
-    { 
+    {
         Guid? GetTenantId(ClaimsPrincipal user);
     }
 }

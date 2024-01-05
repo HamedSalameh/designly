@@ -8,9 +8,8 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
 using Clients.API.Middleware;
-using Clients.API.Identity;
-using Polly;
 using Microsoft.AspNetCore.Authorization;
+using Designly.Shared.Identity;
 
 public class Program
 {
@@ -102,7 +101,7 @@ public class Program
 
         app.Run();
 
-        void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
+        static void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHealthChecks("/health", new HealthCheckOptions()
             {
@@ -129,14 +128,9 @@ public class Program
 
     private static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy(IdentityData.AdminUserPolicyName,
-                policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()));
-
-            options.AddPolicy(IdentityData.AccountOwnerPolicyName,
-                policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
-        });
+        builder.Services.AddAuthorizationBuilder()
+            .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
+            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
 
         builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
         builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();

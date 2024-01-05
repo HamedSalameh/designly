@@ -15,6 +15,7 @@
             }
             this.Name = Name;
             this.ProjectId = ProjectId;
+            Tasks = new List<TaskItem>();
         }
 
         public void AddTask(TaskItem task)

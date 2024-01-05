@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Clients.API.DTO;
-using Clients.API.Identity;
 using Clients.Application.Commands;
 using Clients.Application.Queries;
-using Clients.Domain;
 using Clients.Domain.Entities;
+using Designly.Shared.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +24,7 @@ namespace Clients.API.Controllers
         private readonly IAuthorizationProvider authroizationProvider = authorizationProvider ?? throw new ArgumentNullException(nameof(authroizationProvider));
 
         [HttpPost]
+        [Authorize(Policy = IdentityData.AdminUserPolicyName)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

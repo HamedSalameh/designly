@@ -1,4 +1,4 @@
-﻿namespace Clients.API.Identity
+﻿namespace Designly.Shared.Identity
 {
     public class IdentityData
     {

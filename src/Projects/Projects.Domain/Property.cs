@@ -6,7 +6,7 @@ namespace Projects.Domain
     public class Property : Entity
     {
         public string Name { get; set; }
-        public required Address Address { get; set;  }
+        public required Address Address { get; set; }
         public required List<Floor> Floors { get; set; }
         public double TotalArea { get; set; }
 
@@ -18,8 +18,8 @@ namespace Projects.Domain
             }
             this.Name = Name;
             this.Address = Address;
-            this.Floors = new List<Floor>();
-            this.TotalArea = 0;
+            Floors = new List<Floor>();
+            TotalArea = 0;
         }
 
         // Used by Dapper for automatic object initialization
