@@ -1,4 +1,5 @@
 ﻿using Designly.Shared;
+using Microsoft.Extensions.Hosting;
 
 namespace Projects.Domain
 {
@@ -26,17 +27,17 @@ namespace Projects.Domain
         /// <summary>
         /// Planned or actual start date of the project
         /// </summary>
-        public DateOnly? StartDate { get; set; }
+        public DateOnly? StartDate { get; private set; }
 
         /// <summary>
         /// Planned or actual deadline of the project
         /// </summary>
-        public DateOnly? Deadline { get; set; }
+        public DateOnly? Deadline { get; private set; }
 
         /// <summary>
         /// Actual completion date of the project
         /// </summary>
-        public DateOnly? CompletedAt { get; set; }
+        public DateOnly? CompletedAt { get; private set; }      
 
         public ProjectStatus Status { get => _status; set => _status = value; }
 
@@ -64,6 +65,22 @@ namespace Projects.Domain
             StartDate = null;
             Deadline = null;
             CompletedAt = null;
+        }
+
+        public BasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
+            DateOnly startDate, DateOnly deadline, DateOnly? completedAt = null, string description = "") : this(tenantId, projectLeadId, ClientId, projectName)
+        {
+            if (startDate > deadline)
+            {
+                throw new ArgumentException($"{nameof(startDate)} : must be before {nameof(deadline)}");
+            }
+            StartDate = startDate;
+            Deadline = deadline;
+            Description = description;
+            if (completedAt.HasValue)
+            {
+                CompleteProject(completedAt.Value);
+            }
         }
 
         // Used by Dapper for automatic object initialization
@@ -100,6 +117,39 @@ namespace Projects.Domain
                 throw new ArgumentException($"{nameof(projectLeadId)} : must not be empty");
             }
             ProjectLeadId = projectLeadId;
+        }
+
+        /// <summary>
+        /// Marks the project as completed
+        /// </summary>
+        /// <param name="completionDate">DateOnly value of the actual completion date</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void CompleteProject(DateOnly completionDate)
+        {
+            if (completionDate < StartDate)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(completionDate)} : must be after {nameof(StartDate)}");
+            }
+            CompletedAt = completionDate;
+            Status = ProjectStatus.Completed;
+        }
+
+        public void SetStartDate(DateOnly startDate)
+        {
+            if (Deadline.HasValue && startDate > Deadline)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(startDate)} : must be before {nameof(Deadline)}");
+            }
+            StartDate = startDate;
+        }
+
+        public void SetDeadline(DateOnly deadline)
+        {
+            if (StartDate.HasValue && deadline < StartDate)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(deadline)} : must be after {nameof(StartDate)}");
+            }
+            Deadline = deadline;
         }
     }
 
