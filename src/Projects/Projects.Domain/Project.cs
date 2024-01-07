@@ -184,8 +184,8 @@ namespace Projects.Domain
 
         public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
         {
-            PropertyList = new List<Property>();
-            TaskGroups = new List<TaskGroup>();
+            PropertyList = [];
+            TaskGroups = [];
         }
     }
 }

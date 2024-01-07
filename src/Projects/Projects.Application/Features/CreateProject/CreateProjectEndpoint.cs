@@ -11,7 +11,7 @@ using Projects.Application.Common;
 
 namespace Projects.Application.Features.CreateProject
 {
-    public static class CreateProjectFeature
+    public static class CreateProjectEndpoint
     {
         public static IEndpointConventionBuilder MapCreateFeature(this IEndpointRouteBuilder endpoints, string pattern)
         {

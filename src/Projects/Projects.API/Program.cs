@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Projects.Application;
 using Projects.Application.Extentions;
 using Projects.Application.Features.CreateProject;
+using Projects.Application.Features.DeleteProject;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,7 +72,8 @@ var routeGroup = app
     .RequireAuthorization()
     .WithApiVersionSet(versionSet);
 
-routeGroup.MapCreateFeature("/hello");
+routeGroup.MapCreateFeature("");
+routeGroup.MapDeleteFeature("{projectId}");
 
 app.UseHttpsRedirection();
 
@@ -84,14 +86,9 @@ app.Run();
 
 static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder)
 {
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy(IdentityData.AdminUserPolicyName,
-            policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()));
-
-        options.AddPolicy(IdentityData.AccountOwnerPolicyName,
-            policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
-    });
+    builder.Services.AddAuthorizationBuilder()
+        .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
+        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
 
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();

@@ -6,7 +6,7 @@ using Projects.Domain;
 namespace Projects.Tests
 {
     [TestFixture]
-    public class CreateProjectFeatureTests
+    public class ProjectEntityTests
     {
         [Test]
         public void Constructor_WithValidArguments_InitializesProperties()
@@ -258,8 +258,11 @@ namespace Projects.Tests
             basicProject.SetStartDate(startDate);
             basicProject.CompleteProject(completionDate);
 
-            Assert.That(basicProject.Status, Is.EqualTo(ProjectStatus.Completed));
-            Assert.That(basicProject.CompletedAt, Is.EqualTo(completionDate));
+            Assert.Multiple(() =>
+            {
+                Assert.That(basicProject.Status, Is.EqualTo(ProjectStatus.Completed));
+                Assert.That(basicProject.CompletedAt, Is.EqualTo(completionDate));
+            });
         }
 
         [Test]
