@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
-namespace Designly.Shared.Identity
+namespace Designly.Auth.Identity
 {
     public class MustBeAccountOwnerRequirementHandler : AuthorizationHandler<MustBeAccountOwnerRequirement>
     {

@@ -3,7 +3,7 @@ using Clients.API.DTO;
 using Clients.Application.Commands;
 using Clients.Application.Queries;
 using Clients.Domain.Entities;
-using Designly.Shared.Identity;
+using Designly.Auth.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

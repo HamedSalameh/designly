@@ -1,5 +1,5 @@
 ﻿
-using Designly.Shared.Identity;
+using Designly.Auth.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

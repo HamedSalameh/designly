@@ -1,4 +1,6 @@
-﻿namespace Designly.Shared
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Designly.Shared
 {
     public static class Consts
     {
@@ -23,5 +25,9 @@
         }
 
         public static string CorrelationIdHeader = "X-Correlation-Id";
+
+        public static string ApiVersionHeaderEntry = "api-version";
+        public static string ApiVersionQueryStringEntry = "api-version";
+        
     }
 }

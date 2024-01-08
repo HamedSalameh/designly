@@ -9,7 +9,8 @@ using System.Reflection;
 using System.Text.Json;
 using Clients.API.Middleware;
 using Microsoft.AspNetCore.Authorization;
-using Designly.Shared.Identity;
+using Designly.Auth.Identity;
+using Designly.Shared;
 
 public class Program
 {
@@ -34,9 +35,8 @@ public class Program
             v.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
             v.ReportApiVersions = true;
             v.ApiVersionReader = ApiVersionReader.Combine(
-                new QueryStringApiVersionReader("api-version"),
-                new HeaderApiVersionReader("api-version"),
-                new MediaTypeApiVersionReader("ver"));
+                new QueryStringApiVersionReader(Consts.ApiVersionQueryStringEntry),
+                new HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
         });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

@@ -18,13 +18,14 @@ public static class AuthenticationExtentions
 
         var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
 
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }
-        ).AddJwtBearer( jwtBearerOptions =>
+        services.AddAuthentication(
+            option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddBearerToken()
+            .AddJwtBearer( jwtBearerOptions =>
         {
             var encodedToken = string.Empty;
             jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters

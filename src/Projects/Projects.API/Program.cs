@@ -1,10 +1,14 @@
-using Designly.Shared.Identity;
+using Designly.Auth.Identity;
+using Designly.Auth.Providers;
+using Designly.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Extentions;
 using Projects.Application.Features.CreateProject;
 using Projects.Application.Features.DeleteProject;
 using Serilog;
+using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +32,7 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
     options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
         new Asp.Versioning.UrlSegmentApiVersionReader(),
-        new Asp.Versioning.HeaderApiVersionReader("api-version"));
+        new Asp.Versioning.HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
 }).AddApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'V";
@@ -44,8 +48,14 @@ builder.Services.ConfigureSecuredSwagger();
 builder.Services.ConfigureCors();
 
 // Configure Services
+builder.Services.AddHttpClient("cognito", client =>
+{
+    client.DefaultRequestHeaders.Add(HeaderNames.Accept, MediaTypeNames.Application.Json);
+    client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
+});
 builder.Services.AddApplication(configuration);
 builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 // Configure Health checks
 builder.Services.AddHealthChecks();

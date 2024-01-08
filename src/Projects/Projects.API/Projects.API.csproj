@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
 	  <ProjectReference Include="..\Projects.Application\Projects.Application.csproj" />
 	</ItemGroup>
 

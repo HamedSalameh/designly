@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Designly.Shared.Identity
+namespace Designly.Auth.Identity
 {
     public interface IAuthorizationProvider
     {
