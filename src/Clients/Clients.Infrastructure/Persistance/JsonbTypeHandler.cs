@@ -6,7 +6,9 @@ namespace Clients.Infrastructure.Persistance
 {
     public class JsonbTypeHandler<T> : SqlMapper.TypeHandler<T>
     {
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         public override void SetValue(IDbDataParameter parameter, T value)
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
             parameter.Value = JsonConvert.SerializeObject(value);
         }

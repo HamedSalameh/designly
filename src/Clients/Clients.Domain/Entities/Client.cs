@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Clients.Domain.ValueObjects;
+﻿using Designly.Shared;
+using Designly.Shared.ValueObjects;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Clients.Domain.Entities

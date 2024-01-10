@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Shared\Designly.Shared.csproj" />
     <ProjectReference Include="..\Clients.API\Clients.API.csproj" />
   </ItemGroup>
 

@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-Guid DevelopmentTenant = Guid.Parse("00000000-0000-0000-0000-000000000001");
+var Tenant = Guid.Parse("INSERT_TENANT_ID");
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -16,15 +16,15 @@ Log.Logger = new LoggerConfiguration()
 
 var _modelFaker = new Faker<Client>()
     .CustomInstantiator(f => new Client(f.Person.FirstName, f.Person.LastName,
-    new Clients.Domain.ValueObjects.Address(
+    new Designly.Shared.ValueObjects.Address(
         f.Address.City(), 
         f.Address.StreetName(),
         f.Random.Bool() ? f.Address.BuildingNumber() : string.Empty),
-    new Clients.Domain.ValueObjects.ContactDetails(
+    new Designly.Shared.ValueObjects.ContactDetails(
         f.Phone.PhoneNumber("(###) ###-####"),
         f.Random.Bool() ? f.Phone.PhoneNumber("(###) ###-####") : string.Empty,
         f.Internet.Email()),
-    DevelopmentTenant))
+    Tenant))
     .RuleFor(c => c.Id, f => Guid.NewGuid())
     //.RuleFor(c => c.FirstName, f => f.Name.FirstName())
     //.RuleFor(c => c.FamilyName, f => f.Name.LastName())

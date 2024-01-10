@@ -32,7 +32,7 @@ namespace Clients.Application.Behaviors
                 await Task.WhenAll(_validators.Select(validator => validator.ValidateAsync(context, cancellationToken))).ConfigureAwait(false);
             var failures = validationResults.SelectMany(validationResult => validationResult.Errors).Where(failure => failure != null).ToList();
             
-            if (!failures.Any())
+            if (failures.Count == 0)
             {
                 return await next().ConfigureAwait(false);
             }
@@ -40,7 +40,7 @@ namespace Clients.Application.Behaviors
             // convert the List<ValidationFailure> to a List<Key, Value> where Key is the name of the property and Value is the error message
             var errors = failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage);
 
-            throw new Domain.Exceptions.ValidationException(errors);
+            throw new Designly.Shared.Exceptions.ValidationException(errors);
         }
     }
 }

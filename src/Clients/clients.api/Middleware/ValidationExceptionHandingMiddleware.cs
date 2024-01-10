@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
 using System.Text.Json;
-using Clients.Domain.Exceptions;
+using Designly.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clients.API.Middleware
@@ -24,7 +24,7 @@ namespace Clients.API.Middleware
             {
                 await _next(context).ConfigureAwait(false);
             }
-            catch (Domain.Exceptions.ValidationException validationException)
+            catch (Designly.Shared.Exceptions.ValidationException validationException)
             {
                 _logger.LogError(validationException, "Validation exception occurred");
                 await HandleValidationExceptionAsync(context, validationException);

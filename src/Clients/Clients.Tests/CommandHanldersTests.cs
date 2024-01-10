@@ -1,7 +1,7 @@
 ﻿using Clients.Application.Commands;
 using Clients.Domain.Entities;
-using Clients.Domain.ValueObjects;
 using Clients.Infrastructure.Interfaces;
+using Designly.Shared.ValueObjects;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -45,9 +45,10 @@ namespace Clients.Tests
             // Arrange
             var draftClient = new Client(firstName, familyName, address, contactDetails, Tenant);
             var request = new CreateClientCommand(draftClient);
+            var newClientIdGuid = Guid.NewGuid();
 
-            _unitOfWorkMock.Setup(uow => uow.ClientsRepository.CreateClientAsync(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Guid.NewGuid());
+            _unitOfWorkMock.Setup(uow => uow.ClientsRepository.CreateClientAsyncWithDapper(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(newClientIdGuid);
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);
