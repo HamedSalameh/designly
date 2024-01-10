@@ -85,7 +85,7 @@ namespace Projects.Application.Features.CreateProject
         private async Task AddAuthentication(HttpClient client)
         {
             // TODO: Get clientId and clientSecret from configuration
-            var accessToken = await _tokenProvider.GetAccessTokenAsync("35pjbh9a429lu7uepb8b0cv4br", "1m6t5aqj45jf6fcluce9pkrgk8nbnl1inien8dqjdsb6dvhltd98").ConfigureAwait(false);
+            var accessToken = await _tokenProvider.GetAccessTokenAsync("5jbktc23rqr59etq1kgeq5s6ms", "mmhvko32k47d50ik6hfqlomref62gvegvntp8g0v2qq0j40671v").ConfigureAwait(false);
              var authenticationHeaderValue = new AuthenticationHeaderValue(
                 Designly.Auth.Consts.BearerAuthenicationScheme, accessToken);
             client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;

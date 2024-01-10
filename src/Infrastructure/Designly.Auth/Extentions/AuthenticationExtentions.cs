@@ -27,7 +27,7 @@ public static class AuthenticationExtentions
                 option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddBearerToken()
-            .AddJwtBearer( jwtBearerOptions =>
+            .AddJwtBearer(jwtBearerOptions =>
         {
             var encodedToken = string.Empty;
             jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
@@ -40,13 +40,13 @@ public static class AuthenticationExtentions
                     return GetIssuerSigningKey(parameters);
                 },
                 ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 AudienceValidator = (audiences, securityToken, validationParameters) =>
                 {
                     // Resolving audience claim from the token generated from AWS Congnito
-                    return audienceValidator(audience, encodedToken);
+                    return audienceValidator(encodedToken);
                 }
             };
 
@@ -55,7 +55,7 @@ public static class AuthenticationExtentions
                 OnTokenValidated = context =>
                 {
                     // This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"
-                    ResolveAudienceClaim(context, audience);
+                    ResolveAudienceClaim(context);
                     // Resolve the tenant id from the token and add it as new claim to the principal
                     ResolveTentanId(context);
 
@@ -82,19 +82,22 @@ public static class AuthenticationExtentions
         }
     }
 
-    private static void ResolveAudienceClaim(TokenValidatedContext context, string audience)
+    private static void ResolveAudienceClaim(TokenValidatedContext context)
     {
         if (context.Principal == null || context.Principal.Identity == null || !context.Principal.Identity.IsAuthenticated)
             return;
 
         if (!context.Principal.HasClaim(c => c.Type == "aud"))
         {
-            var claimsIdentity = (ClaimsIdentity)context.Principal.Identity;
-            claimsIdentity.AddClaim(new Claim("aud", audience));
+            var clientIdClaim = context.Principal?.Claims?.FirstOrDefault(claim =>
+                                       claim.Type == "client_id")?.Value;
 
-            var claims = context.Principal.Claims;
-            var identity = new ClaimsIdentity(claims, context.Scheme.Name);
-            context.Principal = new ClaimsPrincipal(identity);
+            if (!string.IsNullOrEmpty(clientIdClaim))
+            {
+                var claimsIdentity = (ClaimsIdentity)context.Principal.Identity;
+                var audinceClaim = new Claim("aud", clientIdClaim);
+                claimsIdentity.AddClaim(audinceClaim);
+            }
         }
     }
 
@@ -115,12 +118,18 @@ public static class AuthenticationExtentions
         return keys;
     }
 
-    private static bool audienceValidator(string audience, string rawToken)
+    private static bool audienceValidator(string rawToken)
     {
+        List<string> supportedAudiences = new List<string> { "709s3upgn1brajea9j3gplh3gm", "5jbktc23rqr59etq1kgeq5s6ms" };
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadJwtToken(rawToken);
         var clientId = jwtToken.Payload["client_id"]?.ToString();
 
-        return audience.Equals(clientId);
+        if (string.IsNullOrEmpty(clientId))
+            return false;
+
+        return supportedAudiences.Contains(clientId);
+
+        //return audience.Equals(clientId);
     }
 }
