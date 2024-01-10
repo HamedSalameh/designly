@@ -8,13 +8,14 @@ namespace Designly.Auth.Identity
         {
             if (user != null && user.Claims != null)
             {
-                var tenantId = "";
-                tenantId = user.Claims?.FirstOrDefault(claim =>
-                               claim.Type == IdentityData.JwtClaimType && claim.Value.StartsWith(IdentityData.TenantIdClaimType))?.Value;
+                var tenantIdClaim = user.Claims?.FirstOrDefault(claim => claim.Type == IdentityData.TenantId);
+                if (tenantIdClaim != null)
+                {
+                    var tenantId = tenantIdClaim.Value;
+                    Guid.TryParse(tenantId, out var tenantIdGuid);
 
-                Guid.TryParse(tenantId.Split('_')[1], out var tenantIdGuid);
-
-                return tenantIdGuid;
+                    return tenantIdGuid;
+                }
             }
             return null;
         }

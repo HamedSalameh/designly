@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Designly.Auth.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 
 public static class AuthenticationExtentions
 {
@@ -30,7 +32,6 @@ public static class AuthenticationExtentions
             var encodedToken = string.Empty;
             jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
             {
-                
                 ValidIssuer = authority,    // The authority is the issuer that provides the token
                 ValidAudience = audience,   // The audience is the resource that the token is intended for
                 IssuerSigningKeyResolver = (s, securityToken, identifier, parameters) =>
@@ -44,11 +45,57 @@ public static class AuthenticationExtentions
                 ValidateIssuerSigningKey = true,
                 AudienceValidator = (audiences, securityToken, validationParameters) =>
                 {
-                    // AWS Cognito specific: This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"
+                    // Resolving audience claim from the token generated from AWS Congnito
                     return audienceValidator(audience, encodedToken);
                 }
             };
+
+            jwtBearerOptions.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
+                {
+                    // This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"
+                    ResolveAudienceClaim(context, audience);
+                    // Resolve the tenant id from the token and add it as new claim to the principal
+                    ResolveTentanId(context);
+
+                    return Task.CompletedTask;
+                }
+            };
         });
+    }
+
+    private static void ResolveTentanId(TokenValidatedContext context)
+    {
+        if (context.Principal == null || context.Principal.Identity == null || !context.Principal.Identity.IsAuthenticated)
+            return;
+
+        var tenantId = context.Principal?.Claims?.FirstOrDefault(claim =>
+                                                   claim.Type == IdentityData.JwtClaimType && claim.Value.StartsWith(IdentityData.TenantIdClaimType))?.Value;
+
+        Guid.TryParse(tenantId?.Split('_')[1], out var tenantIdGuid);
+        var tenantIdClaim = new Claim(IdentityData.TenantId, tenantIdGuid.ToString());
+        // add the tenant id as new claim to the principal
+        if (context.Principal != null && !context.Principal.HasClaim(c => c.Type == IdentityData.TenantIdClaimType))
+        {
+            ((ClaimsIdentity)context.Principal.Identity).AddClaim(tenantIdClaim);
+        }
+    }
+
+    private static void ResolveAudienceClaim(TokenValidatedContext context, string audience)
+    {
+        if (context.Principal == null || context.Principal.Identity == null || !context.Principal.Identity.IsAuthenticated)
+            return;
+
+        if (!context.Principal.HasClaim(c => c.Type == "aud"))
+        {
+            var claimsIdentity = (ClaimsIdentity)context.Principal.Identity;
+            claimsIdentity.AddClaim(new Claim("aud", audience));
+
+            var claims = context.Principal.Claims;
+            var identity = new ClaimsIdentity(claims, context.Scheme.Name);
+            context.Principal = new ClaimsPrincipal(identity);
+        }
     }
 
     private static IEnumerable<SecurityKey> GetIssuerSigningKey(TokenValidationParameters parameters)
@@ -59,7 +106,11 @@ public static class AuthenticationExtentions
         if (string.IsNullOrEmpty(json))
             throw new WebException("Unable to get JsonWebKeySet from AWS");
         // Serialize the result
-        var keys = JsonConvert.DeserializeObject<JsonWebKeySet>(json).Keys;
+        var keys = JsonConvert.DeserializeObject<JsonWebKeySet>(json)?.Keys;
+        if (keys == null)
+        {
+            throw new WebException("Unable to deserialize JsonWebKeySet from AWS");
+        }
         // Cast the result to be the type expected by IssuerSigningKeyResolver
         return keys;
     }
