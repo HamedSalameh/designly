@@ -1,7 +1,6 @@
 ﻿using Designly.Auth.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
@@ -32,7 +31,7 @@ namespace Designly.Auth.Providers
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
-            return await getOAuth2Token(clientId, clientSecret);
+            return await GetOAuth2Token(clientId, clientSecret);
         }
 
         public async Task<String?> GetAccessTokenAsync(string clientId, string clientSecret)
@@ -65,7 +64,7 @@ namespace Designly.Auth.Providers
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <returns></returns>
-        private async Task<string?> getOAuth2Token(string clientId, string clientSecret)
+        private async Task<string?> GetOAuth2Token(string clientId, string clientSecret)
         {
             var httpClient = _httpClientFactory.CreateClient();
             // TODO: Get the base address from configuration

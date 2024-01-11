@@ -24,10 +24,23 @@ namespace Designly.Shared
             public const string NotAvailable = "N/A";
         }
 
-        public static string CorrelationIdHeader = "X-Correlation-Id";
-
-        public static string ApiVersionHeaderEntry = "api-version";
-        public static string ApiVersionQueryStringEntry = "api-version";
+        // Message headers
+        public const string CorrelationIdHeader = "X-Correlation-Id";
+        public const string ApiVersionHeaderEntry = "api-version";
+        public const string ApiVersionQueryStringEntry = "api-version";
         
+    }
+
+    public enum ClientStatusCode
+    {
+        // Default value
+        NonExistent = 0,
+        // Regular client statuses
+        Active,
+        // Below are the statuses that are not considered 'Green' and safe to transact with
+        Inactive,
+        Suspended,        
+        HighRisk,
+        Blacklisted
     }
 }
