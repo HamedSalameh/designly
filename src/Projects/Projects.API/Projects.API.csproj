@@ -21,4 +21,8 @@
 	  <ProjectReference Include="..\Projects.Application\Projects.Application.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Extentions\" />
+	</ItemGroup>
+
 </Project>

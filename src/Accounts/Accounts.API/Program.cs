@@ -1,14 +1,9 @@
+using Accounts.Application;
 using Designly.Auth.Identity;
-using Designly.Auth.Providers;
 using Designly.Shared;
 using Designly.Shared.Extentions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Net.Http.Headers;
-using Projects.Application;
-using Projects.Application.Features.CreateProject;
-using Projects.Application.Features.DeleteProject;
 using Serilog;
-using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,20 +44,7 @@ builder.Services.ConfigureSecuredSwagger();
 builder.Services.ConfigureCors();
 
 // Configure Services
-builder.Services.AddHttpClient("cognito", client =>
-{
-    client.DefaultRequestHeaders.Add(HeaderNames.Accept, MediaTypeNames.Application.Json);
-    client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
-});
 builder.Services.AddApplication(configuration);
-builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
-
-// Configure Health checks
-builder.Services.AddHealthChecks();
-
-builder.Services.AddControllers();
-
 
 var app = builder.Build();
 
@@ -73,14 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-MapEndoints(app);
-
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
 
@@ -92,20 +67,4 @@ static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder
 
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
-}
-
-static void MapEndoints(WebApplication app)
-{
-    var versionSet = app.NewApiVersionSet()
-        .HasApiVersion(new Asp.Versioning.ApiVersion(1))
-        .ReportApiVersions()
-        .Build();
-
-    var routeGroup = app
-        .MapGroup("api/v{version:apiVersion}")
-        .RequireAuthorization()
-        .WithApiVersionSet(versionSet);
-
-    routeGroup.MapCreateFeature("");
-    routeGroup.MapDeleteFeature("{projectId}");
 }
