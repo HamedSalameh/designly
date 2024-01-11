@@ -117,6 +117,31 @@ namespace Clients.API.Controllers
             return Ok(clientDto);
         }
 
+        [HttpGet("status/{tenantId}/{id}")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStatus([FromRoute] Guid tenantId, [FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            if (id == default || id == Guid.Empty)
+            {
+                logger.LogError($"Invalid value for {nameof(id)} : {id}");
+                return BadRequest(id);
+            }
+            if (tenantId == default || tenantId == Guid.Empty)
+            {
+                logger.LogError($"Invalid value for {nameof(tenantId)} : {tenantId}");
+                return BadRequest(tenantId);
+            }
+
+            // Try get user status from the database and respond with the status
+            var clientStatus = await mediator.Send(new GetClientStatusQuery(tenantId, id), cancellationToken).ConfigureAwait(false);
+
+            return Ok(clientStatus);
+        }
+
         [HttpPost("search")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
