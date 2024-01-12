@@ -1,4 +1,4 @@
-using Accounts.Application;
+using Projects.Application;
 using Designly.Auth.Identity;
 using Designly.Shared;
 using Designly.Shared.Extentions;

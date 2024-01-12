@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 
-namespace Accounts.Application;
+namespace Projects.Application;
 
 public static class DependencyInjection
 {

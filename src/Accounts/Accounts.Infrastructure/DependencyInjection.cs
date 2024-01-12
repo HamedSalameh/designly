@@ -1,7 +1,6 @@
 ﻿using Clients.Infrastructure.Interfaces;
 using Clients.Infrastructure.Persistance;
 using Designly.Shared.ConnectionProviders;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -20,14 +19,7 @@ namespace Clients.Infrastructure
                     serviceProvider.GetRequiredService<IOptionsMonitor<DatabaseConnectionDetails>>());
             });
 
-            services.AddDbContext<ClientsDBContext>((serviceProvider, options) =>
-            {
-                var connectionStringProvider = serviceProvider.GetRequiredService<IDbConnectionStringProvider>();
-                var connectionString = connectionStringProvider.ConnectionString;
-                options.UseNpgsql(connectionString);
-            });
-
-            services.AddScoped<IClientsRepository, ClientsRepository>();
+            services.AddScoped<IAccountsRepository, AccountsRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;

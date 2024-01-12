@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Npgsql;
 
-namespace SharedKernel.ConnectionProviders
+namespace Designly.Shared.ConnectionProviders
 {
     public class PostgreSqlDbConnectionStringProvider : IDbConnectionStringProvider
     {

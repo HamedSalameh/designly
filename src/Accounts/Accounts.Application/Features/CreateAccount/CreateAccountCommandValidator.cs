@@ -1,4 +1,4 @@
-﻿using Accounts.Application.Features.CreateAccount;
+﻿using Projects.Application.Features.CreateAccount;
 using FluentValidation;
 
 namespace Projects.Application.Features.CreateProject

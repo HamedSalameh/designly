@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Accounts.Application.Common
+namespace Projects.Application.Common
 {
     internal static class Helpers
     {

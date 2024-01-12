@@ -1,4 +1,4 @@
-﻿using Accounts.Application.Common;
+﻿using Projects.Application.Common;
 using Designly.Auth.Identity;
 using Mapster;
 using MediatR;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 
-namespace Accounts.Application.Features.CreateAccount
+namespace Projects.Application.Features.CreateAccount
 {
     public static class CreateAccountEndpoint
     {
