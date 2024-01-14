@@ -1,5 +1,5 @@
-﻿using Clients.Infrastructure.Interfaces;
-using Clients.Infrastructure.Persistance;
+﻿using Accounts.Infrastructure.Persistance;
+using Clients.Infrastructure.Interfaces;
 using Designly.Shared.ConnectionProviders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

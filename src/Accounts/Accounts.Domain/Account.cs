@@ -10,7 +10,7 @@ namespace Accounts.Domain
 
         public Guid AccountOwner { get; set; }
 
-        public List<Team> Teams { get; private set; }
+        public ICollection<Team> Teams { get; private set; }
 
         public Account(string Name, Guid accountOwner)
         {
@@ -51,18 +51,6 @@ namespace Accounts.Domain
             }
 
             Teams.Remove(team);
-        }
-
-        public void AddTeams(IEnumerable<Team> teams)
-        {
-            if (teams == null) throw new ArgumentNullException(nameof(teams));
-
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
-
-            Teams.AddRange(teams);
         }
     }
 }

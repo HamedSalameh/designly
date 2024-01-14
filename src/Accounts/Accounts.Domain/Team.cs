@@ -4,12 +4,16 @@ namespace Accounts.Domain
 {
     public class Team : Entity
     {
+        public Guid AccountId { get; set; }
+        
+        public Account Account { get; set; }
+        
         // For the root team, this is the tenantId because the root team is the tenant
         public Guid MemberOf { get; set; }
 
         public string Name { get; set; }
 
-        public List<User> Members { get; set; }
+        public ICollection<User> Members { get; set; }
 
         public Team(string name, Guid memberOf)
         {
@@ -80,8 +84,11 @@ namespace Accounts.Domain
             {
                 Members = new List<User>();
             }
-
-            Members.AddRange(users);
+            
+            foreach (var user in users)
+            {
+                Members.Add(user);
+            }
         }
 
         public void RemoveMembers(IEnumerable<User> users)

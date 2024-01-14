@@ -7,6 +7,8 @@
         public string Email { get; set; }
         public string? JobTitle { get; set; }
 
+        // this is the team the user is a member of
+        public Team Team { get; set; }  
         public Guid MemberOf { get; set; }
 
         public User(string firstName, string lastName, string email, string? jobTitle, Guid memberOf)

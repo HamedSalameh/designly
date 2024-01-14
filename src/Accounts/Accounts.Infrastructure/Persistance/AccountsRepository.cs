@@ -1,5 +1,6 @@
 ﻿using Accounts.Domain;
 using Clients.Infrastructure.Interfaces;
+using Clients.Infrastructure.Persistance;
 using Clients.Infrastructure.Polly;
 using Dapper;
 using Designly.Shared.ConnectionProviders;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 using Polly.Wrap;
 
-namespace Clients.Infrastructure.Persistance
+namespace Accounts.Infrastructure.Persistance
 {
     public class AccountsRepository : IAccountsRepository
     {
