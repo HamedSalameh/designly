@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     modified_at TIMESTAMP,
     name VARCHAR(100) NOT NULL,
     account_owner UUID NOT NULL,
-    status INT NOT NULL,
-    FOREIGN KEY (account_owner) REFERENCES users(id) ON DELETE CASCADE
+    status INT NOT NULL
 );
 
 -- Create teams table
