@@ -6,27 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Projects.Application.Common;
 
-namespace Projects.Application.Features.CreateProject
+namespace Accounts.Application.Features.CreateAccount
 {
-    public static class CreateProjectEndpoint
+    public static class CreateAccountEndpoint
     {
-        public static IEndpointConventionBuilder MapCreateFeature(this IEndpointRouteBuilder endpoints, string pattern = "")
+        public static IEndpointConventionBuilder MapCreateAccountFeature(this IEndpointRouteBuilder endpoints, string pattern = "")
         {
             var endPoint = endpoints
-                .MapPost(pattern, CreateProjectEndpointMethodAsync)
-                .RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+                .MapPost(pattern, CreateAccountEndpointMethodAsync)
+                .RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status403Forbidden)
                 .Produces(StatusCodes.Status400BadRequest);
-            
+
             return endPoint;
         }
 
-        private static async Task<IResult> CreateProjectEndpointMethodAsync([FromBody] CreateProjectRequestDto createProjectRequestDto, 
+        private static async Task<IResult> CreateAccountEndpointMethodAsync([FromBody] CreateAccountRequestDto createAccountRequestDto,
             IAuthorizationProvider authroizationProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
@@ -35,10 +34,10 @@ namespace Projects.Application.Features.CreateProject
             )
         {
             ILogger logger = loggerFactory.CreateLogger("CreateProjectFeature");
-            
-            if (createProjectRequestDto == null)
+
+            if (createAccountRequestDto == null)
             {
-                logger.LogError($"Invalid value for {nameof(createProjectRequestDto)}");
+                logger.LogError($"Invalid value for {nameof(createAccountRequestDto)}");
                 return Results.BadRequest($"The submitted project object is not valid or empty");
             }
 
@@ -49,15 +48,12 @@ namespace Projects.Application.Features.CreateProject
                 return Results.BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
-            var createProjectCommand = createProjectRequestDto.Adapt<CreateProjectCommand>();
-            createProjectCommand.TenantId = tenantId.Value;
+            var createAccountCommand = createAccountRequestDto.Adapt<CreateAccountCommand>();
+            createAccountCommand.TenantId = tenantId.Value;
 
-            var projectId = await sender.Send(createProjectCommand, cancellationToken).ConfigureAwait(false);
+            var accountId = await sender.Send(createAccountCommand, cancellationToken).ConfigureAwait(false);
 
-            var projectResourceUrl = Helpers.BuildResourceUri(httpContext, projectId);
-
-            return Results.Ok(projectResourceUrl);
+            return Results.Ok(accountId);
         }
-
     }
 }

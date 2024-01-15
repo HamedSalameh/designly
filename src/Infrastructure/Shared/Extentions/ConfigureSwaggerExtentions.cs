@@ -1,14 +1,15 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
-namespace Clients.API.Extentions
+namespace Designly.Shared.Extentions
 {
     public static class ConfigureSwaggerExtentions
     {
-        public static void ConfigureSecuredSwagger(this IServiceCollection services)
+        public static void ConfigureSecuredSwagger(this IServiceCollection services, string title, string version)
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clients API", Version = "v1" });
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
 
                 // Enable JWT Bearer authorization
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

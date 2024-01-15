@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.ConnectionProviders
+﻿namespace Designly.Shared.ConnectionProviders
 {
     public interface IDbConnectionStringProvider
     {
