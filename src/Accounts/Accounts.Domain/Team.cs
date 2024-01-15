@@ -12,7 +12,7 @@ namespace Accounts.Domain
         // For the root team, this is the tenantId because the root team is the tenant
         public Guid MemberOf { get; set; }
 
-        public TeamStatus TeamStatus { get; private set; }
+        public TeamStatus Status { get; private set; }
 
         public string Name { get; set; }
 
@@ -26,7 +26,7 @@ namespace Accounts.Domain
             Name = name;
             MemberOf = memberOf;
             Members = new List<User>();
-            TeamStatus = TeamStatus.Active;
+            Status = TeamStatus.Active;
         }
 
         public Team(string name, Guid memberOf, List<User> members, Guid tenantId) : this(name, memberOf, tenantId)
@@ -123,7 +123,7 @@ namespace Accounts.Domain
         public void ChangeTeamStatus(TeamStatus newStatus)
         {
             // TODO: Add team status change rules
-            TeamStatus = newStatus;
+            Status = newStatus;
         }
     }
 }

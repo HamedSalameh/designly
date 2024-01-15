@@ -12,7 +12,7 @@ namespace Accounts.Domain
 
         public Guid AccountOwner { get; set; }
 
-        public AccountStatus AccountStatus { get; private set; }
+        public AccountStatus Status { get; private set; }
 
         public ICollection<Team> Teams { get; private set; }
 
@@ -24,7 +24,7 @@ namespace Accounts.Domain
             this.Name = Name;
             AccountOwner = accountOwner;
             Teams = new List<Team>();
-            AccountStatus = AccountStatus.Active;
+            Status = AccountStatus.Active;
         }
 
         // Used by EF, Dapper, etc.
@@ -61,7 +61,7 @@ namespace Accounts.Domain
         public void ChangeAccountStatus(AccountStatus newStatus)
         {
             // TODO: Add account status change rules
-            AccountStatus = newStatus;
+            Status = newStatus;
         }
     }
 }

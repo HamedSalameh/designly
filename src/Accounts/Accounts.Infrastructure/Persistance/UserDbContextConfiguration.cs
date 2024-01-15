@@ -37,6 +37,10 @@ namespace Accounts.Infrastructure.Persistance
                 .HasColumnName("job_title")
                 .HasMaxLength(Consts.JobTitleMaxLength);
 
+            builder.Property(x => x.Status)
+                .HasColumnName("status")
+                .IsRequired();
+
             builder.HasOne(user => user.Team)
                 .WithMany(team => team.Members)
                 .HasForeignKey(user => user.MemberOf)

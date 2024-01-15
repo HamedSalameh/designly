@@ -30,6 +30,10 @@ namespace Accounts.Infrastructure.Persistance
                 .HasColumnName("account_owner")
                 .IsRequired();
 
+            builder.Property(x => x.Status)
+                .HasColumnName("status")
+                .IsRequired();
+
             builder.HasMany(acc => acc.Teams)
                 .WithOne(team => team.Account)
                 .HasForeignKey(team => team.AccountId)
