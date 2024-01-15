@@ -1,5 +1,4 @@
 ﻿using Clients.Domain.Entities;
-using System.Diagnostics.Eventing.Reader;
 
 namespace Clients.Infrastructure.Interfaces
 {

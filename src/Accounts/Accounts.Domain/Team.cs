@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static Accounts.Domain.Consts;
 
 namespace Accounts.Domain
 {
@@ -11,11 +12,13 @@ namespace Accounts.Domain
         // For the root team, this is the tenantId because the root team is the tenant
         public Guid MemberOf { get; set; }
 
+        public TeamStatus TeamStatus { get; private set; }
+
         public string Name { get; set; }
 
         public ICollection<User> Members { get; set; }
 
-        public Team(string name, Guid memberOf)
+        public Team(string name, Guid memberOf, Guid tenantId) : base(tenantId)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (memberOf == Guid.Empty || memberOf == default) throw new ArgumentNullException(nameof(memberOf));
@@ -23,9 +26,10 @@ namespace Accounts.Domain
             Name = name;
             MemberOf = memberOf;
             Members = new List<User>();
+            TeamStatus = TeamStatus.Active;
         }
 
-        public Team(string name, Guid memberOf, List<User> members) : this(name, memberOf)
+        public Team(string name, Guid memberOf, List<User> members, Guid tenantId) : this(name, memberOf, tenantId)
         {
             if (members == null) throw new ArgumentNullException(nameof(members));
             Members = members;
@@ -116,5 +120,10 @@ namespace Accounts.Domain
             Members.Clear();
         }
 
+        public void ChangeTeamStatus(TeamStatus newStatus)
+        {
+            // TODO: Add team status change rules
+            TeamStatus = newStatus;
+        }
     }
 }

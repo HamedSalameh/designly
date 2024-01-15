@@ -1,7 +1,6 @@
-﻿using Projects.Application.Features.CreateAccount;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Projects.Application.Features.CreateProject
+namespace Accounts.Application.Features.CreateAccount
 {
     public class CreateAccountCommandValidator : AbstractValidator<CreateAccountCommand>
     {

@@ -1,4 +1,3 @@
-using Clients.API.Extentions;
 using Clients.Application;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -11,6 +10,7 @@ using Clients.API.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Designly.Auth.Identity;
 using Designly.Shared;
+using Designly.Shared.Extentions;
 
 public class Program
 {
@@ -47,7 +47,7 @@ public class Program
         RegisterAuthorizationAndPolicyHandlers(builder);
 
         // Configure Swagger
-        builder.Services.ConfigureSecuredSwagger();
+        builder.Services.ConfigureSecuredSwagger("clients", "v1");
         builder.Services.ConfigureCors();
 
         // Configure Services

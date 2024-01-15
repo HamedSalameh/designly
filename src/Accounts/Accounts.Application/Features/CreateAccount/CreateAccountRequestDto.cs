@@ -1,4 +1,4 @@
-﻿namespace Projects.Application.Features.CreateAccount
+﻿namespace Accounts.Application.Features.CreateAccount
 {
     public class CreateAccountRequestDto
     {

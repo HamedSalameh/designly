@@ -4,6 +4,8 @@ using Designly.Shared;
 using Designly.Shared.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
+using Designly.Auth.Providers;
+using Accounts.Application.Features.CreateAccount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,11 +42,14 @@ builder.Services.AddJwtBearerConfig(configuration);
 RegisterAuthorizationAndPolicyHandlers(builder);
 
 // Configure Swagger
-builder.Services.ConfigureSecuredSwagger();
+builder.Services.ConfigureSecuredSwagger("accounts", "v1");
 builder.Services.ConfigureCors();
 
 // Configure Services
+builder.Services.AddHttpClient();
 builder.Services.AddApplication(configuration);
+builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 var app = builder.Build();
 
@@ -54,6 +59,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+MapEndoints(app);
 
 app.UseHttpsRedirection();
 
@@ -67,4 +74,19 @@ static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder
 
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+}
+
+static void MapEndoints(WebApplication app)
+{
+    var versionSet = app.NewApiVersionSet()
+        .HasApiVersion(new Asp.Versioning.ApiVersion(1))
+        .ReportApiVersions()
+        .Build();
+
+    var routeGroup = app
+        .MapGroup("api/v{version:apiVersion}")
+        .RequireAuthorization()
+        .WithApiVersionSet(versionSet);
+
+    routeGroup.MapCreateAccountFeature();
 }

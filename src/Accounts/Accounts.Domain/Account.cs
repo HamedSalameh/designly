@@ -1,4 +1,6 @@
 ﻿
+using static Accounts.Domain.Consts;
+
 namespace Accounts.Domain
 {
     public class Account : Entity
@@ -10,9 +12,11 @@ namespace Accounts.Domain
 
         public Guid AccountOwner { get; set; }
 
+        public AccountStatus AccountStatus { get; private set; }
+
         public ICollection<Team> Teams { get; private set; }
 
-        public Account(string Name, Guid accountOwner)
+        public Account(string Name, Guid accountOwner) : base()
         {
             if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
             if (accountOwner == Guid.Empty || accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
@@ -20,6 +24,7 @@ namespace Accounts.Domain
             this.Name = Name;
             AccountOwner = accountOwner;
             Teams = new List<Team>();
+            AccountStatus = AccountStatus.Active;
         }
 
         // Used by EF, Dapper, etc.
@@ -51,6 +56,12 @@ namespace Accounts.Domain
             }
 
             Teams.Remove(team);
+        }
+
+        public void ChangeAccountStatus(AccountStatus newStatus)
+        {
+            // TODO: Add account status change rules
+            AccountStatus = newStatus;
         }
     }
 }

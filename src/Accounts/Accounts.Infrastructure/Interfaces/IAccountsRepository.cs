@@ -1,8 +1,6 @@
-﻿
+﻿using Accounts.Domain;
 
-using Accounts.Domain;
-
-namespace Clients.Infrastructure.Interfaces
+namespace Accounts.Infrastructure.Interfaces
 {
     public interface IAccountsRepository
     {

@@ -23,4 +23,8 @@
 	  <ProjectReference Include="..\Accounts.Infrastructure\Accounts.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Common\" />
+	</ItemGroup>
+
 </Project>

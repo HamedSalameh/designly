@@ -11,7 +11,8 @@
 
         protected Entity()
         {
-
+            CreatedAt = DateTime.UtcNow;
+            ModifiedAt = DateTime.UtcNow;
         }
 
         protected Entity(Guid TenantId) : this()
@@ -23,8 +24,6 @@
             }
 
             this.TenantId = TenantId;
-            CreatedAt = DateTime.UtcNow;
-            ModifiedAt = DateTime.UtcNow;
         }
 
         public bool IsTransient()

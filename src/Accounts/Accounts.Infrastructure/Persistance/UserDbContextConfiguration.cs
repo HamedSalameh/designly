@@ -21,21 +21,21 @@ namespace Accounts.Infrastructure.Persistance
             builder.Property(x => x.FirstName)
                 .HasColumnName("first_name")
                 .IsRequired()
-                .HasMaxLength(Consts.User.FirstNameMaxLength);
+                .HasMaxLength(Consts.FirstNameMaxLength);
 
             builder.Property(x => x.LastName)
                 .HasColumnName("last_name")
                 .IsRequired()
-                .HasMaxLength(Consts.User.LastNameMaxLength);
+                .HasMaxLength(Consts.LastNameMaxLength);
 
             builder.Property(x => x.Email)
                 .HasColumnName("email")
                 .IsRequired()
-                .HasMaxLength(Consts.User.MaxEmailAddressLength);
+                .HasMaxLength(Consts.MaxEmailAddressLength);
 
             builder.Property(x => x.JobTitle)
                 .HasColumnName("job_title")
-                .HasMaxLength(Consts.User.JobTitleMaxLength);
+                .HasMaxLength(Consts.JobTitleMaxLength);
 
             builder.HasOne(user => user.Team)
                 .WithMany(team => team.Members)

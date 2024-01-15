@@ -1,4 +1,4 @@
-﻿namespace Clients.Infrastructure.Interfaces
+﻿namespace Accounts.Infrastructure.Interfaces
 {
 
     public interface IUnitOfWork

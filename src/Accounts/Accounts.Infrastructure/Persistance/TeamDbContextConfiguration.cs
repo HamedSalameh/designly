@@ -21,7 +21,7 @@ namespace Accounts.Infrastructure.Persistance
             builder.Property(team => team.Name)
                 .HasColumnName("name")
                 .IsRequired()
-                .HasMaxLength(Consts.Team.NameMaxLength);
+                .HasMaxLength(Consts.TeamNameMaxLength);
 
             builder.Property(team => team.MemberOf)
                 .HasColumnName("member_of")

@@ -1,22 +1,14 @@
-﻿using Projects.Application.Features.CreateAccount;
-using Designly.Auth.Identity;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Clients.Infrastructure.Interfaces;
 using Accounts.Domain;
+using Accounts.Infrastructure.Interfaces;
 
-namespace Projects.Application.Features.CreateProject
+namespace Accounts.Application.Features.CreateAccount
 {
-    public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, Guid>
+    public class CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<CreateAccountCommand, Guid>
     {
-        private readonly ILogger<CreateAccountCommandHandler> _logger;
-        private readonly IUnitOfWork unitOfWork;
-
-        public CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, IUnitOfWork unitOfWork)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        }
+        private readonly ILogger<CreateAccountCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
         public async Task<Guid> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {

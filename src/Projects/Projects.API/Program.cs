@@ -45,7 +45,7 @@ builder.Services.AddJwtBearerConfig(configuration);
 RegisterAuthorizationAndPolicyHandlers(builder);
 
 // Configure Swagger
-builder.Services.ConfigureSecuredSwagger();
+builder.Services.ConfigureSecuredSwagger("projects", "v1");
 builder.Services.ConfigureCors();
 
 // Configure Services
@@ -106,6 +106,6 @@ static void MapEndoints(WebApplication app)
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
-    routeGroup.MapCreateFeature("");
+    routeGroup.MapCreateFeature();
     routeGroup.MapDeleteFeature("{projectId}");
 }

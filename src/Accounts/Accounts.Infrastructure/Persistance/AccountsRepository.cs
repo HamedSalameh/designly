@@ -1,5 +1,5 @@
 ﻿using Accounts.Domain;
-using Clients.Infrastructure.Interfaces;
+using Accounts.Infrastructure.Interfaces;
 using Clients.Infrastructure.Persistance;
 using Clients.Infrastructure.Polly;
 using Dapper;
@@ -13,11 +13,12 @@ namespace Accounts.Infrastructure.Persistance
 {
     public class AccountsRepository : IAccountsRepository
     {
+        private readonly AccountsDbContext _context;
         private readonly ILogger<AccountsRepository> _logger;
         private readonly IDbConnectionStringProvider dbConnectionStringProvider;
         private readonly AsyncPolicyWrap policy;
 
-        public AccountsRepository(ILogger<AccountsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider)
+        public AccountsRepository(ILogger<AccountsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider, AccountsDbContext context)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.dbConnectionStringProvider = dbConnectionStringProvider;
@@ -25,11 +26,21 @@ namespace Accounts.Infrastructure.Persistance
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
             policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            _context = context;
         }
 
         public async Task<Guid> CreateAccountAsync(Account account, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(Guid.NewGuid());
+            if (account == null)
+            {
+                _logger.LogError("Provided account entity is null");
+                throw new ArgumentNullException(nameof(account));   
+            }
+
+            await _context.Accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+
+            return account.Id;
         }
     }
 }

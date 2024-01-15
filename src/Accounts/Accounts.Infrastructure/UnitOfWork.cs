@@ -1,4 +1,4 @@
-﻿using Clients.Infrastructure.Interfaces;
+﻿using Accounts.Infrastructure.Interfaces;
 
 namespace Clients.Infrastructure
 {

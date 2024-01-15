@@ -12,7 +12,7 @@ namespace Projects.Application.Features.CreateProject
 {
     public static class CreateProjectEndpoint
     {
-        public static IEndpointConventionBuilder MapCreateFeature(this IEndpointRouteBuilder endpoints, string pattern)
+        public static IEndpointConventionBuilder MapCreateFeature(this IEndpointRouteBuilder endpoints, string pattern = "")
         {
             var endPoint = endpoints
                 .MapPost(pattern, CreateProjectEndpointMethodAsync)
