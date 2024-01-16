@@ -23,25 +23,28 @@ namespace Accounts.Infrastructure.Persistance
                 .IsRequired()
                 .HasMaxLength(Consts.TeamNameMaxLength);
 
-            builder.Property(team => team.MemberOf)
-                .HasColumnName("member_of")
-                .IsRequired();
-
             builder.Property(team => team.Status)
                 .HasColumnName("status")
                 .IsRequired();
 
-            builder.HasMany(team => team.Members)
-                .WithOne(user => user.Team)
-                .HasForeignKey(user => user.MemberOf)
-                .HasPrincipalKey(team => team.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(team => team.AccountId)
+                .HasColumnName("account_id")
+                .IsRequired();
+
+            //builder.HasMany(team => team.Members)
+            //    .WithMany(user => user.Teams)
+            //    .UsingEntity(j => j.ToTable("team_members"));
 
             builder.HasOne(team => team.Account)
                 .WithMany(account => account.Teams)
                 .HasForeignKey(team => team.AccountId)
                 .HasPrincipalKey(account => account.Id)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Define many-to-many relationship between Team and User
+            builder.HasMany(team => team.Members)
+                .WithMany(member => member.Teams)
+                .UsingEntity<TeamMembers>(table => table.ToTable("team_members"));
         }
     }
 }

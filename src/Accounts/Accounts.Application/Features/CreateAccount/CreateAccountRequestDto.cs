@@ -3,6 +3,13 @@
     public class CreateAccountRequestDto
     {
         public string Name { get; set; } = string.Empty;
-        public Guid AccountOwner { get; set; }
+
+        public string OwnerFirstName { get; set; } = string.Empty;
+        public string OwnerLastName { get; set; } = string.Empty;
+        public string OwnerEmail { get; set; } = string.Empty;
+        public string OwnerJobTitle { get; set; } = string.Empty;
+        // TODO: Add this
+        //public string OwnerPhoneNumber { get; set; } = string.Empty;
+
     }
 }
