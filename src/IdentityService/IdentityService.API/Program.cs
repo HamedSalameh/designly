@@ -1,5 +1,5 @@
+using Designly.Shared.Extentions;
 using Clients.Application;
-using IdentityService.API.Extentions;
 using IdentityService.Service;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -52,7 +52,7 @@ public class Program
         builder.Services.AddAuthorization();
 
         // Configure Swagger
-        builder.Services.ConfigureSecuredSwagger();
+        builder.Services.ConfigureSecuredSwagger("Identity Service API", "v1");
         builder.Services.ConfigureCors();
 
         // Configure Services
@@ -82,12 +82,12 @@ public class Program
         // the call to UserAuthorization should appeat between UseRouting and UseEndpoints
         app.UseAuthorization();
 
-        app.UseEndpoints((Action<IEndpointRouteBuilder>)(endpoints =>
+        app.UseEndpoints(endpoints =>
         {
             ConfigureHealthChecksRouting(endpoints);
 
             endpoints.MapControllers();
-        }));
+        });
 
         app.Run();
 

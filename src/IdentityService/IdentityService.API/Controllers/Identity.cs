@@ -24,6 +24,32 @@ namespace IdentityService.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [Route("createuser")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateUserAsync([FromForm] CreateUserRequestDetails createUserRequestDetails,
+                       CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createUserCommand = new CreateUserCommand
+            {
+                Email = createUserRequestDetails.Email,
+                FirstName = createUserRequestDetails.FirstName,
+                LastName = createUserRequestDetails.LastName
+            };
+
+            _ = await _mediator.Send(createUserCommand, cancellationToken).ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("signin")]
         [AllowAnonymous]
         [Produces(MediaTypeNames.Application.Json)]
@@ -44,7 +70,7 @@ namespace IdentityService.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await UserSigningAsync(clientSigningRequest);
+                await SigninUserAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -62,7 +88,7 @@ namespace IdentityService.API.Controllers
 
             var signoutRequest = new SignoutRequest(accessToken);
 
-            _ = await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
+            await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
 
             await UserSignoutAsync();
 
@@ -101,7 +127,7 @@ namespace IdentityService.API.Controllers
         /// </summary>
         /// <param name="clientSigningRequest"></param>
         /// <returns></returns>
-        private async Task UserSigningAsync(ClientSigningRequest clientSigningRequest)
+        private async Task SigninUserAsync(ClientSigningRequest clientSigningRequest)
         {
             var claims = new List<Claim>()
                 {

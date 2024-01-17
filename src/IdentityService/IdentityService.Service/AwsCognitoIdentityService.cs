@@ -179,5 +179,66 @@ namespace IdentityService.Service
                 TokenType = response.AuthenticationResult.TokenType
             };
         }
+
+        public async Task<bool> CreateUser(string email, string firstName, string lastName, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException(nameof(email));
+            }
+            if (string.IsNullOrEmpty(firstName))
+            {
+                throw new ArgumentException(nameof(firstName));
+            }
+            if (string.IsNullOrEmpty(lastName))
+            {
+                throw new ArgumentException(nameof(lastName));
+            }
+
+            var request = new AdminCreateUserRequest
+            {
+                UserPoolId = _poolId,
+                Username = email,
+                UserAttributes = new List<AttributeType>
+                {
+                    new AttributeType
+                    {
+                        Name = "email",
+                        Value = email
+                    },
+                    new AttributeType
+                    {
+                        Name = "given_name",
+                        Value = firstName
+                    },
+                    new AttributeType
+                    {
+                        Name = "family_name",
+                        Value = lastName
+                    }
+                },
+                TemporaryPassword = "Changeme1!",
+                DesiredDeliveryMediums = new List<string>
+                {
+                    "EMAIL"
+                }
+            };
+
+            try
+            {
+                var response = await _client.AdminCreateUserAsync(request, cancellationToken).ConfigureAwait(false);
+                return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
+            }
+            catch (UsernameExistsException usernameExistsException)
+            {
+                _logger.LogError($"The username {email} already exists.");
+                throw new Exception($"The username {email} already exists.", usernameExistsException);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
+                return false;
+            }
+        }
     }
 }

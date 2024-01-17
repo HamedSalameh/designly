@@ -15,6 +15,9 @@ namespace Designly.Shared
 
         public const byte MaxClientNameLength = 100;
 
+        public const byte FirstNameMaxLength = 50;
+        public const byte LastNameMaxLength = 50;
+
         public const byte DefaultMaxLimitedStringLength = 255;
 
         public static class Strings
