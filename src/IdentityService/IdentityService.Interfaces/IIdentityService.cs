@@ -2,6 +2,7 @@
 {
     public interface IIdentityService
     {
+        Task<bool> CreateUser(string email, string firstName, string lastName, CancellationToken cancellationToken);
         Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken);
         Task<ITokenResponse?> LoginJwtAsync(string username, string password, CancellationToken cancellationToken);
         Task<ITokenResponse?> RefreshToken(string refreshToken, CancellationToken cancellationToken);
