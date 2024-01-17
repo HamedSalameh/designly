@@ -49,7 +49,7 @@ namespace Accounts.Application.Builders
 
             account.AssignOwner(accountOwner);
             
-            account.CreateDefaultTeam(accountOwner);
+            account.CreateDefaultTeam();
             
             account.AddUserToDefaultTeam(accountOwner);
 

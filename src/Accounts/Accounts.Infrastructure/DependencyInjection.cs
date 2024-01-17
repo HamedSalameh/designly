@@ -26,6 +26,10 @@ namespace Accounts.Infrastructure
                 var connectionStringProvider = serviceProvider.GetRequiredService<IDbConnectionStringProvider>();
                 var connectionString = connectionStringProvider.ConnectionString;
                 options.UseNpgsql(connectionString);
+                options.EnableDetailedErrors();
+                options.EnableSensitiveDataLogging();
+                
+
             });
 
             services.AddScoped<IAccountsRepository, AccountsRepository>();

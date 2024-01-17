@@ -18,17 +18,15 @@ namespace Accounts.Application.Features.CreateAccount
             {
                 var account = _accountBuilder.CreateBasicAccount(request.Name).Build();
 
-                var accountId = await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
-
                 var accountOwner = new User(request.OwnerFirstName, request.OwnerLastName, request.OwnerEmail, request.OwnerJobTitle, account);
 
                 // assign the account owner as the owner of the account
                 account = _accountBuilder.ConfigureAccount(accountOwner).Build();
 
                 // save changes
-                var completeAccount = await unitOfWork.AccountsRepository.SaveChanges(account, cancellationToken);
+                await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
 
-                return accountId;
+                return account.Id;
             }
             catch (Exception exception)
             {

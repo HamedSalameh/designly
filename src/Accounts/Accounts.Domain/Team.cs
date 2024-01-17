@@ -23,6 +23,7 @@ namespace Accounts.Domain
             Members = new List<User>();
             Status = TeamStatus.Active;
             Account = account;
+            AccountId = account.Id;
         }
 
         // Used by EF, Dapper, etc.

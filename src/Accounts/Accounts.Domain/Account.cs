@@ -7,7 +7,7 @@ namespace Accounts.Domain
     {
         public string Name { get; set; }
 
-        public User? AccountOwner { get; set; }
+        public User? Owner { get; set; }
 
         public AccountStatus Status { get; private set; }
 
@@ -19,7 +19,7 @@ namespace Accounts.Domain
             if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
 
             this.Name = Name;
-            AccountOwner = accountOwner;
+            Owner = accountOwner;
             Status = AccountStatus.Active;
 
             Teams = new List<Team>();
@@ -46,22 +46,12 @@ namespace Accounts.Domain
         {
             if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
 
-            AccountOwner = accountOwner;
+            Owner = accountOwner;
             Status = AccountStatus.Active;
         }
 
-        public void CreateDefaultTeam(User accountOwner)
+        public void CreateDefaultTeam()
         {
-            if (Id == default)
-            {
-                throw new ArgumentNullException("Account has not been created yet");
-            }
-
-            if (accountOwner == null)
-            {
-                throw new ArgumentNullException(nameof(accountOwner));
-            }
-
             if (Teams == null)
             {
                 Teams = new List<Team>();
@@ -74,8 +64,6 @@ namespace Accounts.Domain
                 defaultTeam = new Team(Consts.DefaultTeamName, this);
                 Teams.Add(defaultTeam);
             }
-
-            defaultTeam.AddMember(accountOwner);
         }
 
         public void AddUserToDefaultTeam(User user)

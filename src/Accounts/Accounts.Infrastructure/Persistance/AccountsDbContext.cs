@@ -7,7 +7,7 @@ namespace Accounts.Infrastructure.Persistance
     {
         public AccountsDbContext(DbContextOptions options) : base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

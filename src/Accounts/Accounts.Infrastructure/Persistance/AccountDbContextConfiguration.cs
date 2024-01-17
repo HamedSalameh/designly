@@ -29,10 +29,10 @@ namespace Accounts.Infrastructure.Persistance
 
             // one-to-one between account and user
             // marked as optional to allow creation of account before user
-            builder.HasOne(account => account.AccountOwner)
-                .WithOne(user => user.Account)
-                .HasForeignKey<User>(user => user.AccountId)
-                .IsRequired(false);
+            //builder.HasOne(account => account.AccountOwner)
+            //    .WithOne(user => user.Account)
+            //    .HasForeignKey<User>(user => user.AccountId)
+            //    .IsRequired(false);
 
             builder.Property(x => x.Status)
                 .HasColumnName("status")
@@ -41,7 +41,6 @@ namespace Accounts.Infrastructure.Persistance
             builder.HasMany(acc => acc.Teams)
                 .WithOne(team => team.Account)
                 .HasForeignKey(team => team.AccountId)
-                .HasPrincipalKey(acc => acc.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
