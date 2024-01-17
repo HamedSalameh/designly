@@ -49,7 +49,6 @@ namespace Accounts.Application.Features.CreateAccount
             }
 
             var createAccountCommand = createAccountRequestDto.Adapt<CreateAccountCommand>();
-            createAccountCommand.TenantId = tenantId.Value;
 
             var accountId = await sender.Send(createAccountCommand, cancellationToken).ConfigureAwait(false);
 

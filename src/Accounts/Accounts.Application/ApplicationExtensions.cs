@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 using Accounts.Infrastructure;
+using Accounts.Application.Builders;
 
 namespace Projects.Application;
 
@@ -11,6 +12,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IAccountBuilder, AccountBuilder>();
+
         services.AddInfrastructureCore(configuration);
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

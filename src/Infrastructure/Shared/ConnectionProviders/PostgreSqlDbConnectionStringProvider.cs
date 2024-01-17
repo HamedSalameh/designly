@@ -43,8 +43,12 @@ namespace Designly.Shared.ConnectionProviders
                 Username = credentials.Username,
                 Password = credentials.Password,
                 Host = credentials.Hostname,
-                Port = credentials.Port,
+                Port = credentials.Port
             };
+
+            npgSqlConnectionString.IncludeErrorDetail = true;
+            npgSqlConnectionString.Pooling = true;
+            
 
             return npgSqlConnectionString.ConnectionString;
         }

@@ -9,30 +9,21 @@ namespace Accounts.Domain
         
         public Account Account { get; set; }
         
-        // For the root team, this is the tenantId because the root team is the tenant
-        public Guid MemberOf { get; set; }
-
         public TeamStatus Status { get; private set; }
 
         public string Name { get; set; }
 
         public ICollection<User> Members { get; set; }
 
-        public Team(string name, Guid memberOf, Guid tenantId) : base(tenantId)
+        public Team(string name, Account account) : base()
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
-            if (memberOf == Guid.Empty || memberOf == default) throw new ArgumentNullException(nameof(memberOf));
 
             Name = name;
-            MemberOf = memberOf;
             Members = new List<User>();
             Status = TeamStatus.Active;
-        }
-
-        public Team(string name, Guid memberOf, List<User> members, Guid tenantId) : this(name, memberOf, tenantId)
-        {
-            if (members == null) throw new ArgumentNullException(nameof(members));
-            Members = members;
+            Account = account;
+            AccountId = account.Id;
         }
 
         // Used by EF, Dapper, etc.

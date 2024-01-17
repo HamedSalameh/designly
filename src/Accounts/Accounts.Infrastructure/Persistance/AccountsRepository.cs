@@ -4,7 +4,7 @@ using Clients.Infrastructure.Persistance;
 using Clients.Infrastructure.Polly;
 using Dapper;
 using Designly.Shared.ConnectionProviders;
-
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using Polly.Wrap;
@@ -29,6 +29,22 @@ namespace Accounts.Infrastructure.Persistance
             _context = context;
         }
 
+        public async Task<Account?> GetAccountAsync(Guid accountId, CancellationToken cancellationToken)
+        {
+            if (accountId == Guid.Empty || accountId == default)
+            {
+                _logger.LogError("Provided accountId is empty or default");
+                throw new ArgumentNullException(nameof(accountId));
+            }
+
+            var account = await _context.Accounts
+                .Include(a => a.Owner)
+                .Include(a => a.Teams)
+                .FirstOrDefaultAsync(a => a.Id == accountId, cancellationToken);
+
+            return account;
+        }
+
         public async Task<Guid> CreateAccountAsync(Account account, CancellationToken cancellationToken)
         {
             if (account == null)
@@ -37,10 +53,71 @@ namespace Accounts.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(account));   
             }
 
-            await _context.Accounts.AddAsync(account);
-            await _context.SaveChangesAsync();
+            await _context.Accounts.AddAsync(account, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
 
             return account.Id;
+        }
+
+        public async Task UpdateAccount(Account account, CancellationToken cancellationToken)
+        {
+            if (account == null)
+            {
+                _logger.LogError("Provided account entity is null");
+                throw new ArgumentNullException(nameof(account));
+            }
+
+            _context.Accounts.Update(account);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<User>> CreateUsersAsync(IEnumerable<User> users, CancellationToken cancellationToken)
+        {
+            if (users == null)
+            {
+                _logger.LogError("Provided users collection is null");
+                throw new ArgumentNullException(nameof(users));
+            }
+
+            await _context.Users.AddRangeAsync(users, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return users;
+        }
+
+        public async Task<IEnumerable<Team>> UpdateTeamsAsync(IEnumerable<Team> teams, CancellationToken cancellationToken)
+        {
+            if (teams == null)
+            {
+                _logger.LogError("Provided teams collection is null");
+                throw new ArgumentNullException(nameof(teams));
+            }
+
+            _context.Teams.UpdateRange(teams);
+
+            await _context.SaveChangesAsync();
+
+            return teams;
+        }
+
+        public async Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken)
+        {
+            if (Id == Guid.Empty || Id == default)
+            {
+                _logger.LogError("Provided Id is empty or default");
+                throw new ArgumentNullException(nameof(Id));
+            }
+
+            // Do not track the entity
+            var entity = await _context.Set<User>().FindAsync(Id, cancellationToken);
+            if (entity is not null)
+            {
+                _context.Entry(entity).State = EntityState.Detached;
+            }
+
+            return entity;            
         }
     }
 }

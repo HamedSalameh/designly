@@ -7,23 +7,11 @@
 
         int? _requestedHashCode;
         public virtual Guid Id { get; set; }
-        public virtual Guid TenantId { get; set; }
 
         protected Entity()
         {
             CreatedAt = DateTime.UtcNow;
             ModifiedAt = DateTime.UtcNow;
-        }
-
-        protected Entity(Guid TenantId) : this()
-        {
-            // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == Guid.Empty || TenantId == default)
-            {
-                throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
-            }
-
-            this.TenantId = TenantId;
         }
 
         public bool IsTransient()

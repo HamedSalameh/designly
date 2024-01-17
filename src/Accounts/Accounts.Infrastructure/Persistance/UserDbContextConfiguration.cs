@@ -31,7 +31,11 @@ namespace Accounts.Infrastructure.Persistance
             builder.Property(x => x.Email)
                 .HasColumnName("email")
                 .IsRequired()
-                .HasMaxLength(Consts.MaxEmailAddressLength);
+                .HasMaxLength(Consts.EmailAddressMaxLength);
+
+            builder.Property(x => x.AccountId)
+                .HasColumnName("account_id")
+                .IsRequired();
 
             builder.Property(x => x.JobTitle)
                 .HasColumnName("job_title")
@@ -41,11 +45,10 @@ namespace Accounts.Infrastructure.Persistance
                 .HasColumnName("status")
                 .IsRequired();
 
-            builder.HasOne(user => user.Team)
+            // many to many between user and teams
+            builder.HasMany(user => user.Teams)
                 .WithMany(team => team.Members)
-                .HasForeignKey(user => user.MemberOf)
-                .HasPrincipalKey(team => team.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .UsingEntity<TeamMembers>(table => table.ToTable("team_members"));
         }
     }
 }

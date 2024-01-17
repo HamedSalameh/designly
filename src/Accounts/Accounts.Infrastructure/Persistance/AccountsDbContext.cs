@@ -7,7 +7,7 @@ namespace Accounts.Infrastructure.Persistance
     {
         public AccountsDbContext(DbContextOptions options) : base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -15,6 +15,7 @@ namespace Accounts.Infrastructure.Persistance
             modelBuilder.ApplyConfiguration(new AccountDbContextConfiguration());
             modelBuilder.ApplyConfiguration(new TeamDbContextConfiguration());
             modelBuilder.ApplyConfiguration(new UserDbContextConfiguration());
+            modelBuilder.ApplyConfiguration(new TeamMemberDbContextConfiguration());
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
