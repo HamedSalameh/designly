@@ -1,8 +1,62 @@
-# Status Enums Documentation
+# Accounts and Account Management
 
-## Introduction
+## Use Cases
 
-This document provides an overview of the status enums used in the application to represent the status of users, teams, and accounts. Status enums are commonly used to indicate the state or condition of entities within a system.
+### User Registration
+
+1. redirect to the registration page.
+2. The user selects a plan.
+3. The user enters their email address and password.
+4. A new user is created in the AWS Cognito user pool.
+5. The user is sent a confirmation email.
+6. The user confirms their email address by clicking on the link in the email.
+7. The link in the email redircs the user to the application login page.
+
+### Invite User to Account
+
+1. The user clicks on the `Invite User` button.
+2. The user enters the email address of the user to invite.
+3. The user clicks on the `Send Invitation` button.
+4. The user is sent an invitation email.
+5. AWS: A new user is created in the AWS Cognito user pool
+6. AWS: The user is added to the tenant group.
+
+7. The invited user clicks on the link in the email.
+8. The link in the email redirects the user to the application join by invite page.
+9. The user enters their email address, sets their password and general details.
+10. The user is authenticated against the AWS Cognito user pool.
+11. The user is authenticated against the application database.
+12. redirect to the dashboard.
+
+### User Registration with Invitation
+
+1. The user receives an invitation email.
+2. The user clicks on the link in the email.
+3. The link in the email redirects the user to the application login page.
+4. The user enters their email address and password.
+5. The user is authenticated against the AWS Cognito user pool.
+6. The user is authenticated against the application database.
+7. Redirect to dashboard.
+
+### User Signin
+
+1. The user enters their email address and password.
+2. The user is authenticated against the AWS Cognito user pool.
+3. The user is authenticated against the application database.
+4. If this is the first time the user has signed in, then:  
+   0. If the user does not have a tenant, then this mean new account creation
+   1. Basic account is created
+   2. The user is assigned as the owner of the account.
+   3. A default team is created for the account.
+   4. the user is added to the default team.
+   5. the account status is set to `Active`.
+   6. AWS: A new group is created for the account (to hold the tenant)
+   7. AWS: The user is added to the account group.
+   8. AWS: The user is added to the `AccountOwner` group.
+   9. A welcome email is sent to the user.
+5. redirect to the dashboard.
+
+
 
 ## User Status
 

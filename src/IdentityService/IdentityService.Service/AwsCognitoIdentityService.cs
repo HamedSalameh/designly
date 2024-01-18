@@ -33,12 +33,12 @@ namespace IdentityService.Service
             {
                 throw new ArgumentException($"Invalid value for {nameof(_poolId)} : must not be null or empty");
             }
-            if (string.IsNullOrEmpty( _region))
+            if (string.IsNullOrEmpty(_region))
             {
                 throw new ArgumentException("Region configuration is not set or empty");
             }
 
-            var awsRegion = RegionEndpoint.GetBySystemName( _region );
+            var awsRegion = RegionEndpoint.GetBySystemName(_region);
 
             _client = new AmazonCognitoIdentityProviderClient(awsRegion);
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -237,6 +237,76 @@ namespace IdentityService.Service
             catch (Exception exception)
             {
                 _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Create a group in AWS Cognito
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <param name="cancellation"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<bool> CreateGroup(string groupName, CancellationToken cancellation)
+        {
+            if (string.IsNullOrEmpty(groupName))
+            {
+                throw new ArgumentException(nameof(groupName));
+            }
+
+            var request = new CreateGroupRequest
+            {
+                GroupName = groupName,
+                UserPoolId = _poolId
+            };
+
+            try
+            {
+                var response = await _client.CreateGroupAsync(request, cancellation).ConfigureAwait(false);
+                return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not create group in AWS Cognito due to error: {exception.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Adds a user to a group in AWS Cognito
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="groupName"></param>
+        /// <param name="cancellation"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<bool> AddUserToGroup(string email, string groupName, CancellationToken cancellation)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException(nameof(email));
+            }
+            if (string.IsNullOrEmpty(groupName))
+            {
+                throw new ArgumentException(nameof(groupName));
+            }
+
+            var request = new AdminAddUserToGroupRequest
+            {
+                GroupName = groupName,
+                UserPoolId = _poolId,
+                Username = email
+            };
+
+            try
+            {
+                var response = await _client.AdminAddUserToGroupAsync(request, cancellation).ConfigureAwait(false);
+                return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not add user to group in AWS Cognito due to error: {exception.Message}");
                 return false;
             }
         }
