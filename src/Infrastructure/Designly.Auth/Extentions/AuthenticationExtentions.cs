@@ -1,5 +1,6 @@
 ﻿using Designly.Auth.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -27,7 +28,21 @@ namespace Designly.Auth.Extentions
                 {
                     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                }).AddCookie(options =>
+                {  // Setting up cookie based authentication options
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.Unspecified;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);   // setting cookie life-span
+                    options.SlidingExpiration = true;                   // issue a new cookie
+                    options.Events.OnRedirectToLogin = (context) =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                }
+                    )
                 .AddBearerToken()
                 .AddJwtBearer(jwtBearerOptions =>
             {
