@@ -49,8 +49,6 @@ builder.Services.ConfigureCors();
 // Configure Services
 builder.Services.AddHttpClient();
 builder.Services.AddApplication(configuration);
-builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 var app = builder.Build();
 

@@ -58,6 +58,7 @@ public class Program
         builder.Services.ConfigureCors();
 
         // Configure Services
+        builder.Services.AddHttpClient();
         builder.Services.AddApplication(configuration);
 
         // Configure Health checks

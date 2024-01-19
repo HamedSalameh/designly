@@ -1,5 +1,4 @@
-﻿using Designly.Auth.Providers;
-using IdentityService.Service;
+﻿using Designly.Auth.Extentions;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,8 +10,7 @@ namespace Clients.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<IdentityProviderConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
-            services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
+            services.AddIdentityProvider(configuration);
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             return services;

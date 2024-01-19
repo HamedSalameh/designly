@@ -70,7 +70,7 @@ namespace IdentityService.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await SigninUserAsync(clientSigningRequest);
+                // await SigninUserAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -89,7 +89,7 @@ namespace IdentityService.API.Controllers
 
             await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
 
-            await UserSignoutAsync();
+            // await UserSignoutAsync();
 
             return Ok();
         }

@@ -1,4 +1,6 @@
 ﻿using Designly.Auth.Identity;
+using Designly.Auth.Providers;
+using IdentityService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,17 @@ namespace Designly.Auth.Extentions
 {
     public static class AuthenticationExtentions
     {
+        public static IServiceCollection AddIdentityProvider(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<IdentityProviderConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
+            services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
+
+            services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+            services.AddSingleton<ITokenProvider, TokenProvider>();
+
+            return services;
+        }
+
         public static void AddJwtBearerConfig(this IServiceCollection services, IConfiguration configuration)
         {
             var region = configuration.GetValue<string>("AWSCognitoConfiguration:Region");
@@ -28,21 +41,24 @@ namespace Designly.Auth.Extentions
                 {
                     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddCookie(options =>
-                {  // Setting up cookie based authentication options
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.Unspecified;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                })
+                //}).AddCookie(options =>
+                //{  // Setting up cookie based authentication options
+                //    options.Cookie.Name = "designly_cookie";
+                //    options.Cookie.Path = "/";
+                //    options.Cookie.HttpOnly = true;
+                //    options.Cookie.SameSite = SameSiteMode.Unspecified;
+                //    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);   // setting cookie life-span
-                    options.SlidingExpiration = true;                   // issue a new cookie
-                    options.Events.OnRedirectToLogin = (context) =>
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        return Task.CompletedTask;
-                    };
-                }
-                    )
+                //    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);   // setting cookie life-span
+                //    options.SlidingExpiration = true;                   // issue a new cookie
+                //    options.Events.OnRedirectToLogin = (context) =>
+                //    {
+                //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                //        return Task.CompletedTask;
+                //    };
+                //}
+                //    )
                 .AddBearerToken()
                 .AddJwtBearer(jwtBearerOptions =>
             {
