@@ -240,13 +240,15 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> CreateGroup(string groupName, CancellationToken cancellation)
+        public async Task<bool> CreateGroup(string groupName, string groupDescription, CancellationToken cancellation)
         {
-            ArgumentNullException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
+            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
+            ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
 
             var request = new CreateGroupRequest
             {
                 GroupName = groupName,
+                Description = groupDescription,
                 UserPoolId = _poolId
             };
 
@@ -290,6 +292,31 @@ namespace Designly.Auth.Providers
             catch (Exception exception)
             {
                 _logger.LogError($"Could not add user to group in AWS Cognito due to error: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> SetUserPasswordAsync(string email, string password, CancellationToken cancellationToken)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
+            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+
+            var request = new AdminSetUserPasswordRequest
+            {
+                UserPoolId = _poolId,
+                Username = email,
+                Password = password,
+                Permanent = true
+            };
+
+            try
+            {
+                var response = await _client.AdminSetUserPasswordAsync(request, cancellationToken).ConfigureAwait(false);
+                return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not set user password in AWS Cognito due to error: {exception.Message}");
                 return false;
             }
         }

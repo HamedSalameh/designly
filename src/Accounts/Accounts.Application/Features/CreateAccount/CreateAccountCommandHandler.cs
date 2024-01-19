@@ -34,10 +34,13 @@ namespace Accounts.Application.Features.CreateAccount
 
                 // Create the tenant group at AWS
                 string tenantGroup = $"{IdentityData.TenantIdClaimType + account.Id.ToString()}";
-                await _identityService.CreateGroup(tenantGroup, cancellationToken);
+                await _identityService.CreateGroup(tenantGroup, request.Name, cancellationToken);
 
                 // Add the user to the tenant group at AWS
                 await _identityService.AddUserToGroup(accountOwner.Email, tenantGroup, cancellationToken);
+
+                // Set the user password at AWS
+                await _identityService.SetUserPasswordAsync(accountOwner.Email, request.OwnerPassword, cancellationToken);
 
                 return account.Id;
             }
