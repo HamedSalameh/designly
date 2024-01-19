@@ -18,9 +18,4 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IdentityService.Interfaces\IdentityService.Interfaces.csproj" />
-    <ProjectReference Include="..\IdentityService.Service\IdentityService.Service.csproj" />
-  </ItemGroup>
-
 </Project>

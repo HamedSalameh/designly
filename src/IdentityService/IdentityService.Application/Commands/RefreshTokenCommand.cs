@@ -1,4 +1,5 @@
-﻿using IdentityService.Interfaces;
+﻿using Designly.Auth.Models;
+using Designly.Auth.Providers;
 using MediatR;
 
 namespace IdentityService.Application.Commands
@@ -14,14 +15,9 @@ namespace IdentityService.Application.Commands
         }
     }
 
-    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, ITokenResponse?>
+    public class RefreshTokenCommandHandler(IIdentityService identityService) : IRequestHandler<RefreshTokenCommand, ITokenResponse?>
     {
-        private readonly IIdentityService _identityService;
-
-        public RefreshTokenCommandHandler(IIdentityService identityService)
-        {
-            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
-        }
+        private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
 
         public async Task<ITokenResponse?> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {

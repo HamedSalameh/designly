@@ -1,15 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Designly.Auth.Identity;
+using Designly.Auth.Providers;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Projects.Application.Features.CreateProject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using static NUnit.Framework.Constraints.Tolerance;
 
 namespace Projects.Tests
 {
@@ -19,6 +13,15 @@ namespace Projects.Tests
         private CreateProjectCommandHandler _handler;
         // NSubstitute for ILogger as Mock
         private readonly ILogger<CreateProjectCommandHandler> _logger = Substitute.For<ILogger<CreateProjectCommandHandler>>();
+        private readonly ITokenProvider _tokenProvider = Substitute.For<ITokenProvider>();
+        private readonly IHttpClientFactory _httpClientFactory = Substitute.For<IHttpClientFactory>();
+        private readonly IAuthorizationProvider _authorizationProvider = Substitute.For<IAuthorizationProvider>();
+
+        [SetUp]
+        public void Setup()
+        {
+            _handler = new CreateProjectCommandHandler(_logger, _tokenProvider, _httpClientFactory, _authorizationProvider);
+        }
 
         [Test]
         public void TestGetToken()
@@ -26,10 +29,12 @@ namespace Projects.Tests
             // Arrange
             var clientId = "35pjbh9a429lu7uepb8b0cv4br";
             var clientSecret = "1m6t5aqj45jf6fcluce9pkrgk8nbnl1inien8dqjdsb6dvhltd98";
-            
 
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com");
+
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com")
+            };
 
             var request = new HttpRequestMessage(HttpMethod.Post, "oauth2/token");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

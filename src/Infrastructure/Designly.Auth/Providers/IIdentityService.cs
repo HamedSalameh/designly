@@ -1,4 +1,6 @@
-﻿namespace IdentityService.Interfaces
+﻿using Designly.Auth.Models;
+
+namespace Designly.Auth.Providers
 {
     public interface IIdentityService
     {

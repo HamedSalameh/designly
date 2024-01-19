@@ -20,6 +20,6 @@
         public ContactDetailsDto ContactDetails { get; set; }
     }
 
-    public record AddressDto(string City, string Street = "", string BuildingNumber = "", List<string>? AddressLines = null);
+    public record AddressDto(string City, string Street = "", string BuildingNumber = "", List<string>? AddressLines = null );
     public record ContactDetailsDto(string PrimaryPhoneNumber, string SecondaryPhoneNumber = "", string EmailAddress = "");
 }

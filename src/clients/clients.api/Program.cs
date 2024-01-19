@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Designly.Auth.Identity;
 using Designly.Shared;
 using Designly.Shared.Extentions;
+using Designly.Auth.Extentions;
 
 public class Program
 {

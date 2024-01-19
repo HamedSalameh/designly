@@ -20,8 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Shared\Designly.Shared.csproj" />
-		<ProjectReference Include="..\IdentityService.Interfaces\IdentityService.Interfaces.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,31 +1,20 @@
-﻿using IdentityService.Interfaces;
+﻿using Designly.Auth.Models;
+using Designly.Auth.Providers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace IdentityService.Application.Commands
 {
-    public class SigninRequest : IRequest<ITokenResponse>
+    public class SigninRequest(string Username, string Password) : IRequest<ITokenResponse>
     {
-        public string Username { get; init; }
-        public string Password { get; init; }
-
-        public SigninRequest(string Username, string Password)
-        {
-            this.Username = Username;
-            this.Password = Password;
-        }
+        public string Username { get; init; } = Username;
+        public string Password { get; init; } = Password;
     }
 
-    public class SigninRequestHandler : IRequestHandler<SigninRequest, ITokenResponse?>
+    public class SigninRequestHandler(IIdentityService identityService, ILogger<SigninRequestHandler> logger) : IRequestHandler<SigninRequest, ITokenResponse?>
     {
-        private readonly IIdentityService _identityService;
-        private readonly ILogger<SigninRequestHandler> logger;
-
-        public SigninRequestHandler(IIdentityService identityService, ILogger<SigninRequestHandler> logger)
-        {
-            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+        private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
+        private readonly ILogger<SigninRequestHandler> logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         public async Task<ITokenResponse?> Handle(SigninRequest request, CancellationToken cancellationToken)
         {

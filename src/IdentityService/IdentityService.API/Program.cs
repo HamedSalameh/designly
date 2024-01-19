@@ -1,6 +1,5 @@
 using Designly.Shared.Extentions;
 using Clients.Application;
-using IdentityService.Service;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -8,6 +7,9 @@ using Serilog;
 using Serilog.Events;
 using System.Net.Mime;
 using System.Text.Json;
+using Designly.Auth.Extentions;
+
+namespace IdentityService.API;
 
 public class Program
 {
@@ -57,7 +59,6 @@ public class Program
 
         // Configure Services
         builder.Services.AddApplication(configuration);
-        builder.Services.AddIdentityService(configuration);
 
         // Configure Health checks
         builder.Services.AddHealthChecks();
@@ -91,7 +92,7 @@ public class Program
 
         app.Run();
 
-        void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
+        static void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHealthChecks("/health", new HealthCheckOptions()
             {

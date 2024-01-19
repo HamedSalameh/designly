@@ -56,7 +56,7 @@ namespace Clients.Tests
                 Assert.That(address.City, Is.EqualTo(addressDto.City));
                 Assert.That(address.Street, Is.EqualTo(addressDto.Street));
                 Assert.That(address.BuildingNumber, Is.EqualTo(addressDto.BuildingNumber));
-                Assert.That(address.AddressLines, Is.EquivalentTo(addressDto.AddressLines));
+                Assert.That(address.AddressLines, Is.EquivalentTo(addressLines));
             });
         }
 
@@ -73,7 +73,7 @@ namespace Clients.Tests
                 Assert.That(addressDto.Street, Is.EqualTo(address.Street));
                 Assert.That(addressDto.BuildingNumber, Is.EqualTo(address.BuildingNumber));
                 Assert.That(addressDto.AddressLines?.Count, Is.Not.EqualTo(0));
-                Assert.That(addressDto.AddressLines, Is.EquivalentTo(address.AddressLines));
+                Assert.That(addressDto.AddressLines, Is.EquivalentTo(addressLines));
             });
         }
 

@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Interfaces
+﻿namespace Designly.Auth.Models
 {
     public class TokenResponse : ITokenResponse
     {

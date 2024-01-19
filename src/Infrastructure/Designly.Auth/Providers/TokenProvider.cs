@@ -7,16 +7,10 @@ using System.Net.Mime;
 
 namespace Designly.Auth.Providers
 {
-    public class TokenProvider : ITokenProvider
+    public class TokenProvider(IHttpClientFactory httpClientFactory, ILogger<TokenProvider> logger) : ITokenProvider
     {
-        private readonly ILogger<TokenProvider> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
-
-        public TokenProvider(IHttpClientFactory httpClientFactory, ILogger<TokenProvider> logger)
-        {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+        private readonly ILogger<TokenProvider> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 
         public async Task<string?> GetTokenAsync(string clientId, string clientSecret)
         {

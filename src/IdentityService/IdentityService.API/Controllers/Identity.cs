@@ -83,8 +83,7 @@ namespace IdentityService.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Signout(CancellationToken cancellation)
         {
-            var accessToken = HttpContext.Request.Headers["Authorization"]
-                .ToString().Replace("Bearer ", string.Empty);
+            var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty);
 
             var signoutRequest = new SignoutRequest(accessToken);
 
@@ -131,7 +130,7 @@ namespace IdentityService.API.Controllers
         {
             var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name, clientSigningRequest.Username)
+                    new(ClaimTypes.Name, clientSigningRequest.Username)
                 };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
