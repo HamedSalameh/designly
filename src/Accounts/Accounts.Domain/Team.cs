@@ -31,12 +31,13 @@ namespace Accounts.Domain
         {
             Name = string.Empty;
             Members = new List<User>();
+            Status = TeamStatus.Active;
         }
 
         public override string ToString()
         {
             // return the team name and its members
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.AppendLine($"Team: {Name}");
             sb.AppendLine("Members:");
             foreach (var member in Members)
@@ -49,36 +50,27 @@ namespace Accounts.Domain
 
         public void AddMember(User user)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user));
+            ArgumentNullException.ThrowIfNull(user);
 
-            if (Members == null)
-            {
-                Members = new List<User>();
-            }
+            Members ??= new List<User>();
 
             Members.Add(user);
         }
 
         public void RemoveMember(User user)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user));
+            ArgumentNullException.ThrowIfNull(user);
 
-            if (Members == null)
-            {
-                Members = new List<User>();
-            }
+            Members ??= new List<User>();
 
             Members.Remove(user);
         }
 
         public void AddMembers(IEnumerable<User> users)
         {
-            if (users == null) throw new ArgumentNullException(nameof(users));
+            ArgumentNullException.ThrowIfNull(users);
 
-            if (Members == null)
-            {
-                Members = new List<User>();
-            }
+            Members ??= new List<User>();
             
             foreach (var user in users)
             {
@@ -88,12 +80,9 @@ namespace Accounts.Domain
 
         public void RemoveMembers(IEnumerable<User> users)
         {
-            if (users == null) throw new ArgumentNullException(nameof(users));
+            ArgumentNullException.ThrowIfNull(users);
 
-            if (Members == null)
-            {
-                Members = new List<User>();
-            }
+            Members ??= new List<User>();
 
             foreach (var user in users)
             {
@@ -103,10 +92,7 @@ namespace Accounts.Domain
 
         public void RemoveAllMembers()
         {
-            if (Members == null)
-            {
-                Members = new List<User>();
-            }
+            Members ??= new List<User>();
 
             Members.Clear();
         }

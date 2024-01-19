@@ -20,7 +20,7 @@ namespace Accounts.Domain
 
             this.Name = Name;
             Owner = accountOwner;
-            Status = AccountStatus.Active;
+            Status = AccountStatus.InProcessRegisteration;
 
             Teams = new List<Team>();
         }
@@ -30,7 +30,7 @@ namespace Accounts.Domain
             if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
 
             this.Name = Name;
-            Status = AccountStatus.Pending;
+            Status = AccountStatus.InProcessRegisteration;
 
             Teams = new List<Team>();
         }
@@ -47,7 +47,6 @@ namespace Accounts.Domain
             if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
 
             Owner = accountOwner;
-            Status = AccountStatus.Active;
         }
 
         public void CreateDefaultTeam()
@@ -100,10 +99,76 @@ namespace Accounts.Domain
             Teams.Remove(team);
         }
 
-        public void ChangeAccountStatus(AccountStatus newStatus)
+        /// <summary>
+        /// Activates the current account, if it is not already activated.
+        /// </summary>
+        /// <exception cref="AccountException"></exception>
+        public void ActivateAccount()
         {
-            // TODO: Add account status change rules
-            Status = newStatus;
+            if (Status == AccountStatus.Active) return;
+
+            if (Owner == null)
+            {
+                throw new AccountException("Account owner is not assigned yet");
+            }
+            if (Id == default)
+            {
+                throw new AccountException("Account is not created yet");
+            }
+            if (Status == AccountStatus.Deleted)
+            {
+                throw new AccountException("Account is deleted");
+            }
+            if (Status == AccountStatus.MarkedForDeletion)
+            {
+                throw new AccountException("Account is marked for deletion");
+            }
+            
+            Status = AccountStatus.Active;
+        }
+
+        public void SuspendAccount()
+        {
+            if (Status == AccountStatus.Suspended || Status == AccountStatus.Deleted) return;
+
+            if (Status == AccountStatus.Deleted)
+            {
+                throw new AccountException("Account is deleted");
+            }
+            if (Status == AccountStatus.MarkedForDeletion)
+            {
+                throw new AccountException("Account is marked for deletion");
+            }
+
+            Status = AccountStatus.Suspended;
+        }
+
+        public void DisableAccount()
+        {
+            if (Status == AccountStatus.Disabled) return;
+
+            if (Status == AccountStatus.Deleted)
+            {
+                throw new AccountException("Account is deleted");
+            }
+            if (Status == AccountStatus.MarkedForDeletion)
+            {
+                throw new AccountException("Account is marked for deletion");
+            }
+
+            Status = AccountStatus.Disabled;
+        }
+
+        public void MarkAccountForDeletion()
+        {
+            if (Status == AccountStatus.MarkedForDeletion) return;
+
+            if (Status == AccountStatus.Deleted)
+            {
+                throw new AccountException("Account is deleted");
+            }
+
+            Status = AccountStatus.MarkedForDeletion;
         }
     }
 }

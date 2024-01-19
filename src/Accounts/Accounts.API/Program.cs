@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Designly.Auth.Providers;
 using Accounts.Application.Features.CreateAccount;
+using Designly.Auth.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +49,6 @@ builder.Services.ConfigureCors();
 // Configure Services
 builder.Services.AddHttpClient();
 builder.Services.AddApplication(configuration);
-builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 var app = builder.Build();
 

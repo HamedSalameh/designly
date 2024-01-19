@@ -98,10 +98,10 @@
         public enum AccountStatus
         {
             /// <summary>
-            /// Special status of account, given when the account is created but not activated yet.
-            /// until the account is activated and assigned an owner, it cannot be used.
+            /// Special status of account, means the account is in the process of registration.
+            /// and cannot be used until the registration is completed.
             /// </summary>
-            Pending,
+            InProcessRegisteration,
 
             /// <summary>
             /// Active accounts are the ones that are in use.

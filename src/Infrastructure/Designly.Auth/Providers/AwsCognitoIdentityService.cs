@@ -3,11 +3,12 @@ using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
 using Amazon.Runtime;
-using IdentityService.Interfaces;
+using Designly.Auth.Models;
+using IdentityService.Service;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace IdentityService.Service
+namespace Designly.Auth.Providers
 {
     public class AwsCognitoIdentityService : IIdentityService
     {
@@ -103,7 +104,7 @@ namespace IdentityService.Service
                 }
             };
 
-            var response = await _client.InitiateAuthAsync(request);
+            var response = await _client.InitiateAuthAsync(request, cancellationToken);
             TokenResponse tokenResponse = BuildTokenResponse(response);
 
             return tokenResponse;
@@ -155,7 +156,7 @@ namespace IdentityService.Service
         {
             if (string.IsNullOrEmpty(accessToken))
             {
-                throw new ArgumentException(nameof(accessToken));
+                throw new ArgumentNullException(nameof(accessToken));
             }
 
             var signoutRequest = new GlobalSignOutRequest
@@ -168,7 +169,7 @@ namespace IdentityService.Service
             return signoutResponse.HttpStatusCode is System.Net.HttpStatusCode.OK;
         }
 
-        private TokenResponse BuildTokenResponse(InitiateAuthResponse response)
+        private static TokenResponse BuildTokenResponse(InitiateAuthResponse response)
         {
             return new TokenResponse
             {
@@ -182,25 +183,16 @@ namespace IdentityService.Service
 
         public async Task<bool> CreateUser(string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(email))
-            {
-                throw new ArgumentException(nameof(email));
-            }
-            if (string.IsNullOrEmpty(firstName))
-            {
-                throw new ArgumentException(nameof(firstName));
-            }
-            if (string.IsNullOrEmpty(lastName))
-            {
-                throw new ArgumentException(nameof(lastName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
+            ArgumentException.ThrowIfNullOrEmpty(firstName, nameof(firstName));
+            ArgumentException.ThrowIfNullOrEmpty(lastName, nameof(lastName));
 
             var request = new AdminCreateUserRequest
             {
                 UserPoolId = _poolId,
                 Username = email,
-                UserAttributes = new List<AttributeType>
-                {
+                UserAttributes =
+                [
                     new AttributeType
                     {
                         Name = "email",
@@ -216,12 +208,12 @@ namespace IdentityService.Service
                         Name = "family_name",
                         Value = lastName
                     }
-                },
+                ],
                 TemporaryPassword = "Changeme1!",
-                DesiredDeliveryMediums = new List<string>
-                {
+                DesiredDeliveryMediums =
+                [
                     "EMAIL"
-                }
+                ]
             };
 
             try
@@ -248,16 +240,15 @@ namespace IdentityService.Service
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> CreateGroup(string groupName, CancellationToken cancellation)
+        public async Task<bool> CreateGroup(string groupName, string groupDescription, CancellationToken cancellation)
         {
-            if (string.IsNullOrEmpty(groupName))
-            {
-                throw new ArgumentException(nameof(groupName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
+            ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
 
             var request = new CreateGroupRequest
             {
                 GroupName = groupName,
+                Description = groupDescription,
                 UserPoolId = _poolId
             };
 
@@ -283,14 +274,8 @@ namespace IdentityService.Service
         /// <exception cref="ArgumentException"></exception>
         public async Task<bool> AddUserToGroup(string email, string groupName, CancellationToken cancellation)
         {
-            if (string.IsNullOrEmpty(email))
-            {
-                throw new ArgumentException(nameof(email));
-            }
-            if (string.IsNullOrEmpty(groupName))
-            {
-                throw new ArgumentException(nameof(groupName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
+            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
 
             var request = new AdminAddUserToGroupRequest
             {
@@ -307,6 +292,31 @@ namespace IdentityService.Service
             catch (Exception exception)
             {
                 _logger.LogError($"Could not add user to group in AWS Cognito due to error: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> SetUserPasswordAsync(string email, string password, CancellationToken cancellationToken)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
+            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+
+            var request = new AdminSetUserPasswordRequest
+            {
+                UserPoolId = _poolId,
+                Username = email,
+                Password = password,
+                Permanent = true
+            };
+
+            try
+            {
+                var response = await _client.AdminSetUserPasswordAsync(request, cancellationToken).ConfigureAwait(false);
+                return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not set user password in AWS Cognito due to error: {exception.Message}");
                 return false;
             }
         }

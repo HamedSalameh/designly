@@ -14,7 +14,7 @@ namespace Designly.Shared.ValueObjects
             City = city;
             Street = street ?? "";
             BuildingNumber = buildingNumber ?? "";
-            AddressLines = addressLines ?? new List<string>(); ;
+            AddressLines = addressLines ?? []; ;
         }
 
         private Address()
@@ -24,7 +24,7 @@ namespace Designly.Shared.ValueObjects
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             if (!string.IsNullOrEmpty(Street))
             {

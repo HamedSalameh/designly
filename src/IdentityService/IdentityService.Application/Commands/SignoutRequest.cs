@@ -1,29 +1,18 @@
-﻿using IdentityService.Interfaces;
+﻿using Designly.Auth.Providers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace IdentityService.Application.Commands
 {
-    public class SignoutRequest : IRequest<Unit>
+    public class SignoutRequest(string accessToken) : IRequest<Unit>
     {
-        public string AccessToken { get; init; }
-
-        public SignoutRequest(string accessToken)
-        {
-            AccessToken = accessToken;
-        }
+        public string AccessToken { get; init; } = accessToken;
     }
 
-    public class SignoutRequestHandler : IRequestHandler<SignoutRequest, Unit>
+    public class SignoutRequestHandler(ILogger<SignoutRequestHandler> logger, IIdentityService identityService) : IRequestHandler<SignoutRequest, Unit>
     {
-        private readonly ILogger<SignoutRequestHandler> _logger;
-        private readonly IIdentityService _identityService;
-
-        public SignoutRequestHandler(ILogger<SignoutRequestHandler> logger, IIdentityService identityService)
-        {
-            _logger = logger;
-            _identityService = identityService;
-        }
+        private readonly ILogger<SignoutRequestHandler> _logger = logger;
+        private readonly IIdentityService _identityService = identityService;
 
         public async Task<Unit> Handle(SignoutRequest request, CancellationToken cancellationToken)
         {

@@ -70,7 +70,7 @@ namespace IdentityService.API.Controllers
             if (tokenResponse != null &&
                 !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
             {
-                await SigninUserAsync(clientSigningRequest);
+                // await SigninUserAsync(clientSigningRequest);
             }
 
             return Ok(tokenResponse);
@@ -83,14 +83,13 @@ namespace IdentityService.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Signout(CancellationToken cancellation)
         {
-            var accessToken = HttpContext.Request.Headers["Authorization"]
-                .ToString().Replace("Bearer ", string.Empty);
+            var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty);
 
             var signoutRequest = new SignoutRequest(accessToken);
 
             await _mediator.Send(signoutRequest, cancellation).ConfigureAwait(false);
 
-            await UserSignoutAsync();
+            // await UserSignoutAsync();
 
             return Ok();
         }
@@ -131,7 +130,7 @@ namespace IdentityService.API.Controllers
         {
             var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name, clientSigningRequest.Username)
+                    new(ClaimTypes.Name, clientSigningRequest.Username)
                 };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

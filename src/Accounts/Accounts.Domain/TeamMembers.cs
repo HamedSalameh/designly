@@ -2,10 +2,10 @@
 {
     public class TeamMembers
     {
-        public Guid TeamId;
-        public Team Team;
+        public required Guid TeamId;
+        public required Team Team;
 
-        public Guid UserId;
-        public User User;
+        public required Guid UserId;
+        public required User User;
     }
 }

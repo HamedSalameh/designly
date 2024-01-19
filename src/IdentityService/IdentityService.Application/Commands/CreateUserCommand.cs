@@ -1,5 +1,5 @@
-﻿using Designly.Shared;
-using IdentityService.Interfaces;
+﻿using Designly.Auth.Providers;
+using Designly.Shared;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;

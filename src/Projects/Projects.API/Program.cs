@@ -1,3 +1,4 @@
+using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
 using Designly.Auth.Providers;
 using Designly.Shared;
@@ -55,8 +56,6 @@ builder.Services.AddHttpClient("cognito", client =>
     client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
 });
 builder.Services.AddApplication(configuration);
-builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
-builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
 // Configure Health checks
 builder.Services.AddHealthChecks();

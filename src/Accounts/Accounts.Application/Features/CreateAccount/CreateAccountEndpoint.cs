@@ -15,7 +15,8 @@ namespace Accounts.Application.Features.CreateAccount
         {
             var endPoint = endpoints
                 .MapPost(pattern, CreateAccountEndpointMethodAsync)
-                .RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
+                //.RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
+                .AllowAnonymous()
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)
