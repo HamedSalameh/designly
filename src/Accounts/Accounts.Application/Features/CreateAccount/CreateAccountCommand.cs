@@ -1,9 +1,10 @@
 ﻿using Accounts.Domain;
+using LanguageExt.Common;
 using MediatR;
 
 namespace Accounts.Application.Features.CreateAccount
 {
-    public class CreateAccountCommand : IRequest<Guid>
+    public class CreateAccountCommand : IRequest<Result<Guid>>
     {
         public CreateAccountCommand(string name, string ownerFirstName, string ownerLastName, string ownerEmail, string ownerJobTitle, string ownerPassword) //, string ownerPhoneNumber)
         {

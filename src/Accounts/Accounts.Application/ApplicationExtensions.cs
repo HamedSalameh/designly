@@ -5,9 +5,6 @@ using System.Reflection;
 using FluentValidation;
 using Accounts.Infrastructure;
 using Accounts.Application.Builders;
-using Designly.Auth.Identity;
-using Designly.Auth.Providers;
-using IdentityService.Service;
 using Designly.Auth.Extentions;
 
 namespace Projects.Application;

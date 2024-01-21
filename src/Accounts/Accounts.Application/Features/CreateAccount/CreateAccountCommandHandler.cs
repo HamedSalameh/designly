@@ -5,17 +5,19 @@ using Accounts.Application.Builders;
 using Accounts.Domain;
 using Designly.Auth.Providers;
 using Designly.Auth.Identity;
+using LanguageExt.Common;
 
 namespace Accounts.Application.Features.CreateAccount
 {
-    public class CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, IAccountBuilder accountBuilder, IUnitOfWork unitOfWork, IIdentityService identityService) : IRequestHandler<CreateAccountCommand, Guid>
+    public class CreateAccountCommandHandler(ILogger<CreateAccountCommandHandler> logger, IAccountBuilder accountBuilder, IUnitOfWork unitOfWork, IIdentityService identityService) 
+        : IRequestHandler<CreateAccountCommand, Result<Guid>>
     {
         private readonly ILogger<CreateAccountCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IAccountBuilder _accountBuilder = accountBuilder ?? throw new ArgumentNullException(nameof(accountBuilder));
         private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
 
-        public async Task<Guid> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
             try
             {

@@ -29,10 +29,18 @@ namespace Accounts.API.Extensions
                 Status = StatusCodes.Status400BadRequest,
                 Detail = "TODO",
                 Type = $"https://httpstatuses.com/{StatusCodes.Status400BadRequest}",
-                Instance = httpContext.Request.Path
             };
 
-            
+            // parse the account error object
+            var accountErrors = accountException.Errors;
+            if (accountErrors != null)
+            {
+                // iterate through the errors and add them to the problem details
+                foreach (var error in accountErrors)
+                {
+                    problemDetails.Extensions.Add(error.Code, error.Description);
+                }
+            }
 
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken: cancellationToken).ConfigureAwait(false);
             
