@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extentions\" />
     <Folder Include="Logging\" />
   </ItemGroup>
 

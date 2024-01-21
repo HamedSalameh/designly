@@ -1,4 +1,3 @@
-using Designly.Shared.Extentions;
 using Clients.Application;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -8,6 +7,7 @@ using Serilog.Events;
 using System.Net.Mime;
 using System.Text.Json;
 using Designly.Auth.Extentions;
+using Designly.Shared.Extensions;
 
 namespace IdentityService.API;
 

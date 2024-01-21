@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Designly.Shared.Extentions
+namespace Designly.Shared.Extensions
 {
     public static class ConfigureSwaggerExtentions
     {

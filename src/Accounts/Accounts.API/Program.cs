@@ -1,12 +1,14 @@
 using Projects.Application;
 using Designly.Auth.Identity;
 using Designly.Shared;
-using Designly.Shared.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Designly.Auth.Providers;
 using Accounts.Application.Features.CreateAccount;
 using Designly.Auth.Extentions;
+using Designly.Shared.Extensions;
+using Accounts.API.Extensions;
+using Designly.Shared.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,11 @@ RegisterAuthorizationAndPolicyHandlers(builder);
 builder.Services.ConfigureSecuredSwagger("accounts", "v1");
 builder.Services.ConfigureCors();
 
+// Wire up the exception handlers
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<AccountExceptionsHandler>();
+builder.Services.AddProblemDetails(); ;
+
 // Configure Services
 builder.Services.AddHttpClient();
 builder.Services.AddApplication(configuration);
@@ -58,6 +65,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseExceptionHandler();
 
 MapEndoints(app);
 

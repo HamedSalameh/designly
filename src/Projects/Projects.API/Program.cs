@@ -2,7 +2,7 @@ using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
 using Designly.Auth.Providers;
 using Designly.Shared;
-using Designly.Shared.Extentions;
+using Designly.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;

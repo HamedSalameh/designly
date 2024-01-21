@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Designly.Shared.Extentions
+namespace Designly.Shared.Extensions
 {
     public static class ConfigureCorsExtensions
     {

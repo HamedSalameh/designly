@@ -42,13 +42,6 @@ namespace Accounts.Application.Features.CreateAccount
                 return Results.BadRequest($"The submitted project object is not valid or empty");
             }
 
-            var tenantId = authroizationProvider.GetTenantId(httpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
-            {
-                logger.LogError($"Invalid value for {nameof(tenantId)}");
-                return Results.BadRequest($"The submitted tenant Id is not valid or empty");
-            }
-
             var createAccountCommand = createAccountRequestDto.Adapt<CreateAccountCommand>();
 
             var accountId = await sender.Send(createAccountCommand, cancellationToken).ConfigureAwait(false);

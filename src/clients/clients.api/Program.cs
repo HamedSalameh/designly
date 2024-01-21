@@ -6,12 +6,12 @@ using Serilog;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text.Json;
-using Clients.API.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Designly.Auth.Identity;
 using Designly.Shared;
-using Designly.Shared.Extentions;
 using Designly.Auth.Extentions;
+using Designly.Shared.Extensions;
+using Designly.Shared.Middleware;
 
 public class Program
 {
@@ -51,6 +51,10 @@ public class Program
         builder.Services.ConfigureSecuredSwagger("clients", "v1");
         builder.Services.ConfigureCors();
 
+        // Wire up the exception handlers
+        builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+        builder.Services.AddProblemDetails(); ;
+
         // Configure Services
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
         builder.Services.AddApplication(configuration);
@@ -83,8 +87,6 @@ public class Program
             });
         }
 
-        // Register the custom middleware
-        app.UseMiddleware<ValidationExceptionHandingMiddleware>();
 
         // Configure CORS middleware
         app.UseCors("DevelopmentCors");
