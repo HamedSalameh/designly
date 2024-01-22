@@ -6,6 +6,7 @@ using FluentValidation;
 using Accounts.Infrastructure;
 using Accounts.Application.Builders;
 using Designly.Auth.Extentions;
+using Accounts.Application.Behaviors;
 
 namespace Projects.Application;
 
@@ -13,8 +14,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        
-        
         services.AddIdentityProvider(configuration);
 
         services.AddSingleton<IAccountBuilder, AccountBuilder>();
@@ -25,7 +24,7 @@ public static class DependencyInjection
 
         // MediatR
         services.AddMediatR(Assembly.GetExecutingAssembly());
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviors.ValidationBehaviour<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
         return services;
     }

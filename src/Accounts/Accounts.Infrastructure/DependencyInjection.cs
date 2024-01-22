@@ -1,6 +1,5 @@
 ﻿using Accounts.Infrastructure.Interfaces;
 using Accounts.Infrastructure.Persistance;
-using Clients.Infrastructure;
 using Designly.Shared.ConnectionProviders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +32,7 @@ namespace Accounts.Infrastructure
             });
 
             services.AddScoped<IAccountsRepository, AccountsRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;

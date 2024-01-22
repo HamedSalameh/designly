@@ -29,6 +29,11 @@
             Errors = new List<Error>(accountErrors);
         }
 
+        public AccountException(string message, Error accountError) : base(message)
+        {
+            Errors = new List<Error> { accountError };
+        }
+
         public List<Error> Errors { get; set; } = new List<Error>();
         
         public override string ToString()

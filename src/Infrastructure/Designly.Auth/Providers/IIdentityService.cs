@@ -4,9 +4,9 @@ namespace Designly.Auth.Providers
 {
     public interface IIdentityService
     {
-        Task<bool> AddUserToGroup(string email, string groupName, CancellationToken cancellation);
-        Task<bool> CreateGroup(string groupName, string groupDescription, CancellationToken cancellation);
-        Task<bool> CreateUser(string email, string firstName, string lastName, CancellationToken cancellationToken);
+        Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellation);
+        Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellation);
+        Task<bool> CreateUserAsync(string email, string firstName, string lastName, CancellationToken cancellationToken);
         Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken);
         Task<ITokenResponse?> LoginJwtAsync(string username, string password, CancellationToken cancellationToken);
         Task<ITokenResponse?> RefreshToken(string refreshToken, CancellationToken cancellationToken);
