@@ -83,7 +83,9 @@
             /// </summary>
             MarkedForDeletion,
 
-            Deleted
+            Deleted,
+
+            Blacklisted
         }
 
         public enum TeamStatus

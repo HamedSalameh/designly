@@ -33,7 +33,7 @@ namespace IdentityService.Application.Commands
                 logger.LogDebug($"Handling request {nameof(CreateUserCommandHandler)} for {nameof(request.Email)} {request.Email}");
             }
 
-            var response = await _identityService.CreateUser(request.Email, request.FirstName, request.LastName, cancellationToken);
+            var response = await _identityService.CreateUserAsync(request.Email, request.FirstName, request.LastName, cancellationToken);
             return response;
 
         }

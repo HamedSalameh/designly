@@ -181,7 +181,7 @@ namespace Designly.Auth.Providers
             };
         }
 
-        public async Task<bool> CreateUser(string email, string firstName, string lastName, CancellationToken cancellationToken)
+        public async Task<bool> CreateUserAsync(string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
             ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
             ArgumentException.ThrowIfNullOrEmpty(firstName, nameof(firstName));
@@ -240,7 +240,7 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> CreateGroup(string groupName, string groupDescription, CancellationToken cancellation)
+        public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellation)
         {
             ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
             ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
@@ -272,7 +272,7 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> AddUserToGroup(string email, string groupName, CancellationToken cancellation)
+        public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellation)
         {
             ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
             ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));

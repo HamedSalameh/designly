@@ -1,4 +1,5 @@
-﻿using Designly.Auth.Identity;
+﻿using Accounts.Application.Extensions;
+using Designly.Auth.Identity;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,7 @@ namespace Accounts.Application.Features.CreateAccount
             return endPoint;
         }
 
-        private static async Task<IResult> CreateAccountEndpointMethodAsync([FromBody] CreateAccountRequestDto createAccountRequestDto,
+        private static async Task<IActionResult> CreateAccountEndpointMethodAsync([FromBody] CreateAccountRequestDto createAccountRequestDto,
             IAuthorizationProvider authroizationProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
@@ -39,14 +40,16 @@ namespace Accounts.Application.Features.CreateAccount
             if (createAccountRequestDto == null)
             {
                 logger.LogError($"Invalid value for {nameof(createAccountRequestDto)}");
-                return Results.BadRequest($"The submitted project object is not valid or empty");
+                return new BadRequestObjectResult($"Invalid value for {nameof(createAccountRequestDto)}");
             }
 
             var createAccountCommand = createAccountRequestDto.Adapt<CreateAccountCommand>();
 
-            var accountId = await sender.Send(createAccountCommand, cancellationToken).ConfigureAwait(false);
+            var operationResult = await sender.Send(createAccountCommand, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok(accountId);
+            return operationResult.ToActionResult();
         }
+
+        
     }
 }

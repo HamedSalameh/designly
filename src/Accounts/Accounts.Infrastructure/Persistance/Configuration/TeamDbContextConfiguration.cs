@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Accounts.Infrastructure.Persistance
+namespace Accounts.Infrastructure.Persistance.Configuration
 {
     public class TeamDbContextConfiguration : IEntityTypeConfiguration<Team>
     {

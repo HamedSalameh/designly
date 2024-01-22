@@ -14,16 +14,31 @@
         {
         }
 
-        public AccountException(string message, Exception innerException, string errorCode) : base(message, innerException)
+        public AccountException(string message, Exception innerException, Error accountError) : base(message, innerException)
         {
-            ErrorCode = errorCode;
+            Errors = new List<Error> { accountError };
         }
 
-        public string ErrorCode { get; set; } = string.Empty;
+        public AccountException(string message, Exception innerException, List<Error> accountErrors) : base(message, innerException)
+        {
+            Errors = new List<Error>(accountErrors);
+        }
 
+        public AccountException(string message, List<Error> accountErrors) : base(message)
+        {
+            Errors = new List<Error>(accountErrors);
+        }
+
+        public AccountException(string message, Error accountError) : base(message)
+        {
+            Errors = new List<Error> { accountError };
+        }
+
+        public List<Error> Errors { get; set; } = new List<Error>();
+        
         public override string ToString()
         {
-            return $"{base.ToString()} ErrorCode: {ErrorCode}";
+            return $"{base.ToString()} Errors: {Errors}";
         }
     }
 }
