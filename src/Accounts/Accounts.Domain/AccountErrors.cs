@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Accounts.Domain
+﻿namespace Accounts.Domain
 {
     public static class AccountErrors
     {

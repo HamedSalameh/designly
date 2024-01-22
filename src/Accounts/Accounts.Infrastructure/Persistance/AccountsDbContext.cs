@@ -1,4 +1,5 @@
 ﻿using Accounts.Domain;
+using Accounts.Infrastructure.Persistance.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounts.Infrastructure.Persistance

@@ -11,6 +11,5 @@ namespace Accounts.Infrastructure.Interfaces
         Task<IEnumerable<Team>> UpdateTeamsAsync(IEnumerable<Team> teams, CancellationToken cancellationToken);
 
         Task<IEnumerable<User>> CreateUsersAsync(IEnumerable<User> users, CancellationToken cancellationToken);
-        Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken);
     }
 }

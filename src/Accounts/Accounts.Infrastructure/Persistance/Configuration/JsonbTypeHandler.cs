@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Data;
 
-namespace Clients.Infrastructure.Persistance
+namespace Accounts.Infrastructure.Persistance.Configuration
 {
     public class JsonbTypeHandler<T> : SqlMapper.TypeHandler<T>
     {

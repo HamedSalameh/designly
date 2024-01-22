@@ -1,6 +1,6 @@
 ﻿using Accounts.Domain;
 using Accounts.Infrastructure.Interfaces;
-using Clients.Infrastructure.Persistance;
+using Accounts.Infrastructure.Persistance.Configuration;
 using Clients.Infrastructure.Polly;
 using Dapper;
 using Designly.Shared.ConnectionProviders;
@@ -100,24 +100,6 @@ namespace Accounts.Infrastructure.Persistance
             await _context.SaveChangesAsync();
 
             return teams;
-        }
-
-        public async Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken)
-        {
-            if (Id == Guid.Empty || Id == default)
-            {
-                _logger.LogError("Provided Id is empty or default");
-                throw new ArgumentNullException(nameof(Id));
-            }
-
-            // Do not track the entity
-            var entity = await _context.Set<User>().FindAsync(Id, cancellationToken);
-            if (entity is not null)
-            {
-                _context.Entry(entity).State = EntityState.Detached;
-            }
-
-            return entity;            
         }
     }
 }

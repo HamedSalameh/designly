@@ -6,8 +6,6 @@ using Accounts.Domain;
 using Designly.Auth.Providers;
 using Designly.Auth.Identity;
 using LanguageExt.Common;
-using LanguageExt.Pipes;
-using System.Threading;
 
 namespace Accounts.Application.Features.CreateAccount
 {
