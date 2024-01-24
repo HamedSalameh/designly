@@ -8,7 +8,7 @@ namespace Accounts.Application.Features.ValidateUser
     {
         public ValidateUserCommandValidator()
         {
-            RuleFor(cmd => cmd.userId)
+            RuleFor(cmd => cmd.Email)
                 .NotEmpty();
 
             RuleFor(cmd => cmd.tenantId)

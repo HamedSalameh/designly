@@ -1,5 +1,6 @@
 ﻿using Accounts.Domain;
 using Accounts.Infrastructure.Persistance.Configuration;
+using Designly.Auth.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounts.Infrastructure.Persistance
@@ -8,7 +9,6 @@ namespace Accounts.Infrastructure.Persistance
     {
         public AccountsDbContext(DbContextOptions options) : base(options)
         {
-            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -17,6 +17,7 @@ namespace Accounts.Infrastructure.Persistance
             modelBuilder.ApplyConfiguration(new TeamDbContextConfiguration());
             modelBuilder.ApplyConfiguration(new UserDbContextConfiguration());
             modelBuilder.ApplyConfiguration(new TeamMemberDbContextConfiguration());
+
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

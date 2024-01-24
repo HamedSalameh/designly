@@ -29,34 +29,6 @@ namespace Accounts.Infrastructure.Persistance
             _context = context;
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken)
-        {
-            if (Id == Guid.Empty || Id == default)
-            {
-                _logger.LogError("Provided Id is empty or default");
-                throw new ArgumentNullException(nameof(Id));
-            }
-
-            if(_logger.IsEnabled(LogLevel.Debug))
-            {
-                _logger.LogDebug($"Getting user by Id for {Id}");
-            }
-
-            // Do not track the entity
-            var entity = await _context.Set<User>().FindAsync(Id, cancellationToken);
-            if (entity is not null)
-            {
-                _context.Entry(entity).State = EntityState.Detached;
-            }
-
-            if (_logger.IsEnabled(LogLevel.Debug))
-            {
-                _logger.LogDebug($"Got user by Id for {Id} : {entity?.ToString()}");
-            }
-
-            return entity;
-        }
-
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -79,6 +51,39 @@ namespace Accounts.Infrastructure.Persistance
             if (_logger.IsEnabled(LogLevel.Debug))
             {
                 _logger.LogDebug($"Got user by email for {email} : {user?.ToString()}");
+            }
+
+            return user;
+        }
+
+        public async Task<User?> GetTenantUserByEmailAsync(string email, Guid tenantId, CancellationToken cancellationToken)
+        {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Getting tenant user by email for {email} in tenant {tenantId}");
+            }
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                _logger.LogError("Provided email is null or empty");
+                throw new ArgumentNullException(nameof(email));
+            }
+
+            if (tenantId == Guid.Empty)
+            {
+                _logger.LogError("Provided tenantId is empty");
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Account)
+                .Include(u => u.Teams)
+                .FirstOrDefaultAsync(u => u.Email == email && u.Account.Id == tenantId, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Got tenant user by email for {email} in tenant {tenantId} : {user?.ToString()}");
             }
 
             return user;

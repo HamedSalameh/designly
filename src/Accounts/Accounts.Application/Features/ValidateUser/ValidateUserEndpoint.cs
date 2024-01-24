@@ -1,5 +1,6 @@
 ﻿using Accounts.Application.Extensions;
 using Designly.Auth.Identity;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,7 @@ namespace Accounts.Application.Features.ValidateUser
     public static class ValidateUserEndpoint
     {
         public static IEndpointConventionBuilder MapValidateUserFeature(this IEndpointRouteBuilder routeBuilder, string pattern = "validateuser") {
-            var endpoint = routeBuilder.MapGet(pattern, ValidateUserEndpointAsync)
+            var endpoint = routeBuilder.MapPost(pattern, ValidateUserEndpointAsync)
                 .RequireAuthorization(policyBuilder => policyBuilder
                     .AddRequirements(new MustBeAccountOwnerRequirement())
                     .AddRequirements(new MustBeAdminRequirement()))
@@ -24,15 +25,13 @@ namespace Accounts.Application.Features.ValidateUser
             return endpoint;
         }
 
-        private static async Task<IResult> ValidateUserEndpointAsync([FromQuery] Guid userId, 
+        private static async Task<IResult> ValidateUserEndpointAsync([FromBody] ValidateUserCommandDto validateUserCommandDto, 
             CancellationToken cancellationToken,
             ITenantProvider tenantProvider,
             HttpContext httpContext,
             ISender sender)
         {
-            var tenanId = tenantProvider.GetTenantId();
-
-            var validateUserIdCommand = new ValidateUserCommand(userId, tenanId);
+            var validateUserIdCommand = validateUserCommandDto.Adapt<ValidateUserCommand>();
 
             var operationResult = await sender.Send(validateUserIdCommand, cancellationToken).ConfigureAwait(false);
 
