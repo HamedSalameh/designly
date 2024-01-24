@@ -15,12 +15,11 @@ namespace Projects.Tests
         private readonly ILogger<CreateProjectCommandHandler> _logger = Substitute.For<ILogger<CreateProjectCommandHandler>>();
         private readonly ITokenProvider _tokenProvider = Substitute.For<ITokenProvider>();
         private readonly IHttpClientFactory _httpClientFactory = Substitute.For<IHttpClientFactory>();
-        private readonly ITenantProvider _authorizationProvider = Substitute.For<ITenantProvider>();
 
         [SetUp]
         public void Setup()
         {
-            _handler = new CreateProjectCommandHandler(_logger, _tokenProvider, _httpClientFactory, _authorizationProvider);
+            _handler = new CreateProjectCommandHandler(_logger, _tokenProvider, _httpClientFactory);
         }
 
         [Test]

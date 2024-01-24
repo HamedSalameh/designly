@@ -31,7 +31,7 @@ namespace Accounts.Application.Features.ValidateUser
             HttpContext httpContext,
             ISender sender)
         {
-            var validateUserIdCommand = validateUserCommandDto.Adapt<ValidateUserCommand>();
+            var validateUserIdCommand = new ValidateUserCommand(validateUserCommandDto.Email, validateUserCommandDto.tenantId);
 
             var operationResult = await sender.Send(validateUserIdCommand, cancellationToken).ConfigureAwait(false);
 

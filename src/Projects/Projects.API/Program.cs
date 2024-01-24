@@ -1,8 +1,10 @@
+using Designly.Auth;
 using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
-using Designly.Auth.Providers;
+using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
+using Designly.Shared.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
@@ -26,19 +28,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     );
 
 // API versioning
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
-        new Asp.Versioning.UrlSegmentApiVersionReader(),
-        new Asp.Versioning.HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'V";
-});
+ConfigureVersioning(builder);
 
 // Enabled authentication
 builder.Services.AddJwtBearerConfig(configuration);
@@ -49,6 +39,10 @@ RegisterAuthorizationAndPolicyHandlers(builder);
 builder.Services.ConfigureSecuredSwagger("projects", "v1");
 builder.Services.ConfigureCors();
 
+// Wire up the exception handlers
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 // Configure Services
 builder.Services.AddHttpClient("cognito", client =>
 {
@@ -56,12 +50,8 @@ builder.Services.AddHttpClient("cognito", client =>
     client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
 });
 builder.Services.AddApplication(configuration);
-
-// Configure Health checks
-builder.Services.AddHealthChecks();
-
-builder.Services.AddControllers();
-
+// get AccountsApiConfiguration from configuration and configure it
+builder.Services.Configure<AccountsApiConfiguration>(configuration.GetSection(nameof(AccountsApiConfiguration)));
 
 var app = builder.Build();
 
@@ -72,11 +62,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
+
 MapEndoints(app);
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseMiddleware<TenantProviderMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -107,4 +100,21 @@ static void MapEndoints(WebApplication app)
 
     routeGroup.MapCreateFeature();
     routeGroup.MapDeleteFeature("{projectId}");
+}
+
+static void ConfigureVersioning(WebApplicationBuilder builder)
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+        options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
+            new Asp.Versioning.UrlSegmentApiVersionReader(),
+            new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+    });
 }

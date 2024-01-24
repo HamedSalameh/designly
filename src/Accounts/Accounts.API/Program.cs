@@ -1,9 +1,7 @@
 using Projects.Application;
 using Designly.Auth.Identity;
-using Designly.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
-using Designly.Auth.Providers;
 using Accounts.Application.Features.CreateAccount;
 using Designly.Auth.Extentions;
 using Designly.Shared.Extensions;
@@ -27,19 +25,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     );
 
 // API versioning
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
-        new Asp.Versioning.UrlSegmentApiVersionReader(),
-        new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'V";
-});
+ConfigureVersioning(builder);
 
 // Enabled authentication
 builder.Services.AddJwtBearerConfig(configuration);
@@ -68,14 +54,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseExceptionHandler();
 
 MapEndoints(app);
 
-app.UseMiddleware<TenantProviderMiddleware>();
-
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseMiddleware<TenantProviderMiddleware>();
+app.UseAuthorization();
 
 app.Run();
 
@@ -103,4 +90,21 @@ static void MapEndoints(WebApplication app)
 
     routeGroup.MapCreateAccountFeature();
     routeGroup.MapValidateUserFeature();
+}
+
+static void ConfigureVersioning(WebApplicationBuilder builder)
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+        options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
+            new Asp.Versioning.UrlSegmentApiVersionReader(),
+            new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+    });
 }

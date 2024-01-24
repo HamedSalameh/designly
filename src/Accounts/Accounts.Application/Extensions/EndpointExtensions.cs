@@ -15,14 +15,14 @@ namespace Accounts.Application.Extensions
 
         public static IResult ToActionResult<T>(this Result<T> result)
         {
-            return result.Match<IResult>(
+            return result.Match(
                 Succ: response => Results.Ok(result),
                 Fail: ex =>
                 {
                     IResult result = ex switch
                     {
-                        ValidationException validationException => Results.BadRequest(validationException.ToValidationProblemDetails()),
-                        AccountException accountException => Results.BadRequest(accountException.ToAccountProblemDetails()),
+                        ValidationException validationException => Results.Ok(validationException.ToValidationProblemDetails()),
+                        AccountException accountException => Results.Ok(accountException.ToAccountProblemDetails()),
                         _ => Results.BadRequest(ex.Message)
                     };
 
