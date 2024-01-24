@@ -14,10 +14,10 @@ namespace Projects.Application.Features.CreateProject
     {
         private readonly ILogger<CreateProjectCommandHandler> _logger;
         private readonly ITokenProvider _tokenProvider;
-        private readonly IAuthorizationProvider _authorizationProvider;
+        private readonly ITenantProvider _authorizationProvider;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger, ITokenProvider tokenProvider, IHttpClientFactory httpClientFactory, IAuthorizationProvider authorizationProvider)
+        public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger, ITokenProvider tokenProvider, IHttpClientFactory httpClientFactory, ITenantProvider authorizationProvider)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));

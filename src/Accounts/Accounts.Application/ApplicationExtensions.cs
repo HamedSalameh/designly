@@ -15,7 +15,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentityProvider(configuration);
-
+        
         services.AddSingleton<IAccountBuilder, AccountBuilder>();
 
         services.AddInfrastructureCore(configuration);

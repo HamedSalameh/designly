@@ -8,6 +8,7 @@ namespace Accounts.Infrastructure.Persistance.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            // map to table
             builder.ToTable("users");
 
             builder.Property(p => p.CreatedAt).HasColumnName("created_at");

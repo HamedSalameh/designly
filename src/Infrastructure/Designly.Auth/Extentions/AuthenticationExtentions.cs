@@ -20,7 +20,8 @@ namespace Designly.Auth.Extentions
             services.Configure<IdentityProviderConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
             services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
 
-            services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+            services.AddScoped<TenantProviderMiddleware>();
+            services.AddSingleton<ITenantProvider, TenantProvider>();
             services.AddSingleton<ITokenProvider, TokenProvider>();
 
             return services;

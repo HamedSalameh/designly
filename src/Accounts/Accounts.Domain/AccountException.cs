@@ -34,6 +34,11 @@
             Errors = new List<Error> { accountError };
         }
 
+        public AccountException(Error accountError)
+        {
+            this.Errors = new List<Error>() { accountError };
+        }
+
         public List<Error> Errors { get; set; } = new List<Error>();
         
         public override string ToString()

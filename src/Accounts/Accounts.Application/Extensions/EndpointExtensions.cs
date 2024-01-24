@@ -1,5 +1,7 @@
 ﻿using Accounts.Domain;
+using Designly.Shared.Exceptions;
 using LanguageExt.Common;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,21 +9,24 @@ namespace Accounts.Application.Extensions
 {
     public static class EndpointExtensions
     {
-        private const string ProblemTitle = "One or more validation errors occurred.";
+        private const string ValidationProblemTitle = "One or more validation errors occurred.";
+        private const string AccountExceptionProblemTitle = "One or more account validation errors occurred.";
         private const string ProblemDetail = "See the errors property for details.";
 
-        public static IActionResult ToActionResult(this Result<Guid> result)
+        public static IResult ToActionResult<T>(this Result<T> result)
         {
-            return result.Match<IActionResult>(
-                Succ: id => new OkObjectResult(id),
+            return result.Match<IResult>(
+                Succ: response => Results.Ok(result),
                 Fail: ex =>
                 {
-                    if (ex is AccountException accountException)
+                    IResult result = ex switch
                     {
-                        return new BadRequestObjectResult(accountException.ToAccountProblemDetails());
-                    }
+                        ValidationException validationException => Results.BadRequest(validationException.ToValidationProblemDetails()),
+                        AccountException accountException => Results.BadRequest(accountException.ToAccountProblemDetails()),
+                        _ => Results.BadRequest(ex.Message)
+                    };
 
-                    return new BadRequestObjectResult(ex.Message);
+                    return result;
                 });
         }
 
@@ -32,12 +37,7 @@ namespace Accounts.Application.Extensions
                 throw new ArgumentNullException(nameof(accountException));
             }
 
-            var problemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = ProblemTitle,
-                Detail = ProblemDetail,
-            };
+            var problemDetails = CreateBasicProlemDetails(AccountExceptionProblemTitle, StatusCodes.Status400BadRequest);
 
             var accountErrors = accountException.Errors;
             // add the errors as list of key value pairs to the extensions under 'errors'
@@ -46,6 +46,33 @@ namespace Accounts.Application.Extensions
                 problemDetails.Extensions.Add("Errors", accountErrors);
             }
             return problemDetails;
+        }
+
+        public static ProblemDetails ToValidationProblemDetails(this ValidationException validationException)
+        {
+            if (validationException == null)
+            {
+                throw new ArgumentNullException(nameof(validationException));
+            }
+
+            var problemDetails = CreateBasicProlemDetails(ValidationProblemTitle, StatusCodes.Status400BadRequest);
+            var accountErrors = validationException.Errors;
+            // add the errors as list of key value pairs to the extensions under 'errors'
+            if (accountErrors != null)
+            {
+                problemDetails.Extensions.Add("Errors", accountErrors);
+            }
+            return problemDetails;
+        }
+
+        private static ProblemDetails CreateBasicProlemDetails(string title, int statusCode)
+        {
+            return new ProblemDetails
+            {
+                Title = title,
+                Status = statusCode,
+                Detail = ProblemDetail
+            };
         }
     }
 }

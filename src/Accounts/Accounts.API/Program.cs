@@ -9,6 +9,8 @@ using Designly.Auth.Extentions;
 using Designly.Shared.Extensions;
 using Accounts.API.Extensions;
 using Designly.Shared.Middleware;
+using Accounts.Application.Features.ValidateUser;
+using Designly.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,7 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
     options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
         new Asp.Versioning.UrlSegmentApiVersionReader(),
-        new Asp.Versioning.HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
+        new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
 }).AddApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'V";
@@ -51,7 +53,7 @@ builder.Services.ConfigureCors();
 // Wire up the exception handlers
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<AccountExceptionsHandler>();
-builder.Services.AddProblemDetails(); ;
+builder.Services.AddProblemDetails();
 
 // Configure Services
 builder.Services.AddHttpClient();
@@ -70,6 +72,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler();
 
 MapEndoints(app);
+
+app.UseMiddleware<TenantProviderMiddleware>();
 
 app.UseHttpsRedirection();
 
@@ -98,4 +102,5 @@ static void MapEndoints(WebApplication app)
         .WithApiVersionSet(versionSet);
 
     routeGroup.MapCreateAccountFeature();
+    routeGroup.MapValidateUserFeature();
 }

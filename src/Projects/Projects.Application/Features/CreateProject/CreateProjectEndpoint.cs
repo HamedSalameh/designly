@@ -27,7 +27,7 @@ namespace Projects.Application.Features.CreateProject
         }
 
         private static async Task<IResult> CreateProjectEndpointMethodAsync([FromBody] CreateProjectRequestDto createProjectRequestDto, 
-            IAuthorizationProvider authroizationProvider,
+            ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
             HttpContext httpContext,
@@ -42,15 +42,10 @@ namespace Projects.Application.Features.CreateProject
                 return Results.BadRequest($"The submitted project object is not valid or empty");
             }
 
-            var tenantId = authroizationProvider.GetTenantId(httpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
-            {
-                logger.LogError($"Invalid value for {nameof(tenantId)}");
-                return Results.BadRequest($"The submitted tenant Id is not valid or empty");
-            }
+            var tenantId = tenantProvider.GetTenantId();
 
             var createProjectCommand = createProjectRequestDto.Adapt<CreateProjectCommand>();
-            createProjectCommand.TenantId = tenantId.Value;
+            createProjectCommand.TenantId = tenantId;
 
             var projectId = await sender.Send(createProjectCommand, cancellationToken).ConfigureAwait(false);
 
