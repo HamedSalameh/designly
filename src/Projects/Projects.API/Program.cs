@@ -1,6 +1,7 @@
 using Designly.Auth;
 using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
+using Designly.Auth.Models;
 using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
@@ -47,8 +48,9 @@ builder.Services.AddProblemDetails();
 // Configure Services
 builder.Services.AddHttpClient();
 
-// load and bond AccountsApiConfiguration
+// load and bind configurations
 builder.Services.Configure<AccountsApiConfiguration>(configuration.GetSection(nameof(AccountsApiConfiguration)));
+builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
 
 AttachNamedHttpClient<AccountsApiConfiguration>(builder);
 

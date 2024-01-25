@@ -82,9 +82,9 @@ namespace Projects.Application.Features.CreateProject
                 return false;
             }
 
-            using (var client = await CreateHttpClient())
+            using (var httpClient = await CreateHttpClient())
             {
-                var response = await client.GetAsync($"status/{tenantId}/{client}", cancellationToken).ConfigureAwait(false);
+                var response = await httpClient.GetAsync($"status/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
 
                 var clientStatus = await response.Content.ReadAsStringAsync();
 
@@ -98,15 +98,6 @@ namespace Projects.Application.Features.CreateProject
             }
         }
 
-        private string GetAccountServiceUri(string endpoint)
-        {
-            var clientServiceAddress = _accountApiConfiguration.Value.BaseUrl;
-            var serviceUrl = _accountApiConfiguration.Value.ServiceUrl;
-            var clientServiceEndpoint = _accountApiConfiguration.Value.Endpoints?.Status;
-
-            return $"{clientServiceAddress}/{serviceUrl}/{clientServiceEndpoint}";
-        }
-
         private async Task<HttpClient> CreateHttpClient()
         {
             var client = _httpClientFactory.CreateClient(nameof(AccountsApiConfiguration));
@@ -118,7 +109,7 @@ namespace Projects.Application.Features.CreateProject
 
         private async Task AddAuthentication(HttpClient client)
         {
-            var accessToken = await _tokenProvider.GetAccessTokenAsync("5jbktc23rqr59etq1kgeq5s6ms", "mmhvko32k47d50ik6hfqlomref62gvegvntp8g0v2qq0j40671v").ConfigureAwait(false);
+            var accessToken = await _tokenProvider.GetAccessTokenAsync().ConfigureAwait(false);
             var authenticationHeaderValue = new AuthenticationHeaderValue(Designly.Auth.Consts.BearerAuthenicationScheme, accessToken);
 
             client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
