@@ -6,6 +6,7 @@ using Designly.Shared;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Features.CreateProject;
@@ -44,14 +45,14 @@ builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // Configure Services
-builder.Services.AddHttpClient("cognito", client =>
-{
-    client.DefaultRequestHeaders.Add(HeaderNames.Accept, MediaTypeNames.Application.Json);
-    client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
-});
-builder.Services.AddApplication(configuration);
-// get AccountsApiConfiguration from configuration and configure it
+builder.Services.AddHttpClient();
+
+// load and bond AccountsApiConfiguration
 builder.Services.Configure<AccountsApiConfiguration>(configuration.GetSection(nameof(AccountsApiConfiguration)));
+
+AttachNamedHttpClient<AccountsApiConfiguration>(builder);
+
+builder.Services.AddApplication(configuration);
 
 var app = builder.Build();
 
@@ -116,5 +117,19 @@ static void ConfigureVersioning(WebApplicationBuilder builder)
     }).AddApiExplorer(options =>
     {
         options.GroupNameFormat = "'v'V";
+    });
+}
+
+static void AttachNamedHttpClient<T>(WebApplicationBuilder builder) where T : class, IApiServiceConfiguration
+{
+    builder.Services.AddHttpClient(typeof(T).Name, (sp, client) =>
+    {
+        var apiServiceConfig = sp.GetRequiredService<IOptions<T>>()?.Value;
+        var baseAddress = apiServiceConfig?.BaseUrl;
+        var serviceUri = apiServiceConfig?.ServiceUrl;
+        client.BaseAddress = new Uri($"{baseAddress}/{serviceUri}");
+
+        client.DefaultRequestHeaders.Add(
+            nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
     });
 }

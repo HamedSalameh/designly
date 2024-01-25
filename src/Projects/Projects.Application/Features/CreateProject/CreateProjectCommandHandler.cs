@@ -82,12 +82,9 @@ namespace Projects.Application.Features.CreateProject
                 return false;
             }
 
-            var baseAddress = GetAccountServiceUri("ClientValidation");
-            var clientServiceUrl = $"{baseAddress}/{tenantId}/{clientId}";
-
             using (var client = await CreateHttpClient())
             {
-                var response = await client.GetAsync(clientServiceUrl, cancellationToken).ConfigureAwait(false);
+                var response = await client.GetAsync($"status/{tenantId}/{client}", cancellationToken).ConfigureAwait(false);
 
                 var clientStatus = await response.Content.ReadAsStringAsync();
 
@@ -112,8 +109,7 @@ namespace Projects.Application.Features.CreateProject
 
         private async Task<HttpClient> CreateHttpClient()
         {
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Clear();
+            var client = _httpClientFactory.CreateClient(nameof(AccountsApiConfiguration));
 
             await AddAuthentication(client).ConfigureAwait(false);
 
