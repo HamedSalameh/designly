@@ -1,28 +1,20 @@
 ﻿namespace Designly.Configuration
 {
-    public class AccountsApiConfiguration : IApiServiceConfiguration
+    public class ServiceConfiguration
     {
-        public string Position { get; } = "AccountsApiConfiguration";
-
+        public const string Position = "";
         public string? ServiceName { get; set; }
         public string? BaseUrl { get; set; }
         public string? ServiceUrl { get; set; }
-        public EndpointsConfiguration? Endpoints { get; set; }
-        
     }
 
-    public interface IApiServiceConfiguration
+    public class AccountsServiceConfiguration : ServiceConfiguration
     {
-        string Position { get; }
-
-        string? ServiceName { get; set; }
-        string? BaseUrl { get; set; }
-        string? ServiceUrl { get; set; }
-        EndpointsConfiguration? Endpoints { get; set; }
+        public new const string Position  = "AccountsApi";
     }
 
-    public class EndpointsConfiguration
+    public class ClientsServiceConfiguration : ServiceConfiguration
     {
-        public string? Status { get; set; }
+        public new const string Position  = "ClientsApi";
     }
 }

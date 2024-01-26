@@ -16,24 +16,22 @@ namespace Projects.Application.Features.CreateProject
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, Result<Guid>>
     {
         private readonly ILogger<CreateProjectCommandHandler> _logger;
-        private readonly IOptions<AccountsApiConfiguration> _accountApiConfiguration;
         private readonly ITokenProvider _tokenProvider;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
-            IOptions<AccountsApiConfiguration> accountApiConfiguration,
+            IOptions<AccountsServiceConfiguration> accountsApiConfig,
             ITokenProvider tokenProvider, 
             IHttpClientFactory httpClientFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _accountApiConfiguration = accountApiConfiguration ?? throw new ArgumentNullException(nameof(accountApiConfiguration));
             _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-            try
+         try   
             {
                 // Step 1: Validate the customer by Id
                 var validatedClient = await ValidateClientAsync(request.TenantId, request.ClientId, cancellationToken);
@@ -46,7 +44,7 @@ namespace Projects.Application.Features.CreateProject
                 }
 
                 // Step 2: Validate the project lead by Id
-                var validatedProjectLead = await ValidateProjectLeadAsync(request.ProjectLeadId, cancellationToken);
+                var validatedProjectLead = await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
                 if (!validatedProjectLead)
                 {
                     _logger.LogError("Could not find project lead with Id: {projectLeadId}", request.ProjectLeadId);
@@ -68,11 +66,30 @@ namespace Projects.Application.Features.CreateProject
             }
         }
 
-        private async Task<bool> ValidateProjectLeadAsync(Guid projectLeadId, CancellationToken cancellationToken)
+        private async Task<bool> ValidateProjectLeadAsync(Guid tenantId, Guid projectLeadId, CancellationToken cancellationToken)
         {
-            _logger.LogWarning("Project lead validation is not implemented yet");
+            if (projectLeadId == Guid.Empty || projectLeadId == default)
+            {
+                return false;
+            }
 
-            return await Task.FromResult(true);
+            using (var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position))
+            {
+                var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Could not validate project lead with Id {projectLeadId}");
+                }
+
+                var projectLeadStatus = await response.Content.ReadAsStringAsync();
+
+                if (_logger.IsEnabled(LogLevel.Debug))
+                {
+                    _logger.LogDebug("Project lead status for {projectLeadId}: {projectLeadStatus}", projectLeadId, projectLeadStatus);
+                }
+
+                return response.IsSuccessStatusCode;
+            }
         }
 
         private async Task<bool> ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
@@ -82,9 +99,13 @@ namespace Projects.Application.Features.CreateProject
                 return false;
             }
 
-            using (var httpClient = await CreateHttpClient())
+            using (var httpClient = await CreateHttpClient(ClientsServiceConfiguration.Position))
             {
-                var response = await httpClient.GetAsync($"status/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
+                var response = await httpClient.GetAsync($"validate/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Could not validate client with Id {clientId} in tenant {tenantId}");
+                }
 
                 var clientStatus = await response.Content.ReadAsStringAsync();
 
@@ -98,9 +119,9 @@ namespace Projects.Application.Features.CreateProject
             }
         }
 
-        private async Task<HttpClient> CreateHttpClient()
+        private async Task<HttpClient> CreateHttpClient(string configuration)
         {
-            var client = _httpClientFactory.CreateClient(nameof(AccountsApiConfiguration));
+            var client = _httpClientFactory.CreateClient(configuration);
 
             await AddAuthentication(client).ConfigureAwait(false);
 

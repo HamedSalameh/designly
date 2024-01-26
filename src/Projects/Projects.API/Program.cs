@@ -7,6 +7,7 @@ using Designly.Shared;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
@@ -48,11 +49,14 @@ builder.Services.AddProblemDetails();
 // Configure Services
 builder.Services.AddHttpClient();
 
-// load and bind configurations
-builder.Services.Configure<AccountsApiConfiguration>(configuration.GetSection(nameof(AccountsApiConfiguration)));
-builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
+// Configure each service separately using IOptions
+builder.Services.Configure<AccountsServiceConfiguration>(configuration.GetSection(AccountsServiceConfiguration.Position));
+builder.Services.Configure<ClientsServiceConfiguration>(configuration.GetSection(ClientsServiceConfiguration.Position));
 
-AttachNamedHttpClient<AccountsApiConfiguration>(builder);
+AttachNamedHttpClient<AccountsServiceConfiguration>(builder, AccountsServiceConfiguration.Position);
+AttachNamedHttpClient<ClientsServiceConfiguration>(builder, ClientsServiceConfiguration.Position);
+
+builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
 
 builder.Services.AddApplication(configuration);
 
@@ -83,12 +87,13 @@ static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder
 {
     builder.Services.AddAuthorizationBuilder()
         .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
+        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+        .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
 
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, MustBeServiceAccountRequirementHandler>();
 }
-
 static void MapEndoints(WebApplication app)
 {
     var versionSet = app.NewApiVersionSet()
@@ -122,16 +127,22 @@ static void ConfigureVersioning(WebApplicationBuilder builder)
     });
 }
 
-static void AttachNamedHttpClient<T>(WebApplicationBuilder builder) where T : class, IApiServiceConfiguration
+static void AttachNamedHttpClient<T>(WebApplicationBuilder builder, string section) where T : ServiceConfiguration
 {
-    builder.Services.AddHttpClient(typeof(T).Name, (sp, client) =>
+    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>();
+    if (accountsServiceConfig is null)
     {
-        var apiServiceConfig = sp.GetRequiredService<IOptions<T>>()?.Value;
-        var baseAddress = apiServiceConfig?.BaseUrl;
-        var serviceUri = apiServiceConfig?.ServiceUrl;
-        client.BaseAddress = new Uri($"{baseAddress}/{serviceUri}");
+        throw new InvalidOperationException($"Could not find configuration for {section}");
+    }
 
+    var clientName = accountsServiceConfig.ServiceName;
+    var baseAddress = accountsServiceConfig.BaseUrl;
+    var serviceUri = accountsServiceConfig.ServiceUrl;
+
+    builder.Services.AddHttpClient(clientName, client =>
+    {
+        client.BaseAddress = new Uri($"{baseAddress}/{serviceUri}");
         client.DefaultRequestHeaders.Add(
-            nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
+        nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
     });
 }

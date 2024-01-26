@@ -133,9 +133,11 @@ public class Program
     {
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
+            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+            .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
 
         builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
         builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, MustBeServiceAccountRequirementHandler>();
     }
 }

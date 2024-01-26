@@ -2,7 +2,7 @@
 {
     public class ValidateUserCommandDto
     {
-        public string Email { get; set; } = null!;
+        public Guid userId { get; set; }
         public Guid tenantId { get; set; }
     }
 }

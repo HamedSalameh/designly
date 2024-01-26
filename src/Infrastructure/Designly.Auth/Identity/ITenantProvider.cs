@@ -7,5 +7,6 @@ namespace Designly.Auth.Identity
         Guid GetTenantId();
         void SetTenantId(Guid tenantId);
         Guid? GetTenantIdFromRequest(HttpContext context);
+        bool IsServiceAccount(HttpContext context);
     }
 }

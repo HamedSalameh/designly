@@ -12,6 +12,12 @@ namespace Designly.Auth
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            if (authorizationProvider.IsServiceAccount(context))
+            {
+                await next(context);
+                return;
+            }
+
             var tenantId = authorizationProvider.GetTenantIdFromRequest(context);
 
             if (tenantId is null || tenantId == Guid.Empty)

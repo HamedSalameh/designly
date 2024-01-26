@@ -11,9 +11,10 @@ namespace Accounts.Application.Features.ValidateUser
 {
     public static class ValidateUserEndpoint
     {
-        public static IEndpointConventionBuilder MapValidateUserFeature(this IEndpointRouteBuilder routeBuilder, string pattern = "validateuser") {
-            var endpoint = routeBuilder.MapPost(pattern, ValidateUserEndpointAsync)
+        public static IEndpointConventionBuilder MapValidateUserFeature(this IEndpointRouteBuilder routeBuilder, string pattern = "accounts/{tenantId}/users/{userId}/validate") {
+            var endpoint = routeBuilder.MapGet(pattern, ValidateUserEndpointAsync)
                 .RequireAuthorization(policyBuilder => policyBuilder
+                    .AddRequirements(new MustBeServiceAccountRequirement())
                     .AddRequirements(new MustBeAccountOwnerRequirement())
                     .AddRequirements(new MustBeAdminRequirement()))
                 .Produces(StatusCodes.Status200OK)
@@ -25,13 +26,13 @@ namespace Accounts.Application.Features.ValidateUser
             return endpoint;
         }
 
-        private static async Task<IResult> ValidateUserEndpointAsync([FromBody] ValidateUserCommandDto validateUserCommandDto, 
+        private static async Task<IResult> ValidateUserEndpointAsync([FromRoute] Guid tenantId, [FromRoute] Guid userId, 
             CancellationToken cancellationToken,
             ITenantProvider tenantProvider,
             HttpContext httpContext,
             ISender sender)
         {
-            var validateUserIdCommand = new ValidateUserCommand(validateUserCommandDto.Email, validateUserCommandDto.tenantId);
+            var validateUserIdCommand = new ValidateUserCommand(userId, tenantId);
 
             var operationResult = await sender.Send(validateUserIdCommand, cancellationToken).ConfigureAwait(false);
 

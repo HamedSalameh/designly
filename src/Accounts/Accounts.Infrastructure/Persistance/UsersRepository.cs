@@ -56,6 +56,27 @@ namespace Accounts.Infrastructure.Persistance
             return user;
         }
 
+        public async Task<User?> GetUserByIdAsync(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+        {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Getting user by userId for {userId}");
+            }
+            
+            var user = await _context.Users
+                .Include(u => u.Account)
+                .Include(u => u.Teams)
+                .FirstOrDefaultAsync(u => u.Id == userId && u.AccountId == tenantId, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Got user by userId for {userId} : {user?.ToString()}");
+            }
+
+            return user;
+        }
+
         public async Task<User?> GetTenantUserByEmailAsync(string email, Guid tenantId, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))

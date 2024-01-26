@@ -117,13 +117,13 @@ namespace Clients.API.Controllers
             return Ok(clientDto);
         }
 
-        [HttpGet("status/{tenantId}/{id}")]
+        [HttpGet("validate/{tenantId}/{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStatus([FromRoute] Guid tenantId, [FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Validate([FromRoute] Guid tenantId, [FromRoute] Guid id, CancellationToken cancellationToken)
         {
             if (id == default || id == Guid.Empty)
             {

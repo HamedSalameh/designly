@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Accounts.Application.Features.ValidateUser
 {
-    public record ValidateUserCommand(string Email, Guid tenantId) : IRequest<Result<bool>>;
+    public record ValidateUserCommand(Guid userId, Guid tenantId) : IRequest<Result<bool>>;
 }

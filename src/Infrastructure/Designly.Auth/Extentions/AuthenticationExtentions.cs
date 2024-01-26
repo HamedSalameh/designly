@@ -152,7 +152,7 @@ namespace Designly.Auth.Extentions
 
         private static bool AudienceValidator(string rawToken)
         {
-            List<string> supportedAudiences = ["709s3upgn1brajea9j3gplh3gm", "5jbktc23rqr59etq1kgeq5s6ms"];
+            List<string> supportedAudiences = ["709s3upgn1brajea9j3gplh3gm", "7scnlh38o1clcv914cbvnvhfhq"];
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(rawToken);
             var clientId = jwtToken.Payload["client_id"]?.ToString();

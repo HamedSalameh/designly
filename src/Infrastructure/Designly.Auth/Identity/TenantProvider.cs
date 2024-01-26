@@ -38,5 +38,16 @@ namespace Designly.Auth.Identity
             }
             return null;
         }
+
+        public bool IsServiceAccount(HttpContext context)
+        {
+            if (context is null) return false;
+
+            var isServiceAccount = context.User
+                .Claims
+                .Any(c => c.Type == IdentityData.CustomScopesClaimType && c.Value.Contains(IdentityData.ServiceAccountScopeValue));
+
+            return isServiceAccount;
+        }
     }
 }
