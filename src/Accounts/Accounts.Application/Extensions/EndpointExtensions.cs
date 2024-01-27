@@ -21,8 +21,8 @@ namespace Accounts.Application.Extensions
                 {
                     IResult result = ex switch
                     {
-                        ValidationException validationException => Results.Ok(validationException.ToValidationProblemDetails()),
-                        AccountException accountException => Results.Ok(accountException.ToAccountProblemDetails()),
+                        ValidationException validationException => Results.BadRequest(validationException.ToValidationProblemDetails()),
+                        AccountException accountException => Results.UnprocessableEntity(accountException.ToAccountProblemDetails()),
                         _ => Results.BadRequest(ex.Message)
                     };
 

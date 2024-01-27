@@ -1,6 +1,6 @@
 ﻿using Accounts.Application.Extensions;
 using Designly.Auth.Identity;
-using Mapster;
+using Designly.Auth.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,10 +13,7 @@ namespace Accounts.Application.Features.ValidateUser
     {
         public static IEndpointConventionBuilder MapValidateUserFeature(this IEndpointRouteBuilder routeBuilder, string pattern = "accounts/{tenantId}/users/{userId}/validate") {
             var endpoint = routeBuilder.MapGet(pattern, ValidateUserEndpointAsync)
-                .RequireAuthorization(policyBuilder => policyBuilder
-                    .AddRequirements(new MustBeServiceAccountRequirement())
-                    .AddRequirements(new MustBeAccountOwnerRequirement())
-                    .AddRequirements(new MustBeAdminRequirement()))
+                .RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()))
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)

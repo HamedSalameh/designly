@@ -6,8 +6,10 @@ using Designly.Shared.Exceptions;
 using LanguageExt.Common;
 using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 
@@ -21,7 +23,7 @@ namespace Projects.Application.Features.CreateProject
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
             IOptions<AccountsServiceConfiguration> accountsApiConfig,
-            ITokenProvider tokenProvider, 
+            ITokenProvider tokenProvider,
             IHttpClientFactory httpClientFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -31,7 +33,7 @@ namespace Projects.Application.Features.CreateProject
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
-         try   
+            try
             {
                 // Step 1: Validate the customer by Id
                 var validatedClient = await ValidateClientAsync(request.TenantId, request.ClientId, cancellationToken);
@@ -78,6 +80,13 @@ namespace Projects.Application.Features.CreateProject
                 var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
+                    if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity || response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        // read the error message
+                        var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        return false;
+                    }
+
                     throw new Exception($"Could not validate project lead with Id {projectLeadId}");
                 }
 
@@ -109,6 +118,7 @@ namespace Projects.Application.Features.CreateProject
 
                 var clientStatus = await response.Content.ReadAsStringAsync();
 
+
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
                     _logger.LogDebug("Client status for {clientId} in tenant {tenantId}: {clientStatus}", clientId, tenantId, clientStatus);
@@ -139,4 +149,15 @@ namespace Projects.Application.Features.CreateProject
         }
 
     }
+
+
+    public class ProblemDetailsWithErrors
+    {
+        public string Type { get; set; }
+        public string Title { get; set; }
+        public int Status { get; set; }
+        public string TraceId { get; set; }
+        public Dictionary<string, string[]> Errors { get; set; }
+    }
+
 }

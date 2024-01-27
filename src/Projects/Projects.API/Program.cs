@@ -2,6 +2,7 @@ using Designly.Auth;
 using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
 using Designly.Auth.Models;
+using Designly.Auth.Policies;
 using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
@@ -90,9 +91,9 @@ static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder
         .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
         .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
 
-    builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, AdminUserAuthorizationHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
-    builder.Services.AddSingleton<IAuthorizationHandler, MustBeServiceAccountRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
 }
 static void MapEndoints(WebApplication app)
 {
