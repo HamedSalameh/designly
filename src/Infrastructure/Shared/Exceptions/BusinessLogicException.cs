@@ -9,12 +9,14 @@
             : base(message)
         {
             Errors = new Dictionary<string, string>();
+            DomainErrors = new List<KeyValuePair<string, string>>();
         }
 
         public BusinessLogicException(string message, Exception inner)
             : base(message, inner)
         {
             Errors = new Dictionary<string, string>();
+            DomainErrors = new List<KeyValuePair<string, string>>();
         }
 
         /// <summary>
@@ -26,6 +28,8 @@
                        message)
         {
             Errors = errors;
+            // convery dictionary to list of key value pairs
+            DomainErrors = errors.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList();
         }
 
         /// <summary>
@@ -39,6 +43,11 @@
             Errors = new Dictionary<string, string>
             {
                 { error.Key, error.Value }
+            };
+
+            DomainErrors = new List<KeyValuePair<string, string>>
+            {
+                error
             };
         }
 
@@ -58,5 +67,6 @@
         }
 
         public IDictionary<string, string> Errors { get; }
+        public IList<KeyValuePair<string, string>> DomainErrors { get; set; }
     }
 }

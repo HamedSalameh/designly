@@ -40,7 +40,6 @@ namespace Accounts.Application.Extensions
 
             var errors = accountException.Errors;
 
-
             var problemDetails = new DesignlyProblemDetails(
                 title: title,
                 statusCode: (int)statusCode,

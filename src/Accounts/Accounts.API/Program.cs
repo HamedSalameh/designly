@@ -39,6 +39,7 @@ builder.Services.ConfigureCors();
 
 // Wire up the exception handlers
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<BusinessLogicExceptionHandler>();
 builder.Services.AddExceptionHandler<AccountExceptionsHandler>();
 builder.Services.AddProblemDetails();
 

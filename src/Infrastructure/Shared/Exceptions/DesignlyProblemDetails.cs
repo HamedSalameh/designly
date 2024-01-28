@@ -17,7 +17,7 @@ namespace Designly.Shared.Exceptions
             Errors = new List<KeyValuePair<string, string>>();
         }
 
-        public DesignlyProblemDetails(string title, int statusCode, string detail = null)
+        public DesignlyProblemDetails(string title, int statusCode, string? detail = null)
         {
             Title = title;
             Status = statusCode;
@@ -25,15 +25,15 @@ namespace Designly.Shared.Exceptions
             Errors = new List<KeyValuePair<string, string>>();
         }
 
-        public DesignlyProblemDetails(string title, int statusCode, string detail = null, List<KeyValuePair<string, string>> errors = null)
+        public DesignlyProblemDetails(string title, int statusCode, string? detail = null, List<KeyValuePair<string, string>>? errors = null)
         {
             Title = title;
             Status = statusCode;
             Detail = detail;
-            Errors = errors;
+            Errors = errors ?? new List<KeyValuePair<string, string>>();
         }
 
-        public DesignlyProblemDetails(string title, int statusCode, string detail = null, IEnumerable<Error> failures = null)
+        public DesignlyProblemDetails(string title, int statusCode, string? detail = null, IEnumerable<Error>? failures = null)
         {
             Title = title;
             Status = statusCode;

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -22,7 +23,6 @@ namespace Projects.Application.Features.CreateProject
         private readonly IHttpClientFactory _httpClientFactory;
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
-            IOptions<AccountsServiceConfiguration> accountsApiConfig,
             ITokenProvider tokenProvider,
             IHttpClientFactory httpClientFactory)
         {
@@ -46,13 +46,7 @@ namespace Projects.Application.Features.CreateProject
                 }
 
                 // Step 2: Validate the project lead by Id
-                var validatedProjectLead = await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
-                if (!validatedProjectLead)
-                {
-                    _logger.LogError("Could not find project lead with Id: {projectLeadId}", request.ProjectLeadId);
-                    var businessLogicError = new BusinessLogicException("ProjectLeadId", $"Project lead with Id {request.ProjectLeadId} is not a valid project lead.");
-                    return new Result<Guid>(businessLogicError);
-                }
+                await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
 
                 var projectId = Guid.NewGuid();
                 // var projectId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
@@ -68,11 +62,11 @@ namespace Projects.Application.Features.CreateProject
             }
         }
 
-        private async Task<bool> ValidateProjectLeadAsync(Guid tenantId, Guid projectLeadId, CancellationToken cancellationToken)
+        private async Task ValidateProjectLeadAsync(Guid tenantId, Guid projectLeadId, CancellationToken cancellationToken)
         {
             if (projectLeadId == Guid.Empty || projectLeadId == default)
             {
-                return false;
+                throw new ArgumentNullException(nameof(projectLeadId));
             }
 
             using (var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position))
@@ -80,26 +74,29 @@ namespace Projects.Application.Features.CreateProject
                 var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity || response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    // Since this is a server to server call, we should only handle 422 
+                    // and bad request should not be parsed here
+                    if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
                     {
                         // read the error message
-                        var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
-
-                        return false;
+                        await ToBusinessLogicException(response).ConfigureAwait(false);
                     }
 
                     throw new Exception($"Could not validate project lead with Id {projectLeadId}");
                 }
+            }
+        }
 
-                var projectLeadStatus = await response.Content.ReadAsStringAsync();
-
-                if (_logger.IsEnabled(LogLevel.Debug))
-                {
-                    _logger.LogDebug("Project lead status for {projectLeadId}: {projectLeadStatus}", projectLeadId, projectLeadStatus);
-                }
-
-                return response.IsSuccessStatusCode;
+        private static async Task ToBusinessLogicException(HttpResponseMessage response)
+        {
+            var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
+            if (designlyProblemDetails is not null)
+            {
+                // return a failed result
+                var businessLogicException = new BusinessLogicException(designlyProblemDetails.Title);
+                businessLogicException.DomainErrors = designlyProblemDetails.Errors;
+                throw businessLogicException;
             }
         }
 
@@ -149,6 +146,5 @@ namespace Projects.Application.Features.CreateProject
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
             client.DefaultRequestHeaders.Add(Consts.ApiVersionHeaderEntry, "1.0"); // TODO: Get from configuration
         }
-
     }
 }
