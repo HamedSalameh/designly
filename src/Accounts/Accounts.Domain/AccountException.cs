@@ -1,4 +1,6 @@
-﻿namespace Accounts.Domain
+﻿using Designly.Shared;
+
+namespace Accounts.Domain
 {
     public class AccountException : Exception
     {

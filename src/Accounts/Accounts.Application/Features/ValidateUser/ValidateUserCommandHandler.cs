@@ -41,7 +41,7 @@ namespace Accounts.Application.Features.ValidateUser
                 Consts.UserStatus.MarkedForDeletion => new Result<bool>(new AccountException(AccountErrors.UserIsMarkedForDeletion)),
                 Consts.UserStatus.Deleted => new Result<bool>(new AccountException(AccountErrors.UserIsDeleted)),
                 Consts.UserStatus.Blacklisted => new Result<bool>(new AccountException(AccountErrors.UserIsBlacklisted)),
-                _ => throw new AccountException(AccountErrors.UnsupportedUserStatus.Description, AccountErrors.UnsupportedUserStatus)
+                _ => throw new AccountException(AccountErrors.UnsupportedUserStatus)
             };
 
             return validationResult;

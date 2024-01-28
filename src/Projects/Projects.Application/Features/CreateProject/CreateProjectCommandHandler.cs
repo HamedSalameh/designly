@@ -84,6 +84,8 @@ namespace Projects.Application.Features.CreateProject
                     {
                         // read the error message
                         var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
+
                         return false;
                     }
 
@@ -149,15 +151,4 @@ namespace Projects.Application.Features.CreateProject
         }
 
     }
-
-
-    public class ProblemDetailsWithErrors
-    {
-        public string Type { get; set; }
-        public string Title { get; set; }
-        public int Status { get; set; }
-        public string TraceId { get; set; }
-        public Dictionary<string, string[]> Errors { get; set; }
-    }
-
 }

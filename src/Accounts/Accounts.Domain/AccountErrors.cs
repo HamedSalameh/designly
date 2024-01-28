@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using Designly.Shared;
 
 namespace Accounts.Domain
 {
