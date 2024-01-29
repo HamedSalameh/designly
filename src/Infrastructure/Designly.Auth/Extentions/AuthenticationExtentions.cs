@@ -2,7 +2,6 @@
 using Designly.Auth.Providers;
 using IdentityService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -17,10 +16,11 @@ namespace Designly.Auth.Extentions
     {
         public static IServiceCollection AddIdentityProvider(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<IdentityProviderConfiguration>(configuration.GetSection("AWSCognitoConfiguration"));
+            services.Configure<IdentityProviderConfiguration>(configuration.GetSection(IdentityProviderConfiguration.Position));
             services.AddScoped<IIdentityService, AwsCognitoIdentityService>();
 
-            services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+            services.AddScoped<TenantProviderMiddleware>();
+            services.AddSingleton<ITenantProvider, TenantProvider>();
             services.AddSingleton<ITokenProvider, TokenProvider>();
 
             return services;
@@ -28,11 +28,14 @@ namespace Designly.Auth.Extentions
 
         public static void AddJwtBearerConfig(this IServiceCollection services, IConfiguration configuration)
         {
-            var region = configuration.GetValue<string>("AWSCognitoConfiguration:Region");
-            var userPoolId = configuration.GetValue<string>("AWSCognitoConfiguration:PoolId");
-            var audience = configuration.GetValue<string>("AWSCognitoConfiguration:ClientId");
+            var idpConfiguration = configuration.GetSection(IdentityProviderConfiguration.Position).Get<IdentityProviderConfiguration>();
+
+            var region = idpConfiguration?.Region;
+            var userPoolId = idpConfiguration?.PoolId;
+            var audience = idpConfiguration?.ClientId; 
+
             if (string.IsNullOrEmpty(region) || string.IsNullOrEmpty(userPoolId) || string.IsNullOrEmpty(audience))
-                throw new ArgumentException("Missing configuration for AWS Cognito");
+                throw new ArgumentException("Missing configuration for IDP service");
 
             var authority = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
 
@@ -149,7 +152,7 @@ namespace Designly.Auth.Extentions
 
         private static bool AudienceValidator(string rawToken)
         {
-            List<string> supportedAudiences = ["709s3upgn1brajea9j3gplh3gm", "5jbktc23rqr59etq1kgeq5s6ms"];
+            List<string> supportedAudiences = ["709s3upgn1brajea9j3gplh3gm", "7scnlh38o1clcv914cbvnvhfhq"];
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(rawToken);
             var clientId = jwtToken.Payload["client_id"]?.ToString();

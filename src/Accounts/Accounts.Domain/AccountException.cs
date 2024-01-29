@@ -1,4 +1,6 @@
-﻿namespace Accounts.Domain
+﻿using Designly.Shared;
+
+namespace Accounts.Domain
 {
     public class AccountException : Exception
     {
@@ -32,6 +34,11 @@
         public AccountException(string message, Error accountError) : base(message)
         {
             Errors = new List<Error> { accountError };
+        }
+
+        public AccountException(Error accountError)
+        {
+            this.Errors = new List<Error>() { accountError };
         }
 
         public List<Error> Errors { get; set; } = new List<Error>();

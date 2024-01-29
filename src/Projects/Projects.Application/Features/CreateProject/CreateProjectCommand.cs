@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using LanguageExt.Common;
+using MediatR;
 
 namespace Projects.Application.Features.CreateProject
 {
-    public class CreateProjectCommand : IRequest<Guid>
+    public class CreateProjectCommand : IRequest<Result<Guid>>
     {
         public Guid TenantId { get; set; }
         public string Name { get; set; } = string.Empty;

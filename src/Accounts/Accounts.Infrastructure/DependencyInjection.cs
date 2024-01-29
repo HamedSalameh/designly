@@ -28,7 +28,6 @@ namespace Accounts.Infrastructure
                 options.EnableDetailedErrors();
                 options.EnableSensitiveDataLogging();
                 
-
             });
 
             services.AddScoped<IAccountsRepository, AccountsRepository>();

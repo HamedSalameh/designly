@@ -1,5 +1,6 @@
 ﻿using Designly.Auth.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
@@ -7,10 +8,11 @@ using System.Net.Mime;
 
 namespace Designly.Auth.Providers
 {
-    public class TokenProvider(IHttpClientFactory httpClientFactory, ILogger<TokenProvider> logger) : ITokenProvider
+    public class TokenProvider(IHttpClientFactory httpClientFactory, ILogger<TokenProvider> logger, IOptions<OAuth2ServiceProviderConfiguration> OAuth2Options) : ITokenProvider
     {
         private readonly ILogger<TokenProvider> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        private readonly IOptions<OAuth2ServiceProviderConfiguration> oAuth2ServiceProviderConfiguration = OAuth2Options ?? throw new ArgumentNullException(nameof(OAuth2Options));
 
         public async Task<string?> GetTokenAsync(string clientId, string clientSecret)
         {
@@ -26,6 +28,25 @@ namespace Designly.Auth.Providers
             }
 
             return await GetOAuth2Token(clientId, clientSecret);
+        }
+
+        public async Task<string?> GetAccessTokenAsync()
+        {
+            var clientId = oAuth2ServiceProviderConfiguration.Value.client_id;
+            var clientSecret = oAuth2ServiceProviderConfiguration.Value.client_secret;
+
+            if (string.IsNullOrEmpty(clientId))
+            {
+                _logger.LogError("Provided ClientId value is null or empty");
+                throw new ArgumentNullException(nameof(clientId));
+            }
+            if (string.IsNullOrEmpty(clientSecret))
+            {
+                _logger.LogError("Provided ClientSecret value is null or empty");
+                throw new ArgumentNullException(nameof(clientSecret));
+            }
+
+            return await GetAccessTokenAsync(clientId, clientSecret);
         }
 
         public async Task<String?> GetAccessTokenAsync(string clientId, string clientSecret)
@@ -61,14 +82,32 @@ namespace Designly.Auth.Providers
         private async Task<string?> GetOAuth2Token(string clientId, string clientSecret)
         {
             var httpClient = _httpClientFactory.CreateClient();
-            // TODO: Get the base address from configuration
-            httpClient.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com");
+            var baseAddress = oAuth2ServiceProviderConfiguration.Value?.authorization_endpoint;
+            var tokenEndpoint = oAuth2ServiceProviderConfiguration.Value?.token_endpoint;
+            var grantType = oAuth2ServiceProviderConfiguration.Value?.grant_type;
+            if (string.IsNullOrEmpty(baseAddress))
+            {
+                _logger.LogError("Provided base address value is null or empty");
+                throw new ArgumentNullException(nameof(baseAddress));
+            }
+            if (string.IsNullOrEmpty(tokenEndpoint))
+            {
+                _logger.LogError("Provided token endpoint value is null or empty");
+                throw new ArgumentNullException(nameof(tokenEndpoint));
+            }
+            if (string.IsNullOrEmpty(grantType))
+            {
+                _logger.LogError("Provided grant type value is null or empty");
+                throw new ArgumentNullException(nameof(grantType));
+            }
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "oauth2/token");
+            httpClient.BaseAddress = new Uri(baseAddress);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
             request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                ["grant_type"] = "client_credentials",
+                ["grant_type"] = grantType,
                 ["client_id"] = clientId,
                 ["client_secret"] = clientSecret
             });

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Designly.Auth.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
-namespace Designly.Auth.Identity
+namespace Designly.Auth.Policies
 {
 
     public class MustBeAdminRequirementHandler : AuthorizationHandler<MustBeAdminRequirement>

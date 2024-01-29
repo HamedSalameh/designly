@@ -16,12 +16,12 @@ namespace Clients.API.Controllers
     [Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator, IAuthorizationProvider authorizationProvider) : ControllerBase
+    public class ClientsController(ILogger<ClientsController> logger, IMapper mapper, IMediator mediator, ITenantProvider authorizationProvider) : ControllerBase
     {
         private readonly ILogger<ClientsController> logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IMapper mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         private readonly IMediator mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        private readonly IAuthorizationProvider authroizationProvider = authorizationProvider ?? throw new ArgumentNullException(nameof(authroizationProvider));
+        private readonly ITenantProvider tenantProvider = authorizationProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
 
         [HttpPost]
         [Authorize(Policy = IdentityData.AdminUserPolicyName)]
@@ -38,15 +38,15 @@ namespace Clients.API.Controllers
                 return BadRequest($"The submitted client object is not valid or empty");
             }
 
-            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
+            var tenantId = tenantProvider.GetTenantId();
+            if (Guid.Empty == tenantId)
             {
                 logger.LogError($"Invalid value for {nameof(tenantId)}");
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
             var draftClient = mapper.Map<Client>(clientDto);
-            draftClient.TenantId = tenantId.Value;
+            draftClient.TenantId = tenantId;
 
             var createClientCommand = new CreateClientCommand(draftClient);
 
@@ -71,8 +71,8 @@ namespace Clients.API.Controllers
                 return BadRequest(id);
             }
 
-            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
+            var tenantId = tenantProvider.GetTenantId();
+            if (Guid.Empty == tenantId)
             {
                 logger.LogError($"Invalid value for {nameof(tenantId)}");
                 return BadRequest($"The submitted tenant Id is not valid or empty");
@@ -103,27 +103,27 @@ namespace Clients.API.Controllers
                 return BadRequest(id);
             }
 
-            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
+            var tenantId = tenantProvider.GetTenantId();
+            if ( Guid.Empty == tenantId)
             {
                 logger.LogError($"Invalid value for {nameof(tenantId)}");
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
-            var client = await mediator.Send(new GetClientQuery(tenantId.Value, id), cancellationToken).ConfigureAwait(false);
+            var client = await mediator.Send(new GetClientQuery(tenantId, id), cancellationToken).ConfigureAwait(false);
 
             var clientDto = mapper.Map<ClientDto>(client);
             
             return Ok(clientDto);
         }
 
-        [HttpGet("status/{tenantId}/{id}")]
+        [HttpGet("validate/{tenantId}/{id}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetStatus([FromRoute] Guid tenantId, [FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Validate([FromRoute] Guid tenantId, [FromRoute] Guid id, CancellationToken cancellationToken)
         {
             if (id == default || id == Guid.Empty)
             {
@@ -156,14 +156,14 @@ namespace Clients.API.Controllers
                 return BadRequest($"The submitted search object is not valid or empty");
             }
 
-            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
+            var tenantId = tenantProvider.GetTenantId();
+            if (Guid.Empty == tenantId)
             {
                 logger.LogError($"Invalid value for {nameof(tenantId)}");
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
-            var clientSearchQuery = new SearchClientsQuery(tenantId.Value, clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
+            var clientSearchQuery = new SearchClientsQuery(tenantId, clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
             var clients = await mediator.Send(clientSearchQuery, cancellationToken).ConfigureAwait(false);
             var clientDtos = mapper.Map<IEnumerable<ClientDto>>(clients);
             
@@ -184,14 +184,14 @@ namespace Clients.API.Controllers
                 return BadRequest(id);
             }
 
-            var tenantId = authroizationProvider.GetTenantId(HttpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
+            var tenantId = tenantProvider.GetTenantId();
+            if (Guid.Empty == tenantId)
             {
                 logger.LogError($"Invalid value for {nameof(tenantId)}");
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
-            var deleteClientCommand = new DeleteClientCommand(tenantId.Value, id);
+            var deleteClientCommand = new DeleteClientCommand(tenantId, id);
 
             await mediator.Send(deleteClientCommand, cancellationToken).ConfigureAwait(false);
 

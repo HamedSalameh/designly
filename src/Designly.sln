@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounts.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accounts.DB", "Accounts\Accounts.DB\Accounts.DB.csproj", "{CF66EC88-7DC1-4901-9B1C-C8DDBAFCC7E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designly.Configuration", "Infrastructure\Designly.Configuration\Designly.Configuration.csproj", "{2E0802C9-A7D7-4AE0-869F-E33380F472DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +177,10 @@ Global
 		{CF66EC88-7DC1-4901-9B1C-C8DDBAFCC7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF66EC88-7DC1-4901-9B1C-C8DDBAFCC7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF66EC88-7DC1-4901-9B1C-C8DDBAFCC7E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E0802C9-A7D7-4AE0-869F-E33380F472DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E0802C9-A7D7-4AE0-869F-E33380F472DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E0802C9-A7D7-4AE0-869F-E33380F472DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E0802C9-A7D7-4AE0-869F-E33380F472DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,6 +211,7 @@ Global
 		{1FAC4AB3-12D3-41EA-B368-A914FD3BF495} = {B5BB0DA8-13B3-4F70-99C5-F73FAB346B6A}
 		{FC59ADAD-8A2A-451A-BBC9-C9130D6287FD} = {B5BB0DA8-13B3-4F70-99C5-F73FAB346B6A}
 		{CF66EC88-7DC1-4901-9B1C-C8DDBAFCC7E8} = {B5BB0DA8-13B3-4F70-99C5-F73FAB346B6A}
+		{2E0802C9-A7D7-4AE0-869F-E33380F472DC} = {70AE1E5B-E857-4876-A004-6E17168EF98A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B8AF46F6-521A-4E09-B185-17EF099B95AF}

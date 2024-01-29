@@ -12,6 +12,7 @@ using Designly.Shared;
 using Designly.Auth.Extentions;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
+using Designly.Auth.Policies;
 
 public class Program
 {
@@ -58,7 +59,7 @@ public class Program
         // Configure Services
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
         builder.Services.AddApplication(configuration);
-        builder.Services.AddSingleton<IAuthorizationProvider, AuthorizationProvider>();
+        builder.Services.AddSingleton<ITenantProvider, TenantProvider>();
 
         // Configure Health checks
         builder.Services.AddHealthChecks();
@@ -133,9 +134,11 @@ public class Program
     {
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
+            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+            .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
 
-        builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, AdminUserAuthorizationHandler>();
         builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+        builder.Services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
     }
 }

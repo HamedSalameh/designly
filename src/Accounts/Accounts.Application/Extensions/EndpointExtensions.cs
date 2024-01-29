@@ -1,50 +1,51 @@
 ﻿using Accounts.Domain;
+using Designly.Shared.Exceptions;
+using Designly.Shared.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Accounts.Application.Extensions
 {
+
     public static class EndpointExtensions
     {
-        private const string ProblemTitle = "One or more validation errors occurred.";
-        private const string ProblemDetail = "See the errors property for details.";
-
-        public static IActionResult ToActionResult(this Result<Guid> result)
+        public static IResult ToActionResult<T>(this Result<T> result)
         {
-            return result.Match<IActionResult>(
-                Succ: id => new OkObjectResult(id),
+            return result.Match(
+                Succ: response => Results.Ok(result),
                 Fail: ex =>
                 {
-                    if (ex is AccountException accountException)
+                    IResult result = ex switch
                     {
-                        return new BadRequestObjectResult(accountException.ToAccountProblemDetails());
-                    }
+                        ValidationException validationException => Results.BadRequest(validationException.ToDesignlyProblemDetails()),
+                        AccountException accountException => Results.UnprocessableEntity(accountException.ToDesignlyProblemDetails()),
+                        _ => Results.BadRequest(ex.Message)
+                    };
 
-                    return new BadRequestObjectResult(ex.Message);
+                    return result;
                 });
         }
 
-        public static ProblemDetails ToAccountProblemDetails(this AccountException accountException)
+        public static DesignlyProblemDetails ToDesignlyProblemDetails(this AccountException accountException,
+            string title = "The request could not be processed",
+            HttpStatusCode? statusCode = HttpStatusCode.UnprocessableEntity)
         {
+            var problemDetail = "See the error list for more information";
+
             if (accountException == null)
             {
                 throw new ArgumentNullException(nameof(accountException));
             }
 
-            var problemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = ProblemTitle,
-                Detail = ProblemDetail,
-            };
+            var errors = accountException.Errors;
 
-            var accountErrors = accountException.Errors;
-            // add the errors as list of key value pairs to the extensions under 'errors'
-            if (accountErrors != null)
-            {
-                problemDetails.Extensions.Add("Errors", accountErrors);
-            }
+            var problemDetails = new DesignlyProblemDetails(
+                title: title,
+                statusCode: (int)statusCode,
+                detail: errors.Count == 1 ? errors[0].Description : problemDetail,
+                errors);
+
             return problemDetails;
         }
     }

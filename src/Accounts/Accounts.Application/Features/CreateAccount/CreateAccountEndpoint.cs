@@ -16,7 +16,6 @@ namespace Accounts.Application.Features.CreateAccount
         {
             var endPoint = endpoints
                 .MapPost(pattern, CreateAccountEndpointMethodAsync)
-                //.RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
                 .AllowAnonymous()
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
@@ -27,11 +26,9 @@ namespace Accounts.Application.Features.CreateAccount
             return endPoint;
         }
 
-        private static async Task<IActionResult> CreateAccountEndpointMethodAsync([FromBody] CreateAccountRequestDto createAccountRequestDto,
-            IAuthorizationProvider authroizationProvider,
+        private static async Task<IResult> CreateAccountEndpointMethodAsync([FromBody] CreateAccountRequestDto createAccountRequestDto,
             ISender sender,
             ILoggerFactory loggerFactory,
-            HttpContext httpContext,
             CancellationToken cancellationToken
             )
         {
@@ -40,7 +37,7 @@ namespace Accounts.Application.Features.CreateAccount
             if (createAccountRequestDto == null)
             {
                 logger.LogError($"Invalid value for {nameof(createAccountRequestDto)}");
-                return new BadRequestObjectResult($"Invalid value for {nameof(createAccountRequestDto)}");
+                return Results.BadRequest($"Invalid value for {nameof(createAccountRequestDto)}");
             }
 
             var createAccountCommand = createAccountRequestDto.Adapt<CreateAccountCommand>();

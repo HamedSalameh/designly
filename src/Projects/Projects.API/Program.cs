@@ -1,9 +1,15 @@
+using Designly.Auth;
 using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
-using Designly.Auth.Providers;
+using Designly.Auth.Models;
+using Designly.Auth.Policies;
+using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
+using Designly.Shared.Middleware;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Features.CreateProject;
@@ -26,19 +32,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     );
 
 // API versioning
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-    options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
-        new Asp.Versioning.UrlSegmentApiVersionReader(),
-        new Asp.Versioning.HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'V";
-});
+ConfigureVersioning(builder);
 
 // Enabled authentication
 builder.Services.AddJwtBearerConfig(configuration);
@@ -49,19 +43,24 @@ RegisterAuthorizationAndPolicyHandlers(builder);
 builder.Services.ConfigureSecuredSwagger("projects", "v1");
 builder.Services.ConfigureCors();
 
+// Wire up the exception handlers
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<BusinessLogicExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 // Configure Services
-builder.Services.AddHttpClient("cognito", client =>
-{
-    client.DefaultRequestHeaders.Add(HeaderNames.Accept, MediaTypeNames.Application.Json);
-    client.BaseAddress = new Uri("https://designflow.auth.us-east-1.amazoncognito.com/oauth2/token");
-});
+builder.Services.AddHttpClient();
+
+// Configure each service separately using IOptions
+builder.Services.Configure<AccountsServiceConfiguration>(configuration.GetSection(AccountsServiceConfiguration.Position));
+builder.Services.Configure<ClientsServiceConfiguration>(configuration.GetSection(ClientsServiceConfiguration.Position));
+
+AttachNamedHttpClient<AccountsServiceConfiguration>(builder, AccountsServiceConfiguration.Position);
+AttachNamedHttpClient<ClientsServiceConfiguration>(builder, ClientsServiceConfiguration.Position);
+
+builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
+
 builder.Services.AddApplication(configuration);
-
-// Configure Health checks
-builder.Services.AddHealthChecks();
-
-builder.Services.AddControllers();
-
 
 var app = builder.Build();
 
@@ -72,11 +71,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
+
 MapEndoints(app);
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseMiddleware<TenantProviderMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -87,12 +89,13 @@ static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder
 {
     builder.Services.AddAuthorizationBuilder()
         .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()));
+        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+        .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
 
-    builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, AdminUserAuthorizationHandler>();
     builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+    builder.Services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
 }
-
 static void MapEndoints(WebApplication app)
 {
     var versionSet = app.NewApiVersionSet()
@@ -107,4 +110,41 @@ static void MapEndoints(WebApplication app)
 
     routeGroup.MapCreateFeature();
     routeGroup.MapDeleteFeature("{projectId}");
+}
+
+static void ConfigureVersioning(WebApplicationBuilder builder)
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+        options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
+            new Asp.Versioning.UrlSegmentApiVersionReader(),
+            new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
+    }).AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+    });
+}
+
+static void AttachNamedHttpClient<T>(WebApplicationBuilder builder, string section) where T : ServiceConfiguration
+{
+    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>();
+    if (accountsServiceConfig is null)
+    {
+        throw new InvalidOperationException($"Could not find configuration for {section}");
+    }
+
+    var clientName = accountsServiceConfig.ServiceName;
+    var baseAddress = accountsServiceConfig.BaseUrl;
+    var serviceUri = accountsServiceConfig.ServiceUrl;
+
+    builder.Services.AddHttpClient(clientName, client =>
+    {
+        client.BaseAddress = new Uri($"{baseAddress}/{serviceUri}");
+        client.DefaultRequestHeaders.Add(
+        nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
+    });
 }

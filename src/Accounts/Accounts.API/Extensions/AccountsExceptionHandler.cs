@@ -27,7 +27,6 @@ namespace Accounts.API.Extensions
             {
                 Title = accountException.Message,
                 Status = StatusCodes.Status400BadRequest,
-                Detail = "TODO",
                 Type = $"https://httpstatuses.com/{StatusCodes.Status400BadRequest}",
             };
 

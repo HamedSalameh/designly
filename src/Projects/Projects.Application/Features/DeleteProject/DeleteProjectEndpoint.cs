@@ -1,5 +1,5 @@
-﻿
-using Designly.Auth.Identity;
+﻿using Designly.Auth.Identity;
+using Designly.Auth.Policies;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +26,7 @@ namespace Projects.Application.Features.DeleteProject
         }
 
         private static async Task<IResult> DeleteProjectEndpointMethodAsync([FromQuery] Guid projectId,
-            IAuthorizationProvider authroizationProvider,
+            ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
             HttpContext httpContext,
@@ -40,16 +40,11 @@ namespace Projects.Application.Features.DeleteProject
                 return Results.BadRequest($"The submitted project Id is not valid or empty");
             }
 
-            var tenantId = authroizationProvider.GetTenantId(httpContext.User);
-            if (tenantId is null || Guid.Empty == tenantId)
-            {
-                logger.LogError($"Invalid value for {nameof(tenantId)}");
-                return Results.BadRequest($"The submitted tenant Id is not valid or empty");
-            }
+            var tenantId = tenantProvider.GetTenantId();
 
             var deleteProjectCommand = new DeleteProjectCommand()
             {
-                TenantId = tenantId.Value,
+                TenantId = tenantId,
                 ProjectId = projectId
             };
 
