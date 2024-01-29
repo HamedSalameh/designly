@@ -1,37 +1,45 @@
 ﻿using Designly.Auth.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 
 namespace Designly.Auth.Providers
 {
-    public class TokenProvider(IHttpClientFactory httpClientFactory, ILogger<TokenProvider> logger, IOptions<OAuth2ServiceProviderConfiguration> OAuth2Options) : ITokenProvider
+    public class TokenProvider(IHttpClientFactory httpClientFactory, 
+        ILogger<TokenProvider> logger, 
+        IOptions<OAuth2ServiceProviderConfiguration> OAuth2Options,
+        IMemoryCache memoryCache) : ITokenProvider
     {
         private readonly ILogger<TokenProvider> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         private readonly IOptions<OAuth2ServiceProviderConfiguration> oAuth2ServiceProviderConfiguration = OAuth2Options ?? throw new ArgumentNullException(nameof(OAuth2Options));
+        private readonly IMemoryCache _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
 
-        public async Task<string?> GetTokenAsync(string clientId, string clientSecret)
-        {
-            if (string.IsNullOrEmpty(clientId))
-            {
-                _logger.LogError("Provided ClientId value is null or empty");
-                throw new ArgumentNullException(nameof(clientId));
-            }
-            if (string.IsNullOrEmpty(clientSecret))
-            {
-                _logger.LogError("Provided ClientSecret value is null or empty");
-                throw new ArgumentNullException(nameof(clientSecret));
-            }
-
-            return await GetOAuth2Token(clientId, clientSecret);
-        }
+        private const string cacheKeyName = "accessToken";
 
         public async Task<string?> GetAccessTokenAsync()
         {
+            // first, we check if we have a cached token
+            if (_memoryCache.TryGetValue<string>(cacheKeyName, out var token))
+            {
+                if (!string.IsNullOrEmpty(token))
+                {
+                    // check if the token is still valid
+                    var isTokenExpired = IsTokenExpired(token);
+                    if (!isTokenExpired)
+                    {
+                        _logger.LogInformation("Using cached token");
+                    }
+
+                    return token;
+                }
+            }
+
             var clientId = oAuth2ServiceProviderConfiguration.Value.client_id;
             var clientSecret = oAuth2ServiceProviderConfiguration.Value.client_secret;
 
@@ -46,12 +54,17 @@ namespace Designly.Auth.Providers
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
-            return await GetAccessTokenAsync(clientId, clientSecret);
+            var accessToken = await GetAccessTokenAsync(clientId, clientSecret);
+
+            // cache the token
+            _memoryCache.Set(cacheKeyName, accessToken, TimeSpan.FromMinutes(5));
+
+            return accessToken;
         }
 
-        public async Task<String?> GetAccessTokenAsync(string clientId, string clientSecret)
+        public async Task<string?> GetAccessTokenAsync(string clientId, string clientSecret)
         {
-            var jwtToken = await GetTokenAsync(clientId, clientSecret);
+            var jwtToken = await GetOAuth2Token(clientId, clientSecret);
             if (jwtToken == null)
             {
                 _logger.LogError("Could not get JWT token from AWS Cognito");
@@ -60,6 +73,16 @@ namespace Designly.Auth.Providers
 
             var accessToken = ExtractAccessToken(jwtToken);
             return accessToken;
+        }
+
+        private bool IsTokenExpired(string accessToken)
+        {
+            // deserialize the token
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
+            var expirationDate = jwtToken.ValidTo;
+            // check if the token is expired
+            var isTokenExpired = expirationDate < DateTime.UtcNow;
+            return isTokenExpired;
         }
 
         private string? ExtractAccessToken(string OAuth2TokenReponse)

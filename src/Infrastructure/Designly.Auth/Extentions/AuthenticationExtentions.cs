@@ -23,6 +23,9 @@ namespace Designly.Auth.Extentions
             services.AddSingleton<ITenantProvider, TenantProvider>();
             services.AddSingleton<ITokenProvider, TokenProvider>();
 
+            // Needed for token caching
+            services.AddMemoryCache();
+
             return services;
         }
 
