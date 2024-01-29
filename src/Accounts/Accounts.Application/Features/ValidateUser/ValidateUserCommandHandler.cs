@@ -24,15 +24,15 @@ namespace Accounts.Application.Features.ValidateUser
                 _logger.LogDebug($"Validating user  {request.userId} in tenant {request.tenantId}");
             }
 
-            var user = await unitOfWork.UsersRepository.GetUserByIdAsync(request.userId, request.tenantId, cancellationToken).ConfigureAwait(false);
+            var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.userId, request.tenantId, cancellationToken).ConfigureAwait(false);
 
-            if (user is null)
+            if (userStatus is null)
             {
                 var userValidationException = new AccountException(AccountErrors.UserNotFound.Description, AccountErrors.UserNotFound);
                 return new Result<bool>(userValidationException);
             }
 
-            Result<bool> validationResult = user.Status switch
+            Result<bool> validationResult = userStatus switch
             {
                 Consts.UserStatus.BeforeActivation => new Result<bool>(new AccountException(AccountErrors.UserIsNotActivated)),
                 Consts.UserStatus.Active => new Result<bool>(true),

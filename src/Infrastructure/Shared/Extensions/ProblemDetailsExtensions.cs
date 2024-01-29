@@ -1,4 +1,5 @@
 ﻿using Designly.Shared.Exceptions;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace Designly.Shared.Extensions
@@ -50,7 +51,49 @@ namespace Designly.Shared.Extensions
                 detail: errors.Count == 1 ? errors[0].Key : problemDetail,
                 errorList);
 
+            // set the problem detail type as business logic exception
+            problemDetails.Type = ProblemDetailTypes.BusinessLogicException.name;
+
             return problemDetails;
+        }
+
+        /// <summary>
+        /// Creates a new business logic exception from a problem details in an http reponse
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static async Task ToBusinessLogicException(this HttpResponseMessage response)
+        {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
+            var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
+            if (designlyProblemDetails is not null)
+            {
+                // return a failed result
+                var businessLogicException = new BusinessLogicException(designlyProblemDetails.Title);
+                businessLogicException.DomainErrors = designlyProblemDetails.Errors;
+                throw businessLogicException;
+            }
+            throw new Exception("Could not parse the exception to a problem details object.");
+        }
+
+        public sealed record ProblemDetailType(string name, string title);
+
+        // list of problem details types
+        public static class ProblemDetailTypes
+        {
+            public static ProblemDetailType BusinessLogicException = new ProblemDetailType(
+                nameof(BusinessLogicException),
+                "The request could not be processed");
+
+            public static ProblemDetailType ValidationException = new ProblemDetailType(
+                nameof(ValidationException),
+                "There are one or more validation errors occured");
         }
     }
 }

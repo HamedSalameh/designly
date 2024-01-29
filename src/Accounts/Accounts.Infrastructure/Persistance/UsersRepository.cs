@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using Polly.Wrap;
+using System.Linq;
+using static Accounts.Domain.Consts;
 
 namespace Accounts.Infrastructure.Persistance
 {
@@ -75,6 +77,26 @@ namespace Accounts.Infrastructure.Persistance
             }
 
             return user;
+        }
+
+        public async Task<UserStatus?> GetUserStatusAsync(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+        {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Getting user status by userId for {userId}");
+            }
+
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId && u.AccountId == tenantId, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Got user status by userId for {userId} : {user?.ToString()}");
+            }
+
+            return user?.Status;
         }
 
         public async Task<User?> GetTenantUserByEmailAsync(string email, Guid tenantId, CancellationToken cancellationToken)
