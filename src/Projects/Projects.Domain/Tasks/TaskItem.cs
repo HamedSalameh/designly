@@ -1,6 +1,6 @@
 ﻿using Designly.Shared;
 
-namespace Projects.Domain
+namespace Projects.Domain.Tasks
 {
     public class TaskItem : Entity
     {
@@ -12,7 +12,7 @@ namespace Projects.Domain
         public Guid? AssignedTo { get; set; }
         public Guid? AssignedBy { get; set; }
         public DateTime? DueDate { get; set; }
-        public DateTime? CompletedAt { get; set; }   
+        public DateTime? CompletedAt { get; set; }
         public string? Description { get; set; }
         public TaskItemStatus taskItemStatus { get; set; }
         public bool IsCompleted => taskItemStatus == TaskItemStatus.Completed;
@@ -33,7 +33,7 @@ namespace Projects.Domain
         {
             Name = Consts.Strings.ValueNotSet;
             Description = Consts.Strings.ValueNotSet;
-            taskItemStatus = TaskItemStatus.NotStarted;  
+            taskItemStatus = TaskItemStatus.NotStarted;
             ProjectId = Guid.Empty;
         }
 

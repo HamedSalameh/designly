@@ -30,6 +30,9 @@ namespace Accounts.Domain
             AccountId = account.Id;
         }
 
+        public User(string firstName, string lastName, string email, Account account) : this(firstName, lastName, email, null, account)
+        {
+        }
         // Used by EF, Dapper, etc.
         protected User()
         {
