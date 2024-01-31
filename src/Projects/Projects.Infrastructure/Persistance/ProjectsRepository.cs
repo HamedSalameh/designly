@@ -36,15 +36,14 @@ namespace Projects.Infrastructure.Persistance
             }
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("id", basicProject.Id);
-            dynamicParameters.Add("tenant_id", basicProject.TenantId);
-            dynamicParameters.Add("name", basicProject.Name);
-            dynamicParameters.Add("project_lead_id", basicProject.ProjectLeadId);
-            dynamicParameters.Add("client_id", basicProject.ClientId);
-            dynamicParameters.Add("start_date", basicProject.StartDate);
-            dynamicParameters.Add("deadline", basicProject.Deadline);
-            dynamicParameters.Add("completed_at", basicProject.CompletedAt);
-            dynamicParameters.Add("status", basicProject.Status);
+            dynamicParameters.Add("p_tenant_id", basicProject.TenantId);
+            dynamicParameters.Add("p_name", basicProject.Name);
+            dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId);
+            dynamicParameters.Add("p_client_id", basicProject.ClientId);
+            dynamicParameters.Add("p_start_date", basicProject.StartDate);
+            dynamicParameters.Add("p_deadline", basicProject.Deadline);
+            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt);
+            dynamicParameters.Add("p_status", basicProject.Status);
 
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
@@ -55,7 +54,7 @@ namespace Projects.Infrastructure.Persistance
                 using var transaction = connection.BeginTransaction();
                 try
                 {
-                    await connection.ExecuteAsync(sql: "projects.create_basic_project",
+                    await connection.ExecuteAsync(sql: "projects.insert_project",
                         param: dynamicParameters,
                         commandType: CommandType.StoredProcedure,
                         transaction: transaction);

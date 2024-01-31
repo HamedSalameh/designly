@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
 using Designly.Auth.Extentions;
+using Projects.Infrastructure;
 
 namespace Projects.Application;
 
@@ -13,7 +14,7 @@ public static class DependencyInjection
     {
         services.AddIdentityProvider(configuration);
 
-        //services.AddInfrastructureCore(configuration);
+        services.AddInfrastructureCore(configuration);
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddMediatR(Assembly.GetExecutingAssembly());

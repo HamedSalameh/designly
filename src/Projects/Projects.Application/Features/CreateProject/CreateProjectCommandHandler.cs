@@ -1,19 +1,14 @@
-﻿using Designly.Auth.Identity;
-using Designly.Auth.Providers;
+﻿using Designly.Auth.Providers;
 using Designly.Configuration;
 using Designly.Shared;
-using Designly.Shared.Exceptions;
 using Designly.Shared.Extensions;
 using LanguageExt.Common;
-using Mapster;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using Projects.Domain;
+using Projects.Infrastructure.Interfaces;
 using System.Net.Http.Headers;
 using System.Net.Mime;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -22,14 +17,17 @@ namespace Projects.Application.Features.CreateProject
         private readonly ILogger<CreateProjectCommandHandler> _logger;
         private readonly ITokenProvider _tokenProvider;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
             ITokenProvider tokenProvider,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            IUnitOfWork unitOfWork)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -42,11 +40,13 @@ namespace Projects.Application.Features.CreateProject
                 // Step 2: Validate the project lead by Id
                 await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
 
-                var projectId = Guid.NewGuid();
-                // var projectId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug("Created project: {clientId}", projectId);
+                var basicProject = new BasicProject(request.TenantId, request.ProjectLeadId, request.ClientId, request.Name);
+                
+                var project_id = await _unitOfWork.ProjectsRepository.CreateBasicProjectAsync(basicProject, cancellationToken);
+                
+                _logger.LogDebug($"Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})");
 
-                return await Task.FromResult(projectId);
+                return project_id;
             }
             catch (Exception ex)
             {
