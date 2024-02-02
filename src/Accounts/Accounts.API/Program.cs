@@ -31,7 +31,7 @@ ConfigureVersioning(builder);
 // Enabled authentication
 builder.Services.AddJwtBearerConfig(configuration);
 
-RegisterAuthorizationAndPolicyHandlers(builder);
+builder.Services.RegisterAuthorizationAndPolicyHandlers();
 
 // Configure Swagger
 builder.Services.ConfigureSecuredSwagger("accounts", "v1");
@@ -67,18 +67,6 @@ app.UseMiddleware<TenantProviderMiddleware>();
 app.UseAuthorization();
 
 app.Run();
-
-static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder)
-{
-    builder.Services.AddAuthorizationBuilder()
-        .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-        .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
-        .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
-
-    builder.Services.AddSingleton<IAuthorizationHandler, MustBeAdminRequirementHandler>();
-    builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
-    builder.Services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
-}
 
 static void MapEndoints(WebApplication app)
 {

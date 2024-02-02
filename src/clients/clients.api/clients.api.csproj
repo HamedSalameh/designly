@@ -1,44 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>10cee1a9-e98b-4cac-a873-eb878967e61e</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>10cee1a9-e98b-4cac-a873-eb878967e61e</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+		<PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
-    <ProjectReference Include="..\Clients.Application\Clients.Application.csproj" />
-    <ProjectReference Include="..\Clients.Domain\Clients.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
+		<ProjectReference Include="..\Clients.Application\Clients.Application.csproj" />
+		<ProjectReference Include="..\Clients.Domain\Clients.Domain.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.Development.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Update="appsettings.Development.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extentions\" />
-    <Folder Include="Middleware\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Extentions\" />
+		<Folder Include="Middleware\" />
+	</ItemGroup>
 
 </Project>

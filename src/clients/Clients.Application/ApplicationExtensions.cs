@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
+using Designly.Auth.Extentions;
 
 namespace Clients.Application
 {
@@ -11,6 +12,8 @@ namespace Clients.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddIdentityProvider(configuration);
+
             services.AddInfrastructureCore(configuration);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

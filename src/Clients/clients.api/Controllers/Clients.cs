@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Clients.API.DTO;
 using Clients.Application.Commands;
 using Clients.Application.Queries;
@@ -24,7 +25,7 @@ namespace Clients.API.Controllers
         private readonly ITenantProvider tenantProvider = authorizationProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
 
         [HttpPost]
-        [Authorize(Policy = IdentityData.AdminUserPolicyName)]
+        [Authorize(Policy = IdentityData.AccountOwnerPolicyName)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

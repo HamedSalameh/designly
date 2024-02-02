@@ -1,7 +1,10 @@
 ﻿using Designly.Auth.Identity;
+using Designly.Auth.Policies;
 using Designly.Auth.Providers;
 using IdentityService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -102,6 +105,18 @@ namespace Designly.Auth.Extentions
                     }
                 };
             });
+        }
+
+        public static void RegisterAuthorizationAndPolicyHandlers(this IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder()
+                .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
+                .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
+                .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
+
+            services.AddSingleton<IAuthorizationHandler, AdminUserAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
         }
 
         private static void ResolveTentanId(TokenValidatedContext context)

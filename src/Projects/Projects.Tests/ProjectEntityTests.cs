@@ -2,6 +2,7 @@
 #pragma warning disable CS8604
 
 using Projects.Domain;
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Tests
 {
@@ -12,9 +13,9 @@ namespace Projects.Tests
         public void Constructor_WithValidArguments_InitializesProperties()
         {
             // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
+            TenantId tenantId = TenantId.New;
+            ProjectLeadId projectLeadId = ProjectLeadId.New;
+            ClientId clientId = ClientId.New;
             string projectName = "Test Project";
 
             // Act
@@ -41,9 +42,9 @@ namespace Projects.Tests
         public void Constructor_WithEmptyName_ThrowsArgumentException()
         {
             // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
+            TenantId tenantId = TenantId.New;
+            ProjectLeadId projectLeadId = ProjectLeadId.New;
+            ClientId clientId = ClientId.New;
             string projectName = string.Empty;
 
             // Act
@@ -57,9 +58,9 @@ namespace Projects.Tests
         public void Constructor_WithNullName_ThrowsArgumentException()
         {
             // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
+            TenantId tenantId = TenantId.New;
+            ProjectLeadId projectLeadId = ProjectLeadId.New;
+            ClientId clientId = ClientId.New;
             string projectName = null;
 
             // Act
@@ -73,9 +74,9 @@ namespace Projects.Tests
         public void Constrctor_WithAllProperties()
         {
             // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
+            TenantId tenantId = TenantId.New;
+            ProjectLeadId projectLeadId = ProjectLeadId.New;
+            ClientId clientId = ClientId.New;
             string projectName = "Test Project";
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
             DateOnly deadline = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
@@ -113,7 +114,6 @@ namespace Projects.Tests
 
             // Act
             Assert.Throws<ArgumentOutOfRangeException>(() => new BasicProject(tenantId, projectLeadId, clientId, "Test Project", startDate, deadline, completedAt));
-
         }
 
 
@@ -193,12 +193,12 @@ namespace Projects.Tests
         public void SetProjectLeadId_WithValidProjectLeadId_SetsProjectLeadId()
         {
             // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
+            TenantId tenantId = Guid.NewGuid();
+            ProjectLeadId projectLeadId = Guid.NewGuid();
+            ClientId clientId = Guid.NewGuid();
             string projectName = "Test Project";
             var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
-            Guid newProjectLeadId = Guid.NewGuid();
+            ProjectLeadId newProjectLeadId = Guid.NewGuid();
 
             // Act
             basicProject.SetProjectLeadId(newProjectLeadId);

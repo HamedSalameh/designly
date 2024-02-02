@@ -40,7 +40,8 @@ namespace Projects.Application.Features.CreateProject
                 // Step 2: Validate the project lead by Id
                 await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
 
-                var basicProject = new BasicProject(request.TenantId, request.ProjectLeadId, request.ClientId, request.Name);
+                var basicProject = BasicProject.CreateBasicProject(request.TenantId, request.ProjectLeadId, request.ClientId, request.Name, 
+                    request.StartDate, request.Deadline, request.CompletedAt, request.Description);
                 
                 var project_id = await _unitOfWork.ProjectsRepository.CreateBasicProjectAsync(basicProject, cancellationToken);
                 

@@ -1,18 +1,17 @@
-using Clients.Application;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Serilog;
-using System.Net.Mime;
-using System.Reflection;
-using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
 using Designly.Auth.Identity;
-using Designly.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Serilog;
 using Designly.Auth.Extentions;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
+using Designly.Auth;
 using Designly.Auth.Policies;
+using System.Reflection;
+using Clients.Application;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Text.Json;
+using System.Net.Mime;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 public class Program
 {
@@ -20,33 +19,25 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Load configuration from appsettings.json
         builder.Configuration
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         var configuration = builder.Configuration;
 
+        // Configure Serilog
         builder.Host.UseSerilog((ctx, lc) => lc
             .WriteTo.Console()  // TODO: Read from configuration
-            .MinimumLevel.Error()
+            .MinimumLevel.Debug()
             );
 
-        // Api versioning
-        builder.Services.AddApiVersioning(v =>
-        {
-            v.AssumeDefaultVersionWhenUnspecified = true;
-            v.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-            v.ReportApiVersions = true;
-            v.ApiVersionReader = ApiVersionReader.Combine(
-                new QueryStringApiVersionReader(Consts.ApiVersionQueryStringEntry),
-                new HeaderApiVersionReader(Consts.ApiVersionHeaderEntry));
-        });
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
+        // API versioning
+        ConfigureVersioning(builder);
 
         // Enabled authentication
         builder.Services.AddJwtBearerConfig(configuration);
 
-        RegisterAuthorizationAndPolicyHandlers(builder);
+        builder.Services.RegisterAuthorizationAndPolicyHandlers();
 
         // Configure Swagger
         builder.Services.ConfigureSecuredSwagger("clients", "v1");
@@ -54,12 +45,13 @@ public class Program
 
         // Wire up the exception handlers
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+        builder.Services.AddExceptionHandler<BusinessLogicExceptionHandler>();
         builder.Services.AddProblemDetails(); ;
 
         // Configure Services
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        builder.Services.AddHttpClient();
         builder.Services.AddApplication(configuration);
-        builder.Services.AddSingleton<ITenantProvider, TenantProvider>();
 
         // Configure Health checks
         builder.Services.AddHealthChecks();
@@ -94,7 +86,7 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
-        // the call to UserAuthorization should appeat between UseRouting and UseEndpoints
+        app.UseMiddleware<TenantProviderMiddleware>();
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
@@ -130,15 +122,22 @@ public class Program
         }
     }
 
-    private static void RegisterAuthorizationAndPolicyHandlers(WebApplicationBuilder builder)
-    {
-        builder.Services.AddAuthorizationBuilder()
-            .AddPolicy(IdentityData.AdminUserPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAdminRequirement()))
-            .AddPolicy(IdentityData.AccountOwnerPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeAccountOwnerRequirement()))
-            .AddPolicy(IdentityData.ServiceAccountPolicyName, policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()));
+   
 
-        builder.Services.AddSingleton<IAuthorizationHandler, AdminUserAuthorizationHandler>();
-        builder.Services.AddSingleton<IAuthorizationHandler, MustBeAccountOwnerRequirementHandler>();
-        builder.Services.AddSingleton<IAuthorizationHandler, ServiceAccountAuthorizationHandler>();
+    static void ConfigureVersioning(WebApplicationBuilder builder)
+    {
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
+                new Asp.Versioning.UrlSegmentApiVersionReader(),
+                new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'V";
+        });
     }
 }

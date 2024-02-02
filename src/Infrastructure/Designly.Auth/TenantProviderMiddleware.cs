@@ -18,6 +18,13 @@ namespace Designly.Auth
                 return;
             }
 
+            // if the user is not authenticated, do not attempt to extract the tenant id
+            if (context.User.Identity != null && !context.User.Identity.IsAuthenticated)
+            {
+                await next(context);
+                return;
+            }
+
             var tenantId = authorizationProvider.GetTenantIdFromRequest(context);
 
             if (tenantId is null || tenantId == Guid.Empty)
