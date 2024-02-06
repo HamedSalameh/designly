@@ -7,6 +7,7 @@ namespace Accounts.Domain
     {
         public string Name { get; set; }
 
+        public Guid? OwnerId { get; set; }
         public User? Owner { get; set; }
 
         public AccountStatus Status { get; private set; }

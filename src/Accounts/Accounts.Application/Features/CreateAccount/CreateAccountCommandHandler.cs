@@ -34,13 +34,16 @@ namespace Accounts.Application.Features.CreateAccount
 
                 var account = _accountBuilder.CreateBasicAccount(request.Name).Build();
 
+                // save the account and get the id
+                await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
+
                 var accountOwner = new User(request.OwnerFirstName, request.OwnerLastName, request.OwnerEmail, request.OwnerJobTitle, account);
 
                 // assign the account owner as the owner of the account
                 account = _accountBuilder.ConfigureAccount(accountOwner).Build();
 
-                // save changes
-                await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
+                // save changes and it's related entities
+                await unitOfWork.AccountsRepository.UpdateAccountAsync(account, cancellationToken).ConfigureAwait(false);
 
                 // Register new user account at AWS
                 await _identityService.CreateUserAsync(accountOwner.Email, accountOwner.FirstName, accountOwner.LastName, cancellationToken);
@@ -51,6 +54,9 @@ namespace Accounts.Application.Features.CreateAccount
 
                 // Add the user to the tenant group at AWS
                 await _identityService.AddUserToGroupAsync(accountOwner.Email, tenantGroup, cancellationToken);
+
+                // Add the user to the account owners group at AWS
+                await _identityService.AddUserToGroupAsync(accountOwner.Email, IdentityData.AccountOwnerGroup, cancellationToken);
 
                 // Set the user password at AWS
                 await _identityService.SetUserPasswordAsync(accountOwner.Email, request.OwnerPassword, cancellationToken);
