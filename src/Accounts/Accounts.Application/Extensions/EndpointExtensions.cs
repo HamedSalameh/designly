@@ -1,5 +1,5 @@
 ﻿using Accounts.Domain;
-using Designly.Shared.Exceptions;
+using Designly.Base.Exceptions;
 using Designly.Shared.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +20,7 @@ namespace Accounts.Application.Extensions
                     {
                         ValidationException validationException => Results.BadRequest(validationException.ToDesignlyProblemDetails()),
                         AccountException accountException => Results.UnprocessableEntity(accountException.ToDesignlyProblemDetails()),
+                        BusinessLogicException businessLogicException => Results.UnprocessableEntity(businessLogicException.ToDesignlyProblemDetails()),
                         _ => Results.BadRequest(ex.Message)
                     };
 

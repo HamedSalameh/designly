@@ -17,6 +17,8 @@ namespace Clients.Domain.Entities
         [Required]
         public ContactDetails ContactDetails { get; set; }
 
+        public ClientStatusCode ClientStatus { get; set; }
+
         public Client(string firstName, string familyName, Address address, ContactDetails contactDetails, Guid TenantId)
             : base(TenantId)
         {
@@ -28,6 +30,7 @@ namespace Clients.Domain.Entities
             FamilyName = familyName;
             Address = address ?? throw new ArgumentNullException(nameof(address));
             ContactDetails = contactDetails ?? throw new ArgumentNullException(nameof(contactDetails));
+            ClientStatus = ClientStatusCode.Active;
         }
 
         // Used by Dapper for automatic object initialization
@@ -38,6 +41,8 @@ namespace Clients.Domain.Entities
 
             ContactDetails = new ContactDetails(Consts.Strings.ValueNotSet);
             Address = new Address(Consts.Strings.ValueNotSet);
+
+            ClientStatus = ClientStatusCode.Inactive;
         }
 
         public void UpdateAddress(Address address)
@@ -60,6 +65,7 @@ namespace Clients.Domain.Entities
             
             FirstName = client.FirstName;
             FamilyName = client.FamilyName;
+            ClientStatus = client.ClientStatus;
 
             if (client?.ContactDetails != null)
             {
@@ -82,6 +88,7 @@ namespace Clients.Domain.Entities
 
             sb.Append(", ").Append(Address.ToString());
             sb.Append(", ").Append(ContactDetails.ToString());
+            sb.Append(", ").Append(ClientStatus.ToString());
 
             return sb.ToString();
         }

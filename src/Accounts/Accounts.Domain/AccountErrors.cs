@@ -1,4 +1,4 @@
-﻿using Designly.Shared;
+﻿using Designly.Base;
 
 namespace Accounts.Domain
 {

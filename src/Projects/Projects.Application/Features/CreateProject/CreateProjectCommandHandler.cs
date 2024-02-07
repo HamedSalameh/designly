@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Providers;
+using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
@@ -95,10 +96,10 @@ namespace Projects.Application.Features.CreateProject
             if (response.IsSuccessStatusCode)
             {
                 var clientStatus = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                if (Enum.TryParse<ClientStatusCode>(clientStatus, out var clientStatusCode) && clientStatusCode == ClientStatusCode.Active)
-                {
-                    return;
-                }
+                
+                
+
+                throw new BusinessLogicException(new KeyValuePair<string, string>("clientStatus", clientStatus));
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
@@ -108,7 +109,6 @@ namespace Projects.Application.Features.CreateProject
 
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             throw new Exception($"Could not validate client with Id {clientId}: {responseContent}");
-
         }
 
         private async Task<HttpClient> CreateHttpClient(string configuration)

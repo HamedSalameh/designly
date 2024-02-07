@@ -1,4 +1,4 @@
-﻿using Designly.Shared.Exceptions;
+﻿using Designly.Base.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
 

@@ -1,4 +1,4 @@
-﻿namespace Designly.Shared
+﻿namespace Designly.Base
 {
     public sealed record Error(string Code, string Description)
     {

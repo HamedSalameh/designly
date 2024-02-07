@@ -1,4 +1,4 @@
-﻿namespace Designly.Shared.Exceptions
+﻿namespace Designly.Base.Exceptions
 {
     [Serializable]
     public class ValidationException : Exception

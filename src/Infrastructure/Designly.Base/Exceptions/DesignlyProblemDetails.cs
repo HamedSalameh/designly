@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Designly.Base;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
-namespace Designly.Shared.Exceptions
+namespace Designly.Base.Exceptions
 {
     [Serializable]
     public class DesignlyProblemDetails : ProblemDetails

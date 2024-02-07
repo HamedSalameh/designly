@@ -1,10 +1,9 @@
-﻿using System.Net;
-using System.Net.Mime;
+﻿using System.Net.Mime;
+using Designly.Base.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ValidationException = Designly.Shared.Exceptions.ValidationException;
 
 namespace Designly.Shared.Middleware
 {

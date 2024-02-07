@@ -6,6 +6,7 @@ using Accounts.Domain;
 using Designly.Auth.Providers;
 using Designly.Auth.Identity;
 using LanguageExt.Common;
+using Designly.Base.Exceptions;
 
 namespace Accounts.Application.Features.CreateAccount
 {
@@ -16,7 +17,7 @@ namespace Accounts.Application.Features.CreateAccount
         private readonly IAccountBuilder _accountBuilder = accountBuilder ?? throw new ArgumentNullException(nameof(accountBuilder));
         private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
-
+         
         public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
             try
@@ -63,9 +64,14 @@ namespace Accounts.Application.Features.CreateAccount
 
                 return account.Id;
             }
+            catch (BusinessLogicException businessLogicException)
+            {
+                _logger.LogError(businessLogicException, "Could not create new account due to error: {exceptionType}: {exception.Message}", businessLogicException.GetType().Name, businessLogicException.Message);
+                return new Result<Guid>(businessLogicException);
+            }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new project due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                _logger.LogError(exception, "Could not create new account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

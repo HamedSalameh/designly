@@ -40,7 +40,7 @@ namespace Projects.Application.Behaviors
             // convert the List<ValidationFailure> to a List<Key, Value> where Key is the name of the property and Value is the error message
             var errors = failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage);
 
-            throw new Designly.Shared.Exceptions.ValidationException(errors);
+            throw new Designly.Base.Exceptions.ValidationException(errors);
         }
     }
 }

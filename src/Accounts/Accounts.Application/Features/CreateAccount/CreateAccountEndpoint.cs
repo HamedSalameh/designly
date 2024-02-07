@@ -1,5 +1,4 @@
 ﻿using Accounts.Application.Extensions;
-using Designly.Auth.Identity;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
