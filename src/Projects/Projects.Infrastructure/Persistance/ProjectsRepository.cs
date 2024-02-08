@@ -27,7 +27,7 @@ namespace Projects.Infrastructure.Persistance
             
         }
 
-        public Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
+        public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {
             if (basicProject is null)
             {
@@ -36,10 +36,11 @@ namespace Projects.Infrastructure.Persistance
             }
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_tenant_id", basicProject.TenantId);
+            dynamicParameters.Add("p_tenant_id", basicProject.TenantId.Id);
             dynamicParameters.Add("p_name", basicProject.Name);
-            dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId);
-            dynamicParameters.Add("p_client_id", basicProject.ClientId);
+            dynamicParameters.Add("p_description", basicProject.Description);
+            dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id);
+            dynamicParameters.Add("p_client_id", basicProject.ClientId.Id);
             dynamicParameters.Add("p_start_date", basicProject.StartDate);
             dynamicParameters.Add("p_deadline", basicProject.Deadline);
             dynamicParameters.Add("p_completed_at", basicProject.CompletedAt);
@@ -48,13 +49,13 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
-            return policy.ExecuteAsync(async () =>
+            return await policy.ExecuteAsync(async () => 
             {
                 await connection.OpenAsync(cancellationToken);
-                using var transaction = connection.BeginTransaction();
+                using var transaction = await connection.BeginTransactionAsync();
                 try
                 {
-                    await connection.ExecuteAsync(sql: "projects.insert_project",
+                    await connection.ExecuteAsync(sql: "insert_project",
                         param: dynamicParameters,
                         commandType: CommandType.StoredProcedure,
                         transaction: transaction);
@@ -62,7 +63,7 @@ namespace Projects.Infrastructure.Persistance
                     var projectId = dynamicParameters.Get<Guid>("p_project_id");
                     basicProject.Id = projectId;
 
-                    transaction.Commit();
+                    await transaction.CommitAsync();
 
                     return projectId;
                 }
@@ -71,6 +72,13 @@ namespace Projects.Infrastructure.Persistance
                     _logger.LogError(exception, "Error creating basic project");
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                    }
                 }
             });
         }

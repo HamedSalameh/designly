@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Common;
+using Projects.Application.Extentions;
+using System.Net;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -49,10 +51,8 @@ namespace Projects.Application.Features.CreateProject
             createProjectCommand.TenantId = tenantId;
 
             var projectId = await sender.Send(createProjectCommand, cancellationToken).ConfigureAwait(false);
-
-            var projectResourceUrl = Helpers.BuildResourceUri(httpContext, projectId);
-
-            return Results.Ok(projectResourceUrl);
+            
+            return projectId.ToActionResult();
         }
 
     }

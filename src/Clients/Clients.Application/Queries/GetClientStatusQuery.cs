@@ -31,7 +31,7 @@ namespace Clients.Application.Queries
             var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper(tenantId, clientId, cancellationToken).ConfigureAwait(false);
 
             if (client == null) return ClientStatus.NonExistent;
-            ClientStatus clientStatus = client.ClientStatus switch
+            ClientStatus clientStatus = client.Status switch
             {
                 ClientStatusCode.Active => ClientStatus.Active,
                 ClientStatusCode.Inactive => ClientStatus.Inactive,
