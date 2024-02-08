@@ -2,14 +2,16 @@
 using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared;
-using Designly.Shared.Extensions;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Text.Json;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -95,11 +97,15 @@ namespace Projects.Application.Features.CreateProject
 
             if (response.IsSuccessStatusCode)
             {
-                var clientStatus = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                
-                
+                var clientStatusContentResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var clientStatus = JsonConvert.DeserializeAnonymousType(clientStatusContentResponse, new { Code = 0, Description = "" });
 
-                throw new BusinessLogicException(new KeyValuePair<string, string>("clientStatus", clientStatus));
+                if (clientStatus != null && !clientStatus.Description.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                {
+                    Designly.Base.Error clientStatusError = new Designly.Base.Error(clientStatus.Code.ToString(), clientStatus.Description);
+                    throw new BusinessLogicException(clientStatusError);
+                }
+                return;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {

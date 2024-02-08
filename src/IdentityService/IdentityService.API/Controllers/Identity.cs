@@ -1,4 +1,5 @@
-﻿using IdentityService.API.DTO;
+﻿using Designly.Base.Exceptions;
+using IdentityService.API.DTO;
 using IdentityService.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
@@ -17,6 +18,7 @@ namespace IdentityService.API.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<IdentityController> _logger;
 
         public IdentityController(IMediator mediator)
         {
@@ -65,15 +67,28 @@ namespace IdentityService.API.Controllers
 
             var signinRequest = new SigninRequest(clientSigningRequest.Username, clientSigningRequest.Password);
 
-            var tokenResponse = await _mediator.Send(signinRequest, cancellationToken);
-
-            if (tokenResponse != null &&
-                !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
+            try
             {
-                // await SigninUserAsync(clientSigningRequest);
-            }
+                var tokenResponse = await _mediator.Send(signinRequest, cancellationToken);
 
-            return Ok(tokenResponse);
+                if (tokenResponse != null &&
+                    !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
+                {
+                    // await SigninUserAsync(clientSigningRequest);
+                }
+
+                return Ok(tokenResponse);
+            }
+            catch (BusinessLogicException businessLogicException)
+            {
+                var problemDetails = businessLogicException.ToDesignlyProblemDetails(statusCode: System.Net.HttpStatusCode.BadRequest);
+                return BadRequest(problemDetails);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Could not sign in user due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]

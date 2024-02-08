@@ -147,6 +147,11 @@ namespace Designly.Auth.Providers
 
                 return tokenResponse;
             }
+            catch (NotAuthorizedException notAuthorizedException)
+            {
+                _logger.LogInformation($"Could not perform signin against AWS Cognito due to error: {notAuthorizedException.Message}");
+                throw new BusinessLogicException(AuthenticationErrors.InvalidCredentials(notAuthorizedException.Message));
+            }
             catch (Exception exception)
             {
                 _logger.LogError($"Could not perform signin against AWS Cognito due to error: {exception.Message}");
@@ -225,9 +230,8 @@ namespace Designly.Auth.Providers
             } 
             catch (UsernameExistsException exception)
             {
-                Error error = new Error("UsernameExists", exception.Message);
                 _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
-                throw new BusinessLogicException(error);
+                throw new BusinessLogicException(AuthenticationErrors.UsernameExists(exception.Message));
             }
             catch (TooManyRequestsException tooManyRequestsException)
             {

@@ -1,6 +1,5 @@
 ﻿using Accounts.Domain;
 using Designly.Base.Exceptions;
-using Designly.Shared.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
 using System.Net;
@@ -13,7 +12,7 @@ namespace Accounts.Application.Extensions
         public static IResult ToActionResult<T>(this Result<T> result)
         {
             return result.Match(
-                Succ: response => Results.Ok(result),
+                Succ: response => Results.Ok(response),
                 Fail: ex =>
                 {
                     IResult result = ex switch
