@@ -1,8 +1,7 @@
-﻿using Designly.Shared.Exceptions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
 
-namespace Designly.Shared.Extensions
+namespace Designly.Base.Exceptions
 {
     public static class ProblemDetailsExtensions
     {

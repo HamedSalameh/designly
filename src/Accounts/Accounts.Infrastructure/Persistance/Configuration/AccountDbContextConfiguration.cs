@@ -24,6 +24,15 @@ namespace Accounts.Infrastructure.Persistance.Configuration
                 .IsRequired()
                 .HasMaxLength(Consts.AccountNameMaxLength);
 
+            builder.Property(x => x.OwnerId)
+                .HasColumnName("account_owner_id")
+                .IsRequired(false);
+
+            builder.HasOne(Account => Account.Owner)
+                .WithOne(User => User.Account)
+                .HasForeignKey<Account>(Account => Account.OwnerId)
+                .IsRequired(false);
+
             //builder.Property(x => x.AccountOwner)
             //    .HasColumnName("account_owner")
             //    .IsRequired();

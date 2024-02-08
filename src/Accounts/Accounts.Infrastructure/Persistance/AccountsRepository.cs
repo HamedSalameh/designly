@@ -60,7 +60,7 @@ namespace Accounts.Infrastructure.Persistance
             return account.Id;
         }
 
-        public async Task UpdateAccount(Account account, CancellationToken cancellationToken)
+        public async Task UpdateAccountAsync(Account account, CancellationToken cancellationToken)
         {
             if (account == null)
             {
@@ -68,38 +68,23 @@ namespace Accounts.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(account));
             }
 
-            _context.Accounts.Update(account);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<User>> CreateUsersAsync(IEnumerable<User> users, CancellationToken cancellationToken)
-        {
-            if (users == null)
+            // open new transaction
+            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            try
             {
-                _logger.LogError("Provided users collection is null");
-                throw new ArgumentNullException(nameof(users));
+                // update the account and any related entities
+                _context.Accounts.Update(account);
+
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
             }
-
-            await _context.Users.AddRangeAsync(users, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return users;
-        }
-
-        public async Task<IEnumerable<Team>> UpdateTeamsAsync(IEnumerable<Team> teams, CancellationToken cancellationToken)
-        {
-            if (teams == null)
+            catch (Exception exception)
             {
-                _logger.LogError("Provided teams collection is null");
-                throw new ArgumentNullException(nameof(teams));
+                await transaction.RollbackAsync(cancellationToken);
+                _logger.LogError(exception, "Could not update account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                throw;
             }
-
-            _context.Teams.UpdateRange(teams);
-
-            await _context.SaveChangesAsync();
-
-            return teams;
         }
     }
 }

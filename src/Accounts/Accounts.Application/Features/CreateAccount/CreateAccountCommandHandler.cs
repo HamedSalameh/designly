@@ -6,6 +6,7 @@ using Accounts.Domain;
 using Designly.Auth.Providers;
 using Designly.Auth.Identity;
 using LanguageExt.Common;
+using Designly.Base.Exceptions;
 
 namespace Accounts.Application.Features.CreateAccount
 {
@@ -16,7 +17,7 @@ namespace Accounts.Application.Features.CreateAccount
         private readonly IAccountBuilder _accountBuilder = accountBuilder ?? throw new ArgumentNullException(nameof(accountBuilder));
         private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
-
+         
         public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
             try
@@ -34,13 +35,16 @@ namespace Accounts.Application.Features.CreateAccount
 
                 var account = _accountBuilder.CreateBasicAccount(request.Name).Build();
 
+                // save the account and get the id
+                await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
+
                 var accountOwner = new User(request.OwnerFirstName, request.OwnerLastName, request.OwnerEmail, request.OwnerJobTitle, account);
 
                 // assign the account owner as the owner of the account
                 account = _accountBuilder.ConfigureAccount(accountOwner).Build();
 
-                // save changes
-                await unitOfWork.AccountsRepository.CreateAccountAsync(account, cancellationToken).ConfigureAwait(false);
+                // save changes and it's related entities
+                await unitOfWork.AccountsRepository.UpdateAccountAsync(account, cancellationToken).ConfigureAwait(false);
 
                 // Register new user account at AWS
                 await _identityService.CreateUserAsync(accountOwner.Email, accountOwner.FirstName, accountOwner.LastName, cancellationToken);
@@ -52,14 +56,22 @@ namespace Accounts.Application.Features.CreateAccount
                 // Add the user to the tenant group at AWS
                 await _identityService.AddUserToGroupAsync(accountOwner.Email, tenantGroup, cancellationToken);
 
+                // Add the user to the account owners group at AWS
+                await _identityService.AddUserToGroupAsync(accountOwner.Email, IdentityData.AccountOwnerGroup, cancellationToken);
+
                 // Set the user password at AWS
                 await _identityService.SetUserPasswordAsync(accountOwner.Email, request.OwnerPassword, cancellationToken);
 
                 return account.Id;
             }
+            catch (BusinessLogicException businessLogicException)
+            {
+                _logger.LogError(businessLogicException, "Could not create new account due to error: {exceptionType}: {exception.Message}", businessLogicException.GetType().Name, businessLogicException.Message);
+                return new Result<Guid>(businessLogicException);
+            }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new project due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                _logger.LogError(exception, "Could not create new account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

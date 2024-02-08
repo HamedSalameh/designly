@@ -1,4 +1,6 @@
-﻿namespace Projects.Domain
+﻿using Projects.Domain.StonglyTyped;
+
+namespace Projects.Domain
 {
     public abstract class Entity
     {
@@ -7,17 +9,17 @@
 
         int? _requestedHashCode;
         public virtual Guid Id { get; set; }
-        public virtual Guid TenantId { get; set; }
+        public virtual TenantId TenantId { get; set; }
 
         protected Entity()
         {
 
         }
 
-        protected Entity(Guid TenantId) : this()
+        protected Entity(TenantId TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == Guid.Empty || TenantId == default)
+            if (TenantId == TenantId.Empty || TenantId == default)
             {
                 throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }

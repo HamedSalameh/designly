@@ -1,4 +1,4 @@
-﻿namespace Clients.Domain
+﻿namespace Designly.Base.Exceptions
 {
     public class EntityNotFoundException : Exception
     {

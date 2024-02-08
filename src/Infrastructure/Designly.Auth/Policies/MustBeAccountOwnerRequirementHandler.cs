@@ -23,12 +23,7 @@ namespace Designly.Auth.Policies
             {
                 context.Succeed(requirement);
             }
-            else
-            {
-                _logger.LogWarning($"User {context?.User?.Identity?.Name} is not authorized to access this resource");
-                context?.Fail();
-            }
-
+            
             return Task.CompletedTask;
         }
 

@@ -22,10 +22,7 @@
     <ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Designly.Configuration\Designly.Configuration.csproj" />
     <ProjectReference Include="..\Projects.Domain\Projects.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extentions\" />
+    <ProjectReference Include="..\Projects.Infrastructure\Projects.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

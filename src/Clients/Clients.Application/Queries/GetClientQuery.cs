@@ -1,6 +1,6 @@
-﻿using Clients.Domain;
-using Clients.Domain.Entities;
+﻿using Clients.Domain.Entities;
 using Clients.Infrastructure.Interfaces;
+using Designly.Base.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

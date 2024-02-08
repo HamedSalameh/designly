@@ -1,5 +1,7 @@
 ﻿using Designly.Shared;
-using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
+using Projects.Domain.StonglyTyped;
+using Projects.Domain.Tasks;
 
 namespace Projects.Domain
 {
@@ -18,11 +20,11 @@ namespace Projects.Domain
         /// <summary>
         /// Registered user, The lead designer or architect of the project
         /// </summary>
-        public Guid ProjectLeadId { get; set; }
+        public ProjectLeadId ProjectLeadId { get; set; }
         /// <summary>
         /// The client for whom the project is being done
         /// </summary>
-        public Guid ClientId;
+        public ClientId ClientId;
 
         /// <summary>
         /// Planned or actual start date of the project
@@ -37,7 +39,7 @@ namespace Projects.Domain
         /// <summary>
         /// Actual completion date of the project
         /// </summary>
-        public DateOnly? CompletedAt { get; private set; }      
+        public DateOnly? CompletedAt { get; private set; }
 
         public ProjectStatus Status { get => _status; set => _status = value; }
 
@@ -51,7 +53,7 @@ namespace Projects.Domain
         /// </summary>
         public List<TaskItem> TaskItems { get; set; }
 
-        public BasicProject(Guid tenantId, Guid projectLeadId, Guid clientId, string projectName) : base(tenantId)
+        public BasicProject(TenantId tenantId, ProjectLeadId projectLeadId, ClientId clientId, string projectName) : base(tenantId)
         {
             if (string.IsNullOrEmpty(projectName))
             {
@@ -67,7 +69,7 @@ namespace Projects.Domain
             CompletedAt = null;
         }
 
-        public BasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
+        public BasicProject(TenantId tenantId, ProjectLeadId projectLeadId, ClientId ClientId, string projectName,
             DateOnly startDate, DateOnly deadline, DateOnly? completedAt = null, string description = "") : this(tenantId, projectLeadId, ClientId, projectName)
         {
             if (startDate > deadline)
@@ -150,6 +152,17 @@ namespace Projects.Domain
                 throw new ArgumentOutOfRangeException($"{nameof(deadline)} : must be after {nameof(StartDate)}");
             }
             Deadline = deadline;
+        }
+
+        public static BasicProject CreateBasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
+            DateOnly? startDate = null, DateOnly? deadline = null, DateOnly? completedAt = null, string description = "")
+        {
+            var basicProject = new BasicProject(tenantId, projectLeadId, ClientId, projectName);
+            basicProject.Description = description;
+            if (startDate.HasValue) basicProject.SetStartDate(startDate.Value);
+            if (deadline.HasValue) basicProject.SetDeadline(deadline.Value);
+            if (completedAt.HasValue) basicProject.CompleteProject(completedAt.Value);
+            return basicProject;
         }
     }
 

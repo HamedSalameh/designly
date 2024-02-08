@@ -4,6 +4,8 @@ using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
 using Amazon.Runtime;
 using Designly.Auth.Models;
+using Designly.Base;
+using Designly.Base.Exceptions;
 using IdentityService.Service;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -145,6 +147,11 @@ namespace Designly.Auth.Providers
 
                 return tokenResponse;
             }
+            catch (NotAuthorizedException notAuthorizedException)
+            {
+                _logger.LogInformation($"Could not perform signin against AWS Cognito due to error: {notAuthorizedException.Message}");
+                throw new BusinessLogicException(AuthenticationErrors.InvalidCredentials(notAuthorizedException.Message));
+            }
             catch (Exception exception)
             {
                 _logger.LogError($"Could not perform signin against AWS Cognito due to error: {exception.Message}");
@@ -220,11 +227,17 @@ namespace Designly.Auth.Providers
             {
                 var response = await _client.AdminCreateUserAsync(request, cancellationToken).ConfigureAwait(false);
                 return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
-            }
-            catch (UsernameExistsException usernameExistsException)
+            } 
+            catch (UsernameExistsException exception)
             {
-                _logger.LogError($"The username {email} already exists.");
-                throw new Exception($"The username {email} already exists.", usernameExistsException);
+                _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
+                throw new BusinessLogicException(AuthenticationErrors.UsernameExists(exception.Message));
+            }
+            catch (TooManyRequestsException tooManyRequestsException)
+            {
+                Error error = new Error("TooManyRequests", tooManyRequestsException.Message);
+                _logger.LogError($"Could not create user in AWS Cognito due to error: {tooManyRequestsException.Message}");
+                throw new BusinessLogicException(error);
             }
             catch (Exception exception)
             {

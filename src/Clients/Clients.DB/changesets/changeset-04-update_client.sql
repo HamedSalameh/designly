@@ -1,14 +1,22 @@
-﻿/* 
+﻿--liquibase formatted sql
+--changeset Hamed Salameh:update_client_procedure
+--changeset-id: update_client_procedure
+--changeset-description: Create stored procedure for updating a client
+--changeset-rollback-sql: DROP FUNCTION IF EXISTS update_client(UUID, UUID, VARCHAR(255), VARCHAR(255), INT, VARCHAR(255), VARCHAR(255), VARCHAR(255), TEXT, VARCHAR(255), VARCHAR(255), VARCHAR(255));
+
+/* 
   Description:  
     A stored procedure to update a client.
     if the client does not exist, an exception is thrown.
 */
+--Set database name
 
 CREATE OR REPLACE PROCEDURE update_client(
     p_id UUID,
     p_tenant_id UUID,
     p_first_name VARCHAR(255),
     p_family_name VARCHAR(255),
+    p_status INT,
 	p_city VARCHAR(255),
     p_street VARCHAR(255),
     p_building_number VARCHAR(255),
@@ -32,6 +40,7 @@ BEGIN
     UPDATE clients SET
         first_name = p_first_name,
         family_name = p_family_name,
+        status = p_status,
 		city = p_city,
 		street = p_street,
 		building_number = p_building_number,

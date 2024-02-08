@@ -42,7 +42,7 @@ namespace Accounts.Application.Behaviors
 
             // fail the validation and fail the resut
 
-            throw new Designly.Shared.Exceptions.ValidationException(errors);
+            throw new Designly.Base.Exceptions.ValidationException(errors);
         }
     }
 }

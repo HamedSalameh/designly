@@ -1,5 +1,4 @@
 ﻿using Accounts.Application.Extensions;
-using Designly.Auth.Identity;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +11,7 @@ namespace Accounts.Application.Features.CreateAccount
 {
     public static class CreateAccountEndpoint
     {
-        public static IEndpointConventionBuilder MapCreateAccountFeature(this IEndpointRouteBuilder endpoints, string pattern = "")
+        public static IEndpointConventionBuilder MapCreateAccountFeature(this IEndpointRouteBuilder endpoints, string pattern = "accounts")
         {
             var endPoint = endpoints
                 .MapPost(pattern, CreateAccountEndpointMethodAsync)

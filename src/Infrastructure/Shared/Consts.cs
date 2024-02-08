@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Designly.Shared
+﻿namespace Designly.Shared
 {
     public static class Consts
     {
@@ -34,16 +32,5 @@ namespace Designly.Shared
         
     }
 
-    public enum ClientStatusCode
-    {
-        // Default value
-        NonExistent = 0,
-        // Regular client statuses
-        Active,
-        // Below are the statuses that are not considered 'Green' and safe to transact with
-        Inactive,
-        Suspended,        
-        HighRisk,
-        Blacklisted
-    }
+    
 }

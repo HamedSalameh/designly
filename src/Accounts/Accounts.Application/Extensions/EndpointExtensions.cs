@@ -1,6 +1,5 @@
 ﻿using Accounts.Domain;
-using Designly.Shared.Exceptions;
-using Designly.Shared.Extensions;
+using Designly.Base.Exceptions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
 using System.Net;
@@ -13,13 +12,14 @@ namespace Accounts.Application.Extensions
         public static IResult ToActionResult<T>(this Result<T> result)
         {
             return result.Match(
-                Succ: response => Results.Ok(result),
+                Succ: response => Results.Ok(response),
                 Fail: ex =>
                 {
                     IResult result = ex switch
                     {
                         ValidationException validationException => Results.BadRequest(validationException.ToDesignlyProblemDetails()),
                         AccountException accountException => Results.UnprocessableEntity(accountException.ToDesignlyProblemDetails()),
+                        BusinessLogicException businessLogicException => Results.UnprocessableEntity(businessLogicException.ToDesignlyProblemDetails()),
                         _ => Results.BadRequest(ex.Message)
                     };
 

@@ -1,4 +1,4 @@
-﻿namespace Projects.Domain
+﻿namespace Projects.Domain.Tasks
 {
     public class TaskGroup : Entity
     {

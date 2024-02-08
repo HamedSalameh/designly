@@ -58,6 +58,7 @@ namespace Clients.Infrastructure.Persistance
             parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
             parameters.Add("p_first_name", client.FirstName, DbType.String);
             parameters.Add("p_family_name", client.FamilyName, DbType.String);
+            parameters.Add("p_status", client.Status, DbType.Int16);
             parameters.Add("p_city", client.Address.City, DbType.String);
             parameters.Add("p_street", client.Address.Street, DbType.String);
             parameters.Add("p_building_number", client.Address.BuildingNumber, DbType.String);
@@ -111,6 +112,7 @@ namespace Clients.Infrastructure.Persistance
             parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
             parameters.Add("p_first_name", client.FirstName, DbType.String);
             parameters.Add("p_family_name", client.FamilyName, DbType.String);
+            parameters.Add("p_status", client.Status, DbType.Int16);
             parameters.Add("p_city", client.Address.City, DbType.String);
             parameters.Add("p_street", client.Address.Street, DbType.String);
             parameters.Add("p_building_number", client.Address.BuildingNumber, DbType.String);

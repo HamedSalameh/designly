@@ -23,4 +23,8 @@
     <Folder Include="Logging\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Designly.Base\Designly.Base.csproj" />
+  </ItemGroup>
+
 </Project>
