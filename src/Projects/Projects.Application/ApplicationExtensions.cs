@@ -5,6 +5,7 @@ using System.Reflection;
 using FluentValidation;
 using Designly.Auth.Extentions;
 using Projects.Infrastructure;
+using Projects.Application.Builders;
 
 namespace Projects.Application;
 
@@ -12,6 +13,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IProjectBuilder, ProjectBuilder>();
         services.AddIdentityProvider(configuration);
 
         services.AddInfrastructureCore(configuration);

@@ -23,4 +23,22 @@ namespace Projects.Infrastructure.Persistance
             return parsedValue;
         }
     }
+
+    public class DateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
+    {
+        public override void SetValue(IDbDataParameter parameter, DateOnly value)
+        {
+            parameter.Value = new DateTime(value.Year, value.Month, value.Day);
+        }
+
+        public override DateOnly Parse(object value)
+        {
+            if (value is DateTime dateTime)
+            {
+                return new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+            }
+
+            throw new ArgumentException("Invalid date value");
+        }
+    }
 }

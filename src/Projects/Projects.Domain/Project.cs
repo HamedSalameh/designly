@@ -69,22 +69,6 @@ namespace Projects.Domain
             CompletedAt = null;
         }
 
-        public BasicProject(TenantId tenantId, ProjectLeadId projectLeadId, ClientId ClientId, string projectName,
-            DateOnly startDate, DateOnly deadline, DateOnly? completedAt = null, string description = "") : this(tenantId, projectLeadId, ClientId, projectName)
-        {
-            if (startDate > deadline)
-            {
-                throw new ArgumentException($"{nameof(startDate)} : must be before {nameof(deadline)}");
-            }
-            StartDate = startDate;
-            Deadline = deadline;
-            Description = description;
-            if (completedAt.HasValue)
-            {
-                CompleteProject(completedAt.Value);
-            }
-        }
-
         // Used by Dapper for automatic object initialization
         private BasicProject()
         {
@@ -154,16 +138,16 @@ namespace Projects.Domain
             Deadline = deadline;
         }
 
-        public static BasicProject CreateBasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
-            DateOnly? startDate = null, DateOnly? deadline = null, DateOnly? completedAt = null, string description = "")
-        {
-            var basicProject = new BasicProject(tenantId, projectLeadId, ClientId, projectName);
-            basicProject.Description = description;
-            if (startDate.HasValue) basicProject.SetStartDate(startDate.Value);
-            if (deadline.HasValue) basicProject.SetDeadline(deadline.Value);
-            if (completedAt.HasValue) basicProject.CompleteProject(completedAt.Value);
-            return basicProject;
-        }
+        //public static BasicProject CreateBasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
+        //    DateOnly? startDate = null, DateOnly? deadline = null, DateOnly? completedAt = null, string description = "")
+        //{
+        //    var basicProject = new BasicProject(tenantId, projectLeadId, ClientId, projectName);
+        //    basicProject.Description = description;
+        //    if (startDate.HasValue) basicProject.SetStartDate(startDate.Value);
+        //    if (deadline.HasValue) basicProject.SetDeadline(deadline.Value);
+        //    if (completedAt.HasValue) basicProject.CompleteProject(completedAt.Value);
+        //    return basicProject;
+        //}
     }
 
     public class Project : BasicProject
