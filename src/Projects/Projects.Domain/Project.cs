@@ -10,21 +10,21 @@ namespace Projects.Domain
         /// <summary>
         /// General name of the project
         /// </summary>
-        public string Name;
+        public string Name { get; private set; }
 
         /// <summary>
         /// General optional description of the project
         /// </summary>
-        public string? Description { get; set; }
+        public string? Description { get; private set; }
 
         /// <summary>
         /// Registered user, The lead designer or architect of the project
         /// </summary>
-        public ProjectLeadId ProjectLeadId { get; set; }
+        public ProjectLeadId ProjectLeadId { get; private set; }
         /// <summary>
         /// The client for whom the project is being done
         /// </summary>
-        public ClientId ClientId;
+        public ClientId ClientId { get; private set; }
 
         /// <summary>
         /// Planned or actual start date of the project
@@ -137,52 +137,42 @@ namespace Projects.Domain
             }
             Deadline = deadline;
         }
-
-        //public static BasicProject CreateBasicProject(Guid tenantId, Guid projectLeadId, Guid ClientId, string projectName,
-        //    DateOnly? startDate = null, DateOnly? deadline = null, DateOnly? completedAt = null, string description = "")
-        //{
-        //    var basicProject = new BasicProject(tenantId, projectLeadId, ClientId, projectName);
-        //    basicProject.Description = description;
-        //    if (startDate.HasValue) basicProject.SetStartDate(startDate.Value);
-        //    if (deadline.HasValue) basicProject.SetDeadline(deadline.Value);
-        //    if (completedAt.HasValue) basicProject.CompleteProject(completedAt.Value);
-        //    return basicProject;
-        //}
     }
 
-    public class Project : BasicProject
-    {
-        // Populated by Dapper
-        public List<Property> PropertyList;
-        public List<TaskGroup> TaskGroups { get; set; }
+    // Out of scope for MVP
+    //public class Project : BasicProject
+    //{
+    //    // Populated by Dapper
+    //    public List<Property> PropertyList;
+    //    public List<TaskGroup> TaskGroups { get; set; }
 
-        public Project(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
-        {
-            PropertyList = [];
-            TaskGroups = [];
-        }
-    }
+    //    public Project(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
+    //    {
+    //        PropertyList = [];
+    //        TaskGroups = [];
+    //    }
+    //}
 
-    public class FullProject : Project
-    {
-        // Additional
-        //public Budget ProjectBudget { get; set; }       // project budget allocated by the customer
-        //public Inventory Inventory { get; set; }        // כתב כמויות
-        //public Contract Contract { get; set; }
-        //public List<Documents> Plans { get; set; }      // תוכניות
-        //public List<Documents> Files { get; set; }      // קבצים, תמונות, וידאו
-        //public Questionare questionare { get; set; }    // שאלון לקוח
-        //public List<Questionare> Answers { get; set; }  // תשובות לשאלון לקוח
-        //public List<Documents> Reports { get; set; }    // דוחות
-        //public List<Documents> Invoices { get; set; }   // חשבוניות
-        //public List<Documents> Receipts { get; set; }   // קבלות
-        //public List<Documents> Expenses { get; set; }   // הוצאות
-        //public List<Note> Notes { get; set; }      // הערות
+    //public class FullProject : Project
+    //{
+    //    // Additional
+    //    //public Budget ProjectBudget { get; set; }       // project budget allocated by the customer
+    //    //public Inventory Inventory { get; set; }        // כתב כמויות
+    //    //public Contract Contract { get; set; }
+    //    //public List<Documents> Plans { get; set; }      // תוכניות
+    //    //public List<Documents> Files { get; set; }      // קבצים, תמונות, וידאו
+    //    //public Questionare questionare { get; set; }    // שאלון לקוח
+    //    //public List<Questionare> Answers { get; set; }  // תשובות לשאלון לקוח
+    //    //public List<Documents> Reports { get; set; }    // דוחות
+    //    //public List<Documents> Invoices { get; set; }   // חשבוניות
+    //    //public List<Documents> Receipts { get; set; }   // קבלות
+    //    //public List<Documents> Expenses { get; set; }   // הוצאות
+    //    //public List<Note> Notes { get; set; }      // הערות
 
-        public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
-        {
-            PropertyList = [];
-            TaskGroups = [];
-        }
-    }
+    //    public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
+    //    {
+    //        PropertyList = [];
+    //        TaskGroups = [];
+    //    }
+    //}
 }

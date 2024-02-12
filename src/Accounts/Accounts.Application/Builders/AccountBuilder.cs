@@ -1,5 +1,6 @@
 ﻿
 using Accounts.Domain;
+using Designly.Base.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Accounts.Application.Builders
@@ -31,10 +32,9 @@ namespace Accounts.Application.Builders
 
         public Account Build()
         {
-            // TODO: Add validation
             if (account == null)
             {
-                throw new Exception("Account is not initialized");
+                throw new BusinessLogicException("Account is not initialized");
             }
 
             return account;
@@ -42,9 +42,9 @@ namespace Accounts.Application.Builders
 
         public IAccountBuilder ConfigureAccount(User accountOwner)
         {
-            if (account == default || account is null)
+            if (account == default)
             {
-                throw new Exception("Account is not created yet");
+                throw new BusinessLogicException("Account is not created yet");
             }
 
             account.AssignOwner(accountOwner);

@@ -3,6 +3,18 @@ using Projects.Domain;
 
 namespace Projects.Application.Builders
 {
+    public interface IProjectBuilder
+    {
+        BasicProject BuildBasicProject();
+        ProjectBuilder WithClient(Guid clientId);
+        ProjectBuilder WithName(string name);
+        ProjectBuilder WithDescription(string description);
+        ProjectBuilder WithProjectLead(Guid projectLeadId);
+        ProjectBuilder WithStartDate(DateOnly? startDate);
+        ProjectBuilder WithDeadline(DateOnly? deadline);
+        ProjectBuilder WithCompletedAt(DateOnly? completedAt);
+    }
+
     /// <summary>
     /// A project builder that allows for the construction of a project
     /// <br>The builder will automatically inject the tenant Id from the context</br>
@@ -11,13 +23,13 @@ namespace Projects.Application.Builders
     {
         private readonly ITenantProvider _tenantProvider;
 
-        private Guid ProjectLeadId;
-        private Guid ClientId;
-        private string Name = string.Empty;
-        private string Description = string.Empty;
-        private DateOnly? StartDate;
-        private DateOnly? Deadline;
-        private DateOnly? CompletedAt;
+        private Guid _projectLeadId;
+        private Guid _clientId;
+        private string _name = string.Empty;
+        private string _description = string.Empty;
+        private DateOnly? _startDate;
+        private DateOnly? _deadline;
+        private DateOnly? _completedAt;
 
         public ProjectBuilder(ITenantProvider tenantProvider)
         {
@@ -30,7 +42,7 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(projectLeadId)} : must not be empty");
             }
-            ProjectLeadId = projectLeadId;
+            this._projectLeadId = projectLeadId;
             return this;
         }
 
@@ -40,7 +52,7 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(clientId)} : must not be empty");
             }
-            ClientId = clientId;
+            this._clientId = clientId;
             return this;
         }
 
@@ -50,43 +62,43 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(name)} : must not be null or empty");
             }
-            Name = name;
+            this._name = name;
             return this;
         }
 
         public ProjectBuilder WithDescription(string description)
         {
-            Description = description;
+            this._description = description;
             return this;
         }
 
         public ProjectBuilder WithStartDate(DateOnly? startDate)
         {
-            if (startDate > Deadline)
+            if (startDate > _deadline)
             {
-                throw new ArgumentException($"{nameof(startDate)} : must be before {nameof(Deadline)}");
+                throw new ArgumentException($"{nameof(startDate)} : must be before {nameof(_deadline)}");
             }
-            StartDate = startDate;
+            this._startDate = startDate;
             return this;
         }
 
         public ProjectBuilder WithDeadline(DateOnly? deadline)
         {
-            if (StartDate > deadline)
+            if (_startDate > deadline)
             {
-                throw new ArgumentException($"{nameof(deadline)} : must be after {nameof(StartDate)}");
+                throw new ArgumentException($"{nameof(deadline)} : must be after {nameof(_startDate)}");
             }
-            Deadline = deadline;
+            _deadline = deadline;
             return this;
         }
 
         public ProjectBuilder WithCompletedAt(DateOnly? completedAt)
         {
-            if (completedAt < StartDate)
+            if (completedAt < _startDate)
             {
-                throw new ArgumentException($"{nameof(completedAt)} : must be after {nameof(StartDate)}");
+                throw new ArgumentException($"{nameof(completedAt)} : must be after {nameof(_startDate)}");
             }
-            CompletedAt = completedAt;
+            _completedAt = completedAt;
             return this;
         }
 
@@ -94,11 +106,11 @@ namespace Projects.Application.Builders
         {
             var tenantId = _tenantProvider.GetTenantId();
 
-            var basicProject = new BasicProject(tenantId, ProjectLeadId, ClientId, Name);
-            basicProject.Description = Description;
-            if (StartDate.HasValue) basicProject.SetStartDate(StartDate.Value);
-            if (Deadline.HasValue) basicProject.SetDeadline(Deadline.Value);
-            if (CompletedAt.HasValue) basicProject.CompleteProject(CompletedAt.Value);
+            var basicProject = new BasicProject(tenantId, _projectLeadId, _clientId, _name);
+            basicProject.SetDescription(_description);
+            if (_startDate.HasValue) basicProject.SetStartDate(_startDate.Value);
+            if (_deadline.HasValue) basicProject.SetDeadline(_deadline.Value);
+            if (_completedAt.HasValue) basicProject.CompleteProject(_completedAt.Value);
             return basicProject;
         }
     }

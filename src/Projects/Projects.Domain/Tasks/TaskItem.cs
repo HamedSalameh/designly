@@ -8,7 +8,6 @@ namespace Projects.Domain.Tasks
         //public required Guid TaskGroupId { get; set; }
         //public TaskGroup TaskGroup { get; set; }
         public required Guid ProjectId { get; set; }
-        //public required Project Project { get; set; }
         public Guid? AssignedTo { get; set; }
         public Guid? AssignedBy { get; set; }
         public DateTime? DueDate { get; set; }

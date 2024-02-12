@@ -35,7 +35,7 @@ namespace Designly.Shared.Middleware
             }
 
             httpContext.Response.ContentType = MediaTypeNames.Application.Json;
-            httpContext.Response.StatusCode = problemDetails.Status.Value;
+            httpContext.Response.StatusCode = problemDetails.Status ?? (int)System.Net.HttpStatusCode.UnprocessableEntity;
 
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken: cancellationToken).ConfigureAwait(false);
 

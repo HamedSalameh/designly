@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Projects.Application.Common;
 using Projects.Application.Extentions;
-using System.Net;
 
 namespace Projects.Application.Features.CreateProject
 {

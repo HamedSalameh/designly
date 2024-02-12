@@ -1,12 +1,11 @@
-﻿using Accounts.Domain;
-using LanguageExt.Common;
+﻿using LanguageExt.Common;
 using MediatR;
 
 namespace Accounts.Application.Features.CreateAccount
 {
     public class CreateAccountCommand : IRequest<Result<Guid>>
     {
-        public CreateAccountCommand(string name, string ownerFirstName, string ownerLastName, string ownerEmail, string ownerJobTitle, string ownerPassword) //, string ownerPhoneNumber)
+        public CreateAccountCommand(string name, string ownerFirstName, string ownerLastName, string ownerEmail, string ownerJobTitle, string ownerPassword)
         {
             Name = name;
             OwnerFirstName = ownerFirstName;
@@ -14,15 +13,13 @@ namespace Accounts.Application.Features.CreateAccount
             OwnerEmail = ownerEmail;
             OwnerJobTitle = ownerJobTitle;
             OwnerPassword = ownerPassword;
-            //OwnerPhoneNumber = ownerPhoneNumber;
         }
 
-        public string Name { get; set; } = string.Empty;
-        public string OwnerFirstName { get; set; } = string.Empty;
-        public string OwnerLastName { get; set; } = string.Empty;
-        public string OwnerEmail { get; set; } = string.Empty;
-        public string OwnerJobTitle { get; set; } = string.Empty;
-        public string OwnerPassword { get; set; } = string.Empty;
-        //public string OwnerPhoneNumber { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string OwnerFirstName { get; set; }
+        public string OwnerLastName { get; set; }
+        public string OwnerEmail { get; set; }
+        public string OwnerJobTitle { get; set; }
+        public string OwnerPassword { get; set; }
     }
 }

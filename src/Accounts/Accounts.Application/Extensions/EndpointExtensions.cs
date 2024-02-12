@@ -2,6 +2,7 @@
 using Designly.Base.Exceptions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 
 namespace Accounts.Application.Extensions
@@ -33,16 +34,13 @@ namespace Accounts.Application.Extensions
         {
             var problemDetail = "See the error list for more information";
 
-            if (accountException == null)
-            {
-                throw new ArgumentNullException(nameof(accountException));
-            }
+            ArgumentNullException.ThrowIfNull(accountException);
 
             var errors = accountException.Errors;
 
             var problemDetails = new DesignlyProblemDetails(
                 title: title,
-                statusCode: (int)statusCode,
+                statusCode: statusCode.HasValue ? (int)statusCode.Value :  (int)HttpStatusCode.UnprocessableEntity,
                 detail: errors.Count == 1 ? errors[0].Description : problemDetail,
                 errors);
 

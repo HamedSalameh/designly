@@ -5,7 +5,7 @@ namespace IdentityService.Service
     public class IdentityProviderConfiguration
     {
         // position in the configuration file
-        public const string Position = "AWSCognitoConfiguration";
+        public static readonly string Position = "AWSCognitoConfiguration";
 
         public string Region { get; set; } = "";
         public string ClientId { get; set; } = "";
