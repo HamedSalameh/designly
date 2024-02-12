@@ -23,7 +23,7 @@ namespace Projects.Infrastructure.Persistance
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
-            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
             policy = PollyPolicyFactory.WrappedAsyncPolicies();
             
         }
@@ -42,9 +42,9 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_description", basicProject.Description);
             dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id);
             dynamicParameters.Add("p_client_id", basicProject.ClientId.Id);
-            dynamicParameters.Add("p_start_date", basicProject.StartDate);
-            dynamicParameters.Add("p_deadline", basicProject.Deadline);
-            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt);
+            dynamicParameters.Add("p_start_date", basicProject.StartDate, DbType.Date);
+            dynamicParameters.Add("p_deadline", basicProject.Deadline, DbType.Date);
+            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.Date);
             dynamicParameters.Add("p_status", basicProject.Status);
 
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);

@@ -6,11 +6,11 @@ namespace Projects.Application.Builders
     {
         BasicProject BuildBasicProject();
         ProjectBuilder WithClient(Guid clientId);
-        ProjectBuilder WithCompletedAt(DateOnly completedAt);
-        ProjectBuilder WithDeadline(DateOnly deadline);
-        ProjectBuilder WithDescription(string description);
         ProjectBuilder WithName(string name);
+        ProjectBuilder WithDescription(string description);
         ProjectBuilder WithProjectLead(Guid projectLeadId);
-        ProjectBuilder WithStartDate(DateOnly startDate);
+        ProjectBuilder WithStartDate(DateOnly? startDate);
+        ProjectBuilder WithDeadline(DateOnly? deadline);
+        ProjectBuilder WithCompletedAt(DateOnly? completedAt);
     }
 }

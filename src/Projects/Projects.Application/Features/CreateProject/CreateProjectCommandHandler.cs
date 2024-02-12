@@ -51,11 +51,10 @@ namespace Projects.Application.Features.CreateProject
                     .WithProjectLead(request.ProjectLeadId)
                     .WithClient(request.ClientId)
                     .WithName(request.Name)
-                    .WithDescription(request.Description);
-
-                if (request.StartDate.HasValue) projectBuilder = projectBuilder.WithStartDate(request.StartDate.Value);
-                if (request.Deadline.HasValue) projectBuilder = projectBuilder.WithDeadline(request.Deadline.Value);
-                if (request.CompletedAt.HasValue) projectBuilder = projectBuilder.WithCompletedAt(request.CompletedAt.Value);
+                    .WithDescription(request.Description)
+                    .WithStartDate(request.StartDate)
+                    .WithDeadline(request.Deadline)
+                    .WithCompletedAt(request.CompletedAt);
                     
                 var basicProject = projectBuilder.BuildBasicProject();
 

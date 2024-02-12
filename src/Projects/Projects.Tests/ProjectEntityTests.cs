@@ -71,53 +71,6 @@ namespace Projects.Tests
         }
 
         [Test]
-        public void Constrctor_WithAllProperties()
-        {
-            // Arrange
-            TenantId tenantId = TenantId.New;
-            ProjectLeadId projectLeadId = ProjectLeadId.New;
-            ClientId clientId = ClientId.New;
-            string projectName = "Test Project";
-            DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
-            DateOnly deadline = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
-            DateOnly completedAt = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(2));
-
-            // Act
-            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName, startDate, deadline, completedAt);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(basicProject.TenantId, Is.EqualTo(tenantId));
-                Assert.That(basicProject.ProjectLeadId, Is.EqualTo(projectLeadId));
-                Assert.That(basicProject.ClientId, Is.EqualTo(clientId));
-                Assert.That(basicProject.Name, Is.EqualTo(projectName));
-                Assert.That(basicProject.Description, Is.EqualTo(string.Empty));
-                Assert.That(basicProject.TaskItems, Is.Not.Null);
-                Assert.That(basicProject.TaskItems, Is.Empty);
-                Assert.That(basicProject.StartDate, Is.EqualTo(startDate));
-                Assert.That(basicProject.Deadline, Is.EqualTo(deadline));
-                Assert.That(basicProject.CompletedAt, Is.EqualTo(completedAt));
-            });
-        }
-
-        [Test]
-        public void Construtor_WithCompletedAtBeforeStartDate_ThrowsArgumentException()
-        {
-            // Arrange
-            Guid tenantId = Guid.NewGuid();
-            Guid projectLeadId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
-            DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
-            DateOnly deadline = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
-            DateOnly completedAt = DateOnly.FromDateTime(DateTime.Now - TimeSpan.FromDays(2));
-
-            // Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => new BasicProject(tenantId, projectLeadId, clientId, "Test Project", startDate, deadline, completedAt));
-        }
-
-
-        [Test]
         public void SetName_WithValidName_SetsName()
         {
             // Arrange

@@ -60,7 +60,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithStartDate(DateOnly startDate)
+        public ProjectBuilder WithStartDate(DateOnly? startDate)
         {
             if (startDate > Deadline)
             {
@@ -70,7 +70,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithDeadline(DateOnly deadline)
+        public ProjectBuilder WithDeadline(DateOnly? deadline)
         {
             if (StartDate > deadline)
             {
@@ -80,7 +80,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithCompletedAt(DateOnly completedAt)
+        public ProjectBuilder WithCompletedAt(DateOnly? completedAt)
         {
             if (completedAt < StartDate)
             {
@@ -96,9 +96,9 @@ namespace Projects.Application.Builders
 
             var basicProject = new BasicProject(tenantId, ProjectLeadId, ClientId, Name);
             basicProject.Description = Description;
-            if (StartDate is not null) basicProject.SetStartDate(StartDate.Value);
-            if (Deadline is not null) basicProject.SetDeadline(Deadline.Value);
-            if (CompletedAt is not null && CompletedAt.HasValue) basicProject.CompleteProject(CompletedAt.Value);
+            if (StartDate.HasValue) basicProject.SetStartDate(StartDate.Value);
+            if (Deadline.HasValue) basicProject.SetDeadline(Deadline.Value);
+            if (CompletedAt.HasValue) basicProject.CompleteProject(CompletedAt.Value);
             return basicProject;
         }
     }

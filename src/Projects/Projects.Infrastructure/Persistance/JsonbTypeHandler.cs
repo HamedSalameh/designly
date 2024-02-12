@@ -24,21 +24,12 @@ namespace Projects.Infrastructure.Persistance
         }
     }
 
-    public class DateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
+    public class DapperSqlDateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
     {
-        public override void SetValue(IDbDataParameter parameter, DateOnly value)
-        {
-            parameter.Value = new DateTime(value.Year, value.Month, value.Day);
-        }
+        public override void SetValue(IDbDataParameter parameter, DateOnly date)
+            => parameter.Value = date.ToDateTime(new TimeOnly(0, 0));
 
         public override DateOnly Parse(object value)
-        {
-            if (value is DateTime dateTime)
-            {
-                return new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
-            }
-
-            throw new ArgumentException("Invalid date value");
-        }
+            => DateOnly.FromDateTime((DateTime)value);
     }
 }
