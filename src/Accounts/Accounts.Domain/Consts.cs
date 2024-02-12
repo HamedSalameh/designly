@@ -3,31 +3,31 @@
     public static class Consts
     {
         //https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
-        public const short MaxUrlLength = 2048;
-        public const int AccountNameMaxLength = 100;
-        public const int TeamNameMaxLength = 50;
+        public static readonly short MaxUrlLength = 2048;
+        public static readonly int AccountNameMaxLength = 100;
+        public static readonly int TeamNameMaxLength = 50;
 
-        public const int FirstNameMaxLength = 50;
-        public const int LastNameMaxLength = 50;
-        public const int JobTitleMaxLength = 50;
+        public static readonly int FirstNameMaxLength = 50;
+        public static readonly int LastNameMaxLength = 50;
+        public static readonly int JobTitleMaxLength = 50;
 
         //https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
-        public const short EmailAddressMaxLength = 320;
+        public static readonly short EmailAddressMaxLength = 320;
         //https://en.wikipedia.org/wiki/E.164
-        public const short PhoneNumberMaxLength = 15;
+        public static readonly short PhoneNumberMaxLength = 15;
 
-        public const string DefaultTeamName = "default";
+        public static readonly string DefaultTeamName = "default";
 
         /// <summary>
         /// Special id given to the new account until owner is assigned
         /// </summary>
-        public static Guid OrphanAccount = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        public static readonly Guid OrphanAccount = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
         /// <summary>
         /// special id given to user until assigned to tenant / account
         /// </summary>
-        public static Guid NotPartOfAnyTenant = Guid.Parse("00000000-0000-0000-0000-000000000002");
-        public static Guid NotPartOfAnyGroup = Guid.Parse("00000000-0000-0000-0000-000000000003");
+        public static readonly Guid NotPartOfAnyTenant = Guid.Parse("00000000-0000-0000-0000-000000000002");
+        public static readonly Guid NotPartOfAnyGroup = Guid.Parse("00000000-0000-0000-0000-000000000003");
 
         public enum UserRegistrationType
         {

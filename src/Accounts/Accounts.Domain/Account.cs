@@ -1,4 +1,5 @@
 ﻿
+using Designly.Base.Exceptions;
 using static Accounts.Domain.Consts;
 
 namespace Accounts.Domain
@@ -16,7 +17,7 @@ namespace Accounts.Domain
 
         public Account(string Name, User accountOwner) : base()
         {
-            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
+            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
             if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
 
             this.Name = Name;
@@ -28,7 +29,7 @@ namespace Accounts.Domain
 
         public Account(string Name)
         {
-            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
+            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
 
             this.Name = Name;
             Status = AccountStatus.InProcessRegisteration;
@@ -45,7 +46,7 @@ namespace Accounts.Domain
 
         public void AssignOwner(User accountOwner)
         {
-            if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
+            ArgumentNullException.ThrowIfNull(accountOwner, nameof(accountOwner));
 
             Owner = accountOwner;
         }
@@ -61,7 +62,7 @@ namespace Accounts.Domain
 
             if (defaultTeam == null)
             {
-                defaultTeam = new Team(Consts.DefaultTeamName, this);
+                defaultTeam = new Team(DefaultTeamName, this);
                 Teams.Add(defaultTeam);
             }
         }
@@ -71,14 +72,14 @@ namespace Accounts.Domain
             var defaultTeam = Teams.FirstOrDefault(t => t.Name == Consts.DefaultTeamName);
             if (defaultTeam == null)
             {
-                throw new Exception("The default team is not created yet");
+                throw new AccountException("The default team is not created yet");
             }
             defaultTeam.AddMember(user);
         }
 
         public void AddTeam(Team team)
         {
-            if (team == null) throw new ArgumentNullException(nameof(team));
+            ArgumentNullException.ThrowIfNull(team, nameof(team));
 
             if (Teams == null)
             {
@@ -90,7 +91,7 @@ namespace Accounts.Domain
 
         public void RemoveTeam(Team team)
         {
-            if (team == null) throw new ArgumentNullException(nameof(team));
+            ArgumentNullException.ThrowIfNull(team, nameof(team));
 
             if (Teams == null)
             {

@@ -24,10 +24,8 @@ namespace Accounts.Application.Features.ValidateUser
         }
 
         private static async Task<IResult> ValidateUserEndpointAsync([FromRoute] Guid tenantId, [FromRoute] Guid userId, 
-            CancellationToken cancellationToken,
-            ITenantProvider tenantProvider,
-            HttpContext httpContext,
-            ISender sender)
+            ISender sender,
+            CancellationToken cancellationToken)
         {
             var validateUserIdCommand = new ValidateUserCommand(userId, tenantId);
 

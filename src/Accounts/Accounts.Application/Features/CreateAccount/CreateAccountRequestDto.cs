@@ -9,8 +9,5 @@
         public string OwnerEmail { get; set; } = string.Empty;
         public string OwnerJobTitle { get; set; } = string.Empty;
         public string OwnerPassword { get; set; } = string.Empty;
-        // TODO: Add this
-        //public string OwnerPhoneNumber { get; set; } = string.Empty;
-
     }
 }

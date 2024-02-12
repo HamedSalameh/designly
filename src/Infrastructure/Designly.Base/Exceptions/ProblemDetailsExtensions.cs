@@ -9,10 +9,8 @@ namespace Designly.Base.Exceptions
             string title = "There are one or more validation errors occured",
             HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
-            if (validationException == null)
-            {
-                throw new ArgumentNullException(nameof(validationException));
-            }
+            ArgumentNullException.ThrowIfNull(validationException);
+
             var problemDetail = "See the error list for more information";
 
             var errors = validationException.Errors;
@@ -36,10 +34,7 @@ namespace Designly.Base.Exceptions
         {
             var problemDetail = "See the error list for more information";
 
-            if (businessLogicException == null)
-            {
-                throw new ArgumentNullException(nameof(businessLogicException));
-            }
+            ArgumentNullException.ThrowIfNull(businessLogicException);
 
             var errors = businessLogicException.DomainErrors;
             var errorList = new List<KeyValuePair<string, string>>(errors);
@@ -48,10 +43,11 @@ namespace Designly.Base.Exceptions
                 title: title,
                 statusCode: (int)statusCode,
                 detail: errors.Count == 1 ? errors[0].Key : problemDetail,
-                errorList);
-
-            // set the problem detail type as business logic exception
-            problemDetails.Type = ProblemDetailTypes.BusinessLogicException.name;
+                errorList)
+            {
+                // set the problem detail type as business logic exception
+                Type = ProblemDetailTypes.BusinessLogicException.Name
+            };
 
             return problemDetails;
         }
@@ -64,33 +60,32 @@ namespace Designly.Base.Exceptions
         /// <exception cref="ArgumentNullException"></exception>
         public static async Task ToBusinessLogicException(this HttpResponseMessage response)
         {
-            if (response == null)
-            {
-                throw new ArgumentNullException(nameof(response));
-            }
+            ArgumentNullException.ThrowIfNull(response);
 
             var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
             if (designlyProblemDetails is not null)
             {
                 // return a failed result
-                var businessLogicException = new BusinessLogicException(designlyProblemDetails.Title);
-                businessLogicException.DomainErrors = designlyProblemDetails.Errors;
+                var businessLogicException = new BusinessLogicException(designlyProblemDetails.Title)
+                {
+                    DomainErrors = designlyProblemDetails.Errors
+                };
                 throw businessLogicException;
             }
             throw new Exception("Could not parse the exception to a problem details object.");
         }
 
-        public sealed record ProblemDetailType(string name, string title);
+        public sealed record ProblemDetailType(string Name, string Title);
 
         // list of problem details types
         public static class ProblemDetailTypes
         {
-            public static ProblemDetailType BusinessLogicException = new ProblemDetailType(
+            public static ProblemDetailType BusinessLogicException = new(
                 nameof(BusinessLogicException),
                 "The request could not be processed");
 
-            public static ProblemDetailType ValidationException = new ProblemDetailType(
+            public static ProblemDetailType ValidationException = new(
                 nameof(ValidationException),
                 "There are one or more validation errors occured");
         }
