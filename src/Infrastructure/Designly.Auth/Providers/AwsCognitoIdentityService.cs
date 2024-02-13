@@ -236,7 +236,7 @@ namespace Designly.Auth.Providers
             }
             catch (TooManyRequestsException tooManyRequestsException)
             {
-                Error error = new Error("TooManyRequests", tooManyRequestsException.Message);
+                Error error = new("TooManyRequests", tooManyRequestsException.Message);
                 _logger.LogError($"Could not create user in AWS Cognito due to error: {tooManyRequestsException.Message}");
                 throw new BusinessLogicException(error);
             }

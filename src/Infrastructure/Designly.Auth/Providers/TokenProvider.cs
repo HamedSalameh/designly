@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Models;
+using Designly.Base.Exceptions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -25,19 +26,16 @@ namespace Designly.Auth.Providers
         public async Task<string?> GetAccessTokenAsync()
         {
             // first, we check if we have a cached token
-            if (_memoryCache.TryGetValue<string>(cacheKeyName, out var token))
+            if (_memoryCache.TryGetValue<string>(cacheKeyName, out var token) && !string.IsNullOrEmpty(token))
             {
-                if (!string.IsNullOrEmpty(token))
+                // check if the token is still valid
+                var isTokenExpired = IsTokenExpired(token);
+               if (!isTokenExpired)
                 {
-                    // check if the token is still valid
-                    var isTokenExpired = IsTokenExpired(token);
-                    if (!isTokenExpired)
-                    {
-                        _logger.LogInformation("Using cached token");
-                    }
-
-                    return token;
+                    _logger.LogInformation("Using cached token");
                 }
+
+                return token;
             }
 
             var clientId = oAuth2ServiceProviderConfiguration.Value.client_id;
@@ -46,12 +44,12 @@ namespace Designly.Auth.Providers
             if (string.IsNullOrEmpty(clientId))
             {
                 _logger.LogError("Provided ClientId value is null or empty");
-                throw new ArgumentNullException(nameof(clientId));
+                throw new ConfigurationException(nameof(clientId));
             }
             if (string.IsNullOrEmpty(clientSecret))
             {
                 _logger.LogError("Provided ClientSecret value is null or empty");
-                throw new ArgumentNullException(nameof(clientSecret));
+                throw new ConfigurationException(nameof(clientSecret));
             }
 
             var accessToken = await GetAccessTokenAsync(clientId, clientSecret);
@@ -104,48 +102,50 @@ namespace Designly.Auth.Providers
         /// <returns></returns>
         private async Task<string?> GetOAuth2Token(string clientId, string clientSecret)
         {
-            var httpClient = _httpClientFactory.CreateClient();
             var baseAddress = oAuth2ServiceProviderConfiguration.Value?.authorization_endpoint;
             var tokenEndpoint = oAuth2ServiceProviderConfiguration.Value?.token_endpoint;
             var grantType = oAuth2ServiceProviderConfiguration.Value?.grant_type;
             if (string.IsNullOrEmpty(baseAddress))
             {
                 _logger.LogError("Provided base address value is null or empty");
-                throw new ArgumentNullException(nameof(baseAddress));
+                throw new ConfigurationException(nameof(baseAddress));
             }
             if (string.IsNullOrEmpty(tokenEndpoint))
             {
                 _logger.LogError("Provided token endpoint value is null or empty");
-                throw new ArgumentNullException(nameof(tokenEndpoint));
+                throw new ConfigurationException(nameof(tokenEndpoint));
             }
             if (string.IsNullOrEmpty(grantType))
             {
                 _logger.LogError("Provided grant type value is null or empty");
-                throw new ArgumentNullException(nameof(grantType));
+                throw new ConfigurationException(nameof(grantType));
             }
 
-            httpClient.BaseAddress = new Uri(baseAddress);
-
-            var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-            request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+            using (var httpClient = _httpClientFactory.CreateClient())
             {
-                ["grant_type"] = grantType,
-                ["client_id"] = clientId,
-                ["client_secret"] = clientSecret
-            });
+                httpClient.BaseAddress = new Uri(baseAddress);
 
-            var response = await httpClient.SendAsync(request);
+                var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+                request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    ["grant_type"] = grantType,
+                    ["client_id"] = clientId,
+                    ["client_secret"] = clientSecret
+                });
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                _logger.LogError($"Could not get access token from AWS due to error (statuc code: {response.StatusCode})");
-                return null;
+                var response = await httpClient.SendAsync(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    _logger.LogError($"Could not get access token from AWS due to error (statuc code: {response.StatusCode})");
+                    return null;
+                }
+
+                var token = await response.Content.ReadAsStringAsync();
+
+                return token;
             }
-
-            var token = await response.Content.ReadAsStringAsync();
-
-            return token;
         }
     }
 }
