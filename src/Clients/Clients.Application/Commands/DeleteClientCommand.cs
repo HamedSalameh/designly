@@ -13,7 +13,7 @@ namespace Clients.Application.Commands
 
         public async Task<Unit> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(nameof(request));
+            ArgumentNullException.ThrowIfNull(request);
 
             if (request.clientId == Guid.Empty) {
                 throw new ArgumentException(nameof(request.clientId));

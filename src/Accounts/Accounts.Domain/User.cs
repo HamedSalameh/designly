@@ -39,6 +39,9 @@ namespace Accounts.Domain
             FirstName = string.Empty;
             LastName = string.Empty;
             Email = string.Empty;
+            Status = UserStatus.BeforeActivation;
+            Teams = default!;
+            Account = default!;
         }
 
         public override string ToString()

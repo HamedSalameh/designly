@@ -15,7 +15,7 @@ namespace Projects.Application.Behaviors
 
         public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(next, nameof(next));
+            ArgumentNullException.ThrowIfNull(next);
 
             return InternalHandleAsync(request, next, cancellationToken);
         }

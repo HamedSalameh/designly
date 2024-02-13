@@ -253,7 +253,7 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellation)
+        public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellationToken)
         {
             ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
             ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
@@ -267,7 +267,7 @@ namespace Designly.Auth.Providers
 
             try
             {
-                var response = await _client.CreateGroupAsync(request, cancellation).ConfigureAwait(false);
+                var response = await _client.CreateGroupAsync(request, cancellationToken).ConfigureAwait(false);
                 return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
             }
             catch (Exception exception)
@@ -285,7 +285,7 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellation)
+        public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellationToken)
         {
             ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
             ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
@@ -299,7 +299,7 @@ namespace Designly.Auth.Providers
 
             try
             {
-                var response = await _client.AdminAddUserToGroupAsync(request, cancellation).ConfigureAwait(false);
+                var response = await _client.AdminAddUserToGroupAsync(request, cancellationToken).ConfigureAwait(false);
                 return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
             }
             catch (Exception exception)

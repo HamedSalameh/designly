@@ -9,7 +9,7 @@
     /// </summary>
     public class CommercialProperty : Property
     {
-        private CommercialProperty() : base()
+        public CommercialProperty() : base()
         {
             throw new NotImplementedException();
         }

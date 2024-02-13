@@ -6,7 +6,6 @@ namespace Clients.Domain.Entities
         public DateTime CreatedAt { get; set;  }
         public DateTime ModifiedAt { get; set; }
 
-        int? _requestedHashCode;
         public virtual Guid Id { get; set; }
         public virtual Guid TenantId { get; set; }
 
@@ -54,18 +53,13 @@ namespace Clients.Domain.Entities
 
         public override int GetHashCode()
         {
-            // Ref: https://ericlippert.com/2011/02/28/guidelines-and-rules-for-gethashcode/
-            if (!IsTransient())
+            unchecked
             {
-                if (!_requestedHashCode.HasValue)
-                    _requestedHashCode =
-                        this.Id.GetHashCode() ^
-                        31; 
-
-                return _requestedHashCode.Value;
+                int hash = 17;
+                hash = hash * 23 + Id.GetHashCode();
+                hash = hash * 23 + CreatedAt.GetHashCode();
+                return hash;
             }
-            else
-                return base.GetHashCode();
         }
 
         public static bool operator ==(Entity? left, Entity? right)

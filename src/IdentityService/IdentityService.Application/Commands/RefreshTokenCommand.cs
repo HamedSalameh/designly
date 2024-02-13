@@ -10,7 +10,7 @@ namespace IdentityService.Application.Commands
 
         public RefreshTokenCommand(string refreshToken)
         {
-            ArgumentNullException.ThrowIfNull(nameof(refreshToken));
+            ArgumentNullException.ThrowIfNull(refreshToken);
             RefreshToken = refreshToken;
         }
     }

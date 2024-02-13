@@ -21,7 +21,7 @@ namespace Accounts.Application.Features.ValidateUser
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug($"Validating user  {request.userId} in tenant {request.tenantId}");
+                _logger.LogDebug("Validating user  {request.userId} in tenant {request.tenantId}", request.userId, request.tenantId );
             }
 
             var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.userId, request.tenantId, cancellationToken).ConfigureAwait(false);

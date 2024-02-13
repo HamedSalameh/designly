@@ -17,7 +17,7 @@ namespace Accounts.Domain
 
         public Team(string name, Account account) : base()
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
 
             Name = name;
             Members = new List<User>();
@@ -32,6 +32,7 @@ namespace Accounts.Domain
             Name = string.Empty;
             Members = new List<User>();
             Status = TeamStatus.Active;
+            Account = default!;
         }
 
         public override string ToString()

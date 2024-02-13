@@ -1,5 +1,4 @@
-﻿using Clients.Domain;
-using Clients.Domain.Entities;
+﻿using Clients.Domain.Entities;
 using Clients.Infrastructure.Interfaces;
 using Clients.Infrastructure.Polly;
 using Dapper;
@@ -18,33 +17,21 @@ namespace Clients.Infrastructure.Persistance
 {
     internal sealed class ClientsRepository : IClientsRepository
     {
-        private readonly ClientsDBContext _dbContext;
         private readonly ILogger<ClientsRepository> _logger;
         private readonly IDbConnectionStringProvider dbConnectionStringProvider;
         private readonly AsyncPolicyWrap policy;
 
-        public ClientsRepository(ClientsDBContext dbContext, ILogger<ClientsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider)
+        public ClientsRepository(ILogger<ClientsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
+            
+            _logger = logger;
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
             this.dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
-        }
-
-        public async Task<Guid> CreateClientAsync(Client client, CancellationToken cancellationToken)
-        {
-            if (client == null) throw new ArgumentNullException(nameof(client));
-
-            await _dbContext.Clients.AddAsync(client, cancellationToken).ConfigureAwait(false);
-
-            _ = policy.ExecuteAsync(async () => await _dbContext.SaveChangesAsync().ConfigureAwait(false));
-
-            _logger.LogDebug("Client {client.Id} was successfully created.", client.Id);
-
-            return client.Id;
         }
 
         // Create a new client with Dapper

@@ -20,13 +20,6 @@ namespace Clients.Infrastructure
                     serviceProvider.GetRequiredService<IOptionsMonitor<DatabaseConnectionDetails>>());
             });
 
-            services.AddDbContext<ClientsDBContext>((serviceProvider, options) =>
-            {
-                var connectionStringProvider = serviceProvider.GetRequiredService<IDbConnectionStringProvider>();
-                var connectionString = connectionStringProvider.ConnectionString;
-                options.UseNpgsql(connectionString);
-            });
-
             services.AddScoped<IClientsRepository, ClientsRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

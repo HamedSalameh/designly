@@ -31,10 +31,6 @@ namespace Accounts.Infrastructure.Persistance.Configuration
                 .HasColumnName("account_id")
                 .IsRequired();
 
-            //builder.HasMany(team => team.Members)
-            //    .WithMany(user => user.Teams)
-            //    .UsingEntity(j => j.ToTable("team_members"));
-
             builder.HasOne(team => team.Account)
                 .WithMany(account => account.Teams)
                 .HasForeignKey(team => team.AccountId)

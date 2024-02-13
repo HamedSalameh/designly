@@ -2,26 +2,30 @@
 {
     public abstract class Entity
     {
+        // Timestamps for entity creation and modification
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        int? _requestedHashCode;
+        // Unique identifier for the entity
         public virtual Guid Id { get; set; }
 
+        // Constructor to set default values for timestamps
         protected Entity()
         {
             CreatedAt = DateTime.UtcNow;
             ModifiedAt = DateTime.UtcNow;
         }
 
+        // Check if the entity is transient (i.e., not yet persisted)
         public bool IsTransient()
         {
-            return Id == default;
+            return Id == Guid.Empty;
         }
 
+        // Override the Equals method to compare entities
         public override bool Equals(object? obj)
         {
-            if (obj == null || obj is not Entity)
+            if (obj is not Entity)
                 return false;
 
             if (ReferenceEquals(this, obj))
@@ -32,28 +36,23 @@
 
             Entity item = (Entity)obj;
 
-            if (item.IsTransient() || IsTransient())
-                return false;
-            else
-                return item.Id == Id;
+            // Check for transient entities or compare Ids
+            return !(item.IsTransient() || IsTransient()) && item.Id == Id;
         }
 
+        // Override the GetHashCode method for use in hash-based collections
         public override int GetHashCode()
         {
-            // Ref: https://ericlippert.com/2011/02/28/guidelines-and-rules-for-gethashcode/
-            if (!IsTransient())
+            unchecked
             {
-                if (!_requestedHashCode.HasValue)
-                    _requestedHashCode =
-                        Id.GetHashCode() ^
-                        31;
-
-                return _requestedHashCode.Value;
+                int hash = 17;
+                hash = hash * 23 + Id.GetHashCode();
+                hash = hash * 23 + CreatedAt.GetHashCode();
+                return hash;
             }
-            else
-                return base.GetHashCode();
         }
 
+        // Override the equality operators for convenient usage
         public static bool operator ==(Entity? left, Entity? right)
         {
             if (Equals(left, null))
@@ -67,4 +66,5 @@
             return !(left == right);
         }
     }
+
 }

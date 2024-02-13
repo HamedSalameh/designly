@@ -21,7 +21,7 @@ namespace Designly.Shared.ValueObjects
                 throw new ArgumentException($"Email address length cannot be longer than {Consts.MaxEmailAddressLength} characters");
             }
 
-            PrimaryPhoneNumber = primaryPhoneNumber ?? throw new ArgumentNullException(nameof(PrimaryPhoneNumber));
+            PrimaryPhoneNumber = primaryPhoneNumber;
             SecondaryPhoneNumber = secondaryPhoneNumber;
             EmailAddress = emailAddress;
         }

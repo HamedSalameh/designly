@@ -1,5 +1,4 @@
 ﻿
-using Designly.Base.Exceptions;
 using static Accounts.Domain.Consts;
 
 namespace Accounts.Domain
@@ -17,8 +16,8 @@ namespace Accounts.Domain
 
         public Account(string Name, User accountOwner) : base()
         {
-            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
-            if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
+            ArgumentNullException.ThrowIfNull(Name);
+            ArgumentNullException.ThrowIfNull(accountOwner);
 
             this.Name = Name;
             Owner = accountOwner;
@@ -29,7 +28,7 @@ namespace Accounts.Domain
 
         public Account(string Name)
         {
-            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
+            ArgumentNullException.ThrowIfNull(Name);
 
             this.Name = Name;
             Status = AccountStatus.InProcessRegisteration;
@@ -46,7 +45,7 @@ namespace Accounts.Domain
 
         public void AssignOwner(User accountOwner)
         {
-            ArgumentNullException.ThrowIfNull(accountOwner, nameof(accountOwner));
+            ArgumentNullException.ThrowIfNull(accountOwner);
 
             Owner = accountOwner;
         }
@@ -79,7 +78,7 @@ namespace Accounts.Domain
 
         public void AddTeam(Team team)
         {
-            ArgumentNullException.ThrowIfNull(team, nameof(team));
+            ArgumentNullException.ThrowIfNull(team);
 
             if (Teams == null)
             {
@@ -91,7 +90,7 @@ namespace Accounts.Domain
 
         public void RemoveTeam(Team team)
         {
-            ArgumentNullException.ThrowIfNull(team, nameof(team));
+            ArgumentNullException.ThrowIfNull(team);
 
             if (Teams == null)
             {
@@ -113,7 +112,7 @@ namespace Accounts.Domain
             {
                 throw new AccountException("Account owner is not assigned yet");
             }
-            if (Id == default)
+            if (IsTransient())
             {
                 throw new AccountException("Account is not created yet");
             }
