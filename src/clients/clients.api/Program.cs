@@ -12,7 +12,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Clients.API
 {
-    public class Program
+    public static class Program
     {
         private static void Main(string[] args)
         {
@@ -45,7 +45,7 @@ namespace Clients.API
             // Wire up the exception handlers
             builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
             builder.Services.AddExceptionHandler<BusinessLogicExceptionHandler>();
-            builder.Services.AddProblemDetails(); ;
+            builder.Services.AddProblemDetails();
 
             // Configure Services
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -88,40 +88,34 @@ namespace Clients.API
             app.UseMiddleware<TenantProviderMiddleware>();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                ConfigureHealthChecksRouting(endpoints);
-                endpoints.MapControllers();
-            });
+            MapHealthChecks(app);
+            app.MapControllers();
 
             app.Run();
-
-            static void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
-            {
-                endpoints.MapHealthChecks("/health", new HealthCheckOptions()
-                {
-                    AllowCachingResponses = false
-                });
-
-                endpoints.MapHealthChecks("/health-details",
-                    new HealthCheckOptions
-                    {
-                        ResponseWriter = async (context, report) =>
-                        {
-                            var result = JsonSerializer.Serialize(
-                                new
-                                {
-                                    status = report.Status.ToString(),
-                                    monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
-                                });
-                            context.Response.ContentType = MediaTypeNames.Application.Json;
-                            await context.Response.WriteAsync(result);
-                        }
-                    });
-            }
         }
 
-
+        private static void MapHealthChecks(WebApplication app)
+        {
+            app.MapHealthChecks("/health", new HealthCheckOptions()
+            {
+                AllowCachingResponses = false
+            });
+            app.MapHealthChecks("/health-details",
+                new HealthCheckOptions
+                {
+                    ResponseWriter = async (context, report) =>
+                    {
+                        var result = JsonSerializer.Serialize(
+                            new
+                            {
+                                status = report.Status.ToString(),
+                                monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
+                            });
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
+                        await context.Response.WriteAsync(result);
+                    }
+                });
+        }
 
         static void ConfigureVersioning(WebApplicationBuilder builder)
         {

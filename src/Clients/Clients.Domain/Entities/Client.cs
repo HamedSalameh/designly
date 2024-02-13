@@ -58,7 +58,7 @@ namespace Clients.Domain.Entities
 
         public Client UpdateClient(Client client)
         {
-            if (client is null || client == default)
+            if (client is null)
             {
                 throw new ArgumentException($"Invlaid value for {nameof(client)}");
             }
@@ -67,12 +67,12 @@ namespace Clients.Domain.Entities
             FamilyName = client.FamilyName;
             Status = client.Status;
 
-            if (client?.ContactDetails != null)
+            if (client.ContactDetails != null)
             {
                 UpdateContactDetails(client.ContactDetails);
             }
 
-            if (client?.Address != null)
+            if (client.Address != null)
             {
                 UpdateAddress(client.Address);
             }

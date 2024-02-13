@@ -17,7 +17,7 @@ namespace Designly.Auth.Providers
         private readonly ILogger<AwsCognitoIdentityService> _logger;
         private readonly string _clientId;
         private readonly string _poolId;
-        private readonly string _region;
+        
         private readonly AmazonCognitoIdentityProviderClient _client;
 
         public AwsCognitoIdentityService(
@@ -26,7 +26,7 @@ namespace Designly.Auth.Providers
         {
             _clientId = AWSCognitoConfiguration.Value.ClientId;
             _poolId = AWSCognitoConfiguration.Value.PoolId;
-            _region = AWSCognitoConfiguration.Value.Region;
+            var _region = AWSCognitoConfiguration.Value.Region;
 
             if (string.IsNullOrEmpty(_clientId))
             {
@@ -127,6 +127,8 @@ namespace Designly.Auth.Providers
 
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var userPool = new CognitoUserPool(_poolId, _clientId, _client);
                 var user = new CognitoUser(username, _clientId, userPool, _client);
                 var authRequest = new InitiateSrpAuthRequest()
@@ -134,7 +136,6 @@ namespace Designly.Auth.Providers
                     Password = password
                 };
 
-                // TODO: Wrap in Cancellation Token
                 var authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
 
                 var tokenResponse = new TokenResponse
@@ -190,9 +191,9 @@ namespace Designly.Auth.Providers
 
         public async Task<bool> CreateUserAsync(string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(firstName, nameof(firstName));
-            ArgumentException.ThrowIfNullOrEmpty(lastName, nameof(lastName));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(firstName);
+            ArgumentException.ThrowIfNullOrEmpty(lastName);
 
             var request = new AdminCreateUserRequest
             {
@@ -255,8 +256,8 @@ namespace Designly.Auth.Providers
         /// <exception cref="ArgumentException"></exception>
         public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
-            ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
+            ArgumentException.ThrowIfNullOrEmpty(groupName);
+            ArgumentException.ThrowIfNullOrEmpty(groupDescription);
 
             var request = new CreateGroupRequest
             {
@@ -287,8 +288,8 @@ namespace Designly.Auth.Providers
         /// <exception cref="ArgumentException"></exception>
         public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(groupName);
 
             var request = new AdminAddUserToGroupRequest
             {
@@ -311,8 +312,8 @@ namespace Designly.Auth.Providers
 
         public async Task<bool> SetUserPasswordAsync(string email, string password, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(password);
 
             var request = new AdminSetUserPasswordRequest
             {

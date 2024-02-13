@@ -17,7 +17,7 @@ namespace Clients.Domain.Entities
         protected Entity(Guid TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == Guid.Empty || TenantId == default)
+            if (TenantId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }
@@ -29,12 +29,12 @@ namespace Clients.Domain.Entities
 
         public bool IsTransient()
         {
-            return this.Id == default;
+            return Id == Guid.Empty;
         }
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || obj is not Entity)
+            if (obj is not Entity)
                 return false;
 
             if (Object.ReferenceEquals(this, obj))
