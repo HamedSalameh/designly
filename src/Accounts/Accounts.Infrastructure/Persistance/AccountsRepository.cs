@@ -36,7 +36,7 @@ namespace Accounts.Infrastructure.Persistance
 
             // wrap in polly policy
 
-            await policy.ExecuteAsync(async () =>
+            var account = await policy.ExecuteAsync(async () =>
             {
                 var account = await _context.Accounts
                     .Include(a => a.Owner)
@@ -46,7 +46,7 @@ namespace Accounts.Infrastructure.Persistance
                 return account;
             });
 
-            return null;
+            return account;
         }
 
         public async Task<Guid> CreateAccountAsync(Account account, CancellationToken cancellationToken)
@@ -59,11 +59,7 @@ namespace Accounts.Infrastructure.Persistance
 
             await _context.Accounts.AddAsync(account, cancellationToken);
 
-            // wrap in polly policy
-            await policy.ExecuteAsync(async () =>
-            {
-                await _context.SaveChangesAsync(cancellationToken);
-            });
+            await _context.SaveChangesAsync(cancellationToken);
 
             return account.Id;
         }

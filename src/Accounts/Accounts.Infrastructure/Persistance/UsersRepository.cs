@@ -41,7 +41,7 @@ namespace Accounts.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(email));
             }
 
-            await _policy.ExecuteAsync(async () =>
+            var user = await _policy.ExecuteAsync(async () =>
             {
                 var user = await _context.Users
                     .Include(u => u.Account)
@@ -57,7 +57,7 @@ namespace Accounts.Infrastructure.Persistance
                 return user;
             });
 
-            return null;
+            return user;
         }
 
         public async Task<User?> GetUserByIdAsync(Guid userId, Guid tenantId, CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ namespace Accounts.Infrastructure.Persistance
                 _logger.LogDebug("Getting user by userId for {userId}", userId);
             }
             
-            await _policy.ExecuteAsync(async () =>
+            var user = await _policy.ExecuteAsync(async () =>
             {
                 var user = await _context.Users
                     .Include(u => u.Account)
@@ -83,7 +83,7 @@ namespace Accounts.Infrastructure.Persistance
                 return user;
             });
 
-            return null;
+            return user;
         }
 
         public async Task<UserStatus?> GetUserStatusAsync(Guid userId, Guid tenantId, CancellationToken cancellationToken)
@@ -93,7 +93,7 @@ namespace Accounts.Infrastructure.Persistance
                 _logger.LogDebug("Getting user status by userId for {userId}", userId);
             }
 
-            await _policy.ExecuteAsync(async () =>
+            var userStatus = await _policy.ExecuteAsync(async () =>
             {
                 var user = await _context.Users
                     .AsNoTracking()
@@ -108,7 +108,7 @@ namespace Accounts.Infrastructure.Persistance
                 return user?.Status;
             });
 
-            return null;
+            return userStatus;
         }
 
         public async Task<User?> GetTenantUserByEmailAsync(string email, Guid tenantId, CancellationToken cancellationToken)
