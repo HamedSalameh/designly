@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Projects.Infrastructure.Persistance
 {
-    internal class ProjectsRepository : IProjectsRepository
+    internal sealed class ProjectsRepository : IProjectsRepository
     {
         private readonly ILogger<ProjectsRepository> _logger;
         private readonly AsyncPolicyWrap policy;

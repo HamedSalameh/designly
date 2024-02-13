@@ -2,7 +2,7 @@
 
 namespace Accounts.Infrastructure
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
         public IAccountsRepository AccountsRepository { get; }
         public IUsersRepository UsersRepository { get; }

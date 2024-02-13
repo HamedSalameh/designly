@@ -2,7 +2,7 @@
 
 namespace Projects.Infrastructure
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
         public IProjectsRepository ProjectsRepository { get; }
 

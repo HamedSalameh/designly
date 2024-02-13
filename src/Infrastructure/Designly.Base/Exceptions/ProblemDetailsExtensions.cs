@@ -81,11 +81,11 @@ namespace Designly.Base.Exceptions
         // list of problem details types
         public static class ProblemDetailTypes
         {
-            public static ProblemDetailType BusinessLogicException = new(
+            public static readonly ProblemDetailType BusinessLogicException = new(
                 nameof(BusinessLogicException),
                 "The request could not be processed");
 
-            public static ProblemDetailType ValidationException = new(
+            public static readonly ProblemDetailType ValidationException = new(
                 nameof(ValidationException),
                 "There are one or more validation errors occured");
         }

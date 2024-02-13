@@ -75,7 +75,7 @@ namespace Designly.Auth.Providers
             return accessToken;
         }
 
-        private bool IsTokenExpired(string accessToken)
+        private static bool IsTokenExpired(string accessToken)
         {
             // deserialize the token
             var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);

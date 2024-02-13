@@ -13,7 +13,7 @@ using static Accounts.Domain.Consts;
 
 namespace Accounts.Infrastructure.Persistance
 {
-    public class UsersRepository : IUsersRepository
+    public sealed class UsersRepository : IUsersRepository
     {
         private readonly AccountsDbContext _context;
         private readonly ILogger<AccountsRepository> _logger;

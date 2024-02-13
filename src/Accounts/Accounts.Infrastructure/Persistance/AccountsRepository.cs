@@ -11,7 +11,7 @@ using Polly.Wrap;
 
 namespace Accounts.Infrastructure.Persistance
 {
-    public class AccountsRepository : IAccountsRepository
+    public sealed class AccountsRepository : IAccountsRepository
     {
         private readonly AccountsDbContext _context;
         private readonly ILogger<AccountsRepository> _logger;

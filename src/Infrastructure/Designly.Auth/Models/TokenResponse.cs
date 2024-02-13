@@ -1,6 +1,6 @@
 ﻿namespace Designly.Auth.Models
 {
-    public class TokenResponse : ITokenResponse
+    public sealed class TokenResponse : ITokenResponse
     {
         public string IdToken { get; init; } = "Not Set";
         public string RefreshToken { get; init; } = "Not Set";

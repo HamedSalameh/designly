@@ -1,6 +1,6 @@
 ﻿namespace Designly.Auth.Models
 {
-    public class OAuth2ServiceProviderConfiguration
+    public sealed class OAuth2ServiceProviderConfiguration
     {
         public static readonly string Position = "OAuth2ServiceProviderConfiguration";
         

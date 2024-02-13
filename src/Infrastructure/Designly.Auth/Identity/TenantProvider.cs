@@ -23,7 +23,7 @@ namespace Designly.Auth.Identity
             return GetTenantIdFromClaimsPrincipal(context.User);
         }
 
-        private Guid? GetTenantIdFromClaimsPrincipal(ClaimsPrincipal user)
+        private static Guid? GetTenantIdFromClaimsPrincipal(ClaimsPrincipal user)
         {
             if (user != null && user.Claims != null)
             {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Clients.Infrastructure.Persistance
 {
-    internal class ClientDbContextConfiguration : IEntityTypeConfiguration<Client>
+    internal sealed class ClientDbContextConfiguration : IEntityTypeConfiguration<Client>
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {

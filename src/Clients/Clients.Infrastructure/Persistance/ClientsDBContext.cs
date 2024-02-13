@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clients.Infrastructure.Persistance
 {
-    internal class ClientsDBContext : DbContext
+    internal sealed class ClientsDBContext : DbContext
     {
         public ClientsDBContext(DbContextOptions options) : base(options)
         {

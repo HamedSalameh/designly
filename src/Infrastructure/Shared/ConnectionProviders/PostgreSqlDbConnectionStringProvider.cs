@@ -33,7 +33,7 @@ namespace Designly.Shared.ConnectionProviders
             ConnectionString = CreateConnectionString(postgresCredentials);
         }
 
-        private string CreateConnectionString(IOptionsMonitor<DatabaseConnectionDetails> postgresCredentials)
+        private static string CreateConnectionString(IOptionsMonitor<DatabaseConnectionDetails> postgresCredentials)
         {
             var credentials = postgresCredentials.CurrentValue;
 

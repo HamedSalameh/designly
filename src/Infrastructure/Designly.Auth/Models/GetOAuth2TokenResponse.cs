@@ -1,6 +1,7 @@
 ﻿namespace Designly.Auth.Models
 {
-    internal class GetOAuth2TokenResponse
+using Designly.Auth.Identity;
+    internal sealed class GetOAuth2TokenResponse
     {
         public string? access_token { get; set; }
         public string? token_type { get; set; }

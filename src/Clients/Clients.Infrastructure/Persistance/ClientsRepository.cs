@@ -9,8 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Npgsql;
-using NpgsqlTypes;
-using Polly;
 using Polly.Wrap;
 using SqlKata;
 using SqlKata.Compilers;
@@ -18,7 +16,7 @@ using System.Data;
 
 namespace Clients.Infrastructure.Persistance
 {
-    internal class ClientsRepository : IClientsRepository
+    internal sealed class ClientsRepository : IClientsRepository
     {
         private readonly ClientsDBContext _dbContext;
         private readonly ILogger<ClientsRepository> _logger;

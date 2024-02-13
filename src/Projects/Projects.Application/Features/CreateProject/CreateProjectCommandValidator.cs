@@ -20,7 +20,7 @@ namespace Projects.Application.Features.CreateProject
             RuleFor(Command => Command).Custom(ValidateDates);
         }
 
-        private void ValidateDates(CreateProjectCommand command, ValidationContext<CreateProjectCommand> context)
+        private static void ValidateDates(CreateProjectCommand command, ValidationContext<CreateProjectCommand> context)
         {
             var startDate = command.StartDate;
             var deadline = command.Deadline;
