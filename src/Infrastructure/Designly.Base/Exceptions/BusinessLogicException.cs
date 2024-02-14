@@ -73,7 +73,7 @@ namespace Designly.Base.Exceptions
         {
             DomainErrors = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(error.Code, error.Description)
+                new(error.Code, error.Description)
             };
         }
 

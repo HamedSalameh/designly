@@ -52,12 +52,9 @@ namespace Accounts.Domain
 
         public void CreateDefaultTeam()
         {
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
-            var defaultTeam = Teams.FirstOrDefault(t => t.Name == Consts.DefaultTeamName);
+            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName);
 
             if (defaultTeam == null)
             {
@@ -68,7 +65,7 @@ namespace Accounts.Domain
 
         public void AddUserToDefaultTeam(User user)
         {
-            var defaultTeam = Teams.FirstOrDefault(t => t.Name == Consts.DefaultTeamName);
+            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName);
             if (defaultTeam == null)
             {
                 throw new AccountException("The default team is not created yet");
@@ -80,10 +77,7 @@ namespace Accounts.Domain
         {
             ArgumentNullException.ThrowIfNull(team);
 
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
             Teams.Add(team);
         }
@@ -92,10 +86,7 @@ namespace Accounts.Domain
         {
             ArgumentNullException.ThrowIfNull(team);
 
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
             Teams.Remove(team);
         }

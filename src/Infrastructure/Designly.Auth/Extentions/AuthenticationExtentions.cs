@@ -127,12 +127,14 @@ namespace Designly.Auth.Extentions
             var tenantId = context.Principal?.Claims?.FirstOrDefault(claim =>
                                                        claim.Type == IdentityData.JwtClaimType && claim.Value.StartsWith(IdentityData.TenantIdClaimType))?.Value;
 
-            Guid.TryParse(tenantId?.Split('_')[1], out var tenantIdGuid);
-            var tenantIdClaim = new Claim(IdentityData.TenantId, tenantIdGuid.ToString());
-            // add the tenant id as new claim to the principal
-            if (context.Principal != null && !context.Principal.HasClaim(c => c.Type == IdentityData.TenantIdClaimType))
+            if(Guid.TryParse(tenantId?.Split('_')[1], out var tenantIdGuid))
             {
-                ((ClaimsIdentity)context.Principal.Identity).AddClaim(tenantIdClaim);
+                var tenantIdClaim = new Claim(IdentityData.TenantId, tenantIdGuid.ToString());
+                // add the tenant id as new claim to the principal
+                if (context.Principal != null && !context.Principal.HasClaim(c => c.Type == IdentityData.TenantIdClaimType))
+                {
+                    ((ClaimsIdentity)context.Principal.Identity).AddClaim(tenantIdClaim);
+                }
             }
         }
 

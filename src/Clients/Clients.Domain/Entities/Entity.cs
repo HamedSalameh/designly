@@ -45,10 +45,10 @@ namespace Clients.Domain.Entities
 
             Entity item = (Entity)obj;
 
-            if (item.IsTransient() || this.IsTransient())
+            if (item.IsTransient() || IsTransient())
                 return false;
             else
-                return item.Id == this.Id;
+                return item.Id == Id;
         }
 
         public override int GetHashCode()

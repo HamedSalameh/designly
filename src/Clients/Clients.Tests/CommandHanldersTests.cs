@@ -65,9 +65,7 @@ namespace Clients.Tests
             var unitOfWork = new Mock<IUnitOfWork>().Object;
 
             // Act + Assert
-#pragma warning disable CS8604 // Possible null reference argument.
             _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
-#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         [Test]

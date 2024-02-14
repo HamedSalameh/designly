@@ -3,12 +3,12 @@
     public class Floor
     {
         public int FloorNumber { get; set; }
-        public List<PropertySpace> Spaces { get; set; } = new List<PropertySpace>();
+        public List<PropertySpace> Spaces { get; set; } = [];
 
         public Floor(int FloorNumber = 1)
         {
             this.FloorNumber = FloorNumber;
-            this.Spaces = new List<PropertySpace>();
+            Spaces = new List<PropertySpace>();
         }
     }
 }
