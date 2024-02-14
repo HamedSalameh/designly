@@ -79,7 +79,7 @@ namespace Accounts.Application.Features.CreateAccount
         private static bool IsUserBlacklisted(User? existingUser) => existingUser is not null && existingUser.Status == Consts.UserStatus.Blacklisted;
         private static bool UserAlreadyExists(User? existingUser) => existingUser is not null;
 
-        private static AccountException CreateBlacklistedUserException() => new AccountException(AccountErrors.UserEmailIsBlacklisted.Description, AccountErrors.UserEmailIsBlacklisted);
-        private static AccountException CreateExistingUserException() => new AccountException(AccountErrors.AccountAlreadyExists.Description, AccountErrors.AccountOwnerEmailAlreadyExists);
+        private static AccountException CreateBlacklistedUserException() => new(AccountErrors.UserEmailIsBlacklisted.Description, AccountErrors.UserEmailIsBlacklisted);
+        private static AccountException CreateExistingUserException() => new(AccountErrors.AccountAlreadyExists.Description, AccountErrors.AccountOwnerEmailAlreadyExists);
     }
 }

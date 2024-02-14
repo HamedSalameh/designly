@@ -60,14 +60,14 @@ namespace Projects.Application.Features.CreateProject
 
                 var project_id = await _unitOfWork.ProjectsRepository.CreateBasicProjectAsync(basicProject, cancellationToken);
                 
-                _logger.LogDebug($"Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})");
+                _logger.LogDebug("Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})", 
+                    basicProject.Name, basicProject.Id, basicProject.TenantId);
 
                 return project_id;
             }
             catch (Exception ex)
             {
-                // Handle other exceptions
-                _logger.LogError(ex, $"Could not create project due to error : {ex.Message}");
+                _logger.LogError(ex, "Could not create project due to error : {ex.Message}", ex.Message);
                 throw;
             }
         }
@@ -79,21 +79,19 @@ namespace Projects.Application.Features.CreateProject
                 throw new ArgumentNullException(nameof(projectLeadId));
             }
 
-            using (var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position))
+            using var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position);
+            var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode) return;
+            // only handle business logic related problem details here
+            if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
             {
-                var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
-
-                if (response.IsSuccessStatusCode) return;
-                // only handle business logic related problem details here
-                if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
-                {
-                    await response.ToBusinessLogicException().ConfigureAwait(false);
-                    return;
-                }
-
-                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                throw new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
+                await response.ToBusinessLogicException().ConfigureAwait(false);
+                return;
             }
+
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            throw new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
         }
 
         private async Task ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
@@ -109,12 +107,12 @@ namespace Projects.Application.Features.CreateProject
 
             if (response.IsSuccessStatusCode)
             {
-                var clientStatusContentResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var clientStatusContentResponse = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 var clientStatus = JsonConvert.DeserializeAnonymousType(clientStatusContentResponse, new { Code = 0, Description = "" });
 
                 if (clientStatus != null && !clientStatus.Description.Equals("Active", StringComparison.OrdinalIgnoreCase))
                 {
-                    Designly.Base.Error clientStatusError = new Designly.Base.Error(clientStatus.Code.ToString(), clientStatus.Description);
+                    Designly.Base.Error clientStatusError = new(clientStatus.Code.ToString(), clientStatus.Description);
                     throw new BusinessLogicException(clientStatusError);
                 }
                 return;
@@ -125,7 +123,7 @@ namespace Projects.Application.Features.CreateProject
                 return;
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             throw new Exception($"Could not validate client with Id {clientId}: {responseContent}");
         }
 

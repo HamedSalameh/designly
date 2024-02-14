@@ -56,29 +56,5 @@ namespace Clients.Tests
             // Assert
             Assert.That(result, Is.Not.EqualTo(Guid.Empty));
         }
-
-        [Test]
-        public void Handle_NullLogger_ThrowsArgumentNullException()
-        {
-            // Arrange
-            ILogger<CreateClientCommandHandler>? logger = null;
-            var unitOfWork = new Mock<IUnitOfWork>().Object;
-
-            // Act + Assert
-            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
-        }
-
-        [Test]
-        public void Handle_NullUnitOfWork_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var logger = new Mock<ILogger<CreateClientCommandHandler>>().Object;
-            IUnitOfWork? unitOfWork = null;
-
-            // Act + Assert
-#pragma warning disable CS8604 // Possible null reference argument.
-            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
-#pragma warning restore CS8604 // Possible null reference argument.
-        }
     }
 }

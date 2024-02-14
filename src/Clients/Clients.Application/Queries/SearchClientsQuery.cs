@@ -22,15 +22,17 @@ namespace Clients.Application.Queries
         {
             if (request == null)
             {
-                _logger.LogError($"Invalid value for {nameof(request)}: {request}");
-                throw new ArgumentException($"Invalid value of request object");
+                _logger.LogError("Invalid value for {nameof(request)}: {request}", nameof(request), request);
+                throw new ArgumentNullException($"Invalid value of request object", nameof(request));
             }
             var tenantId = request.TenantId;
             var firstName = request.FirstName ?? string.Empty;
             var familyName = request.FamilyName ?? string.Empty;
             var city = request.City ?? string.Empty;
 
-            _logger.LogDebug($"Search clients: firstName={request?.FirstName}, familyName={request?.FamilyName}, City={request?.City})");
+            _logger.LogDebug("Search clients: firstName={request?.FirstName}, familyName={request?.FamilyName}, City={request?.City})", 
+                request.FirstName, request.FamilyName, request.City);
+
             var clients = await _unitOfWork.ClientsRepository.SearchClientsAsync(
                 tenantId,
                 firstName,

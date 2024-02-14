@@ -57,8 +57,10 @@ do
         Console.WriteLine("Sending all generated user to persistance");
 
         // use httpclient to send the generated users to the API
-        var client = new HttpClient();
-        client.BaseAddress = new Uri("https://localhost:7246");
+        var client = new HttpClient
+        {
+            BaseAddress = new Uri("https://localhost:7246")
+        };
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
                        new MediaTypeWithQualityHeaderValue("application/json"));

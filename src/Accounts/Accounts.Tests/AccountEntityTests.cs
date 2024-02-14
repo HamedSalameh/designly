@@ -258,8 +258,6 @@ namespace Accounts.Tests
         {
             // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            var team = new Team("test_team", account);
 
             // Act
             Assert.That(account.Teams, Is.Not.Null);

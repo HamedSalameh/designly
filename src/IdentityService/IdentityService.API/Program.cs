@@ -84,23 +84,18 @@ public class Program
         // the call to UserAuthorization should appeat between UseRouting and UseEndpoints
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            ConfigureHealthChecksRouting(endpoints);
-
-            endpoints.MapControllers();
-        });
+        MapHealthChecks(app);
+        app.MapControllers();
 
         app.Run();
 
-        static void ConfigureHealthChecksRouting(IEndpointRouteBuilder endpoints)
+        static void MapHealthChecks(WebApplication app)
         {
-            endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+            app.MapHealthChecks("/health", new HealthCheckOptions()
             {
                 AllowCachingResponses = false
             });
-
-            endpoints.MapHealthChecks("/health-details",
+            app.MapHealthChecks("/health-details",
                 new HealthCheckOptions
                 {
                     ResponseWriter = async (context, report) =>

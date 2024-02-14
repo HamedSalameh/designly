@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Queries
 {
-    public record GetClientStatusQuery(Guid tenantId, Guid clientId) : IRequest<ClientStatus>;
+    public record GetClientStatusQuery(Guid TenantId, Guid ClientId) : IRequest<ClientStatus>;
 
     public class GetClientStatusQueryHandler : IRequestHandler<GetClientStatusQuery, ClientStatus>
     {
@@ -22,13 +22,13 @@ namespace Clients.Application.Queries
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling {request} for client {client}...", nameof(request), request.clientId);
+                _logger.LogDebug("Handling {request} for client {client}...", nameof(request), request.ClientId);
             }
 
-            var tenantId = request.tenantId;
-            var clientId = request.clientId;
+            var tenantId = request.TenantId;
+            var clientId = request.ClientId;
 
-            var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper(tenantId, clientId, cancellationToken).ConfigureAwait(false);
+            var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper((Guid)tenantId, (Guid)clientId, cancellationToken).ConfigureAwait(false);
 
             if (client == null) return ClientStatus.NonExistent;
             ClientStatus clientStatus = client.Status switch

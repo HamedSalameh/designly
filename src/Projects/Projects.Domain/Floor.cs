@@ -8,7 +8,7 @@
         public Floor(int FloorNumber = 1)
         {
             this.FloorNumber = FloorNumber;
-            Spaces = new List<PropertySpace>();
+            Spaces = [];
         }
     }
 }
