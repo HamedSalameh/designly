@@ -22,7 +22,7 @@ namespace Clients.Application.Queries
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling {request} for client {client}...", nameof(request), request.ClientId);
+                _logger.LogDebug("Handling request {GetClientStatusQueryHandler} for {request.ClientId}", nameof(GetClientStatusQueryHandler), request.ClientId);
             }
 
             var tenantId = request.TenantId;

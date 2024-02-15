@@ -14,12 +14,16 @@ namespace Projects.Application.Features.DeleteProject
 
         public Task<bool> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {DeleteProjectCommandHandler} for {request.ProjectId}", nameof(DeleteProjectCommandHandler), request.ProjectId);
+            }
+
             try
             {
                 var projectId = request.ProjectId;
                 var tenantId = request.TenantId;
                 // var projectId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug($"Deleted project: {projectId} for TenantId: {tenantId}");
 
                 return Task.FromResult(true);
             }

@@ -1,0 +1,1 @@
+sonar-scanner.bat -D"sonar.projectKey=DesignlyWeb" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_1ed9f4a2963468ef8eda6d58094f096b835826d1"

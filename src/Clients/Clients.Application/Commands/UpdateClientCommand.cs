@@ -14,6 +14,11 @@ namespace Clients.Application.Commands
 
         public async Task<Client> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Handling request {UpdateClientCommandHandler} for {request.Client}", nameof(UpdateClientCommandHandler), request.Client);
+            }
+
             var client = request.Client;
 
             try

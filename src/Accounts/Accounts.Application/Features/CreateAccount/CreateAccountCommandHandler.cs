@@ -20,6 +20,11 @@ namespace Accounts.Application.Features.CreateAccount
          
         public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {CreateAccountCommandHandler} for {request.Name}", nameof(CreateAccountCommandHandler), request.Name);
+            }
+
             try
             {
                 // Business Logic Pre-Validation

@@ -31,7 +31,6 @@ namespace Projects.Application.Features.CreateProject
             ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
-            HttpContext httpContext,
             CancellationToken cancellationToken
             )
         {

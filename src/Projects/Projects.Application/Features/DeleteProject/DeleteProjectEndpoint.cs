@@ -29,7 +29,6 @@ namespace Projects.Application.Features.DeleteProject
             ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
-            HttpContext httpContext,
             CancellationToken cancellationToken)
         {
             ILogger logger = loggerFactory.CreateLogger("DeleteProjectFeature");

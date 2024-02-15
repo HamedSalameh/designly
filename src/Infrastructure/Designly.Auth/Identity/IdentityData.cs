@@ -1,6 +1,6 @@
 ﻿namespace Designly.Auth.Identity
 {
-    public class IdentityData
+    public static class IdentityData
     {
         public static readonly string JwtClaimType = "cognito:groups"; // Claim type
         public static readonly string AdminGroup = "designly_admins"; // Group name

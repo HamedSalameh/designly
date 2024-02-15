@@ -40,6 +40,11 @@ namespace Projects.Application.Features.CreateProject
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {CreateProjectCommandHandler} for {request.Name}", nameof(CreateProjectCommandHandler), request.Name);
+            }
+
             try
             {
                 // Step 1: Validate the customer by Id

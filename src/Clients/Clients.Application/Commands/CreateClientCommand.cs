@@ -15,6 +15,11 @@ namespace Clients.Application.Commands
 
         public async Task<Guid> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {request.Client}", nameof(CreateClientCommandHandler), request.Client);
+            }
+
             var client = request.Client;
 
             try

@@ -20,6 +20,12 @@ namespace Clients.Application.Queries
 
         public async Task<IEnumerable<Client>> Handle(SearchClientsQuery request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {SearchClientsQueryHandler} for {request?.FirstName}, {request?.FamilyName}, {request?.City}", 
+                                       nameof(SearchClientsQueryHandler), request?.FirstName, request?.FamilyName, request?.City);
+            }
+
             if (request == null)
             {
                 _logger.LogError("Invalid value for {nameof(request)}: {request}", nameof(request), request);
@@ -29,9 +35,6 @@ namespace Clients.Application.Queries
             var firstName = request.FirstName ?? string.Empty;
             var familyName = request.FamilyName ?? string.Empty;
             var city = request.City ?? string.Empty;
-
-            _logger.LogDebug("Search clients: firstName={request?.FirstName}, familyName={request?.FamilyName}, City={request?.City})", 
-                request.FirstName, request.FamilyName, request.City);
 
             var clients = await _unitOfWork.ClientsRepository.SearchClientsAsync(
                 tenantId,

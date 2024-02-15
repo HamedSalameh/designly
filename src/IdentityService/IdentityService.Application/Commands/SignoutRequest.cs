@@ -18,7 +18,7 @@ namespace IdentityService.Application.Commands
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug($"Handling request {nameof(SignoutRequestHandler)} for {nameof(request.AccessToken)} {request.AccessToken}");
+                _logger.LogDebug("Handling request {SignoutRequestHandler} for {request.AccessToken}", nameof(SignoutRequestHandler), request.AccessToken);
             }
             var accessToken = request?.AccessToken ?? string.Empty;
 

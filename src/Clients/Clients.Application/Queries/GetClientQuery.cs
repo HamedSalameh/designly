@@ -15,12 +15,17 @@ namespace Clients.Application.Queries
 
         public GetClientQueryHandler(IUnitOfWork unitOfWork, ILogger<GetClientQueryHandler> logger)
         {
-            _unitOfWork = unitOfWork;
-            _logger = logger;
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Client> Handle(GetClientQuery request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {GetClientQueryHandler} for {request.Id}", nameof(GetClientQueryHandler), request.Id);
+            }
+
             var tenantId = request.TenantId;
             var clientId = request.Id;  
             var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper(tenantId, clientId, cancellationToken).ConfigureAwait(false);
