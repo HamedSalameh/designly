@@ -23,7 +23,7 @@ namespace Clients.Application.Queries
             if (request == null)
             {
                 _logger.LogError("Invalid value for {nameof(request)}: {request}", nameof(request), request);
-                throw new ArgumentNullException($"Invalid value of request object", nameof(request));
+                throw new ArgumentNullException(nameof(request), "Invalid value of request object");
             }
             var tenantId = request.TenantId;
             var firstName = request.FirstName ?? string.Empty;

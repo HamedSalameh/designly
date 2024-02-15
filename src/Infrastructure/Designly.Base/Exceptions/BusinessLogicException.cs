@@ -7,7 +7,7 @@ namespace Designly.Base.Exceptions
     /// </summary>
     public class BusinessLogicException : Exception
     {
-        public BusinessLogicException(string message)
+        public BusinessLogicException(string? message = "One or more business logic failures have occurred.")
             : base(message)
         {
             Errors = new Dictionary<string, string>();

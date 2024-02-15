@@ -23,7 +23,7 @@ namespace Clients.Infrastructure.Polly
             return retryPolicy;
         }
 
-        public static AsyncRetryPolicy NetworkRetryAsync(int retryCount, TimeSpan initialDelay, TimeSpan maxDelay)
+        public static AsyncRetryPolicy NetworkRetryAsync(int retryCount, TimeSpan initialDelay)
         {
             return Policy
                 .Handle<HttpRequestException>()
@@ -32,8 +32,6 @@ namespace Clients.Infrastructure.Polly
                     retryAttempt => initialDelay * Math.Pow(2, retryAttempt),
                     (exception, timeSpan, retryCount, context) =>
                     {
-                        // TODO: Log ?
-                        // Console.WriteLine($"Retry {retryCount} in {timeSpan.TotalMilliseconds} ms due to {exception.Message}");
                     }
                 );
         }

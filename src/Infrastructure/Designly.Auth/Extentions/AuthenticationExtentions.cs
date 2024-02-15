@@ -181,8 +181,6 @@ namespace Designly.Auth.Extentions
                 return false;
 
             return supportedAudiences.Contains(clientId);
-
-            //return audience.Equals(clientId);
         }
     }
 }

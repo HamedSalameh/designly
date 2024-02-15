@@ -100,7 +100,6 @@ namespace Accounts.Domain
 
         public void ChangeTeamStatus(TeamStatus newStatus)
         {
-            // TODO: Add team status change rules
             Status = newStatus;
         }
     }

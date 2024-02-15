@@ -1,5 +1,4 @@
-﻿using Clients.Domain;
-using Clients.Domain.Entities;
+﻿using Clients.Domain.Entities;
 using Clients.Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,7 @@ namespace Clients.Application.Commands
 
             try
             {
-                var updatedClient = await unitOfWork.ClientsRepository.UpdateClientAsync((Client)client, cancellationToken);
+                var updatedClient = await unitOfWork.ClientsRepository.UpdateClientAsync(client, cancellationToken);
                 return updatedClient;
             }
             catch (Exception exception)

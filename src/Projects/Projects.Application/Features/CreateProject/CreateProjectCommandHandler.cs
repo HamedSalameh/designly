@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Providers;
+using Designly.Base;
 using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared;
@@ -42,10 +43,18 @@ namespace Projects.Application.Features.CreateProject
             try
             {
                 // Step 1: Validate the customer by Id
-                await ValidateClientAsync(request.TenantId, request.ClientId, cancellationToken);
+                var clientValidationResult = await ValidateClientAsync(request.TenantId, request.ClientId, cancellationToken);
+                if (clientValidationResult != null)
+                {
+                    return new Result<Guid>(clientValidationResult);
+                }
 
                 // Step 2: Validate the project lead by Id
-                await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
+                var projectLeadValidationResult = await ValidateProjectLeadAsync(request.TenantId, request.ProjectLeadId, cancellationToken);
+                if (projectLeadValidationResult != null)
+                {
+                    return new Result<Guid>(projectLeadValidationResult);
+                }
 
                 var projectBuilder = _projectBuilder
                     .WithProjectLead(request.ProjectLeadId)
@@ -72,9 +81,9 @@ namespace Projects.Application.Features.CreateProject
             }
         }
 
-        private async Task ValidateProjectLeadAsync(Guid tenantId, Guid projectLeadId, CancellationToken cancellationToken)
+        private async Task<Exception?> ValidateProjectLeadAsync(Guid tenantId, Guid projectLeadId, CancellationToken cancellationToken)
         {
-            if (projectLeadId == Guid.Empty || projectLeadId == default)
+            if (projectLeadId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(projectLeadId));
             }
@@ -82,19 +91,18 @@ namespace Projects.Application.Features.CreateProject
             using var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position);
             var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
 
-            if (response.IsSuccessStatusCode) return;
+            if (response.IsSuccessStatusCode) return null;
             // only handle business logic related problem details here
             if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
             {
-                await response.ToBusinessLogicException().ConfigureAwait(false);
-                return;
+                return await response.HandleUnprocessableEntityResponse();
             }
 
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            throw new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
+            return new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
         }
 
-        private async Task ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
+        private async Task<Exception?> ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
             if (clientId == Guid.Empty || clientId == default)
             {
@@ -113,18 +121,17 @@ namespace Projects.Application.Features.CreateProject
                 if (clientStatus != null && !clientStatus.Description.Equals("Active", StringComparison.OrdinalIgnoreCase))
                 {
                     Designly.Base.Error clientStatusError = new(clientStatus.Code.ToString(), clientStatus.Description);
-                    throw new BusinessLogicException(clientStatusError);
+                    return new BusinessLogicException(clientStatusError);
                 }
-                return;
+                return null;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
-                await response.ToBusinessLogicException().ConfigureAwait(false);
-                return;
+                return await response.HandleUnprocessableEntityResponse();
             }
 
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            throw new Exception($"Could not validate client with Id {clientId}: {responseContent}");
+            return new Exception($"Could not validate client with Id {clientId}: {responseContent}");
         }
 
         private async Task<HttpClient> CreateHttpClient(string configuration)

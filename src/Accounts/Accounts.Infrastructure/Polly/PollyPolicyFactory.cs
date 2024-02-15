@@ -40,7 +40,6 @@ namespace Clients.Infrastructure.Polly
             var policy = Policy.TimeoutAsync(timeoutInSeconds, TimeoutStrategy.Pessimistic,
               onTimeoutAsync: (context, timespan, _, _) =>
               {
-                  // TODO: Log here?
                   return Task.CompletedTask;
               });
 

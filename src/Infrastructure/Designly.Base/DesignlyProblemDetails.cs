@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
-namespace Designly.Base.Exceptions
+namespace Designly.Base
 {
     [Serializable]
     public class DesignlyProblemDetails : ProblemDetails
@@ -25,12 +25,12 @@ namespace Designly.Base.Exceptions
             Errors = [];
         }
 
-        public DesignlyProblemDetails(string title, int statusCode, string? detail = null, List<KeyValuePair<string, string>>? errors = null) : this(title, statusCode, detail)
+        public DesignlyProblemDetails(string title, int statusCode, List<KeyValuePair<string, string>> errors, string? detail = null) : this(title, statusCode, detail)
         {
             Errors = errors ?? [];
         }
 
-        public DesignlyProblemDetails(string title, int statusCode, string? detail = null, IEnumerable<Error>? failures = null) : this(title, statusCode, detail)
+        public DesignlyProblemDetails(string title, int statusCode, IEnumerable<Error>? failures = null, string? detail = null) : this(title, statusCode, detail)
         {
             Errors = [];
 

@@ -24,7 +24,6 @@ namespace Clients.Application.Queries
             var tenantId = request.TenantId;
             var clientId = request.Id;  
             var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper(tenantId, clientId, cancellationToken).ConfigureAwait(false);
-            //var client = await _unitOfWork.ClientsRepository.GetClientAsyncNoTracking(request.Id, cancellationToken).ConfigureAwait(false);
             if (client == null)
             {
                 _logger.LogInformation("Could not get entity with Id {request.Id}.", request.Id);

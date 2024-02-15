@@ -30,12 +30,12 @@ namespace Projects.Domain
 
         public bool IsTransient()
         {
-            return Id == default;
+            return Id == Guid.Empty;
         }
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || obj is not Entity)
+            if (obj is not Entity)
                 return false;
 
             if (ReferenceEquals(this, obj))

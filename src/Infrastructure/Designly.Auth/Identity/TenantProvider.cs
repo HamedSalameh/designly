@@ -9,7 +9,7 @@ namespace Designly.Auth.Identity
 
         public void SetTenantId(Guid tenantId)
         {
-            if (tenantId == default || tenantId == Guid.Empty) throw new ArgumentException(nameof(tenantId));
+            if (tenantId == Guid.Empty) throw new ArgumentException($"Invalid value for {nameof(tenantId)} : {tenantId}", nameof(tenantId));
 
             TenantId = tenantId;
         }
@@ -31,7 +31,7 @@ namespace Designly.Auth.Identity
                 if (tenantIdClaim != null)
                 {
                     var tenantId = tenantIdClaim.Value;
-                    Guid.TryParse(tenantId, out var tenantIdGuid);
+                    _ = Guid.TryParse(tenantId, out var tenantIdGuid);
 
                     return tenantIdGuid;
                 }
