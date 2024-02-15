@@ -65,11 +65,8 @@ namespace Accounts.Domain
 
         public void AddUserToDefaultTeam(User user)
         {
-            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName);
-            if (defaultTeam == null)
-            {
-                throw new AccountException("The default team is not created yet");
-            }
+            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName)
+                ?? throw new AccountException("The default team is not created yet");
             defaultTeam.AddMember(user);
         }
 

@@ -16,7 +16,7 @@ namespace Accounts.Tests
         public void CreateAccount_WithNullName_ThrowsArgumentNullException()
         {
             // Arrange
-            Assert.Throws<ArgumentNullException>(() => new Account(null));
+            Assert.Throws<ArgumentNullException>(() => new Account(null!));
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace Accounts.Tests
                 Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
                 Assert.That(account.Teams.First().Members, Is.Not.Null);
-                Assert.That(account.Teams.First().Members.Count, Is.EqualTo(1));
+                Assert.That(account.Teams.First().Members, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Members.First(), Is.EqualTo(user));
             });
         }

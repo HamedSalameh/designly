@@ -21,11 +21,7 @@ namespace Projects.Application.Features.DeleteProject
 
             try
             {
-                var projectId = request.ProjectId;
-                var tenantId = request.TenantId;
-                // var projectId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
-
-                return Task.FromResult(true);
+                throw new NotImplementedException();
             }
             catch (Exception exception)
             {

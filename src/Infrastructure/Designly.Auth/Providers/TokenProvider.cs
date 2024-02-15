@@ -121,31 +121,29 @@ namespace Designly.Auth.Providers
                 throw new ConfigurationException(nameof(grantType));
             }
 
-            using (var httpClient = _httpClientFactory.CreateClient())
+            using var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri(baseAddress);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+            request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                httpClient.BaseAddress = new Uri(baseAddress);
+                ["grant_type"] = grantType,
+                ["client_id"] = clientId,
+                ["client_secret"] = clientSecret
+            });
 
-                var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint);
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-                request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    ["grant_type"] = grantType,
-                    ["client_id"] = clientId,
-                    ["client_secret"] = clientSecret
-                });
+            var response = await httpClient.SendAsync(request);
 
-                var response = await httpClient.SendAsync(request);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    _logger.LogError("Could not get access token from AWS due to error (status code: {response.StatusCode})", response.StatusCode);
-                    return null;
-                }
-
-                var token = await response.Content.ReadAsStringAsync();
-
-                return token;
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                _logger.LogError("Could not get access token from AWS due to error (status code: {response.StatusCode})", response.StatusCode);
+                return null;
             }
+
+            var token = await response.Content.ReadAsStringAsync();
+
+            return token;
         }
     }
 }

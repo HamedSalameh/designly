@@ -109,7 +109,7 @@ namespace Projects.Application.Features.CreateProject
 
         private async Task<Exception?> ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (clientId == Guid.Empty || clientId == default)
+            if (clientId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
