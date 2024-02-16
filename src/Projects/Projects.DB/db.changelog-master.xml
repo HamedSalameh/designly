@@ -5,8 +5,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-	<!--<include file="\Changesets\1_create_patients_table.sql" />-->
 	<include file="\changesets\changeset-01-create-projects-table.sql"/>
-  <include file="\changesets\changeset-02-insert-project.sql"/>
+	<include file="\changesets\changeset-02-insert-project.sql"/>
 	
 </databaseChangeLog>
