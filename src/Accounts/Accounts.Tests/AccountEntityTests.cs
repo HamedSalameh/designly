@@ -3,6 +3,7 @@ using static Accounts.Domain.Consts;
 
 namespace Accounts.Tests
 {
+
     [TestFixture]
     public class AccountEntityTests
     {
