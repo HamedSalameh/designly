@@ -82,10 +82,14 @@ namespace Accounts.Tests
                                         .Build();
 
             // Assert
-            Assert.That(result.Owner, Is.Not.Null);
-            Assert.That(result.Owner, Is.EqualTo(accountOwner));
-            Assert.That(result.Teams.Count, Is.GreaterThan(0));
-            Assert.That(result.Teams.First().Members.Contains(accountOwner), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Owner, Is.Not.Null);
+                Assert.That(result.Owner, Is.EqualTo(accountOwner));
+                Assert.That(result.Teams.Count, Is.GreaterThan(0));
+                Assert.That(result.Teams.First().Members.Contains(accountOwner), Is.True);
+            });
+            
         }
     }
 }

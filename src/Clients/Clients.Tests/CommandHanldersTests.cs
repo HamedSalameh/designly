@@ -56,5 +56,22 @@ namespace Clients.Tests
             // Assert
             Assert.That(result, Is.Not.EqualTo(Guid.Empty));
         }
+
+        [Test]
+        public void Handle_ValidRequest_UnitOfWorkThrows()
+        {
+            // arrange
+            var draftClient = new Client(firstName, familyName, address, contactDetails, Tenant);
+            var request = new CreateClientCommand(draftClient);
+
+            var newClientIdGuid = Guid.NewGuid();
+
+            _unitOfWorkMock.Setup(uow => uow.ClientsRepository.CreateClientAsyncWithDapper(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("Some exception"));
+
+            // Assert
+            var exception = Assert.ThrowsAsync<Exception>(() => _handler.Handle(request, CancellationToken.None));
+            Assert.That(exception.Message, Is.EqualTo("Some exception"));
+        }
     }
 }

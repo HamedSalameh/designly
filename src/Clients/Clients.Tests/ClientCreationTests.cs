@@ -168,11 +168,15 @@ namespace Clients.Tests
         [Test]
         public void GetHashCode_DifferentId_ShouldNotBeEqual()
         {
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client1.Id = Guid.NewGuid();
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client2.Id = Guid.NewGuid();
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
             Assert.That(client1.GetHashCode(), Is.Not.EqualTo(client2.GetHashCode()));
         }
@@ -182,11 +186,15 @@ namespace Clients.Tests
         public void NotEqualOperator_SameId_ShouldNotBeEqual()
         {
             var id = Guid.NewGuid();
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client1.Id = id;
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = id
+            };
 
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client2.Id = id;
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = id
+            };
 
             Assert.That(client1 != client2, Is.False);
         }
@@ -194,11 +202,15 @@ namespace Clients.Tests
         [Test]
         public void NotEqualOperator_DifferentId_ShouldNotBeEqual()
         {
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client1.Id = Guid.NewGuid();
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client2.Id = Guid.NewGuid();
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
             Assert.That(client1 != client2, Is.True);
         }
@@ -208,11 +220,15 @@ namespace Clients.Tests
         public void EqualOperator_SameId_ShouldBeEqual()
         {
             var id = Guid.NewGuid();
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client1.Id = id;
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = id
+            };
 
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client2.Id = id;
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = id
+            };
 
             Assert.That(client1 == client2, Is.True);
         }
@@ -220,11 +236,15 @@ namespace Clients.Tests
         [Test]
         public void EqualOperator_DifferentId_ShouldNotBeEqual()
         {
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client1.Id = Guid.NewGuid();
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
-            client2.Id = Guid.NewGuid();
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
+            {
+                Id = Guid.NewGuid()
+            };
 
             Assert.That(client1 == client2, Is.False);
         }
