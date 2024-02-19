@@ -1,6 +1,7 @@
 ﻿using Accounts.Domain;
 using Designly.Base;
 using Designly.Base.Exceptions;
+using Designly.Base.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
 using System.Net;

@@ -1,6 +1,4 @@
-﻿using Designly.Base;
-
-namespace Designly.Base.Exceptions
+﻿namespace Designly.Base.Exceptions
 {
     /// <summary>
     /// A business logic exception indicates that the request is valid but the business logic has failed.

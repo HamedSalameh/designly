@@ -1,6 +1,7 @@
 ﻿using Designly.Auth.Providers;
 using Designly.Base;
 using Designly.Base.Exceptions;
+using Designly.Base.Extensions;
 using Designly.Configuration;
 using Designly.Shared;
 using LanguageExt.Common;
