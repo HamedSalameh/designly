@@ -33,7 +33,7 @@ namespace Designly.Shared.ValueObjects
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             if (!string.IsNullOrEmpty(PrimaryPhoneNumber))
             {

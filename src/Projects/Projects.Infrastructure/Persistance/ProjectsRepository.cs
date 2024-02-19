@@ -37,7 +37,7 @@ namespace Projects.Infrastructure.Persistance
             }
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_tenant_id", basicProject.TenantId.Id);
+            dynamicParameters.Add("p_tenant_id", basicProject.TenantId);
             dynamicParameters.Add("p_name", basicProject.Name);
             dynamicParameters.Add("p_description", basicProject.Description);
             dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id);

@@ -18,7 +18,7 @@ namespace Accounts.Domain
 
         public AccountException(string message, Exception innerException, Error accountError) : base(message, innerException)
         {
-            Errors = new List<Error> { accountError };
+            Errors = [accountError];
         }
 
         public AccountException(string message, Exception innerException, List<Error> accountErrors) : base(message, innerException)
@@ -33,15 +33,15 @@ namespace Accounts.Domain
 
         public AccountException(string message, Error accountError) : base(message)
         {
-            Errors = new List<Error> { accountError };
+            Errors = [accountError];
         }
 
         public AccountException(Error accountError)
         {
-            this.Errors = new List<Error>() { accountError };
+            this.Errors = [accountError];
         }
 
-        public List<Error> Errors { get; set; } = new List<Error>();
+        public List<Error> Errors { get; set; } = [];
         
         public override string ToString()
         {

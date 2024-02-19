@@ -1,8 +1,14 @@
-﻿using Projects.Domain.StonglyTyped;
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Domain
 {
-    public abstract class Entity
+    /// <summary>
+    /// Implementation of the Entity base class
+    /// Must implement the Equals method to compare entities, hence the IEquatable interface
+    /// </summary>
+    public abstract class Entity : IEquatable<Entity>
     {
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
@@ -18,7 +24,7 @@ namespace Projects.Domain
         protected Entity(TenantId TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == TenantId.Empty || TenantId == default)
+            if (TenantId == TenantId.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }
@@ -33,25 +39,6 @@ namespace Projects.Domain
             return Id == Guid.Empty;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not Entity)
-                return false;
-
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            if (GetType() != obj.GetType())
-                return false;
-
-            Entity item = (Entity)obj;
-
-            if (item.IsTransient() || IsTransient())
-                return false;
-            else
-                return item.Id == Id;
-        }
-
         public override int GetHashCode()
         {
             unchecked
@@ -62,6 +49,27 @@ namespace Projects.Domain
                 return hash;
             }
         }
+
+        public bool Equals(Entity? other)
+        {
+            if (other is not Entity)
+                return false;
+
+            if (Object.ReferenceEquals(this, other))
+                return true;
+
+            if (this.GetType() != other.GetType())
+                return false;
+
+            Entity item = other;
+
+            if (item.IsTransient() || IsTransient())
+                return false;
+            else
+                return item.Id == Id;
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Entity);
 
         public static bool operator ==(Entity? left, Entity? right)
         {

@@ -1,6 +1,5 @@
 ﻿namespace Designly.Base.Exceptions
 {
-    [Serializable]
     public class ValidationException : Exception
     {
         // Represent business exception
@@ -41,6 +40,4 @@
 
         public IDictionary<string, string> Errors { get; }
     }
-
-    
 }

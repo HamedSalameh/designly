@@ -18,7 +18,7 @@ namespace Projects.Domain
             }
             this.Name = Name;
             this.Address = Address;
-            Floors = new List<Floor>();
+            Floors = [];
             TotalArea = 0;
         }
 
@@ -27,7 +27,7 @@ namespace Projects.Domain
         {
             Name = Consts.Strings.ValueNotSet;
             Address = new Address(Consts.Strings.ValueNotSet);
-            Floors = new List<Floor>();
+            Floors = [];
             TotalArea = 0;
         }
     }

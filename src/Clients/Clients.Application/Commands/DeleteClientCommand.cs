@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Clients.Application.Commands
 {
-    public record DeleteClientCommand(Guid TenantId, Guid clientId) : IRequest;
+    public record DeleteClientCommand(Guid TenantId, Guid ClientId) : IRequest;
     
     public class DeleteClientCommandHandler(ILogger<DeleteClientCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<DeleteClientCommand>
     {
@@ -16,14 +16,14 @@ namespace Clients.Application.Commands
             ArgumentNullException.ThrowIfNull(request);
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {DeleteClientCommandHandler} for {request.clientId}", nameof(DeleteClientCommandHandler), request.clientId);
+                _logger.LogDebug("Handling request {DeleteClientCommandHandler} for {request.clientId}", nameof(DeleteClientCommandHandler), request.ClientId);
             }
 
-            if (request.clientId == Guid.Empty) {
-                throw new ArgumentException(nameof(request.clientId));
+            if (request.ClientId == Guid.Empty) {
+                throw new ArgumentException(nameof(request.ClientId));
             }
 
-            var clientId = request.clientId;
+            var clientId = request.ClientId;
             var tenantId = request.TenantId;
 
             await unitOfWork.ClientsRepository.

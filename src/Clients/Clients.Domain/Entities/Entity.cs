@@ -1,7 +1,12 @@
-﻿
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
 namespace Clients.Domain.Entities
 {
-    public abstract class Entity
+    /// <summary>
+    /// Implementation of the Entity base class
+    /// Must implement the Equals method to compare entities, hence the IEquatable interface
+    /// </summary>
+    public abstract class Entity : IEquatable<Entity>
     {
         public DateTime CreatedAt { get; set;  }
         public DateTime ModifiedAt { get; set; }
@@ -32,25 +37,6 @@ namespace Clients.Domain.Entities
             return Id == Guid.Empty;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not Entity)
-                return false;
-
-            if (Object.ReferenceEquals(this, obj))
-                return true;
-
-            if (this.GetType() != obj.GetType())
-                return false;
-
-            Entity item = (Entity)obj;
-
-            if (item.IsTransient() || IsTransient())
-                return false;
-            else
-                return item.Id == Id;
-        }
-
         public override int GetHashCode()
         {
             unchecked
@@ -62,17 +48,8 @@ namespace Clients.Domain.Entities
             }
         }
 
-        public static bool operator ==(Entity? left, Entity? right)
-        {
-            if (Equals(left, null))
-                return Equals(right, null);
-            else
-                return left.Equals(right);
-        }
-
-        public static bool operator !=(Entity left, Entity right)
-        {
-            return !(left == right);
-        }
+        public abstract override bool Equals(object? obj);
+        public abstract bool Equals(Entity? other);
+        public abstract override string ToString();
     }
 }

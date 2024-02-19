@@ -13,6 +13,31 @@ namespace Clients.Tests
         private const string PrimaryPhoneNumber = "0542123123";
         private readonly Guid TenantId = Guid.NewGuid();
 
+        // Testing IEqualityComparer of client and IEquatible
+        [Test]
+        public void Client_Equals_ShouldBeEqual()
+        {
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
+
+            client1.Id = Guid.NewGuid();
+            client2.Id = client1.Id;
+
+            Assert.That(client1, Is.EqualTo(client2));
+        }
+
+        [Test]
+        public void Client_Equals_ShouldNotBeEqual()
+        {
+            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
+            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId);
+
+            client1.Id = Guid.NewGuid();
+            client2.Id = Guid.NewGuid();
+
+            Assert.That(client1, Is.Not.EqualTo(client2));
+        }
+
         [Test]
         public void CreateClient_EmptyNameShoudThow()
         {
@@ -179,74 +204,6 @@ namespace Clients.Tests
             };
 
             Assert.That(client1.GetHashCode(), Is.Not.EqualTo(client2.GetHashCode()));
-        }
-
-        // Testing != operator
-        [Test]
-        public void NotEqualOperator_SameId_ShouldNotBeEqual()
-        {
-            var id = Guid.NewGuid();
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = id
-            };
-
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = id
-            };
-
-            Assert.That(client1 != client2, Is.False);
-        }
-
-        [Test]
-        public void NotEqualOperator_DifferentId_ShouldNotBeEqual()
-        {
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = Guid.NewGuid()
-            };
-
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = Guid.NewGuid()
-            };
-
-            Assert.That(client1 != client2, Is.True);
-        }
-
-        // Testing the == operator
-        [Test]
-        public void EqualOperator_SameId_ShouldBeEqual()
-        {
-            var id = Guid.NewGuid();
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = id
-            };
-
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = id
-            };
-
-            Assert.That(client1 == client2, Is.True);
-        }
-
-        [Test]
-        public void EqualOperator_DifferentId_ShouldNotBeEqual()
-        {
-            var client1 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = Guid.NewGuid()
-            };
-
-            var client2 = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId)
-            {
-                Id = Guid.NewGuid()
-            };
-
-            Assert.That(client1 == client2, Is.False);
         }
     }
 }

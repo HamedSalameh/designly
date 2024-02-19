@@ -1,9 +1,11 @@
-﻿
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
+using System.Text;
 using static Accounts.Domain.Consts;
 
 namespace Accounts.Domain
 {
-    public class Account : Entity
+    public sealed class Account : Entity
     {
         public string Name { get; set; }
 
@@ -40,7 +42,7 @@ namespace Accounts.Domain
         }
 
         // Used by EF, Dapper, etc.
-        protected Account()
+        private Account()
         {
             Name = string.Empty;
             Teams = new List<Team>();
@@ -161,6 +163,48 @@ namespace Accounts.Domain
             }
 
             Status = AccountStatus.MarkedForDeletion;
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Account);       
+
+        public override bool Equals(Entity? other)
+        {
+            if (other is not Account)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (GetType() != other.GetType())
+                return false;
+
+            Account item = (Account)other;
+
+            if (item.IsTransient() || IsTransient())
+                return false;
+            else
+                return item.Id == Id;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new();
+            sb.Append(Name);
+            sb.Append(", ").Append(Owner?.ToString());
+            sb.Append(", ").Append(Status.ToString());
+            return sb.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = base.GetHashCode();
+                hash = hash * 37 + Name.GetHashCode();
+                hash = hash * 41 + OwnerId.GetHashCode();
+                hash = hash * 41 + Status.GetHashCode();
+                return hash;
+            }
         }
     }
 }

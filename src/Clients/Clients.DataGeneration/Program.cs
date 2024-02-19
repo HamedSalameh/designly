@@ -39,7 +39,10 @@ var _modelFaker = new Faker<Client>()
 
 Console.WriteLine("How many user do you want to generate ?");
 string? countIput = Console.ReadLine();
-int.TryParse(countIput, out int count);
+if (! int.TryParse(countIput, out int count) )
+{
+    count = 10;
+}
 
 var generatedClients = new List<Client>();
 string? userInput = "";

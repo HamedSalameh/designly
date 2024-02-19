@@ -1,5 +1,4 @@
-﻿using Amazon.CognitoIdentityProvider.Model;
-using Clients.Application.Commands;
+﻿using Clients.Application.Commands;
 using Clients.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -49,7 +48,7 @@ namespace Clients.Tests
 
             // Assert
             var exception = Assert.ThrowsAsync<ArgumentException>(() => _handler.Handle(deleteClientRequest, CancellationToken.None));
-            Assert.That(exception.Message, Is.EqualTo(nameof(deleteClientRequest.clientId)));
+            Assert.That(exception.Message, Is.EqualTo(nameof(deleteClientRequest.ClientId)));
         }
 
         [Test]

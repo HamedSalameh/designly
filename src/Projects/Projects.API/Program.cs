@@ -122,12 +122,7 @@ static void ConfigureVersioning(WebApplicationBuilder builder)
 
 static void AttachNamedHttpClient<T>(WebApplicationBuilder builder, string section) where T : ServiceConfiguration
 {
-    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>();
-    if (accountsServiceConfig is null)
-    {
-        throw new ConfigurationException($"Could not find configuration for {section}");
-    }
-
+    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>() ?? throw new ConfigurationException($"Could not find configuration for {section}");
     if (string.IsNullOrEmpty(accountsServiceConfig.ServiceName))
     {
         throw new ConfigurationException(nameof(accountsServiceConfig.ServiceName));
