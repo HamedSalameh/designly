@@ -12,8 +12,10 @@ using Newtonsoft.Json;
 using Polly.Wrap;
 using Projects.Application.Builders;
 using Projects.Infrastructure.Interfaces;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -72,12 +74,12 @@ namespace Projects.Application.Features.CreateProject
                     .WithStartDate(request.StartDate)
                     .WithDeadline(request.Deadline)
                     .WithCompletedAt(request.CompletedAt);
-                    
+
                 var basicProject = projectBuilder.BuildBasicProject();
 
                 var project_id = await _unitOfWork.ProjectsRepository.CreateBasicProjectAsync(basicProject, cancellationToken);
-                
-                _logger.LogDebug("Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})", 
+
+                _logger.LogDebug("Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})",
                     basicProject.Name, basicProject.Id, basicProject.TenantId);
 
                 return project_id;
@@ -97,22 +99,29 @@ namespace Projects.Application.Features.CreateProject
             }
 
             using var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position);
-            var validationResponse = _policy.ExecuteAsync(async () =>
+            var validationResponse = await _policy.ExecuteAsync(async () =>
             {
                 var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
 
-                if (response.IsSuccessStatusCode) return null;
-                // only handle business logic related problem details here
-                if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
+                Exception? exception = response switch
                 {
-                    return await response.HandleUnprocessableEntityResponse();
-                }
+                    // Business logic validation succeeded
+                    { StatusCode: HttpStatusCode.OK } => null,
 
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                return new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
+                    // Business logic validation failed
+                    { StatusCode: HttpStatusCode.UnprocessableEntity } => await response.HandleUnprocessableEntityResponse(),
+
+                    // Remote API returned an error
+                    { StatusCode: HttpStatusCode.InternalServerError } => await response.HandleInternalServerErrorResponse(cancellationToken),
+
+                    // all other status codes
+                    _ => await response.HandleUnknownServerErrorResponse(cancellationToken)
+                };
+
+                return exception;
             });
-            
-            return await validationResponse;
+
+            return validationResponse;
         }
 
         private async Task<Exception?> ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
@@ -123,27 +132,32 @@ namespace Projects.Application.Features.CreateProject
             }
 
             using var httpClient = await CreateHttpClient(ClientsServiceConfiguration.Position);
-            var validationReponse = _policy.ExecuteAsync(async () =>
+            var validationReponse = await _policy.ExecuteAsync(async () =>
             {
                 HttpResponseMessage response = await httpClient.GetAsync($"validate/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
 
-                if (response.IsSuccessStatusCode)
+                Exception? exception = response switch
                 {
-                    return await handleSuccessfulValidationResponse(response, cancellationToken).ConfigureAwait(false);
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
-                {
-                    return await response.HandleUnprocessableEntityResponse();
-                }
+                    // Business logic validation succeeded
+                    { StatusCode: HttpStatusCode.OK } => await handleSuccessfulValidationResponse(response, cancellationToken).ConfigureAwait(false),
 
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                return new Exception($"Could not validate client with Id {clientId}: {responseContent}");
+                    // Business logic validation failed
+                    { StatusCode: HttpStatusCode.UnprocessableEntity } => await response.HandleUnprocessableEntityResponse(),
+
+                    // Remote API returned an error
+                    { StatusCode: HttpStatusCode.InternalServerError } => await response.HandleInternalServerErrorResponse(cancellationToken),
+
+                    // all other status codes
+                    _ => await response.HandleUnknownServerErrorResponse(cancellationToken)
+                };
+
+                return exception;
             });
-            
-            return await validationReponse;
+
+            return validationReponse;
         }
 
-        private static async Task<Exception?> handleSuccessfulValidationResponse(HttpResponseMessage response, CancellationToken cancellationToken)
+        private static async Task<BusinessLogicException?> handleSuccessfulValidationResponse(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             var clientStatusContentResponse = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             var clientStatus = JsonConvert.DeserializeAnonymousType(clientStatusContentResponse, new { Code = 0, Description = "" });

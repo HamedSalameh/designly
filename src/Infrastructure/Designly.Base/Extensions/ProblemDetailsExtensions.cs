@@ -1,6 +1,7 @@
 ﻿using Designly.Base.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
+using System.Threading;
 
 namespace Designly.Base.Extensions
 {
@@ -78,6 +79,7 @@ namespace Designly.Base.Extensions
             throw new Exception("Could not parse the exception to a problem details object.");
         }
 
+        // handle 422
         public static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(this HttpResponseMessage response)
         {
             var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -96,6 +98,21 @@ namespace Designly.Base.Extensions
             {
                 return new BusinessLogicException(exception.Message);
             }
+        }
+
+        // handle 500
+        public static async Task<InternalServerErrorException> HandleInternalServerErrorResponse(this HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            var validationFailureReason = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+            return new InternalServerErrorException(validationFailureReason);
+        }
+
+        public static async Task<UnknownServerErrorResponseException> HandleUnknownServerErrorResponse(this HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+            return new UnknownServerErrorResponseException($"{response.StatusCode} : {responseContent}");
         }
 
         public sealed record ProblemDetailType(string Name, string Title);
