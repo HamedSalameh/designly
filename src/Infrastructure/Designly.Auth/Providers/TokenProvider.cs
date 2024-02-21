@@ -11,7 +11,7 @@ using System.Net.Mime;
 
 namespace Designly.Auth.Providers
 {
-    public class TokenProvider(IHttpClientFactory httpClientFactory, 
+    public sealed class TokenProvider(IHttpClientFactory httpClientFactory, 
         ILogger<TokenProvider> logger, 
         IOptions<OAuth2ServiceProviderConfiguration> OAuth2Options,
         IMemoryCache memoryCache) : ITokenProvider

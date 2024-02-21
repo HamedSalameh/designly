@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace Designly.Auth.Identity
 {
-    public class TenantProvider : ITenantProvider
+    public sealed class TenantProvider : ITenantProvider
     {
         private Guid TenantId { get; set; }
 

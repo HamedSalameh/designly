@@ -4,17 +4,16 @@ using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using Designly.Configuration;
 using Designly.Shared;
+using Designly.Shared.Polly;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly.Wrap;
 using Projects.Application.Builders;
-using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Net.Mime;
-using System.Text.Json;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -25,18 +24,21 @@ namespace Projects.Application.Features.CreateProject
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IProjectBuilder _projectBuilder;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AsyncPolicyWrap _policy;
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
             ITokenProvider tokenProvider,
             IHttpClientFactory httpClientFactory,
             IProjectBuilder projectBuilder,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            AsyncPolicyWrap policy)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _projectBuilder = projectBuilder ?? throw new ArgumentNullException(nameof(projectBuilder));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _policy = PollyPolicyFactory.WrappedNetworkRetries();
         }
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -95,17 +97,22 @@ namespace Projects.Application.Features.CreateProject
             }
 
             using var httpClient = await CreateHttpClient(AccountsServiceConfiguration.Position);
-            var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
-
-            if (response.IsSuccessStatusCode) return null;
-            // only handle business logic related problem details here
-            if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
+            var validationResponse = _policy.ExecuteAsync(async () =>
             {
-                return await response.HandleUnprocessableEntityResponse();
-            }
+                var response = await httpClient.GetAsync($"{tenantId}/users/{projectLeadId}/validate", cancellationToken).ConfigureAwait(false);
 
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
+                if (response.IsSuccessStatusCode) return null;
+                // only handle business logic related problem details here
+                if (!response.IsSuccessStatusCode && response.StatusCode is System.Net.HttpStatusCode.UnprocessableEntity)
+                {
+                    return await response.HandleUnprocessableEntityResponse();
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                return new Exception($"Could not validate project lead with Id {projectLeadId} : {responseContent}");
+            });
+            
+            return await validationResponse;
         }
 
         private async Task<Exception?> ValidateClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
@@ -116,28 +123,37 @@ namespace Projects.Application.Features.CreateProject
             }
 
             using var httpClient = await CreateHttpClient(ClientsServiceConfiguration.Position);
-
-            var response = await httpClient.GetAsync($"validate/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
-
-            if (response.IsSuccessStatusCode)
+            var validationReponse = _policy.ExecuteAsync(async () =>
             {
-                var clientStatusContentResponse = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-                var clientStatus = JsonConvert.DeserializeAnonymousType(clientStatusContentResponse, new { Code = 0, Description = "" });
+                HttpResponseMessage response = await httpClient.GetAsync($"validate/{tenantId}/{clientId}", cancellationToken).ConfigureAwait(false);
 
-                if (clientStatus != null && !clientStatus.Description.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                if (response.IsSuccessStatusCode)
                 {
-                    Designly.Base.Error clientStatusError = new(clientStatus.Code.ToString(), clientStatus.Description);
-                    return new BusinessLogicException(clientStatusError);
+                    return await handleSuccessfulValidationResponse(response, cancellationToken).ConfigureAwait(false);
                 }
-                return null;
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
-            {
-                return await response.HandleUnprocessableEntityResponse();
-            }
+                else if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
+                {
+                    return await response.HandleUnprocessableEntityResponse();
+                }
 
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new Exception($"Could not validate client with Id {clientId}: {responseContent}");
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                return new Exception($"Could not validate client with Id {clientId}: {responseContent}");
+            });
+            
+            return await validationReponse;
+        }
+
+        private static async Task<Exception?> handleSuccessfulValidationResponse(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            var clientStatusContentResponse = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var clientStatus = JsonConvert.DeserializeAnonymousType(clientStatusContentResponse, new { Code = 0, Description = "" });
+
+            if (clientStatus != null && !clientStatus.Description.Equals("Active", StringComparison.OrdinalIgnoreCase))
+            {
+                Designly.Base.Error clientStatusError = new(clientStatus.Code.ToString(), clientStatus.Description);
+                return new BusinessLogicException(clientStatusError);
+            }
+            return null;
         }
 
         private async Task<HttpClient> CreateHttpClient(string configuration)

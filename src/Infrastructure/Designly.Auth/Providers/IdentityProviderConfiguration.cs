@@ -2,7 +2,7 @@
 
 namespace IdentityService.Service
 {
-    public class IdentityProviderConfiguration
+    public sealed class IdentityProviderConfiguration
     {
         // position in the configuration file
         public static readonly string Position = "AWSCognitoConfiguration";

@@ -1,7 +1,6 @@
 ﻿using Clients.Infrastructure.Interfaces;
 using Clients.Infrastructure.Persistance;
 using Designly.Shared.ConnectionProviders;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

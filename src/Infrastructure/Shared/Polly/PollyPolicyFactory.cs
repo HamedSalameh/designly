@@ -4,9 +4,9 @@ using Polly.Contrib.WaitAndRetry;
 using Polly.Timeout;
 using Polly.Wrap;
 
-namespace Clients.Infrastructure.Polly
+namespace Designly.Shared.Polly
 {
-    internal static class PollyPolicyFactory
+    public static class PollyPolicyFactory
     {
         private const int defaultRetryCount = 5;
         private const int defaultTimeout = 30;
@@ -40,24 +40,29 @@ namespace Clients.Infrastructure.Polly
             var policy = Policy.TimeoutAsync(timeoutInSeconds, TimeoutStrategy.Pessimistic,
               onTimeoutAsync: (context, timespan, _, _) =>
               {
+                  // TODO: Log here?
                   return Task.CompletedTask;
               });
 
             return policy;
         }
 
-        public static AsyncPolicyWrap CreatePolicyWrap(AsyncPolicy[] policies)
-        {
-            return Policy.WrapAsync(policies);
-        }
-
         public static AsyncPolicyWrap WrappedAsyncPolicies()
         {
             var wrappedPolicy = Policy.WrapAsync(
-                RetryWithJitterAsync(), 
+                RetryWithJitterAsync(),
                 TimeoutAsync()
                 );
 
+            return wrappedPolicy;
+        }
+
+        public static AsyncPolicyWrap WrappedNetworkRetries()
+        {
+            var wrappedPolicy = Policy.WrapAsync(
+                NetworkRetryAsync(defaultRetryCount, TimeSpan.FromSeconds(1)),
+                TimeoutAsync()
+                                              );
             return wrappedPolicy;
         }
     }

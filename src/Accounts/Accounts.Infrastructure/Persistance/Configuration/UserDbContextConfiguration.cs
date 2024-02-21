@@ -22,17 +22,17 @@ namespace Accounts.Infrastructure.Persistance.Configuration
             builder.Property(x => x.FirstName)
                 .HasColumnName("first_name")
                 .IsRequired()
-                .HasMaxLength(Consts.FirstNameMaxLength);
+                .HasMaxLength(Designly.Shared.Consts.FirstNameMaxLength);
 
             builder.Property(x => x.LastName)
                 .HasColumnName("last_name")
                 .IsRequired()
-                .HasMaxLength(Consts.LastNameMaxLength);
+                .HasMaxLength(Designly.Shared.Consts.LastNameMaxLength);
 
             builder.Property(x => x.Email)
                 .HasColumnName("email")
                 .IsRequired()
-                .HasMaxLength(Consts.EmailAddressMaxLength);
+                .HasMaxLength(Designly.Shared.Consts.MaxEmailAddressLength);
 
             builder.Property(x => x.AccountId)
                 .HasColumnName("account_id")

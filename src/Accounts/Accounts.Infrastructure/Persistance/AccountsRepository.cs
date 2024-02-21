@@ -1,8 +1,8 @@
 ﻿using Accounts.Domain;
 using Accounts.Infrastructure.Interfaces;
 using Accounts.Infrastructure.Persistance.Configuration;
-using Clients.Infrastructure.Polly;
 using Dapper;
+using Designly.Shared.Polly;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

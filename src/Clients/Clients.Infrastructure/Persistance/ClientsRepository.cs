@@ -1,8 +1,8 @@
 ﻿using Clients.Domain.Entities;
 using Clients.Infrastructure.Interfaces;
-using Clients.Infrastructure.Polly;
 using Dapper;
 using Designly.Shared.ConnectionProviders;
+using Designly.Shared.Polly;
 using Designly.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

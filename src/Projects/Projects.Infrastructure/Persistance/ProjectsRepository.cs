@@ -1,11 +1,11 @@
 ﻿using Dapper;
 using Designly.Shared.ConnectionProviders;
+using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
-using Projects.Infrastructure.Polly;
 using System.Data;
 
 namespace Projects.Infrastructure.Persistance

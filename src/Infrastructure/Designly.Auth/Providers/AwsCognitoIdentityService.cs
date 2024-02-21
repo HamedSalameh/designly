@@ -2,7 +2,6 @@
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
-using Amazon.Runtime;
 using Designly.Auth.Models;
 using Designly.Base;
 using Designly.Base.Exceptions;
@@ -12,13 +11,14 @@ using Microsoft.Extensions.Options;
 
 namespace Designly.Auth.Providers
 {
-    public class AwsCognitoIdentityService : IIdentityService
+    public sealed class AwsCognitoIdentityService : IIdentityService, IDisposable
     {
         private readonly ILogger<AwsCognitoIdentityService> _logger;
         private readonly string _clientId;
         private readonly string _poolId;
         
         private readonly AmazonCognitoIdentityProviderClient _client;
+        private bool disposedValue;
 
         public AwsCognitoIdentityService(
             IOptions<IdentityProviderConfiguration> AWSCognitoConfiguration,
@@ -50,7 +50,6 @@ namespace Designly.Auth.Providers
             {
                 _logger.LogDebug("AWS Region is set to {awsRegion}", awsRegion.DisplayName);
             }
-            
         }
 
         public async Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken)
@@ -337,6 +336,27 @@ namespace Designly.Auth.Providers
                 _logger.LogError(exception, "Could not set user password in AWS Cognito due to error: {Message}", exception.Message);
                 return false;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _client.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
