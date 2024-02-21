@@ -15,11 +15,15 @@ namespace Clients.Application.Commands
 
         public async Task<Guid> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {request.Client}", nameof(CreateClientCommandHandler), request.Client);
+            }
+
             var client = request.Client;
 
             try
             {
-                //var clientId = await _unitOfWork.ClientsRepository.CreateClientAsync(client, cancellationToken).ConfigureAwait(false);
                 var clientId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug("Created client: {clientId}", clientId);
 

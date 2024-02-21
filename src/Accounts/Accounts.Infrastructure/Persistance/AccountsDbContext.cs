@@ -1,11 +1,10 @@
 ﻿using Accounts.Domain;
 using Accounts.Infrastructure.Persistance.Configuration;
-using Designly.Auth.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounts.Infrastructure.Persistance
 {
-    public class AccountsDbContext : DbContext
+    public sealed class AccountsDbContext : DbContext
     {
         public AccountsDbContext(DbContextOptions options) : base(options)
         {

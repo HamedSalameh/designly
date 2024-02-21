@@ -1,6 +1,6 @@
 ﻿namespace Designly.Auth.Identity
 {
-    public class IdentityData
+    public static class IdentityData
     {
         public static readonly string JwtClaimType = "cognito:groups"; // Claim type
         public static readonly string AdminGroup = "designly_admins"; // Group name
@@ -12,11 +12,11 @@
         public const string AccountUserPolicyName = "AccountUserPolicy"; // Policy name
 
         // service account custom scope key and value
-        public static string ServiceAccountPolicyName = "ServiceAccountPolicy"; // Policy name
-        public static string CustomScopesClaimType = "scope"; // Claim type
-        public static string ServiceAccountScopeValue = "service_account"; // Claim value
+        public static readonly string ServiceAccountPolicyName = "ServiceAccountPolicy"; // Policy name
+        public static readonly string CustomScopesClaimType = "scope"; // Claim type
+        public static readonly string ServiceAccountScopeValue = "service_account"; // Claim value
 
-        public static string TenantIdClaimType = "tenant_"; // Claim type
-        public static string TenantId = "tenant_id"; // Claim type
+        public static readonly string TenantIdClaimType = "tenant_"; // Claim type
+        public static readonly string TenantId = "tenant_id"; // Claim type
     }
 }

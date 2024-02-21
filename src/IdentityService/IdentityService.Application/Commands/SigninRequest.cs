@@ -18,10 +18,15 @@ namespace IdentityService.Application.Commands
 
         public async Task<ITokenResponse?> Handle(SigninRequest request, CancellationToken cancellationToken)
         {
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Handling request {SigninRequestHandler} for {username}", nameof(SigninRequestHandler), request.Username);
+            }
+
             var username = request.Username;
             var password = request.Password;
 
-            logger.LogDebug($"Handling request {nameof(SigninRequestHandler)} for {nameof(username)} {username}");
+            logger.LogDebug("Handling request {SigninRequestHandler} for {username}", nameof(SigninRequestHandler), username);
             var tokenResponse = await _identityService.LoginJwtAsync(username, password, cancellationToken);
 
             return tokenResponse;

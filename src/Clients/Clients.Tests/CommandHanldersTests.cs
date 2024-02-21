@@ -58,29 +58,20 @@ namespace Clients.Tests
         }
 
         [Test]
-        public void Handle_NullLogger_ThrowsArgumentNullException()
+        public void Handle_ValidRequest_UnitOfWorkThrows()
         {
-            // Arrange
-            ILogger<CreateClientCommandHandler>? logger = null;
-            var unitOfWork = new Mock<IUnitOfWork>().Object;
+            // arrange
+            var draftClient = new Client(firstName, familyName, address, contactDetails, Tenant);
+            var request = new CreateClientCommand(draftClient);
 
-            // Act + Assert
-#pragma warning disable CS8604 // Possible null reference argument.
-            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
-#pragma warning restore CS8604 // Possible null reference argument.
-        }
+            var newClientIdGuid = Guid.NewGuid();
 
-        [Test]
-        public void Handle_NullUnitOfWork_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var logger = new Mock<ILogger<CreateClientCommandHandler>>().Object;
-            IUnitOfWork? unitOfWork = null;
+            _unitOfWorkMock.Setup(uow => uow.ClientsRepository.CreateClientAsyncWithDapper(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("Some exception"));
 
-            // Act + Assert
-#pragma warning disable CS8604 // Possible null reference argument.
-            _ = Assert.Throws<ArgumentNullException>(() => new CreateClientCommandHandler(logger, unitOfWork));
-#pragma warning restore CS8604 // Possible null reference argument.
+            // Assert
+            var exception = Assert.ThrowsAsync<Exception>(() => _handler.Handle(request, CancellationToken.None));
+            Assert.That(exception.Message, Is.EqualTo("Some exception"));
         }
     }
 }

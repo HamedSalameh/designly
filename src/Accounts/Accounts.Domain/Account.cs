@@ -1,10 +1,11 @@
-﻿
-using Designly.Base.Exceptions;
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
+using System.Text;
 using static Accounts.Domain.Consts;
 
 namespace Accounts.Domain
 {
-    public class Account : Entity
+    public sealed class Account : Entity
     {
         public string Name { get; set; }
 
@@ -17,8 +18,8 @@ namespace Accounts.Domain
 
         public Account(string Name, User accountOwner) : base()
         {
-            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
-            if (accountOwner == default) throw new ArgumentNullException(nameof(accountOwner));
+            ArgumentNullException.ThrowIfNull(Name);
+            ArgumentNullException.ThrowIfNull(accountOwner);
 
             this.Name = Name;
             Owner = accountOwner;
@@ -29,7 +30,10 @@ namespace Accounts.Domain
 
         public Account(string Name)
         {
-            ArgumentNullException.ThrowIfNull(Name, nameof(Name));
+            if (string.IsNullOrEmpty(Name))
+            {
+                throw new ArgumentNullException(nameof(Name));
+            }
 
             this.Name = Name;
             Status = AccountStatus.InProcessRegisteration;
@@ -38,7 +42,7 @@ namespace Accounts.Domain
         }
 
         // Used by EF, Dapper, etc.
-        protected Account()
+        private Account()
         {
             Name = string.Empty;
             Teams = new List<Team>();
@@ -46,19 +50,16 @@ namespace Accounts.Domain
 
         public void AssignOwner(User accountOwner)
         {
-            ArgumentNullException.ThrowIfNull(accountOwner, nameof(accountOwner));
+            ArgumentNullException.ThrowIfNull(accountOwner);
 
             Owner = accountOwner;
         }
 
         public void CreateDefaultTeam()
         {
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
-            var defaultTeam = Teams.FirstOrDefault(t => t.Name == Consts.DefaultTeamName);
+            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName);
 
             if (defaultTeam == null)
             {
@@ -69,34 +70,25 @@ namespace Accounts.Domain
 
         public void AddUserToDefaultTeam(User user)
         {
-            var defaultTeam = Teams.FirstOrDefault(t => t.Name == Consts.DefaultTeamName);
-            if (defaultTeam == null)
-            {
-                throw new AccountException("The default team is not created yet");
-            }
+            var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName)
+                ?? throw new AccountException("The default team is not created yet");
             defaultTeam.AddMember(user);
         }
 
         public void AddTeam(Team team)
         {
-            ArgumentNullException.ThrowIfNull(team, nameof(team));
+            ArgumentNullException.ThrowIfNull(team);
 
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
             Teams.Add(team);
         }
 
         public void RemoveTeam(Team team)
         {
-            ArgumentNullException.ThrowIfNull(team, nameof(team));
+            ArgumentNullException.ThrowIfNull(team);
 
-            if (Teams == null)
-            {
-                Teams = new List<Team>();
-            }
+            Teams ??= new List<Team>();
 
             Teams.Remove(team);
         }
@@ -113,7 +105,7 @@ namespace Accounts.Domain
             {
                 throw new AccountException("Account owner is not assigned yet");
             }
-            if (Id == default)
+            if (IsTransient())
             {
                 throw new AccountException("Account is not created yet");
             }
@@ -171,6 +163,48 @@ namespace Accounts.Domain
             }
 
             Status = AccountStatus.MarkedForDeletion;
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Account);       
+
+        public override bool Equals(Entity? other)
+        {
+            if (other is not Account)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (GetType() != other.GetType())
+                return false;
+
+            Account item = (Account)other;
+
+            if (item.IsTransient() || IsTransient())
+                return false;
+            else
+                return item.Id == Id;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new();
+            sb.Append(Name);
+            sb.Append(", ").Append(Owner?.ToString());
+            sb.Append(", ").Append(Status.ToString());
+            return sb.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = base.GetHashCode();
+                hash = hash * 37 + Name.GetHashCode();
+                hash = hash * 41 + OwnerId.GetHashCode();
+                hash = hash * 41 + Status.GetHashCode();
+                return hash;
+            }
         }
     }
 }

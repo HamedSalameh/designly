@@ -3,6 +3,7 @@ using Designly.Auth.Extentions;
 using Designly.Auth.Identity;
 using Designly.Auth.Models;
 using Designly.Auth.Policies;
+using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared;
 using Designly.Shared.Extensions;
@@ -121,10 +122,10 @@ static void ConfigureVersioning(WebApplicationBuilder builder)
 
 static void AttachNamedHttpClient<T>(WebApplicationBuilder builder, string section) where T : ServiceConfiguration
 {
-    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>();
-    if (accountsServiceConfig is null)
+    var accountsServiceConfig = builder.Configuration.GetSection(section).Get<T>() ?? throw new ConfigurationException($"Could not find configuration for {section}");
+    if (string.IsNullOrEmpty(accountsServiceConfig.ServiceName))
     {
-        throw new InvalidOperationException($"Could not find configuration for {section}");
+        throw new ConfigurationException(nameof(accountsServiceConfig.ServiceName));
     }
 
     var clientName = accountsServiceConfig.ServiceName;

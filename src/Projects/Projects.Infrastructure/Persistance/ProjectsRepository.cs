@@ -1,16 +1,16 @@
 ﻿using Dapper;
 using Designly.Shared.ConnectionProviders;
+using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
-using Projects.Infrastructure.Polly;
 using System.Data;
 
 namespace Projects.Infrastructure.Persistance
 {
-    internal class ProjectsRepository : IProjectsRepository
+    internal sealed class ProjectsRepository : IProjectsRepository
     {
         private readonly ILogger<ProjectsRepository> _logger;
         private readonly AsyncPolicyWrap policy;
@@ -37,7 +37,7 @@ namespace Projects.Infrastructure.Persistance
             }
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_tenant_id", basicProject.TenantId.Id);
+            dynamicParameters.Add("p_tenant_id", basicProject.TenantId);
             dynamicParameters.Add("p_name", basicProject.Name);
             dynamicParameters.Add("p_description", basicProject.Description);
             dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id);

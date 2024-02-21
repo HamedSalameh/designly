@@ -7,10 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Designly.Shared.Middleware
 {
-    public class ValidationExceptionHandler(ILogger<ValidationExceptionHandler> logger) : IExceptionHandler
+    public class ValidationExceptionHandler() : IExceptionHandler
     {
-        private readonly ILogger<ValidationExceptionHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
         public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(httpContext);
@@ -36,7 +34,7 @@ namespace Designly.Shared.Middleware
                     problemDetails.Extensions["Errors"] = validation.Errors;
                 }
 
-                httpContext.Response.WriteAsJsonAsync(problemDetails);
+                httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
                 return ValueTask.FromResult(true);
             }

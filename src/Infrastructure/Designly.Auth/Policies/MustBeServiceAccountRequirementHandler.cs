@@ -16,7 +16,7 @@ namespace Designly.Auth.Policies
                 _logger.LogDebug($"Checking if user is a service account");
             }
 
-            var requirement = context.Requirements.Where(r => r is MustBeServiceAccountRequirement).FirstOrDefault();
+            var requirement = context.Requirements.FirstOrDefault(r => r is MustBeServiceAccountRequirement);
             if (requirement != null)
             {
                 // search the claim in the token group membership

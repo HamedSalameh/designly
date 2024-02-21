@@ -1,4 +1,5 @@
 ﻿using Designly.Base.Exceptions;
+using Designly.Base.Extensions;
 using IdentityService.API.DTO;
 using IdentityService.Application.Commands;
 using MediatR;
@@ -20,9 +21,10 @@ namespace IdentityService.API.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<IdentityController> _logger;
 
-        public IdentityController(IMediator mediator)
+        public IdentityController(IMediator mediator, ILogger<IdentityController> logger)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger;
         }
 
         [HttpPost]

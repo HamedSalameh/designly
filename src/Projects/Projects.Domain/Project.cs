@@ -41,12 +41,10 @@ namespace Projects.Domain
         /// </summary>
         public DateOnly? CompletedAt { get; private set; }
 
-        public ProjectStatus Status { get => _status; set => _status = value; }
+        public ProjectStatus Status { get; private set; }
 
         public bool IsCompleted => CompletedAt.HasValue && Status == ProjectStatus.Completed;
 
-        // Protected and Private fields
-        protected ProjectStatus _status;
 
         /// <summary>
         /// List of task items for the project, general tasks
@@ -114,7 +112,7 @@ namespace Projects.Domain
         {
             if (completionDate < StartDate)
             {
-                throw new ArgumentOutOfRangeException($"{nameof(completionDate)} : must be after {nameof(StartDate)}");
+                throw new ArgumentOutOfRangeException(nameof(completionDate), $"{nameof(completionDate)} : must be after {nameof(StartDate)}");
             }
             CompletedAt = completionDate;
             Status = ProjectStatus.Completed;
@@ -124,7 +122,7 @@ namespace Projects.Domain
         {
             if (Deadline.HasValue && startDate > Deadline)
             {
-                throw new ArgumentOutOfRangeException($"{nameof(startDate)} : must be before {nameof(Deadline)}");
+                throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} : must be before {nameof(Deadline)}");
             }
             StartDate = startDate;
         }
@@ -133,7 +131,7 @@ namespace Projects.Domain
         {
             if (StartDate.HasValue && deadline < StartDate)
             {
-                throw new ArgumentOutOfRangeException($"{nameof(deadline)} : must be after {nameof(StartDate)}");
+                throw new ArgumentOutOfRangeException(nameof(deadline), $"{nameof(deadline)} : must be after {nameof(StartDate)}");
             }
             Deadline = deadline;
         }

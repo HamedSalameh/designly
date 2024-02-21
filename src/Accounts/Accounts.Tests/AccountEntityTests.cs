@@ -3,6 +3,7 @@ using static Accounts.Domain.Consts;
 
 namespace Accounts.Tests
 {
+
     [TestFixture]
     public class AccountEntityTests
     {
@@ -16,7 +17,7 @@ namespace Accounts.Tests
         public void CreateAccount_WithNullName_ThrowsArgumentNullException()
         {
             // Arrange
-            Assert.Throws<ArgumentNullException>(() => new Account(null));
+            Assert.Throws<ArgumentNullException>(() => new Account(null!));
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace Accounts.Tests
         public void CreateAccount_WithNullOwner_ThrowsArgumentNullException()
         {
             // Arrange
-            Assert.Throws<ArgumentNullException>(() => new Account("Test", null));
+            Assert.Throws<ArgumentNullException>(() => new Account("Test", null!));
         }
 
         [Test]
@@ -48,7 +49,7 @@ namespace Accounts.Tests
                 Assert.That(account.Name, Is.EqualTo(accountName));
                 Assert.That(account.Status, Is.EqualTo(AccountStatus.InProcessRegisteration));
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(0));
+                Assert.That(account.Teams, Has.Count.EqualTo(0));
             });
         }
 
@@ -57,7 +58,7 @@ namespace Accounts.Tests
         {
             // Arrange
             var account = new Account(accountName);
-            Assert.Throws<ArgumentNullException>(() => account.AssignOwner(null));
+            Assert.Throws<ArgumentNullException>(() => account.AssignOwner(null!));
         }
 
         [Test]
@@ -88,7 +89,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
             });
         }
@@ -107,7 +108,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
             });
         }
@@ -127,7 +128,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
             });
         }
@@ -141,7 +142,7 @@ namespace Accounts.Tests
             account.CreateDefaultTeam();
 
             // Act
-            Assert.Throws<ArgumentNullException>(() => account.AddUserToDefaultTeam(null));
+            Assert.Throws<ArgumentNullException>(() => account.AddUserToDefaultTeam(null!));
         }
 
         [Test]
@@ -160,10 +161,10 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
                 Assert.That(account.Teams.First().Members, Is.Not.Null);
-                Assert.That(account.Teams.First().Members.Count, Is.EqualTo(1));
+                Assert.That(account.Teams.First().Members, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First().Members.First(), Is.EqualTo(user));
             });
         }
@@ -176,7 +177,7 @@ namespace Accounts.Tests
             var accountOwner = new User(userFirstName, userLastName, userEmail, account);
 
             // Act
-            Assert.Throws<ArgumentNullException>(() => account.AddTeam(null));
+            Assert.Throws<ArgumentNullException>(() => account.AddTeam(null!));
         }
 
         [Test]
@@ -194,7 +195,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First(), Is.EqualTo(team));
             });
         }
@@ -207,7 +208,7 @@ namespace Accounts.Tests
             var accountOwner = new User(userFirstName, userLastName, userEmail, account);
 
             // Act
-            Assert.Throws<ArgumentNullException>(() => account.RemoveTeam(null));
+            Assert.Throws<ArgumentNullException>(() => account.RemoveTeam(null!));
         }
 
         [Test]
@@ -226,7 +227,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(0));
+                Assert.That(account.Teams, Has.Count.EqualTo(0));
             });
         }
 
@@ -248,7 +249,7 @@ namespace Accounts.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams.Count, Is.EqualTo(1));
+                Assert.That(account.Teams, Has.Count.EqualTo(1));
                 Assert.That(account.Teams.First(), Is.EqualTo(team2));
             });
         }
@@ -258,12 +259,10 @@ namespace Accounts.Tests
         {
             // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            var team = new Team("test_team", account);
 
             // Act
             Assert.That(account.Teams, Is.Not.Null);
-            Assert.That(account.Teams.Count, Is.EqualTo(0));
+            Assert.That(account.Teams, Has.Count.EqualTo(0));
         }       
     }
 }

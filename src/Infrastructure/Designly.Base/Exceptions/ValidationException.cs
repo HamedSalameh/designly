@@ -1,6 +1,5 @@
 ﻿namespace Designly.Base.Exceptions
 {
-    [Serializable]
     public class ValidationException : Exception
     {
         // Represent business exception
@@ -26,10 +25,7 @@
 
         public ValidationException(string message, IList<KeyValuePair<string, string>> errors) : base(message)
         {
-            if(Errors is null)
-            {
-                Errors = new Dictionary<string, string> ();
-            }
+            Errors ??= new Dictionary<string, string> ();
             foreach(var error in errors)
             {
                 Errors.Add(error.Key, error.Value);
@@ -44,6 +40,4 @@
 
         public IDictionary<string, string> Errors { get; }
     }
-
-    
 }

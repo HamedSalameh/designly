@@ -33,17 +33,6 @@ namespace Accounts.Infrastructure.Persistance.Configuration
                 .HasForeignKey<Account>(Account => Account.OwnerId)
                 .IsRequired(false);
 
-            //builder.Property(x => x.AccountOwner)
-            //    .HasColumnName("account_owner")
-            //    .IsRequired();
-
-            // one-to-one between account and user
-            // marked as optional to allow creation of account before user
-            //builder.HasOne(account => account.AccountOwner)
-            //    .WithOne(user => user.Account)
-            //    .HasForeignKey<User>(user => user.AccountId)
-            //    .IsRequired(false);
-
             builder.Property(x => x.Status)
                 .HasColumnName("status")
                 .IsRequired();

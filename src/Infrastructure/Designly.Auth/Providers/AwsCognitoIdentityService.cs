@@ -2,7 +2,6 @@
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
-using Amazon.Runtime;
 using Designly.Auth.Models;
 using Designly.Base;
 using Designly.Base.Exceptions;
@@ -12,13 +11,14 @@ using Microsoft.Extensions.Options;
 
 namespace Designly.Auth.Providers
 {
-    public class AwsCognitoIdentityService : IIdentityService
+    public sealed class AwsCognitoIdentityService : IIdentityService, IDisposable
     {
         private readonly ILogger<AwsCognitoIdentityService> _logger;
         private readonly string _clientId;
         private readonly string _poolId;
-        private readonly string _region;
+        
         private readonly AmazonCognitoIdentityProviderClient _client;
+        private bool disposedValue;
 
         public AwsCognitoIdentityService(
             IOptions<IdentityProviderConfiguration> AWSCognitoConfiguration,
@@ -26,19 +26,19 @@ namespace Designly.Auth.Providers
         {
             _clientId = AWSCognitoConfiguration.Value.ClientId;
             _poolId = AWSCognitoConfiguration.Value.PoolId;
-            _region = AWSCognitoConfiguration.Value.Region;
+            var _region = AWSCognitoConfiguration.Value.Region;
 
             if (string.IsNullOrEmpty(_clientId))
             {
-                throw new ArgumentException($"Invalid value for {nameof(_client)} : must not be null or empty.");
+                throw new ConfigurationException($"Invalid value for {nameof(_client)} : must not be null or empty.");
             }
             if (string.IsNullOrEmpty(_poolId))
             {
-                throw new ArgumentException($"Invalid value for {nameof(_poolId)} : must not be null or empty");
+                throw new ConfigurationException($"Invalid value for {nameof(_poolId)} : must not be null or empty");
             }
             if (string.IsNullOrEmpty(_region))
             {
-                throw new ArgumentException("Region configuration is not set or empty");
+                throw new ConfigurationException("Region configuration is not set or empty");
             }
 
             var awsRegion = RegionEndpoint.GetBySystemName(_region);
@@ -46,7 +46,10 @@ namespace Designly.Auth.Providers
             _client = new AmazonCognitoIdentityProviderClient(awsRegion);
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _logger.LogDebug($"AWS Region is set to {awsRegion.DisplayName}");
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("AWS Region is set to {awsRegion}", awsRegion.DisplayName);
+            }
         }
 
         public async Task<ITokenResponse?> LoginAsync(string username, string password, CancellationToken cancellationToken)
@@ -54,12 +57,12 @@ namespace Designly.Auth.Providers
             if (string.IsNullOrEmpty(username))
             {
                 _logger.LogError($"{nameof(username)} must not be null or empty");
-                throw new ArgumentException($"{nameof(username)} must not be null or empty");
+                throw new ConfigurationException($"{nameof(username)} must not be null or empty");
             }
             if (string.IsNullOrEmpty(password))
             {
                 _logger.LogError($"{nameof(password)} must not be null or empty");
-                throw new ArgumentException($"{nameof(password)} must not be null or empty");
+                throw new ConfigurationException($"{nameof(password)} must not be null or empty");
             }
 
             var request = new InitiateAuthRequest
@@ -127,6 +130,8 @@ namespace Designly.Auth.Providers
 
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var userPool = new CognitoUserPool(_poolId, _clientId, _client);
                 var user = new CognitoUser(username, _clientId, userPool, _client);
                 var authRequest = new InitiateSrpAuthRequest()
@@ -134,7 +139,6 @@ namespace Designly.Auth.Providers
                     Password = password
                 };
 
-                // TODO: Wrap in Cancellation Token
                 var authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
 
                 var tokenResponse = new TokenResponse
@@ -149,12 +153,12 @@ namespace Designly.Auth.Providers
             }
             catch (NotAuthorizedException notAuthorizedException)
             {
-                _logger.LogInformation($"Could not perform signin against AWS Cognito due to error: {notAuthorizedException.Message}");
+                _logger.LogInformation(notAuthorizedException, "Could not perform signin against AWS Cognito due to error: {Message}", notAuthorizedException.Message);
                 throw new BusinessLogicException(AuthenticationErrors.InvalidCredentials(notAuthorizedException.Message));
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Could not perform signin against AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not perform signin against AWS Cognito due to error: {Message}", exception.Message);
                 return null;
             }
         }
@@ -190,9 +194,9 @@ namespace Designly.Auth.Providers
 
         public async Task<bool> CreateUserAsync(string email, string firstName, string lastName, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(firstName, nameof(firstName));
-            ArgumentException.ThrowIfNullOrEmpty(lastName, nameof(lastName));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(firstName);
+            ArgumentException.ThrowIfNullOrEmpty(lastName);
 
             var request = new AdminCreateUserRequest
             {
@@ -230,18 +234,18 @@ namespace Designly.Auth.Providers
             } 
             catch (UsernameExistsException exception)
             {
-                _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not create user in AWS Cognito due to error: {Message}", exception.Message);
                 throw new BusinessLogicException(AuthenticationErrors.UsernameExists(exception.Message));
             }
             catch (TooManyRequestsException tooManyRequestsException)
             {
-                Error error = new Error("TooManyRequests", tooManyRequestsException.Message);
-                _logger.LogError($"Could not create user in AWS Cognito due to error: {tooManyRequestsException.Message}");
+                Error error = new("TooManyRequests", tooManyRequestsException.Message);
+                _logger.LogError(tooManyRequestsException, "Could not create user in AWS Cognito due to error: {Message}", tooManyRequestsException.Message);
                 throw new BusinessLogicException(error);
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Could not create user in AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not create user in AWS Cognito due to error: {Message}", exception.Message);
                 return false;
             }
         }
@@ -253,10 +257,10 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellation)
+        public async Task<bool> CreateGroupAsync(string groupName, string groupDescription, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
-            ArgumentException.ThrowIfNullOrEmpty(groupDescription, nameof(groupDescription));
+            ArgumentException.ThrowIfNullOrEmpty(groupName);
+            ArgumentException.ThrowIfNullOrEmpty(groupDescription);
 
             var request = new CreateGroupRequest
             {
@@ -267,12 +271,12 @@ namespace Designly.Auth.Providers
 
             try
             {
-                var response = await _client.CreateGroupAsync(request, cancellation).ConfigureAwait(false);
+                var response = await _client.CreateGroupAsync(request, cancellationToken).ConfigureAwait(false);
                 return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Could not create group in AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not create group in AWS Cognito due to error: {Message}", exception.Message);
                 return false;
             }
         }
@@ -285,10 +289,10 @@ namespace Designly.Auth.Providers
         /// <param name="cancellation"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellation)
+        public async Task<bool> AddUserToGroupAsync(string email, string groupName, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(groupName, nameof(groupName));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(groupName);
 
             var request = new AdminAddUserToGroupRequest
             {
@@ -299,20 +303,20 @@ namespace Designly.Auth.Providers
 
             try
             {
-                var response = await _client.AdminAddUserToGroupAsync(request, cancellation).ConfigureAwait(false);
+                var response = await _client.AdminAddUserToGroupAsync(request, cancellationToken).ConfigureAwait(false);
                 return response.HttpStatusCode is System.Net.HttpStatusCode.OK;
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Could not add user to group in AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not add user to group in AWS Cognito due to error: {Message}", exception.Message);
                 return false;
             }
         }
 
         public async Task<bool> SetUserPasswordAsync(string email, string password, CancellationToken cancellationToken)
         {
-            ArgumentException.ThrowIfNullOrEmpty(email, nameof(email));
-            ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+            ArgumentException.ThrowIfNullOrEmpty(email);
+            ArgumentException.ThrowIfNullOrEmpty(password);
 
             var request = new AdminSetUserPasswordRequest
             {
@@ -329,9 +333,30 @@ namespace Designly.Auth.Providers
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Could not set user password in AWS Cognito due to error: {exception.Message}");
+                _logger.LogError(exception, "Could not set user password in AWS Cognito due to error: {Message}", exception.Message);
                 return false;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _client.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

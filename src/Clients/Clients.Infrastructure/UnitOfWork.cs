@@ -2,7 +2,7 @@
 
 namespace Clients.Infrastructure
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
         public IClientsRepository ClientsRepository { get; }
 

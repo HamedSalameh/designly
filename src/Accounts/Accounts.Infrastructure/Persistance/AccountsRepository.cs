@@ -1,9 +1,8 @@
 ﻿using Accounts.Domain;
 using Accounts.Infrastructure.Interfaces;
 using Accounts.Infrastructure.Persistance.Configuration;
-using Clients.Infrastructure.Polly;
 using Dapper;
-using Designly.Shared.ConnectionProviders;
+using Designly.Shared.Polly;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -11,17 +10,15 @@ using Polly.Wrap;
 
 namespace Accounts.Infrastructure.Persistance
 {
-    public class AccountsRepository : IAccountsRepository
+    public sealed class AccountsRepository : IAccountsRepository
     {
         private readonly AccountsDbContext _context;
         private readonly ILogger<AccountsRepository> _logger;
-        private readonly IDbConnectionStringProvider dbConnectionStringProvider;
         private readonly AsyncPolicyWrap policy;
 
-        public AccountsRepository(ILogger<AccountsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider, AccountsDbContext context)
+        public AccountsRepository(ILogger<AccountsRepository> logger, AccountsDbContext context)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
@@ -31,16 +28,23 @@ namespace Accounts.Infrastructure.Persistance
 
         public async Task<Account?> GetAccountAsync(Guid accountId, CancellationToken cancellationToken)
         {
-            if (accountId == Guid.Empty || accountId == default)
+            if (accountId == Guid.Empty)
             {
                 _logger.LogError("Provided accountId is empty or default");
                 throw new ArgumentNullException(nameof(accountId));
             }
 
-            var account = await _context.Accounts
-                .Include(a => a.Owner)
-                .Include(a => a.Teams)
-                .FirstOrDefaultAsync(a => a.Id == accountId, cancellationToken);
+            // wrap in polly policy
+
+            var account = await policy.ExecuteAsync(async () =>
+            {
+                var account = await _context.Accounts
+                    .Include(a => a.Owner)
+                    .Include(a => a.Teams)
+                    .FirstOrDefaultAsync(a => a.Id == accountId, cancellationToken);
+
+                return account;
+            });
 
             return account;
         }
@@ -72,10 +76,14 @@ namespace Accounts.Infrastructure.Persistance
             using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
-                // update the account and any related entities
-                _context.Accounts.Update(account);
+                // wrap in polly policy
+                await policy.ExecuteAsync(async () =>
+                {
+                    // update the account and any related entities
+                    _context.Accounts.Update(account);
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
+                });
 
                 transaction.Commit();
             }

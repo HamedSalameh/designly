@@ -6,7 +6,7 @@
     /// </summary>
     public class SpecialPurposeProperty : Property
     {
-        private SpecialPurposeProperty()
+        public SpecialPurposeProperty()
         {
             throw new NotImplementedException();
         }

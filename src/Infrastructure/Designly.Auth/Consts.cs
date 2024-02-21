@@ -2,6 +2,6 @@
 {
     public static class Consts
     {
-        public static string BearerAuthenicationScheme = "Bearer";
+        public static readonly string BearerAuthenicationScheme = "Bearer";
     }
 }

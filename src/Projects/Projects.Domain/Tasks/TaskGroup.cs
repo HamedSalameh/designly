@@ -15,12 +15,12 @@
             }
             this.Name = Name;
             this.ProjectId = ProjectId;
-            Tasks = new List<TaskItem>();
+            Tasks = [];
         }
 
         public void AddTask(TaskItem task)
         {
-            if (task is null || task == default)
+            if (task is null)
             {
                 throw new ArgumentException($"Invlaid value for {nameof(task)}");
             }

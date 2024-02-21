@@ -1,13 +1,11 @@
-﻿using Designly.Base;
-
-namespace Designly.Base.Exceptions
+﻿namespace Designly.Base.Exceptions
 {
     /// <summary>
     /// A business logic exception indicates that the request is valid but the business logic has failed.
     /// </summary>
     public class BusinessLogicException : Exception
     {
-        public BusinessLogicException(string message)
+        public BusinessLogicException(string? message = "One or more business logic failures have occurred.")
             : base(message)
         {
             Errors = new Dictionary<string, string>();
@@ -73,7 +71,7 @@ namespace Designly.Base.Exceptions
         {
             DomainErrors = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(error.Code, error.Description)
+                new(error.Code, error.Description)
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Designly.Base.Exceptions;
+using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace Designly.Shared.ConnectionProviders
@@ -12,28 +13,28 @@ namespace Designly.Shared.ConnectionProviders
 
             if (string.IsNullOrEmpty(postgresCredentials.CurrentValue.Database))
             {
-                throw new ArgumentNullException(nameof(postgresCredentials.CurrentValue.Database), $"No database name was supplied for '{nameof(PostgreSqlDbConnectionStringProvider)}'");
+                throw new ConfigurationException(nameof(postgresCredentials.CurrentValue.Database));
             }
 
             if (string.IsNullOrEmpty(postgresCredentials.CurrentValue.Username))
             {
-                throw new ArgumentNullException(nameof(postgresCredentials.CurrentValue.Username));
+                throw new ConfigurationException(nameof(postgresCredentials.CurrentValue.Username));
             }
 
             if (string.IsNullOrEmpty(postgresCredentials.CurrentValue.Password))
             {
-                throw new ArgumentNullException(nameof(postgresCredentials.CurrentValue.Password));
+                throw new ConfigurationException(nameof(postgresCredentials.CurrentValue.Password));
             }
 
             if (string.IsNullOrEmpty(postgresCredentials.CurrentValue.Hostname))
             {
-                throw new ArgumentNullException(nameof(postgresCredentials.CurrentValue.Hostname));
+                throw new ConfigurationException(nameof(postgresCredentials.CurrentValue.Hostname));
             }
 
             ConnectionString = CreateConnectionString(postgresCredentials);
         }
 
-        private string CreateConnectionString(IOptionsMonitor<DatabaseConnectionDetails> postgresCredentials)
+        private static string CreateConnectionString(IOptionsMonitor<DatabaseConnectionDetails> postgresCredentials)
         {
             var credentials = postgresCredentials.CurrentValue;
 
@@ -43,12 +44,11 @@ namespace Designly.Shared.ConnectionProviders
                 Username = credentials.Username,
                 Password = credentials.Password,
                 Host = credentials.Hostname,
-                Port = credentials.Port
+                Port = credentials.Port,
+                IncludeErrorDetail = true,
+                Pooling = true
             };
 
-            npgSqlConnectionString.IncludeErrorDetail = true;
-            npgSqlConnectionString.Pooling = true;
-            
 
             return npgSqlConnectionString.ConnectionString;
         }

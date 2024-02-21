@@ -1,13 +1,18 @@
-﻿using Projects.Domain.StonglyTyped;
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Domain
 {
-    public abstract class Entity
+    /// <summary>
+    /// Implementation of the Entity base class
+    /// Must implement the Equals method to compare entities, hence the IEquatable interface
+    /// </summary>
+    public abstract class Entity : IEquatable<Entity>
     {
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        int? _requestedHashCode;
         public virtual Guid Id { get; set; }
         public virtual TenantId TenantId { get; set; }
 
@@ -19,7 +24,7 @@ namespace Projects.Domain
         protected Entity(TenantId TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == TenantId.Empty || TenantId == default)
+            if (TenantId == TenantId.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }
@@ -31,21 +36,32 @@ namespace Projects.Domain
 
         public bool IsTransient()
         {
-            return Id == default;
+            return Id == Guid.Empty;
         }
 
-        public override bool Equals(object? obj)
+        public override int GetHashCode()
         {
-            if (obj == null || obj is not Entity)
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Id.GetHashCode();
+                hash = hash * 23 + CreatedAt.GetHashCode();
+                return hash;
+            }
+        }
+
+        public bool Equals(Entity? other)
+        {
+            if (other is not Entity)
                 return false;
 
-            if (ReferenceEquals(this, obj))
+            if (Object.ReferenceEquals(this, other))
                 return true;
 
-            if (GetType() != obj.GetType())
+            if (this.GetType() != other.GetType())
                 return false;
 
-            Entity item = (Entity)obj;
+            Entity item = other;
 
             if (item.IsTransient() || IsTransient())
                 return false;
@@ -53,21 +69,7 @@ namespace Projects.Domain
                 return item.Id == Id;
         }
 
-        public override int GetHashCode()
-        {
-            // Ref: https://ericlippert.com/2011/02/28/guidelines-and-rules-for-gethashcode/
-            if (!IsTransient())
-            {
-                if (!_requestedHashCode.HasValue)
-                    _requestedHashCode =
-                        Id.GetHashCode() ^
-                        31;
-
-                return _requestedHashCode.Value;
-            }
-            else
-                return base.GetHashCode();
-        }
+        public override bool Equals(object? obj) => Equals(obj as Entity);
 
         public static bool operator ==(Entity? left, Entity? right)
         {

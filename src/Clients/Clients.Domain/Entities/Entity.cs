@@ -1,12 +1,16 @@
-﻿
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
 namespace Clients.Domain.Entities
 {
-    public abstract class Entity
+    /// <summary>
+    /// Implementation of the Entity base class
+    /// Must implement the Equals method to compare entities, hence the IEquatable interface
+    /// </summary>
+    public abstract class Entity : IEquatable<Entity>
     {
         public DateTime CreatedAt { get; set;  }
         public DateTime ModifiedAt { get; set; }
 
-        int? _requestedHashCode;
         public virtual Guid Id { get; set; }
         public virtual Guid TenantId { get; set; }
 
@@ -18,7 +22,7 @@ namespace Clients.Domain.Entities
         protected Entity(Guid TenantId) : this()
         {
             // TenantId is not nullable, so we can't use the ?? operator
-            if (TenantId == Guid.Empty || TenantId == default)
+            if (TenantId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId), "TenantId cannot be null");
             }
@@ -30,55 +34,22 @@ namespace Clients.Domain.Entities
 
         public bool IsTransient()
         {
-            return this.Id == default;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || obj is not Entity)
-                return false;
-
-            if (Object.ReferenceEquals(this, obj))
-                return true;
-
-            if (this.GetType() != obj.GetType())
-                return false;
-
-            Entity item = (Entity)obj;
-
-            if (item.IsTransient() || this.IsTransient())
-                return false;
-            else
-                return item.Id == this.Id;
+            return Id == Guid.Empty;
         }
 
         public override int GetHashCode()
         {
-            // Ref: https://ericlippert.com/2011/02/28/guidelines-and-rules-for-gethashcode/
-            if (!IsTransient())
+            unchecked
             {
-                if (!_requestedHashCode.HasValue)
-                    _requestedHashCode =
-                        this.Id.GetHashCode() ^
-                        31; 
-
-                return _requestedHashCode.Value;
+                int hash = 17;
+                hash = hash * 23 + Id.GetHashCode();
+                hash = hash * 23 + CreatedAt.GetHashCode();
+                return hash;
             }
-            else
-                return base.GetHashCode();
         }
 
-        public static bool operator ==(Entity? left, Entity? right)
-        {
-            if (Equals(left, null))
-                return Equals(right, null);
-            else
-                return left.Equals(right);
-        }
-
-        public static bool operator !=(Entity left, Entity right)
-        {
-            return !(left == right);
-        }
+        public abstract override bool Equals(object? obj);
+        public abstract bool Equals(Entity? other);
+        public abstract override string ToString();
     }
 }

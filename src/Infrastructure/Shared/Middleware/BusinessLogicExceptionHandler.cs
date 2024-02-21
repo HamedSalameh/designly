@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using Designly.Base.Exceptions;
+using Designly.Base.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,4 @@
 ﻿using Designly.Auth.Providers;
-using Designly.Shared;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -25,9 +24,10 @@ namespace IdentityService.Application.Commands
 
         public async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug($"Handling request {nameof(CreateUserCommandHandler)} for {nameof(request.Email)} {request.Email}");
+                _logger.LogDebug("Handling request {CreateUserCommandHandler} for {request.Email}, {request.FirstName}, {request.LastName}", 
+                                                       nameof(CreateUserCommandHandler), request.Email, request.FirstName, request.LastName);
             }
 
             var response = await _identityService.CreateUserAsync(request.Email, request.FirstName, request.LastName, cancellationToken);

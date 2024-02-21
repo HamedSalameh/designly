@@ -15,7 +15,7 @@ namespace Projects.Application.Behaviors
 
         public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(next, nameof(next));
+            ArgumentNullException.ThrowIfNull(next);
 
             return InternalHandleAsync(request, next, cancellationToken);
         }
@@ -32,7 +32,7 @@ namespace Projects.Application.Behaviors
                 await Task.WhenAll(_validators.Select(validator => validator.ValidateAsync(context, cancellationToken))).ConfigureAwait(false);
             var failures = validationResults.SelectMany(validationResult => validationResult.Errors).Where(failure => failure != null).ToList();
 
-            if (!failures.Any())
+            if (failures.Count == 0)
             {
                 return await next().ConfigureAwait(false);
             }

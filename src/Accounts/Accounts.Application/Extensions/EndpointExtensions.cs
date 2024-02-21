@@ -1,8 +1,9 @@
 ﻿using Accounts.Domain;
+using Designly.Base;
 using Designly.Base.Exceptions;
+using Designly.Base.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 
 namespace Accounts.Application.Extensions
@@ -41,8 +42,9 @@ namespace Accounts.Application.Extensions
             var problemDetails = new DesignlyProblemDetails(
                 title: title,
                 statusCode: statusCode.HasValue ? (int)statusCode.Value :  (int)HttpStatusCode.UnprocessableEntity,
-                detail: errors.Count == 1 ? errors[0].Description : problemDetail,
-                errors);
+                errors,
+                detail: errors.Count == 1 ? errors[0].Description : problemDetail
+                );
 
             return problemDetails;
         }

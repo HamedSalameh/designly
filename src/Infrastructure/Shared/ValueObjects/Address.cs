@@ -14,7 +14,7 @@ namespace Designly.Shared.ValueObjects
             City = city;
             Street = street ?? "";
             BuildingNumber = buildingNumber ?? "";
-            AddressLines = addressLines ?? []; ;
+            AddressLines = addressLines ?? [];
         }
 
         private Address()

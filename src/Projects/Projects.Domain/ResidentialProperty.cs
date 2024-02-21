@@ -10,7 +10,7 @@
     /// </summary>
     public class ResidentialProperty : Property
     {
-        private ResidentialProperty()
+        public ResidentialProperty()
         {
             throw new NotImplementedException();
         }

@@ -21,10 +21,10 @@ namespace Accounts.Application.Features.ValidateUser
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug($"Validating user  {request.userId} in tenant {request.tenantId}");
+                _logger.LogDebug("Handling request {ValidateUserCommandHandler} for {request.UserId}", nameof(ValidateUserCommandHandler), request.UserId);
             }
 
-            var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.userId, request.tenantId, cancellationToken).ConfigureAwait(false);
+            var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.UserId, request.TenantId, cancellationToken).ConfigureAwait(false);
 
             if (userStatus is null)
             {

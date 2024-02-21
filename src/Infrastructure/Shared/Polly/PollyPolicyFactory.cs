@@ -4,9 +4,9 @@ using Polly.Contrib.WaitAndRetry;
 using Polly.Timeout;
 using Polly.Wrap;
 
-namespace Projects.Infrastructure.Polly
+namespace Designly.Shared.Polly
 {
-    internal static class PollyPolicyFactory
+    public static class PollyPolicyFactory
     {
         private const int defaultRetryCount = 5;
         private const int defaultTimeout = 30;
@@ -22,7 +22,7 @@ namespace Projects.Infrastructure.Polly
             return retryPolicy;
         }
 
-        public static AsyncRetryPolicy NetworkRetryAsync(int retryCount, TimeSpan initialDelay, TimeSpan maxDelay)
+        public static AsyncRetryPolicy NetworkRetryAsync(int retryCount, TimeSpan initialDelay)
         {
             return Policy
                 .Handle<HttpRequestException>()
@@ -31,8 +31,6 @@ namespace Projects.Infrastructure.Polly
                     retryAttempt => initialDelay * Math.Pow(2, retryAttempt),
                     (exception, timeSpan, retryCount, context) =>
                     {
-                        // TODO: Log ?
-                        // Console.WriteLine($"Retry {retryCount} in {timeSpan.TotalMilliseconds} ms due to {exception.Message}");
                     }
                 );
         }
@@ -49,11 +47,6 @@ namespace Projects.Infrastructure.Polly
             return policy;
         }
 
-        public static AsyncPolicyWrap CreatePolicyWrap(AsyncPolicy[] policies)
-        {
-            return Policy.WrapAsync(policies);
-        }
-
         public static AsyncPolicyWrap WrappedAsyncPolicies()
         {
             var wrappedPolicy = Policy.WrapAsync(
@@ -61,6 +54,15 @@ namespace Projects.Infrastructure.Polly
                 TimeoutAsync()
                 );
 
+            return wrappedPolicy;
+        }
+
+        public static AsyncPolicyWrap WrappedNetworkRetries()
+        {
+            var wrappedPolicy = Policy.WrapAsync(
+                NetworkRetryAsync(defaultRetryCount, TimeSpan.FromSeconds(1)),
+                TimeoutAsync()
+                                              );
             return wrappedPolicy;
         }
     }

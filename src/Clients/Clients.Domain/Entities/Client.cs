@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Clients.Domain.Entities
 {
-    public class Client : Entity
+    public sealed class Client : Entity
     {
         [Required]
         public string FirstName { get; set; }
@@ -58,7 +58,7 @@ namespace Clients.Domain.Entities
 
         public Client UpdateClient(Client client)
         {
-            if (client is null || client == default)
+            if (client is null)
             {
                 throw new ArgumentException($"Invlaid value for {nameof(client)}");
             }
@@ -67,12 +67,12 @@ namespace Clients.Domain.Entities
             FamilyName = client.FamilyName;
             Status = client.Status;
 
-            if (client?.ContactDetails != null)
+            if (client.ContactDetails != null)
             {
                 UpdateContactDetails(client.ContactDetails);
             }
 
-            if (client?.Address != null)
+            if (client.Address != null)
             {
                 UpdateAddress(client.Address);
             }
@@ -92,5 +92,42 @@ namespace Clients.Domain.Entities
 
             return sb.ToString();
         }
+
+        // Class specific implementation of GetHashCode
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = base.GetHashCode();
+                hash = hash * 37  + TenantId.GetHashCode();
+                hash = hash * 41 + FirstName.GetHashCode();
+                hash = hash * 41 + FamilyName.GetHashCode();
+                return hash;
+            }
+        }
+
+        // Must implement the Equals method to compare entities, hence the IEquatable interface
+        public override bool Equals(Entity? other)
+        {
+            if (other is not Client)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (GetType() != other.GetType())
+                return false;
+
+            Client item = (Client)other;
+
+            if (item.IsTransient() || IsTransient())
+                return false;
+            else
+                // Compare the Id and TenantId to ensure uniqueness
+                return item.Id == Id && item.TenantId == TenantId;
+        }
+
+        // Override the equality operators for convenient usage
+        public override bool Equals(object? obj) => Equals(obj as Entity);
     }
 }

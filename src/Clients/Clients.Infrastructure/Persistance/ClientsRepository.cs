@@ -1,16 +1,13 @@
-﻿using Clients.Domain;
-using Clients.Domain.Entities;
+﻿using Clients.Domain.Entities;
 using Clients.Infrastructure.Interfaces;
-using Clients.Infrastructure.Polly;
 using Dapper;
 using Designly.Shared.ConnectionProviders;
+using Designly.Shared.Polly;
 using Designly.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Npgsql;
-using NpgsqlTypes;
-using Polly;
 using Polly.Wrap;
 using SqlKata;
 using SqlKata.Compilers;
@@ -18,41 +15,29 @@ using System.Data;
 
 namespace Clients.Infrastructure.Persistance
 {
-    internal class ClientsRepository : IClientsRepository
+    internal sealed class ClientsRepository : IClientsRepository
     {
-        private readonly ClientsDBContext _dbContext;
         private readonly ILogger<ClientsRepository> _logger;
         private readonly IDbConnectionStringProvider dbConnectionStringProvider;
         private readonly AsyncPolicyWrap policy;
 
-        public ClientsRepository(ClientsDBContext dbContext, ILogger<ClientsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider)
+        public ClientsRepository(ILogger<ClientsRepository> logger, IDbConnectionStringProvider dbConnectionStringProvider)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
+            
+            _logger = logger;
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
             this.dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
-        }
-
-        public async Task<Guid> CreateClientAsync(Client client, CancellationToken cancellationToken)
-        {
-            if (client == null) throw new ArgumentNullException(nameof(client));
-
-            await _dbContext.Clients.AddAsync(client, cancellationToken).ConfigureAwait(false);
-
-            _ = policy.ExecuteAsync(async () => await _dbContext.SaveChangesAsync().ConfigureAwait(false));
-
-            _logger.LogDebug("Client {client.Id} was successfully created.", client.Id);
-
-            return client.Id;
         }
 
         // Create a new client with Dapper
         public async Task<Guid> CreateClientAsyncWithDapper(Client client, CancellationToken cancellationToken)
         {
-            if (client == null) throw new ArgumentNullException(nameof(client));
+            ArgumentNullException.ThrowIfNull(client);
 
             var parameters = new DynamicParameters();
             parameters.Add("p_tenant_id", client.TenantId, DbType.Guid);
@@ -85,7 +70,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Could not create client entity due to error : {exception.Message}");
+                    _logger.LogError(exception, "Could not create client entity due to error : {exception.Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -96,14 +81,14 @@ namespace Clients.Infrastructure.Persistance
 
         public async Task<Client> UpdateClientAsync(Client client, CancellationToken cancellationToken)
         {
-            if (client == default || client == null)
+            if (client == null)
             {
-                _logger.LogError($"Invalid value for {nameof(client)}: {client}");
+                _logger.LogError("Invalid value for {nameof(client)}: {client}", nameof(client), client);
                 throw new ArgumentException($"Invalid value of client object");
             }
-            if (client.Id == default)
+            if (client.Id == Guid.Empty)
             {
-                _logger.LogError($"Invalid value for {nameof(client.Id)}: {client.Id}");
+                _logger.LogError("Invalid value for {nameof(client.Id)}: {client.Id}", nameof(client.Id), client.Id);
                 throw new ArgumentException("Client object has invalid value for Id property.");
             }
 
@@ -133,7 +118,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, $"Could not update client entity due to error : {exception.Message}");
+                    _logger.LogError(exception, "Could not update client entity due to error : {exception.Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -144,12 +129,12 @@ namespace Clients.Infrastructure.Persistance
 
         public async Task DeleteClientAsync(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (clientId == default || clientId == Guid.Empty)
+            if (clientId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
 
-            if (TenantId == default || TenantId == Guid.Empty)
+            if (TenantId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId));
             }
@@ -161,30 +146,28 @@ namespace Clients.Infrastructure.Persistance
 
             var sqlCommand = "DELETE FROM clients WHERE id=@id AND tenant_id=@tenant_id";
 
-            using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
+            using var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString);
+            await connection.OpenAsync(cancellationToken);
+            using var transaction = connection.BeginTransaction();
+            try
             {
-                await connection.OpenAsync(cancellationToken);
-                using var transaction = connection.BeginTransaction();
-                try
-                {
-                    await connection.ExecuteAsync(sqlCommand, parameters, transaction: transaction, commandType: CommandType.Text);
-                    transaction.Commit();
-                }
-                catch (Exception exception)
-                {
-                    _logger.LogError(exception, $"Could not delete client entity due to error : {exception.Message}");
-                    transaction.Rollback();
-                    throw;
-                }
+                await connection.ExecuteAsync(sqlCommand, parameters, transaction: transaction, commandType: CommandType.Text);
+                transaction.Commit();
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Could not delete client entity due to error : {exception.Message}", exception.Message);
+                transaction.Rollback();
+                throw;
             }
         }
 
-        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid id, CancellationToken cancellationToken)
+        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
         {
             var sqlCommand = "SELECT * FROM clients WHERE id=@id AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();
-            dynamic.Add(nameof(id), id);
+            dynamic.Add(nameof(clientId), clientId);
             dynamic.Add(nameof(TenantId), TenantId);
 
             _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
@@ -208,7 +191,7 @@ namespace Clients.Infrastructure.Persistance
                 });
 
                 return client;
-            };
+            }
         }
 
         public async Task<IEnumerable<Client>> SearchClientsAsync(Guid tenantId, string firstName, string familyName, string city, CancellationToken cancellationToken)
@@ -252,7 +235,7 @@ namespace Clients.Infrastructure.Persistance
                         splitOn: "city, primary_phone_number");
                     return result;
                 });
-            };
+            }
         }
     }
 }

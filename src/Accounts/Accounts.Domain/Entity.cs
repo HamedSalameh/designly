@@ -1,13 +1,17 @@
-﻿namespace Accounts.Domain
+﻿#pragma warning disable IDE0070 // Use 'System.HashCode'
+
+namespace Accounts.Domain
 {
-    public abstract class Entity
+    public abstract class Entity : IEquatable<Entity>
     {
+        // Timestamps for entity creation and modification
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        int? _requestedHashCode;
+        // Unique identifier for the entity
         public virtual Guid Id { get; set; }
 
+        // Constructor to set default values for timestamps
         protected Entity()
         {
             CreatedAt = DateTime.UtcNow;
@@ -16,55 +20,40 @@
 
         public bool IsTransient()
         {
-            return Id == default;
+            return Id == Guid.Empty;
         }
 
-        public override bool Equals(object? obj)
+        public override int GetHashCode()
         {
-            if (obj == null || obj is not Entity)
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Id.GetHashCode();
+                hash = hash * 23 + CreatedAt.GetHashCode();
+                return hash;
+            }
+        }
+
+        public override bool Equals(object? obj) => Equals(obj as Entity);
+        public virtual bool Equals(Entity? other)
+        {
+            if (other is not Entity)
                 return false;
 
-            if (ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, other))
                 return true;
 
-            if (GetType() != obj.GetType())
+            if (GetType() != other.GetType())
                 return false;
 
-            Entity item = (Entity)obj;
+            Entity item = other;
 
             if (item.IsTransient() || IsTransient())
                 return false;
             else
                 return item.Id == Id;
         }
-
-        public override int GetHashCode()
-        {
-            // Ref: https://ericlippert.com/2011/02/28/guidelines-and-rules-for-gethashcode/
-            if (!IsTransient())
-            {
-                if (!_requestedHashCode.HasValue)
-                    _requestedHashCode =
-                        Id.GetHashCode() ^
-                        31;
-
-                return _requestedHashCode.Value;
-            }
-            else
-                return base.GetHashCode();
-        }
-
-        public static bool operator ==(Entity? left, Entity? right)
-        {
-            if (Equals(left, null))
-                return Equals(right, null);
-            else
-                return left.Equals(right);
-        }
-
-        public static bool operator !=(Entity left, Entity right)
-        {
-            return !(left == right);
-        }
+        public abstract override string ToString();
     }
+
 }

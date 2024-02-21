@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Designly.Base.Exceptions;
+using Newtonsoft.Json;
 using System.Net;
 
-namespace Designly.Base.Exceptions
+namespace Designly.Base.Extensions
 {
     public static class ProblemDetailsExtensions
     {
@@ -21,9 +22,10 @@ namespace Designly.Base.Exceptions
 
             var problemDetails = new DesignlyProblemDetails(
                 title: title,
-            statusCode: (int)statusCode,
-                detail: errorList.Count == 1 ? errorList[0].Value : problemDetail,
-                errorList);
+                statusCode: (int)statusCode,
+                errors: errorList,
+                detail: errorList.Count == 1 ? errorList[0].Value : problemDetail
+                );
 
             return problemDetails;
         }
@@ -42,8 +44,8 @@ namespace Designly.Base.Exceptions
             var problemDetails = new DesignlyProblemDetails(
                 title: title,
                 statusCode: (int)statusCode,
-                detail: errors.Count == 1 ? errors[0].Key : problemDetail,
-                errorList)
+                errorList,
+                detail: errors.Count == 1 ? errors[0].Key : problemDetail)
             {
                 // set the problem detail type as business logic exception
                 Type = ProblemDetailTypes.BusinessLogicException.Name
@@ -76,18 +78,39 @@ namespace Designly.Base.Exceptions
             throw new Exception("Could not parse the exception to a problem details object.");
         }
 
+        public static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(this HttpResponseMessage response)
+        {
+            var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            try
+            {
+                var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
+                var businessLogicException = new BusinessLogicException(designlyProblemDetails?.Title);
+                if (designlyProblemDetails is not null)
+                {
+                    // return a failed result
+                    businessLogicException.DomainErrors = designlyProblemDetails.Errors;
+                }
+                return businessLogicException;
+            }
+            catch (Exception exception)
+            {
+                return new BusinessLogicException(exception.Message);
+            }
+        }
+
         public sealed record ProblemDetailType(string Name, string Title);
 
         // list of problem details types
         public static class ProblemDetailTypes
         {
-            public static ProblemDetailType BusinessLogicException = new(
+            public static readonly ProblemDetailType BusinessLogicException = new(
                 nameof(BusinessLogicException),
                 "The request could not be processed");
 
-            public static ProblemDetailType ValidationException = new(
+            public static readonly ProblemDetailType ValidationException = new(
                 nameof(ValidationException),
                 "There are one or more validation errors occured");
         }
+
     }
 }
