@@ -53,7 +53,7 @@ namespace Clients.Tests
         private const string PrimaryPhoneNumber = "0542123123";
 
         private readonly ILogger<ClientsController> loggerMock = Substitute.For<ILogger<ClientsController>>();
-        private readonly ITenantProvider tenantProviderMock = new MockTenantProvider();
+        private readonly MockTenantProvider tenantProviderMock = new MockTenantProvider();
         private static IMapper _mapper;
 
         [SetUp]
@@ -261,7 +261,6 @@ namespace Clients.Tests
         public async Task UpdateClient_InvalidTenantId_ReturnsBadRequest()
         {
             // Arrange
-            var tenantId = Guid.Empty;
             var mediatorMock = Substitute.For<IMediator>();
             var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
             var clientDto = new ClientDto(Guid.Empty, FirstName, FamilyName, new AddressDto(City), new ContactDetailsDto(PrimaryPhoneNumber), Guid.NewGuid());
@@ -297,10 +296,106 @@ namespace Clients.Tests
             Assert.That(result, Is.InstanceOf<OkObjectResult>());
         }
 
+        [Test]
+        public async Task GetClient_EmptyId_ReturnsBadRequest()
+        {
+            // Arrange
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            tenantProviderMock.SetTenantId(Guid.NewGuid());
+
+            // Act
+            var result = await controller.Get(Guid.Empty, CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task GetClient_InvalidTenantId_ReturnsBadRequest()
+        {
+            // Arrange
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            tenantProviderMock.SetTenantId(Guid.Empty);
+
+            // Act
+            var result = await controller.Get(Guid.NewGuid(), CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task GetClient_ValidId_ReturnsOk()
+        {
+            // Arrange
+            var tenantId = Guid.NewGuid();
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            var client = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), tenantId);
+            client.Id = Guid.NewGuid();
+            var clientDto = new ClientDto(client.Id, FirstName, FamilyName, new AddressDto(City), new ContactDetailsDto(PrimaryPhoneNumber), tenantId);
+            tenantProviderMock.SetTenantId(tenantId);
+
+            mediatorMock.Send(Arg.Any<GetClientQuery>(), Arg.Any<CancellationToken>()).Returns(client);
+
+            // Act
+            var result = await controller.Get(client.Id, CancellationToken.None);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        }
+
+        [Test]
+        public async Task Validate_EmptyId_ReturnsBadRequest()
+        {
+            var tenantId = Guid.NewGuid();
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            var client = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), tenantId);
+            var clientDto = new ClientDto(client.Id, FirstName, FamilyName, new AddressDto(City), new ContactDetailsDto(PrimaryPhoneNumber), tenantId);
+            tenantProviderMock.SetTenantId(tenantId);
+
+            var result = await controller.Validate(tenantId, Guid.Empty, CancellationToken.None);
+
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task Validate_InvalidTenantId_ReturnsBadRequest()
+        {
+            var tenantId = Guid.Empty;
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            tenantProviderMock.SetTenantId(Guid.Empty);
+
+            var result = await controller.Validate(tenantId, Guid.NewGuid(), CancellationToken.None);
+
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task Validate_ValidId_ReturnsOk()
+        {
+            var tenantId = Guid.NewGuid();
+            var mediatorMock = Substitute.For<IMediator>();
+            var controller = new ClientsController(loggerMock, _mapper, mediatorMock, tenantProviderMock);
+            tenantProviderMock.SetTenantId(tenantId);
+
+            var client = new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), tenantId);
+            client.Status = Domain.ClientStatusCode.Active;
+            mediatorMock.Send(Arg.Any<GetClientQuery>(), Arg.Any<CancellationToken>()).Returns(client);
+
+            var result = await controller.Validate(tenantId, Guid.NewGuid(), CancellationToken.None);
+
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        }
+
         private static void MockHttpContext(ClientsController controller)
         {
             var httpContext = new DefaultHttpContext();
-            httpContext.Request.Headers["Authorization"] = "Bearer " + Guid.NewGuid().ToString();
+            httpContext.Request.Headers.Authorization = "Bearer " + Guid.NewGuid().ToString();
             httpContext.Request.Scheme = "http";
             controller.ControllerContext = new ControllerContext()
             {
