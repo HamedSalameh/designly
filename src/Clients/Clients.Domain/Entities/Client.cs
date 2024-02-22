@@ -34,7 +34,7 @@ namespace Clients.Domain.Entities
         }
 
         // Used by Dapper for automatic object initialization
-        private Client() : base()
+        private Client(Guid guid) : base()
         {
             FirstName = Consts.Strings.ValueNotSet;
             FamilyName = Consts.Strings.ValueNotSet;
