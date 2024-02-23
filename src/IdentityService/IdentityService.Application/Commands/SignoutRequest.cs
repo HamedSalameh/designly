@@ -11,8 +11,8 @@ namespace IdentityService.Application.Commands
 
     public class SignoutRequestHandler(ILogger<SignoutRequestHandler> logger, IIdentityService identityService) : IRequestHandler<SignoutRequest, Unit>
     {
-        private readonly ILogger<SignoutRequestHandler> _logger = logger;
-        private readonly IIdentityService _identityService = identityService;
+        private readonly ILogger<SignoutRequestHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        private readonly IIdentityService _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
 
         public async Task<Unit> Handle(SignoutRequest request, CancellationToken cancellationToken)
         {
