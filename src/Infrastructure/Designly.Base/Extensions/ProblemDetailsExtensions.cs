@@ -55,30 +55,6 @@ namespace Designly.Base.Extensions
             return problemDetails;
         }
 
-        /// <summary>
-        /// Creates a new business logic exception from a problem details in an http reponse
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static async Task ToBusinessLogicException(this HttpResponseMessage response)
-        {
-            ArgumentNullException.ThrowIfNull(response);
-
-            var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
-            if (designlyProblemDetails is not null)
-            {
-                // return a failed result
-                var businessLogicException = new BusinessLogicException(designlyProblemDetails.Title)
-                {
-                    DomainErrors = designlyProblemDetails.Errors
-                };
-                throw businessLogicException;
-            }
-            throw new Exception("Could not parse the exception to a problem details object.");
-        }
-
         // handle 422
         public static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(this HttpResponseMessage response)
         {

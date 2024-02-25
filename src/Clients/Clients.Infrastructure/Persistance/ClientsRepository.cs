@@ -164,6 +164,15 @@ namespace Clients.Infrastructure.Persistance
 
         public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
         {
+            if (TenantId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(TenantId));
+            }
+            if (clientId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+
             var sqlCommand = "SELECT * FROM clients WHERE id=@id AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();

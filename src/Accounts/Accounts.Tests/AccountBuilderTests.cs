@@ -74,7 +74,7 @@ namespace Accounts.Tests
             var accountBuilder = new AccountBuilder(_logger);
             var account = new Account("test");
             var user = new User("John", "dor", "mail@server.com", account);
-            var accountOwner = Substitute.For<User>();
+            var accountOwner = user;
 
             // Act
             var result = accountBuilder.CreateBasicAccount("ValidAccount")
