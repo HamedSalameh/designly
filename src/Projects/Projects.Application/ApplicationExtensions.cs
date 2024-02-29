@@ -6,6 +6,8 @@ using FluentValidation;
 using Designly.Auth.Extentions;
 using Projects.Infrastructure;
 using Projects.Application.Builders;
+using Projects.Application.Providers;
+using Projects.Application.LogicValidation;
 
 namespace Projects.Application;
 
@@ -13,6 +15,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AutoRegisterBLValidators();
+
+        services.AddScoped<IHttpClientProvider, HttpClientProvider>();
         services.AddScoped<IProjectBuilder, ProjectBuilder>();
         services.AddIdentityProvider(configuration);
 

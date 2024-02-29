@@ -162,21 +162,21 @@ namespace Clients.Infrastructure.Persistance
             }
         }
 
-        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
+        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid ClientId, CancellationToken cancellationToken)
         {
             if (TenantId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(TenantId));
             }
-            if (clientId == Guid.Empty)
+            if (ClientId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(clientId));
+                throw new ArgumentNullException(nameof(ClientId));
             }
 
-            var sqlCommand = "SELECT * FROM clients WHERE id=@id AND tenant_id=@TenantId";
+            var sqlCommand = "SELECT * FROM clients WHERE id=@ClientId AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();
-            dynamic.Add(nameof(clientId), clientId);
+            dynamic.Add(nameof(ClientId), ClientId);
             dynamic.Add(nameof(TenantId), TenantId);
 
             _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
