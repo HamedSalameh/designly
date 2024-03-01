@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Providers;
+using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using Designly.Configuration;
 using Designly.Shared;
@@ -68,7 +69,7 @@ namespace Projects.Application.LogicValidation.Handlers
                 { StatusCode: HttpStatusCode.OK } => null,
 
                 // Business logic validation failed
-                { StatusCode: HttpStatusCode.UnprocessableEntity } => await response.HandleUnprocessableEntityResponse(),
+                { StatusCode: HttpStatusCode.UnprocessableEntity } => await HandleUnprocessableEntityResponse(response, cancellationToken),
 
                 // Remote API returned an error
                 { StatusCode: HttpStatusCode.InternalServerError } => await response.HandleInternalServerErrorResponse(cancellationToken),
@@ -77,6 +78,12 @@ namespace Projects.Application.LogicValidation.Handlers
                 _ => await response.HandleUnknownServerErrorResponse(cancellationToken)
             };
 
+            return exception;
+        }
+        private static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            var exception = await response.HandleUnprocessableEntityResponse(cancellationToken);
+            exception.DomainErrors.Add(new KeyValuePair<string, string>("Project Lead Validation", "Project Lead Validation Validation Failed"));
             return exception;
         }
     }

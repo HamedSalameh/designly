@@ -1,7 +1,6 @@
 ﻿using Accounts.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Accounts.Infrastructure.Persistance.Configuration
 {
@@ -49,19 +48,11 @@ namespace Accounts.Infrastructure.Persistance.Configuration
 
             // many to many between user and teams
             builder
-                .HasMany(user => user.Teams)
-                .WithMany(team => team.Members)
+                .HasMany(u => u.Teams)
+                .WithMany(t => t.Members)
                 .UsingEntity<TeamMembers>(
-                    j => j
-                        .HasOne(tm => tm.Team)
-                        .WithMany()
-                        .HasForeignKey(tm => tm.TeamId),
-                    j => j
-                        .HasOne(tm => tm.User)
-                        .WithMany()
-                        .HasForeignKey(tm => tm.UserId),
-                    j => j
-                        .ToTable("team_members"));
+                    left => left.HasOne<Team>().WithMany().HasForeignKey(t => t.TeamId),
+                    right => right.HasOne<User>().WithMany().HasForeignKey(t => t.UserId));
         }
     }
 }

@@ -26,29 +26,6 @@ namespace Accounts.Infrastructure.Persistance
             _context = context;
         }
 
-        public async Task<Account?> GetAccountAsync(Guid accountId, CancellationToken cancellationToken)
-        {
-            if (accountId == Guid.Empty)
-            {
-                _logger.LogError("Provided accountId is empty or default");
-                throw new ArgumentNullException(nameof(accountId));
-            }
-
-            // wrap in polly policy
-
-            var account = await policy.ExecuteAsync(async () =>
-            {
-                var account = await _context.Accounts
-                    .Include(a => a.Owner)
-                    .Include(a => a.Teams)
-                    .FirstOrDefaultAsync(a => a.Id == accountId, cancellationToken);
-
-                return account;
-            });
-
-            return account;
-        }
-
         public async Task<Guid> CreateAccountAsync(Account account, CancellationToken cancellationToken)
         {
             if (account == null)

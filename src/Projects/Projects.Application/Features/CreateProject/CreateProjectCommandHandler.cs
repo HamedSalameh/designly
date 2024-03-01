@@ -37,7 +37,7 @@ namespace Projects.Application.Features.CreateProject
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {CreateProjectCommandHandler} for {request.Name}", nameof(CreateProjectCommandHandler), request.Name);
+                _logger.LogDebug("Handling request {CreateProjectCommand} for {Name}", nameof(CreateProjectCommandHandler), request.Name);
             }
 
             try
@@ -46,6 +46,7 @@ namespace Projects.Application.Features.CreateProject
                 var clientValidationResult = await _businessLogicValidator.ValidateAsync(new ClientValidationRequest(request.ClientId, request.TenantId), cancellationToken);
                 if (clientValidationResult != null)
                 {
+                    _logger.LogInformation("Client validation failed for {ClientId} under account {TenantId}", request.ClientId, request.TenantId);
                     return new Result<Guid>(clientValidationResult);
                 }
 
@@ -53,6 +54,7 @@ namespace Projects.Application.Features.CreateProject
                 var projectLeadValidationResult = await _businessLogicValidator.ValidateAsync(new ProjectLeadValidationRequest(request.ProjectLeadId, request.TenantId), cancellationToken);
                 if (projectLeadValidationResult != null)
                 {
+                    _logger.LogInformation("Project lead validation failed for {ProjectLeadId} under account {TenantId}", request.ProjectLeadId, request.TenantId);
                     return new Result<Guid>(projectLeadValidationResult);
                 }
 
@@ -69,7 +71,7 @@ namespace Projects.Application.Features.CreateProject
 
                 var project_id = await _unitOfWork.ProjectsRepository.CreateBasicProjectAsync(basicProject, cancellationToken);
 
-                _logger.LogDebug("Created project: {basicProject.Name} ({basicProject.Id}, under account {basicProject.TenantId})",
+                _logger.LogDebug("Created project: {Name} ({Id}, under account {TenantId})",
                     basicProject.Name, basicProject.Id, basicProject.TenantId);
 
                 return project_id;

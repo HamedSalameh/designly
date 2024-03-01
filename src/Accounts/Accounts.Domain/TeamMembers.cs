@@ -6,9 +6,9 @@
     public class TeamMembers
     {
         public required Guid TeamId { get; set;  }
-        public required Team Team { get; set; }
+        //public required Team Team { get; set; }
 
         public required Guid UserId { get; set; }
-        public required User User { get; set; }
+        //public required User User { get; set; }
     }
 }
