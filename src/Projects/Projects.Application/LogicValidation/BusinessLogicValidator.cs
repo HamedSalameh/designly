@@ -23,9 +23,11 @@ namespace Projects.Application.LogicValidation
 
             if (handler == null)
             {
+                _logger.LogError("Handler not found for request type {RequestType}", request.GetType().Name);
                 throw new InvalidOperationException($"Handler not found for request type {request.GetType().Name}");
             }
 
+            _logger.LogDebug("Validating request {RequestType} with handler of type {Handler}", request.GetType().Name, handlerType.Name);
             return await handler.ValidateAsync((dynamic)request, cancellationToken);
         }
     }

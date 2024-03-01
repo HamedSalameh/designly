@@ -75,6 +75,12 @@
             };
         }
 
+        public BusinessLogicException(List<Error> errors, string message = "One or more business logic failures have occurred.") : this(
+                                                                   message)
+        {
+            DomainErrors = errors.Select(x => new KeyValuePair<string, string>(x.Code, x.Description)).ToList();
+        }
+
         public IDictionary<string, string> Errors { get; }
         public IList<KeyValuePair<string, string>> DomainErrors { get; set; }
     }

@@ -56,9 +56,9 @@ namespace Designly.Base.Extensions
         }
 
         // handle 422
-        public static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(this HttpResponseMessage response)
+        public static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(this HttpResponseMessage response, CancellationToken cancellationToken)
         {
-            var validationFailureReason = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var validationFailureReason = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 var designlyProblemDetails = JsonConvert.DeserializeObject<DesignlyProblemDetails>(validationFailureReason);
