@@ -3,5 +3,6 @@
     public interface IUnitOfWork
     {
         IProjectsRepository ProjectsRepository { get; }
+        ITaskItemsRepository TaskItemsRepository { get; }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
+using Projects.Domain.StonglyTyped;
 using Projects.Infrastructure.Interfaces;
 using System.Data;
 
@@ -25,7 +26,7 @@ namespace Projects.Infrastructure.Persistance
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
             SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
             policy = PollyPolicyFactory.WrappedAsyncPolicies();
-            
+
         }
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
@@ -50,7 +51,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
-            return await policy.ExecuteAsync(async () => 
+            return await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = await connection.BeginTransactionAsync();
@@ -79,9 +80,68 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
+                        connection.Dispose();
                     }
                 }
             });
         }
+
+        /// <summary>
+        /// Deletes a single project, including any and all child entities (task groups, tasks, etc...)
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="tenantId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task DeleteProjectAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken = default)
+        {
+            if (projectId == ProjectId.Empty)
+            {
+                throw new ArgumentException("Invalid value for project Id");
+            }
+            if (tenantId == TenantId.Empty)
+            {
+                throw new ArgumentException("Invalid value for tenant Id");
+            }
+
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("p_id", projectId.Id);
+            dynamicParameters.Add("p_tenant_id", tenantId.Id);
+
+            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await policy.ExecuteAsync(async () =>
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = await connection.BeginTransactionAsync();
+
+                try
+                {
+                    await connection.ExecuteAsync(sql: "DELETE FROM Projects WHERE id=@p_id AND tenant_id=@p_tenant_id",
+                        param: dynamicParameters,
+                        commandType: CommandType.Text,
+                        transaction: transaction);
+
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not delete project {id} under account {tenant}", projectId, tenantId);
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            });
+
+            return;
+        }
     }
+
+
 }

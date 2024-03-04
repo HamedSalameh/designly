@@ -12,22 +12,16 @@ namespace Projects.Application.Features.CreateProject
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, Result<Guid>>
     {
         private readonly ILogger<CreateProjectCommandHandler> _logger;
-        private readonly ITokenProvider _tokenProvider;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IProjectBuilder _projectBuilder;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBusinessLogicValidator _businessLogicValidator;
 
         public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger,
-            ITokenProvider tokenProvider,
-            IHttpClientFactory httpClientFactory,
             IProjectBuilder projectBuilder,
             IUnitOfWork unitOfWork,
             IBusinessLogicValidator businessLogicValidator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _projectBuilder = projectBuilder ?? throw new ArgumentNullException(nameof(projectBuilder));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _businessLogicValidator = businessLogicValidator ?? throw new ArgumentNullException(nameof(_businessLogicValidator));

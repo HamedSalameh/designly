@@ -1,0 +1,14 @@
+﻿using FluentValidation;
+
+namespace Projects.Application.Features.CreateTask
+{
+    public sealed class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
+    {
+        public CreateTaskCommandValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Task name is required");
+            RuleFor(x => x.ProjectId).NotEmpty().WithMessage("Project id is required");
+            RuleFor(x => x.TenantId).NotEmpty().WithMessage("Tenant id is required");
+        }
+    }
+}

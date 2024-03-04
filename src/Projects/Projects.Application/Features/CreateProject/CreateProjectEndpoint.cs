@@ -39,7 +39,7 @@ namespace Projects.Application.Features.CreateProject
             if (createProjectRequestDto == null)
             {
                 logger.LogError($"Invalid value for {nameof(createProjectRequestDto)}");
-                return Results.BadRequest($"The submitted project object is not valid or empty");
+                return Results.BadRequest("The submitted project object is not valid or empty");
             }
 
             var tenantId = tenantProvider.GetTenantId();
