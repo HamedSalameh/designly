@@ -1,6 +1,5 @@
 ﻿using Designly.Base.Exceptions;
 using Microsoft.Extensions.Logging;
-using Projects.Application.LogicValidation.Handlers;
 
 namespace Projects.Application.LogicValidation
 {

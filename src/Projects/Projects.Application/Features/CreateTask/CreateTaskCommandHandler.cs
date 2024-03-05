@@ -34,8 +34,7 @@ namespace Projects.Application.Features.CreateTask
             }
 
             // Step 1: Validate the project by Id, can we create task under this project
-            var projectValidationResult = await _businessLogicValidator.ValidateAsync(
-                new CreateTasksValidationRequest(request.ProjectId, request.TenantId), cancellationToken);
+            var projectValidationResult = await _businessLogicValidator.ValidateAsync(new CreateTasksValidationRequest(request.ProjectId, request.TenantId), cancellationToken);
             if (projectValidationResult != null)
             {
                 _logger.LogInformation("Tasks cannot be created for project {project} under account {account} due to business logic rules violation: {response}",
