@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
+using Projects.Application.Features.CreateProject;
 
 namespace Projects.Application.Features.CreateTask
 {
@@ -16,7 +17,6 @@ namespace Projects.Application.Features.CreateTask
         {
             var endpoint = builder
                 .MapPost(pattern, CreateTaskEndpointMethodAsync)
-                .RequireAuthorization()
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)
@@ -44,6 +44,7 @@ namespace Projects.Application.Features.CreateTask
 
             var createTaskItemCommand = createTaskRequestDto.Adapt<CreateTaskCommand>();
             createTaskItemCommand.TenantId = tenantId;
+            createTaskItemCommand.ProjectId = createTaskRequestDto.ProjectId;
 
             var taskId = await sender.Send(createTaskItemCommand, cancellationToken);
 

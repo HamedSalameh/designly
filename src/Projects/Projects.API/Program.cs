@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Features.CreateProject;
+using Projects.Application.Features.CreateTask;
 using Projects.Application.Features.DeleteProject;
 using Serilog;
 using System.Net.Mime;
@@ -94,13 +95,20 @@ static void MapEndoints(WebApplication app)
         .ReportApiVersions()
         .Build();
 
-    var routeGroup = app
+    var projectsRouteGroup = app
         .MapGroup("api/v{version:apiVersion}")
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
-    routeGroup.MapCreateFeature();
-    routeGroup.MapDeleteFeature("{projectId}");
+    var tasksRouteGroup = app
+        .MapGroup("api/v{version:apiVersion}/tasks")
+        .RequireAuthorization()
+        .WithApiVersionSet(versionSet);
+
+    projectsRouteGroup.MapCreateFeature();
+    projectsRouteGroup.MapDeleteFeature("{projectId}");
+
+    tasksRouteGroup.MapCreateTaskFeature();
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)

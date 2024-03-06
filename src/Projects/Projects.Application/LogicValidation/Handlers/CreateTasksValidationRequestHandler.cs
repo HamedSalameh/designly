@@ -7,7 +7,7 @@ namespace Projects.Application.LogicValidation.Handlers
         public Task<Exception?>? ValidateAsync(CreateTasksValidationRequest request, CancellationToken cancellationToken)
         {
             // Always valid
-            return null;
+            return Task.FromResult<Exception?>(null);
         }
     }
 }

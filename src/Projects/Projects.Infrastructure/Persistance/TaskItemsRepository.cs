@@ -35,15 +35,16 @@ namespace Projects.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(taskItem);
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_tenant_id", taskItem.TenantId.Id);
-            dynamicParameters.Add("p_project_id", taskItem.ProjectId.Id);
-            dynamicParameters.Add("p_name", taskItem.Name);
-            dynamicParameters.Add("p_description", taskItem.Description);
-            dynamicParameters.Add("p_assigned_to", taskItem.AssignedTo);
-            dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy);
-            dynamicParameters.Add("p_due_date", taskItem.DueDate);
-            dynamicParameters.Add("p_completed_at", taskItem.CompletedAt);
-            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus);
+            dynamicParameters.Add("p_tenant_id", taskItem.TenantId.Id, DbType.Guid);
+            dynamicParameters.Add("p_project_id", taskItem.ProjectId.Id, DbType.Guid);
+            dynamicParameters.Add("p_name", taskItem.Name, DbType.String);
+            dynamicParameters.Add("p_description", taskItem.Description, DbType.String);
+            dynamicParameters.Add("p_assigned_to", taskItem.AssignedTo, DbType.Guid);
+            dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy, DbType.Guid);
+            dynamicParameters.Add("p_due_date", taskItem.DueDate, DbType.DateTime2);
+            dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime2);
+            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus, DbType.Int16);
+            dynamicParameters.Add("p_task_item_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
@@ -51,7 +52,7 @@ namespace Projects.Infrastructure.Persistance
                 using var transaction = connection.BeginTransaction();
                 try
                 {
-                    await connection.ExecuteAsync("create_task", dynamicParameters,
+                    await connection.ExecuteAsync("create_taskitem", dynamicParameters,
                                                transaction: transaction, 
                                                commandType: CommandType.StoredProcedure);
 

@@ -14,12 +14,12 @@ CREATE OR REPLACE PROCEDURE create_taskitem(
     p_tenant_id UUID,
     p_project_id UUID,
     p_name VARCHAR(255),
-    p_description TEXT,
+    p_description VARCHAR(4000),
     p_assigned_to UUID,
     p_assigned_by UUID,
     p_due_date TIMESTAMPTZ,
     p_completed_at TIMESTAMPTZ,
-    p_task_item_status VARCHAR(255),
+    p_task_item_status INT,
     OUT p_task_item_id UUID)
 LANGUAGE plpgsql AS '
     BEGIN

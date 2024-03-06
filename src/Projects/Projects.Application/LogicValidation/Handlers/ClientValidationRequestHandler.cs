@@ -18,7 +18,7 @@ namespace Projects.Application.LogicValidation.Handlers
         private readonly AsyncPolicyWrap _policy;
         private readonly IHttpClientProvider _httpClientProvider;
         private readonly ILogger<ClientValidationRequestHandler> _logger;
-        private static readonly Error _validationFailed = new("Client Validation", "Client Validation Failed");
+        private static readonly Error _validationFailed = new("Business Logic Validation Failed", "Client");
 
         public ClientValidationRequestHandler(IHttpClientProvider httpClientProvider, ILogger<ClientValidationRequestHandler> logger)
         {
