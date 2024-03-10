@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
   
-	<include file="\changesets\changeset-01-dbcreation.sql"  />
+	<!-- <include file="\changesets\changeset-01-dbcreation.sql"  /> -->
 	<include file="\changesets\changeset-02-create-clients-table.sql"/>
 	<include file="\changesets\changeset-03-create_client.sql"/>
   <include file="\changesets\changeset-04-update_client.sql"/>

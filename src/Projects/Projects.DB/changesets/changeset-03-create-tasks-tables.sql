@@ -1,3 +1,8 @@
+--liquibase formatted sql
+
+--changeset Hamed.Salameh:create_tasks_tables
+--comment: Create the tasks tables
+
 CREATE TABLE TaskItem (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     tenant_id UUID NOT NULL,

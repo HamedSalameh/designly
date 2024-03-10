@@ -1,14 +1,7 @@
 --liquibase formatted sql
---changeset Hamed Salameh:create_taskitem_procedure
---changeset-id: create_taskitem_procedure
---changeset-description: Create stored procedure for inserting a task item
---changeset-rollback-sql: DROP FUNCTION IF EXISTS create_taskitem(UUID, UUID, VARCHAR(255), TEXT, UUID, UUID, TIMESTAMPTZ, TIMESTAMPTZ, TEXT, VARCHAR(255));
 
-/*
-Description:
-    A stored procedure to insert a task item.
-    If the task item already exists, an exception is thrown.
-*/
+--changeset Hamed.Salameh:create_taskitem_procedure
+--comment: A stored procedure to insert a task item.
 
 CREATE OR REPLACE PROCEDURE create_taskitem(
     p_tenant_id UUID,

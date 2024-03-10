@@ -1,10 +1,8 @@
 ﻿--liquibase formatted sql
---changeset Hamed Salameh:create_clients_table
---changeset-id: create_clients_table
---changeset-description: Create the clients table with uuid-ossp extension
---changeset-rollback-sql: DROP TABLE IF EXISTS clients;
 
--- The uuid_generate_v4() function assumes that the uuid-ossp, hence we make sure to enable it before table creation
+--changeset Hamed.Salameh:create_clients_table
+--comment: Create the clients table
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS clients (
@@ -22,4 +20,4 @@ CREATE TABLE IF NOT EXISTS clients (
   email_address VARCHAR(255),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
   modified_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-)
+);

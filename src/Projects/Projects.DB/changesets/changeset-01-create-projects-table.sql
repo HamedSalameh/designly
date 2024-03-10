@@ -1,3 +1,8 @@
+--liquibase formatted sql
+
+--changeset Hamed.Salameh:create_projects_table
+--comment: Create the projects table
+
 -- The uuid_generate_v4() function assumes that the uuid-ossp, hence we make sure to enable it before table creation
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

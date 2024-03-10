@@ -1,4 +1,9 @@
-﻿-- Enable uuid-ossp extension
+﻿--liquibase formatted sql
+
+--changeset Hamed.Salameh:create_accounts_tables
+--comment: Create the accounts tables
+
+-- Enable uuid-ossp extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create accounts table
