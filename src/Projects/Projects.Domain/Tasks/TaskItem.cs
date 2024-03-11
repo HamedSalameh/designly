@@ -1,27 +1,35 @@
 ﻿using Designly.Shared;
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Domain.Tasks
 {
-    public class TaskItem : Entity
+    public sealed class TaskItem : Entity
     {
-        public required string Name { get; set; }
-        //public required Guid TaskGroupId { get; set; }
-        //public TaskGroup TaskGroup { get; set; }
-        public required Guid ProjectId { get; set; }
+        public ProjectId ProjectId { get; private set; }
+        public string Name { get; set; }
+        public string? Description { get; set; }
         public Guid? AssignedTo { get; set; }
         public Guid? AssignedBy { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? CompletedAt { get; set; }
-        public string? Description { get; set; }
-        public TaskItemStatus taskItemStatus { get; set; }
+        public TaskItemStatus taskItemStatus { get; private set; }
         public bool IsCompleted => taskItemStatus == TaskItemStatus.Completed;
 
-        public TaskItem(Guid TenantId, Guid ProjectId, string Name, string? Description) : base(TenantId)
+        public TaskItem(TenantId TenantId, ProjectId ProjectId, string Name, string? Description) : base(TenantId)
         {
             if (string.IsNullOrEmpty(Name))
             {
                 throw new ArgumentException($"{nameof(Name)} : must not be null or empty");
             }
+            if (TenantId == TenantId.Empty)
+            {
+                throw new ArgumentException($"Invalid value for {nameof(TenantId)}");
+            }
+            if (ProjectId == ProjectId.Empty)
+            {
+                throw new ArgumentException($"Invalid value for {nameof(ProjectId)}");
+            }
+
             this.Name = Name;
             this.Description = Description;
             this.ProjectId = ProjectId;

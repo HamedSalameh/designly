@@ -1,31 +1,36 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Projects.Infrastructure.Interfaces;
 
 namespace Projects.Application.Features.DeleteProject
 {
-    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand, bool>
+    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
     {
         private readonly ILogger<DeleteProjectCommandHandler> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteProjectCommandHandler(ILogger<DeleteProjectCommandHandler> logger)
+        public DeleteProjectCommandHandler(ILogger<DeleteProjectCommandHandler> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        public Task<bool> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {DeleteProjectCommandHandler} for {request.ProjectId}", nameof(DeleteProjectCommandHandler), request.ProjectId);
+                _logger.LogDebug("Handling request {DeleteProjectCommandHandler} for {ProjectId}", nameof(DeleteProjectCommandHandler), request.ProjectId);
             }
 
             try
             {
-                throw new NotImplementedException();
+                await _unitOfWork.ProjectsRepository.DeleteProjectAsync(request.ProjectId, request.TenantId, cancellationToken);
+
+                return Unit.Value;
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new project due to error: {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not delete project due to error: {exception.Message}", exception.Message);
                 throw;
             }
         }

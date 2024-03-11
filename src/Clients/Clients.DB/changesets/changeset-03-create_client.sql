@@ -1,14 +1,7 @@
 --liquibase formatted sql
---changeset Hamed Salameh:create_client_procedure
---changeset-id: create_client_procedure
---changeset-description: Create stored procedure for inserting a client
---changeset-rollback-sql: DROP FUNCTION IF EXISTS create_client(UUID, VARCHAR(255), VARCHAR(255), INT, VARCHAR(255), VARCHAR(255), VARCHAR(255), TEXT, VARCHAR(255), VARCHAR(255), VARCHAR(255), OUT UUID);
 
-/*
-Description:
-    A stored procedure to insert a client.
-    If the client already exists, an exception is thrown.
-*/
+--changeset Hamed.Salameh:create_client_procedure
+--comment: A stored procedure to insert a client.
 
 CREATE OR REPLACE PROCEDURE create_client(
     p_tenant_id UUID,

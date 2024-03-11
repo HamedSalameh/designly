@@ -20,6 +20,7 @@ namespace Projects.Infrastructure
             });
 
             services.AddScoped<IProjectsRepository, ProjectsRepository>();
+            services.AddScoped<ITaskItemsRepository, TaskItemsRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;

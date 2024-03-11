@@ -1,8 +1,7 @@
-﻿using Designly.Auth.Providers;
+﻿using Designly.Base;
 using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using Designly.Configuration;
-using Designly.Shared;
 using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
 using Polly.Wrap;
@@ -18,6 +17,7 @@ namespace Projects.Application.LogicValidation.Handlers
         private readonly AsyncPolicyWrap _policy;
         private readonly IHttpClientProvider _httpClientProvider;
         private readonly ILogger<ProjectLeadValidationRequestHandler> _logger;
+        private static readonly Error _validationFailed = new("Business Logic Validation Failed", "Project Lead");
 
         public ProjectLeadValidationRequestHandler(ILogger<ProjectLeadValidationRequestHandler> logger, IHttpClientProvider httpClientProvider)
         {
@@ -83,7 +83,7 @@ namespace Projects.Application.LogicValidation.Handlers
         private static async Task<BusinessLogicException> HandleUnprocessableEntityResponse(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             var exception = await response.HandleUnprocessableEntityResponse(cancellationToken);
-            exception.DomainErrors.Add(new KeyValuePair<string, string>("Project Lead Validation", "Project Lead Validation Validation Failed"));
+            exception.DomainErrors.Add(new KeyValuePair<string, string>(_validationFailed.Code, _validationFailed.Description));
             return exception;
         }
     }

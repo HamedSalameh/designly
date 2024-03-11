@@ -1,15 +1,7 @@
 ﻿--liquibase formatted sql
---changeset Hamed Salameh:update_client_procedure
---changeset-id: update_client_procedure
---changeset-description: Create stored procedure for updating a client
---changeset-rollback-sql: DROP FUNCTION IF EXISTS update_client(UUID, UUID, VARCHAR(255), VARCHAR(255), INT, VARCHAR(255), VARCHAR(255), VARCHAR(255), TEXT, VARCHAR(255), VARCHAR(255), VARCHAR(255));
-
-/* 
-  Description:  
-    A stored procedure to update a client.
-    if the client does not exist, an exception is thrown.
-*/
---Set database name
+ 
+--changeset Hamed.Salameh:update_client_procedure
+--comment: A stored procedure to update a client.
 
 CREATE OR REPLACE PROCEDURE update_client(
     p_id UUID,

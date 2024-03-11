@@ -1,6 +1,5 @@
 ﻿using Designly.Base.Exceptions;
 using Microsoft.Extensions.Logging;
-using Projects.Application.LogicValidation.Handlers;
 
 namespace Projects.Application.LogicValidation
 {
@@ -19,7 +18,7 @@ namespace Projects.Application.LogicValidation
         public async Task<BusinessLogicException?> ValidateAsync(IBusinessLogicValidationRequest request, CancellationToken cancellationToken)
         {
             Type handlerType = typeof(IBusinessLogicValidationHandler<>).MakeGenericType(request.GetType());
-            dynamic handler = _serviceProvider.GetService(handlerType) ?? throw new NotImplementedException();
+            dynamic handler = _serviceProvider.GetService(handlerType) ?? throw new NotImplementedException("Could not get any business logic validation handler from DI container");
 
             if (handler == null)
             {

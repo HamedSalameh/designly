@@ -7,5 +7,7 @@
 
 	<include file="\changesets\changeset-01-create-projects-table.sql"/>
 	<include file="\changesets\changeset-02-insert-project.sql"/>
+  <include file="\changesets\changeset-03-create-tasks-table.sql"/>
+  <include file="\changesets\changeset-04-create-task.sql"/>
 	
 </databaseChangeLog>

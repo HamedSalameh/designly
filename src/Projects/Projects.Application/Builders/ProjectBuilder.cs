@@ -24,7 +24,7 @@ namespace Projects.Application.Builders
             _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
         }
 
-        public ProjectBuilder WithProjectLead(Guid projectLeadId)
+        public IProjectBuilder WithProjectLead(Guid projectLeadId)
         {
             if (projectLeadId == Guid.Empty)
             {
@@ -34,7 +34,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithClient(Guid clientId)
+        public IProjectBuilder WithClient(Guid clientId)
         {
             if (clientId == Guid.Empty)
             {
@@ -44,7 +44,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithName(string name)
+        public IProjectBuilder WithName(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -54,13 +54,13 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithDescription(string description)
+        public IProjectBuilder WithDescription(string description)
         {
             this._description = description;
             return this;
         }
 
-        public ProjectBuilder WithStartDate(DateOnly? startDate)
+        public IProjectBuilder WithStartDate(DateOnly? startDate)
         {
             if (startDate > _deadline)
             {
@@ -70,7 +70,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithDeadline(DateOnly? deadline)
+        public IProjectBuilder WithDeadline(DateOnly? deadline)
         {
             if (_startDate > deadline)
             {
@@ -80,7 +80,7 @@ namespace Projects.Application.Builders
             return this;
         }
 
-        public ProjectBuilder WithCompletedAt(DateOnly? completedAt)
+        public IProjectBuilder WithCompletedAt(DateOnly? completedAt)
         {
             if (completedAt < _startDate)
             {

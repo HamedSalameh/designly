@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Projects.Application.LogicValidation.Handlers;
 using System.Reflection;
 
 namespace Projects.Application.LogicValidation

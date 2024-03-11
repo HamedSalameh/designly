@@ -1,9 +1,7 @@
-/*
-Description:
-    A stored procedure to insert a project.
-    If the project already exists, an exception is thrown.
-*/
+--liquibase formatted sql
 
+--changeset Hamed.Salameh:insert_project_procedure
+--comment: A stored procedure to insert a project.
 
 CREATE OR REPLACE PROCEDURE insert_project(
     p_tenant_id UUID,

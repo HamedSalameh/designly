@@ -23,6 +23,5 @@ namespace Projects.Application.Extentions
                     return result;
                 });
         }
-
     }
 }
