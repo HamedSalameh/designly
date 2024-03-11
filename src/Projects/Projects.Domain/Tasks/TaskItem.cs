@@ -7,11 +7,11 @@ namespace Projects.Domain.Tasks
     {
         public ProjectId ProjectId { get; private set; }
         public string Name { get; set; }
+        public string? Description { get; set; }
         public Guid? AssignedTo { get; set; }
         public Guid? AssignedBy { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? CompletedAt { get; set; }
-        public string? Description { get; set; }
         public TaskItemStatus taskItemStatus { get; private set; }
         public bool IsCompleted => taskItemStatus == TaskItemStatus.Completed;
 

@@ -1,6 +1,7 @@
 ﻿using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
 using Projects.Application.LogicValidation.Requests;
 using Projects.Domain.Tasks;
@@ -13,19 +14,22 @@ namespace Projects.Application.Features.CreateTask
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBusinessLogicValidator _businessLogicValidator;
         private readonly ILogger<CreateTaskCommandHandler> _logger;
+        private readonly ITaskItemBuilder _taskItemBuilder;
 
-        public CreateTaskCommandHandler(ILogger<CreateTaskCommandHandler> logger, IUnitOfWork unitOfWork, IBusinessLogicValidator businessLogicValidator)
+        public CreateTaskCommandHandler(ILogger<CreateTaskCommandHandler> logger, IUnitOfWork unitOfWork, IBusinessLogicValidator businessLogicValidator, ITaskItemBuilder taskItemBuilder)
         {
             ArgumentNullException.ThrowIfNull(logger, nameof(logger));
             ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
             ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
+            ArgumentNullException.ThrowIfNull(taskItemBuilder, nameof(taskItemBuilder));
 
             _unitOfWork = unitOfWork;
             _businessLogicValidator = businessLogicValidator;
             _logger = logger;
+            _taskItemBuilder = taskItemBuilder;
         }
 
-        
+
         public async Task<Result<Guid>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -41,7 +45,14 @@ namespace Projects.Application.Features.CreateTask
                     request.ProjectId, request.TenantId, projectValidationResult);
             }
 
-            var taskItem = new TaskItem(request.TenantId, request.ProjectId, request.Name, request.Description);
+            var taskItem = _taskItemBuilder
+                .CreateTaskItem(request.Name, request.ProjectId, request.Description)
+                .WithAssignedTo(request.AssignedTo)
+                .WithAssignedBy(request.AssignedBy)
+                .WithDueDate(request.DueDate)
+                .WithCompletedAt(request.CompletedAt)
+                .WithStatus(request.taskItemStatus)
+                .Build();
 
             var taskId = await _unitOfWork.TaskItemsRepository.AddAsync(taskItem, cancellationToken).ConfigureAwait(false);
 
