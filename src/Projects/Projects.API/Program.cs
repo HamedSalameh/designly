@@ -16,6 +16,8 @@ using Projects.Application;
 using Projects.Application.Features.CreateProject;
 using Projects.Application.Features.CreateTask;
 using Projects.Application.Features.DeleteProject;
+using Projects.Application.Features.DeleteTask;
+using Projects.Application.Features.UpdateTask;
 using Serilog;
 using System.Net.Mime;
 
@@ -96,19 +98,21 @@ static void MapEndoints(WebApplication app)
         .Build();
 
     var projectsRouteGroup = app
-        .MapGroup("api/v{version:apiVersion}")
+        .MapGroup("api/v{version:apiVersion}/projects")
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
-    var tasksRouteGroup = app
-        .MapGroup("api/v{version:apiVersion}/tasks")
-        .RequireAuthorization()
-        .WithApiVersionSet(versionSet);
+    //var tasksRouteGroup = app
+    //    .MapGroup("api/v{version:apiVersion}/tasks")
+    //    .RequireAuthorization()
+    //    .WithApiVersionSet(versionSet);
 
     projectsRouteGroup.MapCreateFeature();
     projectsRouteGroup.MapDeleteFeature("{projectId}");
 
-    tasksRouteGroup.MapCreateTaskFeature();
+    projectsRouteGroup.MapCreateTaskFeature("tasks");
+    projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");
+    projectsRouteGroup.MapUpdateTaskFeature("{projectId}/tasks/{taskId}");
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
 using Projects.Application.LogicValidation.Requests;
-using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
 
 namespace Projects.Application.Features.CreateTask
@@ -43,6 +42,7 @@ namespace Projects.Application.Features.CreateTask
             {
                 _logger.LogInformation("Tasks cannot be created for project {project} under account {account} due to business logic rules violation: {response}",
                     request.ProjectId, request.TenantId, projectValidationResult);
+                return new Result<Guid>(projectValidationResult);
             }
 
             var taskItem = _taskItemBuilder
