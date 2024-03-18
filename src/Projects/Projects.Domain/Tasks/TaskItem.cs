@@ -79,6 +79,21 @@ namespace Projects.Domain.Tasks
 
             this.taskItemStatus = taskItemStatus;
         }
+
+        public void SetId(TaskItemId id)
+        {
+            if (id == TaskItemId.Empty)
+            {
+                throw new ArgumentException("Invalid value for TaskItem Id");
+            }
+            // We need to block attempts to set an Id if the entity is already initialized
+            if ( CreatedAt == default || ModifiedAt == default )
+            {
+                throw new InvalidOperationException("Entity Id must not be set before the entity is created");
+            }
+
+            Id = id;
+        }
     }
 
 }

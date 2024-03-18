@@ -29,7 +29,11 @@ namespace Projects.Infrastructure.Persistance
             _dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
-            SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
+            AddTypeHandler(new JsonbTypeHandler<List<string>>());
+
+            AddTypeHandler(new DapperProjectIdTypeHandler());
+            AddTypeHandler(new DapperTenantIdTypeHandler());
+            AddTypeHandler(new DapperTaskItemIdTypeHandler());
         }
 
         public async Task<Guid> AddAsync(TaskItem taskItem, CancellationToken cancellationToken)
@@ -125,9 +129,9 @@ namespace Projects.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(taskItem);
 
             var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_id", taskItem.Id, DbType.Guid);
             dynamicParameters.Add("p_tenant_id", taskItem.TenantId.Id, DbType.Guid);
             dynamicParameters.Add("p_project_id", taskItem.ProjectId.Id, DbType.Guid);
+            dynamicParameters.Add("p_id", taskItem.Id, DbType.Guid);
             dynamicParameters.Add("p_name", taskItem.Name, DbType.String);
             dynamicParameters.Add("p_description", taskItem.Description, DbType.String);
             dynamicParameters.Add("p_assigned_to", taskItem.AssignedTo, DbType.Guid);
@@ -151,6 +155,45 @@ namespace Projects.Infrastructure.Persistance
                 catch (Exception exception)
                 {
                     _logger.LogError(exception, "Could not update item due to error : {exception.Message}", exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            }
+        }
+
+        public async Task<TaskItem?> GetByIdAsync(TenantId tenantId, ProjectId projectId, TaskItemId taskItemId, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(tenantId);
+            ArgumentNullException.ThrowIfNull(projectId);
+            ArgumentNullException.ThrowIfNull(taskItemId);
+
+            var sqlScript = "select * from task_items where id = @id and project_id = @project_id and tenant_id = @tenant_id";
+
+            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    var taskItem = await connection.QueryFirstOrDefaultAsync<TaskItem>(sqlScript, 
+                        new { id = taskItemId.Id, project_id = projectId.Id, tenant_id = tenantId.Id },
+                        transaction: transaction,
+                        commandType: CommandType.Text);
+
+                    transaction.Commit();
+                    return taskItem;
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not retrieve item due to error : {exception.Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }

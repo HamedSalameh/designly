@@ -5,7 +5,7 @@ using Projects.Domain.Tasks;
 
 namespace Projects.Application.Features.UpdateTask
 {
-    public sealed class UpdateTaskCommand : IRequest<Result<Guid>>
+    public sealed class UpdateTaskCommand : IRequest<Result<TaskItem>>
     {
         public TenantId TenantId { get; set; }
         public ProjectId ProjectId { get; set; }
