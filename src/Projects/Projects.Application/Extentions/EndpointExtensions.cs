@@ -7,10 +7,10 @@ namespace Projects.Application.Extentions
 {
     public static class EndpointExtensions
     {
-        public static IResult ToActionResult<T>(this Result<T> result)
+        public static IResult ToActionResult<T>(this Result<T> result, Func<T, IResult>? SuccessHandler)
         {
             return result.Match(
-                Succ: response => Results.Ok(response),
+                Succ: SuccessHandler,
                 Fail: ex =>
                 {
                     IResult result = ex switch

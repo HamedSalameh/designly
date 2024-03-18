@@ -6,6 +6,7 @@ using Moq.Contrib.HttpClient;
 using Projects.Application.LogicValidation;
 using Projects.Application.LogicValidation.Handlers;
 using Projects.Application.LogicValidation.Requests;
+using Projects.Application.Providers;
 using Projects.Domain.StonglyTyped;
 
 namespace Projects.Tests
@@ -21,10 +22,9 @@ namespace Projects.Tests
             var services = new ServiceCollection();
             services.AddScoped<IBusinessLogicValidationHandler<ClientValidationRequest>, ClientValidationRequestHandler>();
             services.AddScoped<IBusinessLogicValidationHandler<ProjectLeadValidationRequest>, ProjectLeadValidationRequestHandler>();
-            // add mock logger
-            var loggerMock = new Mock<ILogger<BusinessLogicValidator>>();
-            services.AddScoped(_ => loggerMock.Object);
-
+            // setup IHttpClientProvider
+            services.AddLogging();
+            services.AddScoped<IHttpClientProvider, HttpClientProvider>();
 
             var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
             // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.

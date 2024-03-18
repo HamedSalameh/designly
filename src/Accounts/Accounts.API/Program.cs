@@ -1,6 +1,4 @@
 using Projects.Application;
-using Designly.Auth.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Accounts.Application.Features.CreateAccount;
 using Designly.Auth.Extentions;
@@ -9,7 +7,6 @@ using Accounts.API.Extensions;
 using Designly.Shared.Middleware;
 using Accounts.Application.Features.ValidateUser;
 using Designly.Auth;
-using Designly.Auth.Policies;
 
 var builder = WebApplication.CreateBuilder(args);
 

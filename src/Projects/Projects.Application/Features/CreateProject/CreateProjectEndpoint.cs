@@ -49,7 +49,7 @@ namespace Projects.Application.Features.CreateProject
 
             var projectId = await sender.Send(createProjectCommand, cancellationToken).ConfigureAwait(false);
             
-            return projectId.ToActionResult();
+            return projectId.ToActionResult(res => Results.Ok(res));
         }
 
     }

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
-using Projects.Application.Features.CreateProject;
 
 namespace Projects.Application.Features.CreateTask
 {
@@ -48,7 +47,7 @@ namespace Projects.Application.Features.CreateTask
 
             var taskId = await sender.Send(createTaskItemCommand, cancellationToken);
 
-            return taskId.ToActionResult();
+            return taskId.ToActionResult(res => Results.Ok(res));
         }
     }
 }

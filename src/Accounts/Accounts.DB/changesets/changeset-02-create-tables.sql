@@ -9,8 +9,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Create accounts table
 CREATE TABLE IF NOT EXISTS accounts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_at TIMESTAMP,
-    modified_at TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     name VARCHAR(100) NOT NULL,
     account_owner_id UUID,
     status INT NOT NULL
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS accounts (
 -- Create teams table
 CREATE TABLE IF NOT EXISTS teams (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_at TIMESTAMP,
-    modified_at TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     account_id UUID NOT NULL,
     status INT NOT NULL,
     name VARCHAR(50) NOT NULL
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS teams (
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_at TIMESTAMP,
-    modified_at TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     account_id UUID NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,

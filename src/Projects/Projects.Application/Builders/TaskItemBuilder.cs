@@ -67,11 +67,11 @@ namespace Projects.Application.Builders
                 throw new BusinessLogicException("Task item is not created yet.");
             }
 
-            if (!_taskItem.CompletedAt.HasValue)
+            if (!CompletedAt.HasValue)
             {
                 throw new BusinessLogicException($"{nameof(CompletedAt)} : must have a valid date value");
             }
-            if (_taskItem.CompletedAt.Value.Date > DateTime.UtcNow.Date)
+            if (CompletedAt.Value.Date > DateTime.UtcNow.Date)
             {
                 throw new BusinessLogicException($"{nameof(CompletedAt)} : cannot have a future date value");
             }
@@ -87,7 +87,7 @@ namespace Projects.Application.Builders
                 throw new BusinessLogicException("Task item is not created yet.");
             }
 
-            if (!_taskItem.DueDate.HasValue)
+            if (!DueDate.HasValue)
             {
                 throw new BusinessLogicException($"{nameof(DueDate)} : must have a valid date value");
             }
@@ -103,13 +103,14 @@ namespace Projects.Application.Builders
                 throw new BusinessLogicException("Task item is not created yet.");
             }
 
-            if (taskItemStatus == TaskItemStatus.Completed && _taskItem.CompletedAt.HasValue)
+            // If completedAt is not set, set it to current date
+            if (taskItemStatus == TaskItemStatus.Completed && !_taskItem.CompletedAt.HasValue)
             {
-                _taskItem.UpdateTaskStatus(taskItemStatus);
-                return this;
+                _taskItem.CompletedAt = DateTime.UtcNow;
             }
 
-            throw new BusinessLogicException($"Task item cannot be marked as completed without {_taskItem.CompletedAt} date");
+            _taskItem.UpdateTaskStatus(taskItemStatus);
+            return this;
         }
     }
 }

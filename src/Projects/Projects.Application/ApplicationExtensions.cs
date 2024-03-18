@@ -19,6 +19,7 @@ public static class DependencyInjection
 
         services.AddScoped<IHttpClientProvider, HttpClientProvider>();
         services.AddScoped<IProjectBuilder, ProjectBuilder>();
+        services.AddScoped<ITaskItemBuilder, TaskItemBuilder>();
         services.AddIdentityProvider(configuration);
 
         services.AddInfrastructureCore(configuration);
