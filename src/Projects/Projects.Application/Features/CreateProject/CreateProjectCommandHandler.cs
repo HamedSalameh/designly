@@ -1,5 +1,4 @@
-﻿using Designly.Auth.Providers;
-using LanguageExt.Common;
+﻿using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Builders;

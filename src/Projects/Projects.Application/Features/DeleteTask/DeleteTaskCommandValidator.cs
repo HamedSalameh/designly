@@ -2,7 +2,7 @@
 
 namespace Projects.Application.Features.DeleteTask
 {
-    internal class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
+    public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
     {
         public DeleteTaskCommandValidator()
         {

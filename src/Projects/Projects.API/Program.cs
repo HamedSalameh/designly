@@ -102,11 +102,6 @@ static void MapEndoints(WebApplication app)
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
-    //var tasksRouteGroup = app
-    //    .MapGroup("api/v{version:apiVersion}/tasks")
-    //    .RequireAuthorization()
-    //    .WithApiVersionSet(versionSet);
-
     projectsRouteGroup.MapCreateFeature();
     projectsRouteGroup.MapDeleteFeature("{projectId}");
 
