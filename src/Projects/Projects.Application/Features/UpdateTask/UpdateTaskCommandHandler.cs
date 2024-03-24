@@ -38,12 +38,12 @@ namespace Projects.Application.Features.UpdateTask
                 _logger.LogDebug("Handling request {UpdateTaskCommand} for {Name}", nameof(UpdateTaskCommandHandler), request.Name);
             }
 
-            var projectValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateTaskValidationRequest(request.TenantId, request.ProjectId, request.TaskItemId), cancellationToken);
-            if (projectValidationResult != null)
+            var taskValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateTaskValidationRequest(request.TenantId, request.ProjectId, request.TaskItemId), cancellationToken);
+            if (taskValidationResult != null)
             {
                 _logger.LogInformation("Tasks cannot be updated for project {project} under account {account} due to business logic rules violation: {response}",
-                                       request.ProjectId, request.TenantId, projectValidationResult);
-                return new Result<TaskItem>(projectValidationResult);
+                                       request.ProjectId, request.TenantId, taskValidationResult);
+                return new Result<TaskItem>(taskValidationResult);
             }
 
             var taskItem = _taskItemBuilder
