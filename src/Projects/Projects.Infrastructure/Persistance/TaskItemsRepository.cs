@@ -207,5 +207,43 @@ namespace Projects.Infrastructure.Persistance
                 }
             }
         }
+
+        public Task<IEnumerable<TaskItem>> Search(string sqlQuery, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(sqlQuery))
+            {
+                throw new ArgumentNullException(nameof(sqlQuery));
+            }
+
+            // execute the provided query inside a polling policy
+            return policy.ExecuteAsync(async (ct) =>
+            {
+                using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+                {
+                    await connection.OpenAsync(ct);
+                    using var transaction = connection.BeginTransaction();
+                    try
+                    {
+                        var results = await connection.QueryAsync<TaskItem>(sqlQuery, transaction: transaction, commandType: CommandType.Text);
+                        transaction.Commit();
+                        return results;
+                    }
+                    catch (Exception exception)
+                    {
+                        _logger.LogError(exception, "Could not retrieve items due to error : {exception.Message}", exception.Message);
+                        transaction.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        if (connection.State != ConnectionState.Closed)
+                        {
+                            await connection.CloseAsync();
+                            connection.Dispose();
+                        }
+                    }
+                }
+            }, cancellationToken);
+        }
     }
 }

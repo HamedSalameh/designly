@@ -5,19 +5,16 @@
         None,
         Equals,
         NotEquals,
-        In,
-        NotIn,
         Contains,
         NotContains,
-        GreaterEqualThan,
-        LessEqualThan,
-        Range,
-        LessThan,
+        In,
+        NotIn,
         GreaterThan,
+        LessThan,
+        StartsWith,
+        EndsWith,
         IsNull,
-        JsonArrayContains,
-        AnyExist,
-        NoneExist,
-        IsEmpty
+        IsNotNull,
+        Like
     }
 }

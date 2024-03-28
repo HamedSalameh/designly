@@ -28,13 +28,9 @@ namespace Projects.Application.Features.SearchTasks
                     {
                         context.AddFailure("Filter field is required");
                     }
-                    if (string.IsNullOrEmpty(filter.Value))
+                    if (filter.Values == null || filter.Values.Count() == 0)
                     {
-                        context.AddFailure("Filter value is required");
-                    }
-                    if (filter.Value != null && filter.Value.Length > Domain.Constants.SearchValueMaxLength)
-                    {
-                        context.AddFailure($"Filter value must not exceed {Domain.Constants.SearchValueMaxLength} characters");
+                        context.AddFailure("Filter values are required");
                     }
                     if (filter.Field != null && filter.Field.Length > Domain.Constants.FieldMaxLength)
                     {

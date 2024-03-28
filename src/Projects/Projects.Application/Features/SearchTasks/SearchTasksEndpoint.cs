@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Extentions;
 using Projects.Application.Filter;
 
 namespace Projects.Application.Features.SearchTasks
@@ -53,7 +54,7 @@ namespace Projects.Application.Features.SearchTasks
                 }
                 else
                 {
-                    return Results.BadRequest("Invalid filter operator");
+                    return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
             }
 
