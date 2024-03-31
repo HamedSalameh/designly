@@ -5,6 +5,7 @@ using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Filter;
+using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
 
@@ -46,7 +47,7 @@ namespace Projects.Application.Features.SearchTasks
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
 
-            var results = await _unitOfWork.TaskItemsRepository.Search(sqlQuery.Sql, cancellationToken);
+            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, cancellationToken);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
@@ -56,8 +57,10 @@ namespace Projects.Application.Features.SearchTasks
             return new Result<IEnumerable<TaskItem>>(results);
         }
 
-        private static FilterDefinition getFilterDefinition(SearchTasksCommand request)
+        private FilterDefinition getFilterDefinition(SearchTasksCommand request)
         {
+            var filters = request.filters;
+            filters.Add(new FilterCondition("ProjectId", FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
             return new FilterDefinition("TaskItems", request.filters);
         }
     }

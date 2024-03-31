@@ -208,7 +208,7 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<IEnumerable<TaskItem>> Search(string sqlQuery, CancellationToken cancellationToken)
+        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, string sqlQuery, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(sqlQuery))
             {

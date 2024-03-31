@@ -24,19 +24,35 @@ namespace Projects.Application.Features.SearchTasks
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(filter.Field))
-                    {
-                        context.AddFailure("Filter field is required");
-                    }
                     if (filter.Values == null || filter.Values.Count() == 0)
                     {
                         context.AddFailure("Filter values are required");
                     }
-                    if (filter.Field != null && filter.Field.Length > Domain.Constants.FieldMaxLength)
-                    {
-                        context.AddFailure($"Filter value must not exceed  {Domain.Constants.FieldMaxLength}  charactersrs");
-                    }
+
+                    FieldValidation(filter.Field, context);
                 }
+            }
+        }
+
+        private void FieldValidation(string field, ValidationContext<SearchTasksCommand> context)
+        {
+            if (string.IsNullOrEmpty(field))
+            {
+                context.AddFailure("Filter field is required");
+            }
+            if (field != null && field.Length > Domain.Constants.FieldMaxLength)
+            {
+                context.AddFailure($"Filter value must not exceed  {Domain.Constants.FieldMaxLength}  charactersrs");
+            }
+            if (field != null && field.Length > Domain.Constants.FieldMaxLength)
+            {
+                context.AddFailure($"Filter value must not exceed  {Domain.Constants.FieldMaxLength}  charactersrs");
+            }
+
+            // Validate that the values provided in the field property are of known and supported field names
+            if (field != null && !SupportedFilterFields.SupportedFields.Contains(field))
+            {
+                context.AddFailure($"Filter field {field} is not supported");
             }
         }
     }

@@ -44,6 +44,7 @@ namespace Projects.Application.Features.SearchTasks
 
             var searchTasksCommand = new SearchTasksCommand();
             searchTasksCommand.projectId = searchTaskRequest.projectId;
+            searchTasksCommand.tenantId = tenantId;
 
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchTaskRequest.filters)
@@ -57,8 +58,6 @@ namespace Projects.Application.Features.SearchTasks
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
             }
-
-            searchTasksCommand.tenantId = tenantId;
 
             var tasks = await sender.Send(searchTasksCommand, cancellationToken);
 
