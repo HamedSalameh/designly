@@ -58,6 +58,7 @@ namespace Projects.Application.Features.SearchTasks
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
             }
+            searchTasksCommand.filters = filterConditions;
 
             var tasks = await sender.Send(searchTasksCommand, cancellationToken);
 
