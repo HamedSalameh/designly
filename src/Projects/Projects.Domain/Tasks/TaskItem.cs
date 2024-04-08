@@ -12,8 +12,8 @@ namespace Projects.Domain.Tasks
         public Guid? AssignedBy { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? CompletedAt { get; set; }
-        public TaskItemStatus taskItemStatus { get; private set; }
-        public bool IsCompleted => taskItemStatus == TaskItemStatus.Completed;
+        public TaskItemStatus TaskItemStatus { get; private set; }
+        public bool IsCompleted => TaskItemStatus == TaskItemStatus.Completed;
 
         public TaskItem(TenantId TenantId, ProjectId ProjectId, string Name, string? Description) : base(TenantId)
         {
@@ -40,7 +40,7 @@ namespace Projects.Domain.Tasks
         {
             Name = Consts.Strings.ValueNotSet;
             Description = Consts.Strings.ValueNotSet;
-            taskItemStatus = TaskItemStatus.NotStarted;
+            TaskItemStatus = TaskItemStatus.NotStarted;
             ProjectId = Guid.Empty;
         }
 
@@ -50,7 +50,7 @@ namespace Projects.Domain.Tasks
             {
                 throw new InvalidOperationException("TaskItem is already completed");
             }
-            taskItemStatus = TaskItemStatus.Completed;
+            TaskItemStatus = TaskItemStatus.Completed;
             CompletedAt = DateTime.UtcNow;
         }
 
@@ -60,7 +60,7 @@ namespace Projects.Domain.Tasks
             {
                 throw new InvalidOperationException("TaskItem is not completed");
             }
-            taskItemStatus = TaskItemStatus.InProgress;
+            TaskItemStatus = TaskItemStatus.InProgress;
             CompletedAt = null;
         }
 
@@ -77,7 +77,7 @@ namespace Projects.Domain.Tasks
                 throw new InvalidOperationException("TaskItem is already completed. Reopen the task to update status");
             }
 
-            this.taskItemStatus = taskItemStatus;
+            this.TaskItemStatus = taskItemStatus;
         }
 
         public void SetId(TaskItemId id)

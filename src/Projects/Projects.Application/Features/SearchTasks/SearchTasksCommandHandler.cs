@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Projects.Application.Filter;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
+using Projects.Infrastructure.Filter;
 using Projects.Infrastructure.Interfaces;
 
 namespace Projects.Application.Features.SearchTasks
@@ -49,21 +50,21 @@ namespace Projects.Application.Features.SearchTasks
 
             // Need to configure SqlKata to work properly with column names, i.e ProjectId to project_id
 
-            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, cancellationToken);
+            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
                 _logger.LogDebug("Request {SearchTasksCommand} was handled and returned {results}", nameof(SearchTasksCommand), results?.Count());
             }
 
-            return new Result<IEnumerable<TaskItem>>(results);
+            return new Result<IEnumerable<TaskItem>>(results ?? []);
         }
 
         private FilterDefinition getFilterDefinition(SearchTasksCommand request)
         {
             var filters = request.filters;
-            filters.Add(new FilterCondition("ProjectId", FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
-            return new FilterDefinition("TaskItems", request.filters);
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
+            return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
         }
     }
 }

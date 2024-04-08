@@ -1,32 +1,22 @@
-﻿namespace Projects.Application.Features.SearchTasks
-{
-    // a defined and support field names that the client must use to filter the tasks    
-    public static class SupportedFilterFields
-    {
-        public static readonly string[] SupportedFields =
-        [
-            FieldNames.ProjectId,
-            FieldNames.TaskId,
-            FieldNames.TaskName,
-            FieldNames.TaskDescription,
-            FieldNames.AssignedTo,
-            FieldNames.AssignedBy,
-            FieldNames.DueDate,
-            FieldNames.CompletedAt,
-            FieldNames.TaskItemStatus
-        ];
-    }
+﻿using Projects.Domain.Tasks;
+using Projects.Infrastructure.Filter;
+using System.Collections.Concurrent;
 
-    public static class FieldNames
+namespace Projects.Application.Features.SearchTasks
+{
+    public static class SupportedTaskItemFieldNames
     {
-        public const string ProjectId = "ProjectId";
-        public const string TaskId = "TaskId";
-        public const string TaskName = "TaskName";
-        public const string TaskDescription = "TaskDescription";
-        public const string AssignedTo = "AssignedTo";
-        public const string AssignedBy = "AssignedBy";
-        public const string DueDate = "DueDate";
-        public const string CompletedAt = "CompletedAt";
-        public const string TaskItemStatus = "TaskItemStatus";
+        public static ConcurrentDictionary<string, string> TaskItemFieldNamesDic = new ConcurrentDictionary<string, string>
+        {
+            [nameof(TaskItem.ProjectId)] = TaskItemFieldToColumnMapping.ProjectId,
+            [nameof(TaskItem.Id)] = TaskItemFieldToColumnMapping.TaskId,
+            [nameof(TaskItem.Name)] = TaskItemFieldToColumnMapping.TaskName,
+            [nameof(TaskItem.Description)] = TaskItemFieldToColumnMapping.TaskDescription,
+            [nameof(TaskItem.AssignedTo)] = TaskItemFieldToColumnMapping.AssignedTo,
+            [nameof(TaskItem.AssignedBy)] = TaskItemFieldToColumnMapping.AssignedBy,
+            [nameof(TaskItem.DueDate)] = TaskItemFieldToColumnMapping.DueDate,
+            [nameof(TaskItem.CompletedAt)] = TaskItemFieldToColumnMapping.CompletedAt,
+            [nameof(TaskItem.TaskItemStatus)] = TaskItemFieldToColumnMapping.TaskItemStatus
+        };
     }
 }

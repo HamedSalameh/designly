@@ -49,14 +49,16 @@ namespace Projects.Application.Features.SearchTasks
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchTaskRequest.filters)
             {
-                if (Enum.TryParse<FilterConditionOperator>(filter.Operator, out var Operator))
-                {
-                    filterConditions.Add(new FilterCondition(filter.Field, Operator, filter.Value));
-                }
-                else
+                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDic.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
+                if (!SupportedTaskItemFieldNames.TaskItemFieldNamesDic.TryGetValue(filter.Field, out var filterConditionField))
+                { 
+                    return Results.BadRequest("We could not parse a filter field for one of the filter conditions.");
+                }
+
+                filterConditions.Add(new FilterCondition(filterConditionField, filterConditionOperator, filter.Value));
             }
             searchTasksCommand.filters = filterConditions;
 

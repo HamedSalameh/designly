@@ -49,7 +49,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy, DbType.Guid);
             dynamicParameters.Add("p_due_date", taskItem.DueDate, DbType.DateTime);
             dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime);
-            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus, DbType.Int16);
+            dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
             dynamicParameters.Add("p_task_item_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
@@ -138,7 +138,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy, DbType.Guid);
             dynamicParameters.Add("p_due_date", taskItem.DueDate, DbType.DateTime);
             dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime);
-            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus, DbType.Int16);
+            dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
 
             using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
@@ -226,7 +226,7 @@ namespace Projects.Infrastructure.Persistance
                     {
                         var results = await connection.QueryAsync<TaskItem>(sqlQuery, transaction: transaction, commandType: CommandType.Text);
                         transaction.Commit();
-                        return results;
+                        return results ?? [];
                     }
                     catch (Exception exception)
                     {

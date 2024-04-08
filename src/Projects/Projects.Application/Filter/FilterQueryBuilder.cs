@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using SqlKata;
 using SqlKata.Compilers;
 using System.Collections.Concurrent;
+using System.Text;
 
 namespace Projects.Application.Filter
 {
@@ -71,7 +72,7 @@ namespace Projects.Application.Filter
                 // the logical operator between each condition is AND
                 var fieldValues = condition.Values;
                 var operatorType = condition.Operator;
-                var field = condition.Field;
+                var field = getColumnName(condition.Field);
 
                 BuildWhereQueryCondition(query, field, fieldValues, operatorType);
             }
@@ -94,6 +95,30 @@ namespace Projects.Application.Filter
             }
 
             _conditionBuilders[operatorType](field, fieldValues, query);
+        }
+
+        private string getColumnName(string columnName)
+        {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return columnName;
+            }
+
+            StringBuilder snakeCaseColumnName = new StringBuilder();
+            snakeCaseColumnName.Append(char.ToLower(columnName[0]));
+
+            for (int i = 1; i < columnName.Length; i++)
+            {
+                char c = columnName[i];
+                // Skip the first uppercase character
+                if (char.IsUpper(c))
+                {
+                    snakeCaseColumnName.Append("_");
+                }
+                snakeCaseColumnName.Append(char.ToLower(c));
+            }
+
+            return snakeCaseColumnName.ToString();
         }
     }
 }
