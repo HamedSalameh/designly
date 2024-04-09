@@ -7,6 +7,7 @@ using Polly.Wrap;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
+using SqlKata;
 using System.Data;
 using static Dapper.SqlMapper;
 
@@ -208,19 +209,11 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, string sqlQuery, Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                throw new ArgumentNullException(nameof(sqlQuery));
-            }
-
-            //DynamicParameters dynamicParameters = new DynamicParameters();
-            //foreach (var parameter in parameters)
-            //{
-            //    dynamicParameters.Add(parameter.Key, parameter.Value);
-            //}
-            var dynamicParameters = parameters;
+            ArgumentNullException.ThrowIfNull(sqlResult);
+            var sqlQuery = sqlResult.Sql;
+            var parameters = sqlResult.NamedBindings;
 
             // execute the provided query inside a polling policy
             return policy.ExecuteAsync(async (ct) =>
@@ -232,7 +225,7 @@ namespace Projects.Infrastructure.Persistance
                     try
                     {
                             var results = await connection.QueryAsync<TaskItem>(sqlQuery, 
-                            dynamicParameters, 
+                            parameters, 
                             transaction: transaction, 
                             commandType: CommandType.Text);
                         transaction.Commit();

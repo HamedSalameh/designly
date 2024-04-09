@@ -47,8 +47,7 @@ namespace Projects.Application.Features.SearchTasks
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
 
-            // Need to configure SqlKata to work properly with column names, i.e ProjectId to project_id
-            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, sqlQuery.NamedBindings, cancellationToken).ConfigureAwait(false);
+            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
