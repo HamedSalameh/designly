@@ -1,11 +1,10 @@
 ﻿using Amazon.Runtime.Internal.Util;
 using Designly.Auth.Identity;
 using Designly.Base.Exceptions;
+using Designly.Filter;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Projects.Application.Filter;
-using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 using Projects.Infrastructure.Filter;
 using Projects.Infrastructure.Interfaces;
@@ -49,8 +48,7 @@ namespace Projects.Application.Features.SearchTasks
             }
 
             // Need to configure SqlKata to work properly with column names, i.e ProjectId to project_id
-
-            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, cancellationToken).ConfigureAwait(false);
+            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery.Sql, sqlQuery.NamedBindings, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {

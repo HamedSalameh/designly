@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Identity;
+using Designly.Filter;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
-using Projects.Application.Filter;
 
 namespace Projects.Application.Features.SearchTasks
 {
@@ -58,7 +58,10 @@ namespace Projects.Application.Features.SearchTasks
                     return Results.BadRequest("We could not parse a filter field for one of the filter conditions.");
                 }
 
-                filterConditions.Add(new FilterCondition(filterConditionField, filterConditionOperator, filter.Value));
+                // convert the filter.Values from JsonElement to List<object>
+                var valuesList = filter.Value.ToList();
+
+                filterConditions.Add(new FilterCondition(filterConditionField, filterConditionOperator, valuesList ));
             }
             searchTasksCommand.filters = filterConditions;
 

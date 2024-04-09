@@ -1,6 +1,6 @@
-﻿using LanguageExt.Common;
+﻿using Designly.Filter;
+using LanguageExt.Common;
 using MediatR;
-using Projects.Application.Filter;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 

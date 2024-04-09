@@ -1,4 +1,4 @@
-﻿namespace Projects.Application.Filter
+﻿namespace Designly.Filter
 {
     public enum FilterConditionOperator
     {

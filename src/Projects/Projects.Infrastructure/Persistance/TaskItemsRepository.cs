@@ -208,12 +208,19 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, string sqlQuery, CancellationToken cancellationToken)
+        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, string sqlQuery, Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(sqlQuery))
             {
                 throw new ArgumentNullException(nameof(sqlQuery));
             }
+
+            //DynamicParameters dynamicParameters = new DynamicParameters();
+            //foreach (var parameter in parameters)
+            //{
+            //    dynamicParameters.Add(parameter.Key, parameter.Value);
+            //}
+            var dynamicParameters = parameters;
 
             // execute the provided query inside a polling policy
             return policy.ExecuteAsync(async (ct) =>
@@ -224,7 +231,10 @@ namespace Projects.Infrastructure.Persistance
                     using var transaction = connection.BeginTransaction();
                     try
                     {
-                        var results = await connection.QueryAsync<TaskItem>(sqlQuery, transaction: transaction, commandType: CommandType.Text);
+                            var results = await connection.QueryAsync<TaskItem>(sqlQuery, 
+                            dynamicParameters, 
+                            transaction: transaction, 
+                            commandType: CommandType.Text);
                         transaction.Commit();
                         return results ?? [];
                     }

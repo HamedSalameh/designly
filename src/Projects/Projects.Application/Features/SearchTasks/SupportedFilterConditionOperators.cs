@@ -1,4 +1,4 @@
-﻿using Projects.Application.Filter;
+﻿using Designly.Filter;
 using System.Collections.Concurrent;
 
 namespace Projects.Application.Features.SearchTasks

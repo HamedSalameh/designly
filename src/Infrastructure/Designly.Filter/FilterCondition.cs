@@ -1,4 +1,4 @@
-﻿namespace Projects.Application.Filter
+﻿namespace Designly.Filter
 {
     public class FilterCondition(string Field, FilterConditionOperator Operator, IEnumerable<object> Values)
     {

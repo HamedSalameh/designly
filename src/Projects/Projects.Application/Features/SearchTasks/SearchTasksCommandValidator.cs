@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using Projects.Application.Filter;
+﻿using Designly.Filter;
+using FluentValidation;
 
 namespace Projects.Application.Features.SearchTasks
 {

@@ -1,6 +1,6 @@
 ﻿using SqlKata;
 
-namespace Projects.Application.Filter
+namespace Designly.Filter
 {
     public interface IQueryBuilder
     {

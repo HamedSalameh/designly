@@ -1,5 +1,4 @@
-﻿using Projects.Application.Filter;
-using Projects.Domain.StonglyTyped;
+﻿using Projects.Domain.StonglyTyped;
 
 namespace Projects.Application.Features.SearchTasks
 {

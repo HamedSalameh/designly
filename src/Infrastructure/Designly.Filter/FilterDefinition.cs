@@ -1,4 +1,6 @@
-﻿namespace Projects.Application.Filter
+﻿using Designly.Filter;
+
+namespace Designly.Filter
 {
     public class FilterDefinition
     {

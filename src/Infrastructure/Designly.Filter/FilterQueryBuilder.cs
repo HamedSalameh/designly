@@ -7,7 +7,7 @@ using SqlKata.Compilers;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace Projects.Application.Filter
+namespace Designly.Filter
 {
     public class FilterQueryBuilder : IQueryBuilder
     {
@@ -16,7 +16,7 @@ namespace Projects.Application.Filter
         private readonly Compiler _compiler;
 
         public FilterQueryBuilder(Compiler compiler, ILogger<FilterQueryBuilder> logger)
-        { 
+        {
             ArgumentNullException.ThrowIfNull(compiler, nameof(compiler));
             ArgumentNullException.ThrowIfNull(logger, nameof(logger));
 
@@ -66,7 +66,7 @@ namespace Projects.Application.Filter
             // iterate throught the conditions and create the SqlResult by using SqlKata
             var conditions = filterDefinition.Conditions;
             var query = new Query(filterDefinition.TableName);
-            foreach(var condition in conditions)
+            foreach (var condition in conditions)
             {
                 // create the inner where query for each condition
                 // the logical operator between each condition is AND
@@ -78,7 +78,7 @@ namespace Projects.Application.Filter
             }
 
             var sqlResult = _compiler.Compile(query);
-             
+
             if (_logger.IsEnabled(LogLevel.Debug))
             {
                 _logger.LogDebug("Query was built successfully");

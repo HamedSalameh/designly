@@ -1,8 +1,8 @@
 ﻿using Designly.Base.Exceptions;
+using Designly.Filter;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Projects.Application.Filter;
 using SqlKata.Compilers;
 using System.Runtime.CompilerServices;
 
