@@ -16,11 +16,13 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+	  <PackageReference Include="SqlKata" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Designly.Auth\Designly.Auth.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Designly.Configuration\Designly.Configuration.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Designly.Filter\Designly.Filter.csproj" />
     <ProjectReference Include="..\Projects.Domain\Projects.Domain.csproj" />
     <ProjectReference Include="..\Projects.Infrastructure\Projects.Infrastructure.csproj" />
   </ItemGroup>

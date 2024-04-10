@@ -8,6 +8,8 @@ using Projects.Infrastructure;
 using Projects.Application.Builders;
 using Projects.Application.Providers;
 using Projects.Application.LogicValidation;
+using SqlKata.Compilers;
+using Designly.Filter;
 
 namespace Projects.Application;
 
@@ -20,6 +22,9 @@ public static class DependencyInjection
         services.AddScoped<IHttpClientProvider, HttpClientProvider>();
         services.AddScoped<IProjectBuilder, ProjectBuilder>();
         services.AddScoped<ITaskItemBuilder, TaskItemBuilder>();
+        // Add SqlKata Compiler
+        services.AddScoped<Compiler, PostgresCompiler>();
+        services.AddScoped<IQueryBuilder, FilterQueryBuilder>();
         services.AddIdentityProvider(configuration);
 
         services.AddInfrastructureCore(configuration);

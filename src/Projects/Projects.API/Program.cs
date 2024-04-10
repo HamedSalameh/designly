@@ -17,6 +17,7 @@ using Projects.Application.Features.CreateProject;
 using Projects.Application.Features.CreateTask;
 using Projects.Application.Features.DeleteProject;
 using Projects.Application.Features.DeleteTask;
+using Projects.Application.Features.SearchTasks;
 using Projects.Application.Features.UpdateTask;
 using Serilog;
 using System.Net.Mime;
@@ -108,6 +109,7 @@ static void MapEndoints(WebApplication app)
     projectsRouteGroup.MapCreateTaskFeature("tasks");
     projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");
     projectsRouteGroup.MapUpdateTaskFeature("{projectId}/tasks/{taskId}");
+    projectsRouteGroup.MapSearchTasksEndpoint("tasks/search");
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)

@@ -7,6 +7,7 @@ using Polly.Wrap;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
+using SqlKata;
 using System.Data;
 using static Dapper.SqlMapper;
 
@@ -49,7 +50,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy, DbType.Guid);
             dynamicParameters.Add("p_due_date", taskItem.DueDate, DbType.DateTime);
             dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime);
-            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus, DbType.Int16);
+            dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
             dynamicParameters.Add("p_task_item_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
@@ -138,7 +139,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_assigned_by", taskItem.AssignedBy, DbType.Guid);
             dynamicParameters.Add("p_due_date", taskItem.DueDate, DbType.DateTime);
             dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime);
-            dynamicParameters.Add("p_task_item_status", taskItem.taskItemStatus, DbType.Int16);
+            dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
 
             using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
@@ -206,6 +207,46 @@ namespace Projects.Infrastructure.Persistance
                     }
                 }
             }
+        }
+
+        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(sqlResult);
+            var sqlQuery = sqlResult.Sql;
+            var parameters = sqlResult.NamedBindings;
+
+            // execute the provided query inside a polling policy
+            return policy.ExecuteAsync(async (ct) =>
+            {
+                using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+                {
+                    await connection.OpenAsync(ct);
+                    using var transaction = connection.BeginTransaction();
+                    try
+                    {
+                            var results = await connection.QueryAsync<TaskItem>(sqlQuery, 
+                            parameters, 
+                            transaction: transaction, 
+                            commandType: CommandType.Text);
+                        transaction.Commit();
+                        return results ?? [];
+                    }
+                    catch (Exception exception)
+                    {
+                        _logger.LogError(exception, "Could not retrieve items due to error : {exception.Message}", exception.Message);
+                        transaction.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        if (connection.State != ConnectionState.Closed)
+                        {
+                            await connection.CloseAsync();
+                            connection.Dispose();
+                        }
+                    }
+                }
+            }, cancellationToken);
         }
     }
 }
