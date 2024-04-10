@@ -125,6 +125,45 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
+        public async Task DeleteAllAsync(TenantId tenantId, ProjectId projectId, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(projectId);
+            ArgumentNullException.ThrowIfNull(tenantId);
+
+            var sqlScript = "delete from task_items where project_id = @project_id and tenant_id = @tenant_id";
+
+            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync(sqlScript, 
+                        new { project_id = projectId.Id, tenant_id = tenantId.Id },
+                        transaction: transaction,
+                        commandType: CommandType.Text);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not delete taskitems under {projectId} in tenant {tenantId} due to error : {exception.Message}", 
+                        projectId.Id,
+                        tenantId.Id,
+                        exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            }
+        }
+
         public async Task UpdateAsync(TaskItem taskItem, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(taskItem);
