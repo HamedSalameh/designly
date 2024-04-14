@@ -125,7 +125,7 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public async Task DeleteAllAsync(TenantId tenantId, ProjectId projectId, CancellationToken cancellationToken)
+        public async Task DeleteAllAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(projectId);
             ArgumentNullException.ThrowIfNull(tenantId);

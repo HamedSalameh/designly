@@ -25,7 +25,7 @@ namespace Projects.Application.Features.DeleteProject
             return new List<IEndpointConventionBuilder>() { endPoint };
         }
 
-        private static async Task<IResult> DeleteProjectEndpointMethodAsync([FromQuery] Guid projectId,
+        private static async Task<IResult> DeleteProjectEndpointMethodAsync([FromRoute] Guid projectId,
             ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
