@@ -11,6 +11,6 @@ namespace Projects.Infrastructure.Interfaces
         Task DeleteAllAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken);
         Task UpdateAsync(TaskItem task, CancellationToken cancellationToken);
         Task<TaskItem?> GetByIdAsync(TenantId tenantId, ProjectId projectId, TaskItemId taskItemId, CancellationToken cancellationToken);
-        Task<IEnumerable<TaskItem>> Search(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken);
+        Task<IEnumerable<TaskItem>> SearchAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken);
     }
 }

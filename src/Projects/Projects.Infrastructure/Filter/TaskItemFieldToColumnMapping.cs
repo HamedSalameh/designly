@@ -13,5 +13,7 @@
         public const string DueDate = "due_date";
         public const string CompletedAt = "completed_at";
         public const string TaskItemStatus = "task_item_status";
+        public const string CreatedAt = "created_at";
+        public const string ModifiedAt = "modified_at";
     }
 }

@@ -7,6 +7,7 @@ using Polly.Wrap;
 using Projects.Domain;
 using Projects.Domain.StonglyTyped;
 using Projects.Infrastructure.Interfaces;
+using SqlKata;
 using System.Data;
 
 namespace Projects.Infrastructure.Persistance
@@ -140,6 +141,11 @@ namespace Projects.Infrastructure.Persistance
             });
 
             return;
+        }
+
+        public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 

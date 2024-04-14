@@ -47,7 +47,7 @@ namespace Projects.Application.Features.SearchTasks
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
 
-            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
+            var results = await _unitOfWork.TaskItemsRepository.SearchAsync(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {

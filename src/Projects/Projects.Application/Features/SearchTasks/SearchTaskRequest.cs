@@ -1,4 +1,5 @@
-﻿using Projects.Domain.StonglyTyped;
+﻿using Designly.Filter;
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Application.Features.SearchTasks
 {

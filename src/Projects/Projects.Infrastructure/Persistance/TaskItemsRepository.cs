@@ -248,7 +248,7 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
+        public Task<IEnumerable<TaskItem>> SearchAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(sqlResult);
             var sqlQuery = sqlResult.Sql;
