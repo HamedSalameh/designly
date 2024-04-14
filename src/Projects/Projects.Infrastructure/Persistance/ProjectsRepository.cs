@@ -6,6 +6,7 @@ using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Domain.StonglyTyped;
+using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
 using SqlKata;
 using System.Data;
@@ -145,9 +146,41 @@ namespace Projects.Infrastructure.Persistance
 
         public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(tenantId, nameof(tenantId));
+            ArgumentNullException.ThrowIfNull(sqlResult, nameof(sqlResult));
+
+            var sqlQuery = sqlResult.Sql;
+            var parameters = sqlResult.NamedBindings;
+
+            return policy.ExecuteAsync(async (ct) =>
+            {
+                using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+                await connection.OpenAsync(ct);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    var results = await connection.QueryAsync<BasicProject>(sqlQuery,
+                    parameters,
+                    transaction: transaction,
+                    commandType: CommandType.Text);
+                    transaction.Commit();
+                    return results ?? [];
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not retrieve projects search results due to error : {exception.Message}", exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            }, cancellationToken);
         }
     }
-
-
 }
