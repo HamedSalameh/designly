@@ -5,6 +5,7 @@
         public const string ProjectsTable = "projects";
 
         public const string Id = "id";
+        public const string TenantId = "tenant_id";
         public const string ProjectName = "name";
         public const string ProjectDescription = "description";
         public const string ProjectLead = "project_lead_id";

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
-using Projects.Domain.StonglyTyped;
 
 namespace Projects.Application.Features.UpdateTask
 {

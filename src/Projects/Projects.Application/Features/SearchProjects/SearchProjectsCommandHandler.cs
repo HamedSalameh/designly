@@ -61,6 +61,8 @@ namespace Projects.Application.Features.SearchProjects
 
         private FilterDefinition getFilterDefinition(SearchProjectsCommand request)
         {
+            var filters = request.FilterConditions;
+            filters.Add(new FilterCondition(ProjectFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.TenantId.Id }));
             return new FilterDefinition(ProjectFieldToColumnMapping.ProjectsTable, request.FilterConditions);
         }
     }

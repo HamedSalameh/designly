@@ -61,6 +61,7 @@ namespace Projects.Application.Features.SearchTasks
         {
             var filters = request.filters;
             filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.tenantId.Id }));
             return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
         }
     }
