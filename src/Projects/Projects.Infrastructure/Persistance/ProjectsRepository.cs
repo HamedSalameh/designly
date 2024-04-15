@@ -24,11 +24,17 @@ namespace Projects.Infrastructure.Persistance
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbConnectionStringProvider = dbConnectionStringProvider ?? throw new ArgumentNullException(nameof(dbConnectionStringProvider));
 
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
             SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
 
+            SqlMapper.AddTypeHandler(new DapperProjectIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperTenantIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperTaskItemIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperProjectLeadIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperClientIdTypeHandler());
         }
 
         public async Task<BasicProject?> GetByIdAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken = default)

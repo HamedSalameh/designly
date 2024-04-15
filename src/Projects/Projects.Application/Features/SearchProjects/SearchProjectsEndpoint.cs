@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Extentions;
 
 namespace Projects.Application.Features.SearchProjects
 {
@@ -67,7 +68,7 @@ namespace Projects.Application.Features.SearchProjects
 
             var projects = await sender.Send(searchProjectsCommand, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok(projects);
+            return projects.ToActionResult(res => Results.Ok(res));
         }
     }
 }

@@ -26,15 +26,19 @@ namespace Projects.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
 
             _logger = logger;
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
             _dbConnectionStringProvider = dbConnectionStringProvider;
+
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             AddTypeHandler(new JsonbTypeHandler<List<string>>());
+            AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
 
             AddTypeHandler(new DapperProjectIdTypeHandler());
             AddTypeHandler(new DapperTenantIdTypeHandler());
             AddTypeHandler(new DapperTaskItemIdTypeHandler());
+            AddTypeHandler(new DapperProjectLeadIdTypeHandler());
+            AddTypeHandler(new DapperClientIdTypeHandler());
         }
 
         public async Task<Guid> AddAsync(TaskItem taskItem, CancellationToken cancellationToken)

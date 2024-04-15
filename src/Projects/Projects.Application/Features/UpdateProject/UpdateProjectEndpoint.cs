@@ -12,7 +12,7 @@ namespace Projects.Application.Features.UpdateProject
 {
     public static class UpdateProjectEndpoint
     {
-        public static IEndpointConventionBuilder MapUpdateProjectFeature(this IEndpointRouteBuilder builder, string pattern = "")
+        public static IEndpointConventionBuilder MapUpdateFeature(this IEndpointRouteBuilder builder, string pattern = "")
         {
             var endpoint = builder
                 .MapPut(pattern, UpdateProjectEndpointMethodAsync)
