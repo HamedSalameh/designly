@@ -113,7 +113,7 @@ namespace Projects.Infrastructure.Persistance
                 using var transaction = await connection.BeginTransactionAsync();
                 try
                 {
-                    await connection.ExecuteAsync(sql: "update_project",
+                    await connection.ExecuteAsync(sql: "update_basicproject",
                                                param: dynamicParameters,
                                                commandType: CommandType.StoredProcedure,
                                                transaction: transaction);
