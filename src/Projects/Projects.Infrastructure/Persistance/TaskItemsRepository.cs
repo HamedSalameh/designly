@@ -26,15 +26,19 @@ namespace Projects.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
 
             _logger = logger;
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
             _dbConnectionStringProvider = dbConnectionStringProvider;
+
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             AddTypeHandler(new JsonbTypeHandler<List<string>>());
+            AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
 
             AddTypeHandler(new DapperProjectIdTypeHandler());
             AddTypeHandler(new DapperTenantIdTypeHandler());
             AddTypeHandler(new DapperTaskItemIdTypeHandler());
+            AddTypeHandler(new DapperProjectLeadIdTypeHandler());
+            AddTypeHandler(new DapperClientIdTypeHandler());
         }
 
         public async Task<Guid> AddAsync(TaskItem taskItem, CancellationToken cancellationToken)
@@ -111,6 +115,45 @@ namespace Projects.Infrastructure.Persistance
                 catch (Exception exception)
                 {
                     _logger.LogError(exception, "Could not create item due to error : {exception.Message}", exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            }
+        }
+
+        public async Task DeleteAllAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(projectId);
+            ArgumentNullException.ThrowIfNull(tenantId);
+
+            var sqlScript = "delete from task_items where project_id = @project_id and tenant_id = @tenant_id";
+
+            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    await connection.ExecuteAsync(sqlScript, 
+                        new { project_id = projectId.Id, tenant_id = tenantId.Id },
+                        transaction: transaction,
+                        commandType: CommandType.Text);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not delete taskitems under {projectId} in tenant {tenantId} due to error : {exception.Message}", 
+                        projectId.Id,
+                        tenantId.Id,
+                        exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -209,7 +252,7 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<IEnumerable<TaskItem>> Search(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
+        public Task<IEnumerable<TaskItem>> SearchAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(sqlResult);
             var sqlQuery = sqlResult.Sql;

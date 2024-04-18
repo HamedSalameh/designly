@@ -47,7 +47,7 @@ namespace Projects.Application.Features.SearchTasks
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
 
-            var results = await _unitOfWork.TaskItemsRepository.Search(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
+            var results = await _unitOfWork.TaskItemsRepository.SearchAsync(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
@@ -61,6 +61,7 @@ namespace Projects.Application.Features.SearchTasks
         {
             var filters = request.filters;
             filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.tenantId.Id }));
             return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
         }
     }

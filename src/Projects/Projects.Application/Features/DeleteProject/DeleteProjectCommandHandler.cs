@@ -24,6 +24,8 @@ namespace Projects.Application.Features.DeleteProject
 
             try
             {
+                await _unitOfWork.TaskItemsRepository.DeleteAllAsync(request.ProjectId, request.TenantId, cancellationToken);
+
                 await _unitOfWork.ProjectsRepository.DeleteProjectAsync(request.ProjectId, request.TenantId, cancellationToken);
 
                 return Unit.Value;

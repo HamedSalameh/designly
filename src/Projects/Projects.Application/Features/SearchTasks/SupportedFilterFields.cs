@@ -16,7 +16,9 @@ namespace Projects.Application.Features.SearchTasks
             [nameof(TaskItem.AssignedBy)] = TaskItemFieldToColumnMapping.AssignedBy,
             [nameof(TaskItem.DueDate)] = TaskItemFieldToColumnMapping.DueDate,
             [nameof(TaskItem.CompletedAt)] = TaskItemFieldToColumnMapping.CompletedAt,
-            [nameof(TaskItem.TaskItemStatus)] = TaskItemFieldToColumnMapping.TaskItemStatus
+            [nameof(TaskItem.TaskItemStatus)] = TaskItemFieldToColumnMapping.TaskItemStatus,
+            [nameof(TaskItem.CreatedAt)] = TaskItemFieldToColumnMapping.CreatedAt,
+            [nameof(TaskItem.ModifiedAt)] = TaskItemFieldToColumnMapping.ModifiedAt
         };
     }
 }

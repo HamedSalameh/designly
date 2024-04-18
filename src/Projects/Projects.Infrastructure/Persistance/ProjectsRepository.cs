@@ -6,7 +6,9 @@ using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Domain.StonglyTyped;
+using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
+using SqlKata;
 using System.Data;
 
 namespace Projects.Infrastructure.Persistance
@@ -22,11 +24,116 @@ namespace Projects.Infrastructure.Persistance
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbConnectionStringProvider = dbConnectionStringProvider ?? throw new ArgumentNullException(nameof(dbConnectionStringProvider));
 
+            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
             SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
 
+            SqlMapper.AddTypeHandler(new DapperProjectIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperTenantIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperTaskItemIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperProjectLeadIdTypeHandler());
+            SqlMapper.AddTypeHandler(new DapperClientIdTypeHandler());
+        }
+
+        public async Task<BasicProject?> GetByIdAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken = default)
+        {
+            if (projectId == ProjectId.Empty)
+            {
+                throw new ArgumentException("Invalid value for project Id");
+            }
+            if (tenantId == TenantId.Empty)
+            {
+                throw new ArgumentException("Invalid value for tenant Id");
+            }
+
+            var sqlScript = "select * from projects where id=@p_id and tenant_id=@p_tenant_id";
+
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("p_id", projectId.Id);
+            dynamicParameters.Add("p_tenant_id", tenantId.Id);
+
+            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            return await policy.ExecuteAsync(async () =>
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = await connection.BeginTransactionAsync();
+                try
+                {
+                    var result = await connection.QueryFirstOrDefaultAsync<BasicProject>(sqlScript,
+                        dynamicParameters,
+                        transaction: transaction,
+                        commandType: CommandType.Text);
+
+                    transaction.Commit();
+                    return result;
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not retrieve project {id} under account {tenant}", projectId, tenantId);
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            });
+        }
+
+        public async Task UpdateAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
+        {
+            if (basicProject is null)
+            {
+                _logger.LogError($"{nameof(basicProject)} is null");
+                throw new ArgumentNullException(nameof(basicProject));
+            }
+
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("p_id", basicProject.Id, DbType.Guid);
+            dynamicParameters.Add("p_tenant_id", basicProject.TenantId.Id, DbType.Guid);
+            dynamicParameters.Add("p_name", basicProject.Name, DbType.String);
+            dynamicParameters.Add("p_description", basicProject.Description, DbType.String);
+            dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id, DbType.Guid);
+            dynamicParameters.Add("p_client_id", basicProject.ClientId.Id, DbType.Guid);
+            dynamicParameters.Add("p_start_date", basicProject.StartDate, DbType.DateTime);
+            dynamicParameters.Add("p_deadline", basicProject.Deadline, DbType.DateTime);
+            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.DateTime);
+            dynamicParameters.Add("p_status", basicProject.Status, DbType.Int16);
+
+            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await policy.ExecuteAsync(async () =>
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = await connection.BeginTransactionAsync();
+                try
+                {
+                    await connection.ExecuteAsync(sql: "update_basicproject",
+                                               param: dynamicParameters,
+                                               commandType: CommandType.StoredProcedure,
+                                               transaction: transaction);
+                    await transaction.CommitAsync();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Error updating project {id} under account {tenant}", basicProject.Id, basicProject.TenantId);
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            });
         }
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
@@ -141,7 +248,44 @@ namespace Projects.Infrastructure.Persistance
 
             return;
         }
+
+        public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(tenantId, nameof(tenantId));
+            ArgumentNullException.ThrowIfNull(sqlResult, nameof(sqlResult));
+
+            var sqlQuery = sqlResult.Sql;
+            var parameters = sqlResult.NamedBindings;
+
+            return policy.ExecuteAsync(async (ct) =>
+            {
+                using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+                await connection.OpenAsync(ct);
+                using var transaction = connection.BeginTransaction();
+                try
+                {
+                    var results = await connection.QueryAsync<BasicProject>(sqlQuery,
+                    parameters,
+                    transaction: transaction,
+                    commandType: CommandType.Text);
+                    transaction.Commit();
+                    return results ?? [];
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not retrieve projects search results due to error : {exception.Message}", exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (connection.State != ConnectionState.Closed)
+                    {
+                        await connection.CloseAsync();
+                        connection.Dispose();
+                    }
+                }
+            }, cancellationToken);
+        }
     }
-
-
 }

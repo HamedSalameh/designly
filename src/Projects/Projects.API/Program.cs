@@ -17,7 +17,9 @@ using Projects.Application.Features.CreateProject;
 using Projects.Application.Features.CreateTask;
 using Projects.Application.Features.DeleteProject;
 using Projects.Application.Features.DeleteTask;
+using Projects.Application.Features.SearchProjects;
 using Projects.Application.Features.SearchTasks;
+using Projects.Application.Features.UpdateProject;
 using Projects.Application.Features.UpdateTask;
 using Serilog;
 using System.Net.Mime;
@@ -105,6 +107,8 @@ static void MapEndoints(WebApplication app)
 
     projectsRouteGroup.MapCreateFeature();
     projectsRouteGroup.MapDeleteFeature("{projectId}");
+    projectsRouteGroup.MapUpdateFeature("{projectId}");
+    projectsRouteGroup.MapSearchFeature("search");
 
     projectsRouteGroup.MapCreateTaskFeature("tasks");
     projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");

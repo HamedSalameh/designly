@@ -80,6 +80,15 @@ namespace Projects.Domain
             TaskItems = [];
         }
 
+        public void SetId(ProjectId projectId)
+        {
+            if (projectId == ProjectId.Empty)
+            {
+                throw new ArgumentException($"{nameof(projectId)} : must not be empty");
+            }
+            Id = projectId;
+        }
+
         public void SetName(string projectName)
         {
             if (string.IsNullOrEmpty(projectName))
