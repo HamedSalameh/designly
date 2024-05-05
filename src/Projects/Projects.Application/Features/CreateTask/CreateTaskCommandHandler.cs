@@ -17,10 +17,10 @@ namespace Projects.Application.Features.CreateTask
 
         public CreateTaskCommandHandler(ILogger<CreateTaskCommandHandler> logger, IUnitOfWork unitOfWork, IBusinessLogicValidator businessLogicValidator, ITaskItemBuilder taskItemBuilder)
         {
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
-            ArgumentNullException.ThrowIfNull(taskItemBuilder, nameof(taskItemBuilder));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(businessLogicValidator);
+            ArgumentNullException.ThrowIfNull(taskItemBuilder);
 
             _unitOfWork = unitOfWork;
             _businessLogicValidator = businessLogicValidator;

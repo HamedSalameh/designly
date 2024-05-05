@@ -12,7 +12,7 @@ namespace Projects.Application.LogicValidation
             IServiceProvider serviceProvider, ILogger<BusinessLogicValidator> logger)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<BusinessLogicException?> ValidateAsync(IBusinessLogicValidationRequest request, CancellationToken cancellationToken)

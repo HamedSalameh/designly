@@ -6,7 +6,7 @@ namespace Projects.Application.Features.SearchTasks
 {
     public static class SupportedTaskItemFieldNames
     {
-        public static ConcurrentDictionary<string, string> TaskItemFieldNamesDic = new ConcurrentDictionary<string, string>
+        public static readonly ConcurrentDictionary<string, string> TaskItemFieldNamesDic = new ConcurrentDictionary<string, string>
         {
             [nameof(TaskItem.ProjectId)] = TaskItemFieldToColumnMapping.ProjectId,
             [nameof(TaskItem.Id)] = TaskItemFieldToColumnMapping.TaskId,

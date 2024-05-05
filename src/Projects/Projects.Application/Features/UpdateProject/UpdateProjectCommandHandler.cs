@@ -20,10 +20,10 @@ namespace Projects.Application.Features.UpdateProject
                                   IBusinessLogicValidator businessLogicValidator, 
                                              IProjectBuilder projectBuilder)
         {
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(projectBuilder, nameof(projectBuilder));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(businessLogicValidator);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(projectBuilder);
 
             _logger = logger;
             _unitOfWork = unitOfWork;

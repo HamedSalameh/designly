@@ -84,7 +84,6 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
-                        connection.Dispose();
                     }
                 }
 
@@ -123,7 +122,6 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
-                        connection.Dispose();
                     }
                 }
             }
@@ -162,7 +160,6 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
-                        connection.Dispose();
                     }
                 }
             }
@@ -207,7 +204,6 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
-                        connection.Dispose();
                     }
                 }
             }
@@ -246,7 +242,6 @@ namespace Projects.Infrastructure.Persistance
                     if (connection.State != ConnectionState.Closed)
                     {
                         await connection.CloseAsync();
-                        connection.Dispose();
                     }
                 }
             }
@@ -285,7 +280,6 @@ namespace Projects.Infrastructure.Persistance
                         if (connection.State != ConnectionState.Closed)
                         {
                             await connection.CloseAsync();
-                            connection.Dispose();
                         }
                     }
                 }

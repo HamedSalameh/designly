@@ -23,7 +23,7 @@ namespace Projects.Application.Features.CreateProject
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _projectBuilder = projectBuilder ?? throw new ArgumentNullException(nameof(projectBuilder));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _businessLogicValidator = businessLogicValidator ?? throw new ArgumentNullException(nameof(_businessLogicValidator));
+            _businessLogicValidator = businessLogicValidator ?? throw new ArgumentNullException(nameof(businessLogicValidator));
         }
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)

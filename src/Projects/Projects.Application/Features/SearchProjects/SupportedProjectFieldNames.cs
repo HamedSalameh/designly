@@ -6,7 +6,7 @@ namespace Projects.Application.Features.SearchProjects
 {
     public static class SupportedProjectFieldNames
     {
-        public static ConcurrentDictionary<string, string> ProjectFieldNamesDic = new ConcurrentDictionary<string, string>
+        public static readonly ConcurrentDictionary<string, string> ProjectFieldNamesDic = new ConcurrentDictionary<string, string>
         {
             [nameof(BasicProject.Id)] = ProjectFieldToColumnMapping.Id,
             [nameof(BasicProject.Name)] = ProjectFieldToColumnMapping.ProjectName,

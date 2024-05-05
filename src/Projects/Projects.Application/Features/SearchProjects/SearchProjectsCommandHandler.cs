@@ -22,10 +22,10 @@ namespace Projects.Application.Features.SearchProjects
 
         public SearchProjectsCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchProjectsCommandHandler> logger, ITenantProvider tenantProvider, IQueryBuilder queryBuilder)
         {
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(tenantProvider, nameof(tenantProvider));
-            ArgumentNullException.ThrowIfNull(queryBuilder, nameof(queryBuilder));
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(tenantProvider);
+            ArgumentNullException.ThrowIfNull(queryBuilder);
 
             _unitOfWork = unitOfWork;
             _logger = logger;

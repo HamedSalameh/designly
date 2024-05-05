@@ -251,15 +251,16 @@ namespace Projects.Infrastructure.Persistance
 
         public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(tenantId, nameof(tenantId));
-            ArgumentNullException.ThrowIfNull(sqlResult, nameof(sqlResult));
+            ArgumentNullException.ThrowIfNull(tenantId);
+            ArgumentNullException.ThrowIfNull(sqlResult);
 
             var sqlQuery = sqlResult.Sql;
             var parameters = sqlResult.NamedBindings;
-
+            
+            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             return policy.ExecuteAsync(async (ct) =>
             {
-                using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+                
                 await connection.OpenAsync(ct);
                 using var transaction = connection.BeginTransaction();
                 try

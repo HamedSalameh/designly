@@ -20,10 +20,10 @@ namespace Projects.Application.Features.UpdateTask
             IBusinessLogicValidator businessLogicValidator, 
             ITaskItemBuilder taskItemBuilder)
         {
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(taskItemBuilder, nameof(taskItemBuilder));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(businessLogicValidator);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(taskItemBuilder);
 
             _logger = logger;
             _unitOfWork = unitOfWork;
