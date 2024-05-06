@@ -97,7 +97,7 @@ namespace Designly.Filter
             _conditionBuilders[operatorType](field, fieldValues, query);
         }
 
-        private string getColumnName(string columnName)
+        private static string getColumnName(string columnName)
         {
             if (string.IsNullOrEmpty(columnName))
             {
@@ -113,7 +113,7 @@ namespace Designly.Filter
                 // Skip the first uppercase character
                 if (char.IsUpper(c))
                 {
-                    snakeCaseColumnName.Append("_");
+                    snakeCaseColumnName.Append('_');
                 }
                 snakeCaseColumnName.Append(char.ToLower(c));
             }
