@@ -127,22 +127,22 @@ namespace Clients.Infrastructure.Persistance
             return client;
         }
 
-        public async Task DeleteClientAsync(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
+        public async Task DeleteClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
             if (clientId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
 
-            if (TenantId == Guid.Empty)
+            if (tenantId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(TenantId));
+                throw new ArgumentNullException(nameof(tenantId));
             }
 
             // use dapper to delete client
             var parameters = new DynamicParameters();
             parameters.Add("id", clientId, DbType.Guid);
-            parameters.Add("tenant_id", TenantId, DbType.Guid);
+            parameters.Add("tenant_id", tenantId, DbType.Guid);
 
             var sqlCommand = "DELETE FROM clients WHERE id=@id AND tenant_id=@tenant_id";
 
@@ -162,22 +162,22 @@ namespace Clients.Infrastructure.Persistance
             }
         }
 
-        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid ClientId, CancellationToken cancellationToken)
+        public async Task<Client?> GetClientAsyncWithDapper(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (TenantId == Guid.Empty)
+            if (tenantId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(TenantId));
+                throw new ArgumentNullException(nameof(tenantId));
             }
-            if (ClientId == Guid.Empty)
+            if (clientId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(ClientId));
+                throw new ArgumentNullException(nameof(clientId));
             }
 
             var sqlCommand = "SELECT * FROM clients WHERE id=@ClientId AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();
-            dynamic.Add(nameof(ClientId), ClientId);
-            dynamic.Add(nameof(TenantId), TenantId);
+            dynamic.Add(nameof(clientId), clientId);
+            dynamic.Add(nameof(tenantId), tenantId);
 
             _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))

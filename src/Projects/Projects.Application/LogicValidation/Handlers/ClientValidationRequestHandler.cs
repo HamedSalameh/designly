@@ -42,10 +42,8 @@ namespace Projects.Application.LogicValidation.Handlers
 
         private void DoValidateRequest(ClientValidationRequest request)
         {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            ArgumentNullException.ThrowIfNull(request);
+            
             if (request.ClientId == ClientId.Empty)
             {
                 _logger.LogInformation("Invalid value for {ClientId}", nameof(request.ClientId));
