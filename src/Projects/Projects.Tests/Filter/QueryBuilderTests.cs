@@ -1,10 +1,8 @@
 ﻿using Designly.Base.Exceptions;
 using Designly.Filter;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SqlKata.Compilers;
-using System.Runtime.CompilerServices;
 
 namespace Projects.Tests.Filter
 {

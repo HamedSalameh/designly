@@ -5,7 +5,7 @@ namespace Designly.Filter
     // validate the FilterConditionDto Field property can only be one if the FilterFields
     public static class SupportedFilterConditionOperators
     {
-        public static readonly ConcurrentDictionary<string, FilterConditionOperator> FilterConditionOperatorsDic = new ConcurrentDictionary<string, FilterConditionOperator>
+        public static readonly ConcurrentDictionary<string, FilterConditionOperator> FilterConditionOperatorsDic = new()
         {
             [FilterConditionOperatorStringMapping.Equal] = FilterConditionOperator.Equals,
             [FilterConditionOperatorStringMapping.NotEqual] = FilterConditionOperator.NotEquals,

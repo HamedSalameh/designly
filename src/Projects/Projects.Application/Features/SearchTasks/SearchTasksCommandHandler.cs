@@ -1,6 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
-using Designly.Auth.Identity;
-using Designly.Base.Exceptions;
+﻿using Designly.Base.Exceptions;
 using Designly.Filter;
 using LanguageExt.Common;
 using MediatR;
@@ -15,19 +13,16 @@ namespace Projects.Application.Features.SearchTasks
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<SearchTasksCommandHandler> _logger;
-        private readonly ITenantProvider _tenantProvider;
         private readonly IQueryBuilder _queryBuilder;
 
-        public SearchTasksCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchTasksCommandHandler> logger, ITenantProvider tenantProvider, IQueryBuilder queryBuilder)
+        public SearchTasksCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchTasksCommandHandler> logger, IQueryBuilder queryBuilder)
         {
             ArgumentNullException.ThrowIfNull(unitOfWork);
             ArgumentNullException.ThrowIfNull(logger);
-            ArgumentNullException.ThrowIfNull(tenantProvider);
             ArgumentNullException.ThrowIfNull(queryBuilder);
 
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _tenantProvider = tenantProvider;
             _queryBuilder = queryBuilder;
         }
 
@@ -37,7 +32,7 @@ namespace Projects.Application.Features.SearchTasks
             {
                 _logger.LogDebug("Handling request {SearchTasksCommand}", nameof(SearchTasksCommand));
             }
-            FilterDefinition filterDefinition = getFilterDefinition(request);
+            FilterDefinition filterDefinition = GetFilterDefinition(request);
             var sqlQuery = _queryBuilder.BuildAsync(filterDefinition);
             if (sqlQuery == null)
             {
@@ -57,11 +52,11 @@ namespace Projects.Application.Features.SearchTasks
             return new Result<IEnumerable<TaskItem>>(results ?? []);
         }
 
-        private FilterDefinition getFilterDefinition(SearchTasksCommand request)
+        private static FilterDefinition GetFilterDefinition(SearchTasksCommand request)
         {
             var filters = request.filters;
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.tenantId.Id }));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, [request.projectId.Id]));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.tenantId.Id]));
             return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
         }
     }

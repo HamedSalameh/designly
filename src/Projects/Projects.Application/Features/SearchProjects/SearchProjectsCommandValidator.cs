@@ -23,7 +23,7 @@ namespace Projects.Application.Features.SearchProjects
                 }
                 else
                 {
-                    if (filter.Values == null || filter.Values.Count() == 0)
+                    if (filter.Values == null || !filter.Values.Any())
                     {
                         context.AddFailure("Filter values are required");
                     }

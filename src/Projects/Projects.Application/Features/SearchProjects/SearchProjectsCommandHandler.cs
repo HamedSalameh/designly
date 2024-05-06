@@ -1,11 +1,8 @@
-﻿using Amazon.Runtime.Internal.Util;
-using Designly.Auth.Identity;
-using Designly.Base.Exceptions;
+﻿using Designly.Base.Exceptions;
 using Designly.Filter;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Projects.Application.Features.SearchTasks;
 using Projects.Domain;
 using Projects.Infrastructure.Filter;
 using Projects.Infrastructure.Interfaces;
@@ -17,19 +14,16 @@ namespace Projects.Application.Features.SearchProjects
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<SearchProjectsCommandHandler> _logger;
-        private readonly ITenantProvider _tenantProvider;
         private readonly IQueryBuilder _queryBuilder;
 
-        public SearchProjectsCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchProjectsCommandHandler> logger, ITenantProvider tenantProvider, IQueryBuilder queryBuilder)
+        public SearchProjectsCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchProjectsCommandHandler> logger, IQueryBuilder queryBuilder)
         {
             ArgumentNullException.ThrowIfNull(unitOfWork);
             ArgumentNullException.ThrowIfNull(logger);
-            ArgumentNullException.ThrowIfNull(tenantProvider);
             ArgumentNullException.ThrowIfNull(queryBuilder);
 
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _tenantProvider = tenantProvider;
             _queryBuilder = queryBuilder;
         }
 
@@ -39,7 +33,7 @@ namespace Projects.Application.Features.SearchProjects
             {
                 _logger.LogDebug("Handling request {SearchProjectsCommand}", nameof(SearchProjectsCommand));
             }
-            FilterDefinition filterDefinition = getFilterDefinition(searchProjectsCommand);
+            FilterDefinition filterDefinition = GetFilterDefinition(searchProjectsCommand);
             var sqlQuery = _queryBuilder.BuildAsync(filterDefinition);
             if (sqlQuery == null)
             {
@@ -59,10 +53,10 @@ namespace Projects.Application.Features.SearchProjects
             return new Result<IEnumerable<BasicProject>>(results ?? []);
         }
 
-        private FilterDefinition getFilterDefinition(SearchProjectsCommand request)
+        private static FilterDefinition GetFilterDefinition(SearchProjectsCommand request)
         {
             var filters = request.FilterConditions;
-            filters.Add(new FilterCondition(ProjectFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.TenantId.Id }));
+            filters.Add(new FilterCondition(ProjectFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.TenantId.Id]));
             return new FilterDefinition(ProjectFieldToColumnMapping.ProjectsTable, request.FilterConditions);
         }
     }
