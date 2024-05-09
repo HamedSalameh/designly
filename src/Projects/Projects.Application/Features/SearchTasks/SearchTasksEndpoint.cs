@@ -48,11 +48,11 @@ namespace Projects.Application.Features.SearchTasks
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchTaskRequest.filters)
             {
-                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDic.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
+                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDictionary.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
-                if (!SupportedTaskItemFieldNames.TaskItemFieldNamesDic.TryGetValue(filter.Field, out var filterConditionField))
+                if (!SupportedTaskItemFieldNames.TaskItemFieldNamesDictionary.TryGetValue(filter.Field, out var filterConditionField))
                 { 
                     return Results.BadRequest("We could not parse a filter field for one of the filter conditions.");
                 }

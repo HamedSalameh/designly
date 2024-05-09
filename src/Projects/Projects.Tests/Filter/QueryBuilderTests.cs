@@ -9,13 +9,8 @@ namespace Projects.Tests.Filter
     [TestFixture]
     public class QueryBuilderTests
     {
-        private Mock<ILogger<FilterQueryBuilder>> loggerMock;
+        private readonly Mock<ILogger<FilterQueryBuilder>> loggerMock = new Mock<ILogger<FilterQueryBuilder>>();
         private FilterQueryBuilder sut;
-
-        public QueryBuilderTests()
-        {
-            loggerMock = new Mock<ILogger<FilterQueryBuilder>>();
-        }
 
         [SetUp]
         public void Setup()
@@ -29,7 +24,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Equals, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -55,7 +50,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotEquals, new List<object>{"John"})
+                new("Name", FilterConditionOperator.NotEquals, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -81,7 +76,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Contains, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Contains, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -107,7 +102,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotContains, new List<object>{"John"})
+                new("Name", FilterConditionOperator.NotContains, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -133,7 +128,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.In, new List<object>{"John", "Doe"})
+                new("Name", FilterConditionOperator.In, ["John", "Doe"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -159,7 +154,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotIn, new List<object>{"John", "Doe"})
+                new("Name", FilterConditionOperator.NotIn, ["John", "Doe"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -185,7 +180,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18})
+                new("Age", FilterConditionOperator.GreaterThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -211,7 +206,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Age", FilterConditionOperator.LessThan, new List<object>{18})
+                new("Age", FilterConditionOperator.LessThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -237,7 +232,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.StartsWith, new List<object>{"John"})
+                new("Name", FilterConditionOperator.StartsWith, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -263,7 +258,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.EndsWith, new List<object>{"John"})
+                new("Name", FilterConditionOperator.EndsWith, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -289,7 +284,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.IsNull, new List<object>())
+                new("Name", FilterConditionOperator.IsNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -315,7 +310,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.IsNotNull, new List<object>())
+                new("Name", FilterConditionOperator.IsNotNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -341,7 +336,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Like, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Like, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -381,8 +376,8 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -409,9 +404,9 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -439,10 +434,10 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -471,11 +466,11 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"}),
-                new FilterCondition("Street", FilterConditionOperator.NotContains, new List<object>{"Main"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"]),
+                new("Street", FilterConditionOperator.NotContains, ["Main"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -505,12 +500,12 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"}),
-                new FilterCondition("Street", FilterConditionOperator.NotContains, new List<object>{"Main"}),
-                new FilterCondition("ZipCode", FilterConditionOperator.IsNull, new List<object>())
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"]),
+                new("Street", FilterConditionOperator.NotContains, ["Main"]),
+                new("ZipCode", FilterConditionOperator.IsNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
