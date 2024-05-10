@@ -33,6 +33,13 @@ namespace Projects.Tests.Projects
         [Test]
         public async Task Should_Create_Project()
         {
+            var mockProjectName = "Test Project";
+            var mockProjectLeadId = ProjectLeadId.New;
+            var mockClientId = ClientId.New;
+            var mockProjectId = ProjectId.New;
+            var mockTenantId = TenantId.New;
+            var mockBasicProject = new BasicProject(mockTenantId, mockProjectLeadId, mockClientId, mockProjectName);
+
             // mock client validation
             _businessLogicValidator.Setup(x => x.ValidateAsync(It.IsAny<ClientValidationRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((BusinessLogicException)null!);
@@ -50,24 +57,25 @@ namespace Projects.Tests.Projects
                 .Returns(_projectBuilder.Object);
             _projectBuilder.Setup(x => x.WithDescription(It.IsAny<string>()))
                 .Returns(_projectBuilder.Object);
-            _projectBuilder.Setup(x => x.WithStartDate(It.IsAny<DateOnly>()))
+            _projectBuilder.Setup(x => x.WithStartDate(It.IsAny<DateOnly?>()))
                 .Returns(_projectBuilder.Object);
-            _projectBuilder.Setup(x => x.WithDeadline(It.IsAny<DateOnly>()))
+            _projectBuilder.Setup(x => x.WithDeadline(It.IsAny<DateOnly?>()))
                 .Returns(_projectBuilder.Object);
             _projectBuilder.Setup(x => x.WithCompletedAt(It.IsAny<DateOnly?>()))
                 .Returns(_projectBuilder.Object);
 
-            var unused = _projectBuilder.Setup(x => x.BuildBasicProject())
-                .Returns(new BasicProject(new TenantId(Guid.NewGuid()),
-                new ProjectLeadId(Guid.NewGuid()), new ClientId(Guid.NewGuid()),
-                "Test Project"));
+            _projectBuilder.Setup(x => x.BuildBasicProject())
+                .Returns(new BasicProject(mockTenantId, mockProjectLeadId, mockClientId, mockProjectName));
+
+            _unitOfWork.Setup(x => x.ProjectsRepository.CreateBasicProjectAsync(It.IsAny<BasicProject>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync( mockProjectId.Id);
 
             var sut = await _handler.Handle(new CreateProjectCommand
             {
-                TenantId = Guid.NewGuid(),
-                Name = "Test Project",
-                ProjectLeadId = Guid.NewGuid(),
-                ClientId = Guid.NewGuid()
+                TenantId = mockTenantId,
+                Name = mockProjectName,
+                ProjectLeadId = mockProjectLeadId,
+                ClientId = mockClientId
             }, CancellationToken.None);
 
             Assert.That(sut.IsSuccess);

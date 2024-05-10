@@ -30,7 +30,7 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(projectLeadId)} : must not be empty");
             }
-            this._projectLeadId = projectLeadId;
+            _projectLeadId = projectLeadId;
             return this;
         }
 
@@ -40,7 +40,7 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(clientId)} : must not be empty");
             }
-            this._clientId = clientId;
+            _clientId = clientId;
             return this;
         }
 
@@ -50,29 +50,29 @@ namespace Projects.Application.Builders
             {
                 throw new ArgumentException($"{nameof(name)} : must not be null or empty");
             }
-            this._name = name;
+            _name = name;
             return this;
         }
 
         public IProjectBuilder WithDescription(string description)
         {
-            this._description = description;
+            _description = description;
             return this;
         }
 
         public IProjectBuilder WithStartDate(DateOnly? startDate)
         {
-            if (startDate > _deadline)
+            if (_deadline.HasValue && startDate > _deadline)
             {
                 throw new ArgumentException($"{nameof(startDate)} : must be before {nameof(_deadline)}");
             }
-            this._startDate = startDate;
+            _startDate = startDate;
             return this;
         }
 
         public IProjectBuilder WithDeadline(DateOnly? deadline)
         {
-            if (_startDate > deadline)
+            if (_startDate.HasValue && _startDate > deadline)
             {
                 throw new ArgumentException($"{nameof(deadline)} : must be after {nameof(_startDate)}");
             }
