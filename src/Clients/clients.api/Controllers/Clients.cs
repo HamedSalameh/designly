@@ -35,14 +35,14 @@ namespace Clients.API.Controllers
         {
             if (clientDto == null)
             {
-                _logger.LogError("Invalid value for {clientDto}", nameof(clientDto));
+                _logger.LogError("Invalid value for {ClientDto}", nameof(clientDto));
                 return BadRequest($"The submitted client object is not valid or empty");
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
@@ -68,14 +68,14 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("Invalid value for {Id}", nameof(id));
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
@@ -100,14 +100,14 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("Invalid value for {Id}", nameof(id));
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if ( Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
@@ -128,12 +128,12 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("Invalid value for {Id}", nameof(id));
                 return BadRequest(id);
             }
             if (tenantId == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest(tenantId);
             }
 
@@ -153,14 +153,14 @@ namespace Clients.API.Controllers
         {
             if (clientSearchDto == null)
             {
-                _logger.LogError( "Invalid value for {clientSearchDto}", nameof(clientSearchDto));
+                _logger.LogError( "Invalid value for {ClientSearchDto}", nameof(clientSearchDto));
                 return BadRequest($"The submitted search object is not valid or empty");
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 
@@ -181,14 +181,14 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("Invalid value for {Id}", nameof(id));
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
+                _logger.LogError("Invalid value for {TenantId}", nameof(tenantId));
                 return BadRequest($"The submitted tenant Id is not valid or empty");
             }
 

@@ -35,7 +35,7 @@ namespace Projects.Application.Features.SearchTasks
 
             if (searchTaskRequest == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(searchTaskRequest));
+                logger.LogError("Invalid value for {Request}", nameof(searchTaskRequest));
                 return Results.BadRequest("The submitted search task object is not valid or empty");
             }
 

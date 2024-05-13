@@ -32,7 +32,7 @@ namespace Accounts.Infrastructure.Persistance
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Getting user by email for {email}", email);
+                _logger.LogDebug("Getting user by email for {Email}", email);
             }
 
             if (string.IsNullOrWhiteSpace(email))
@@ -51,7 +51,7 @@ namespace Accounts.Infrastructure.Persistance
                 
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    _logger.LogDebug("Got user by email for {email} : {user}", email, user);
+                    _logger.LogDebug("Got user by email for {Email} : {User}", email, user);
                 }
 
                 return user;
@@ -64,7 +64,7 @@ namespace Accounts.Infrastructure.Persistance
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Getting user by userId for {userId}", userId);
+                _logger.LogDebug("Getting user by userId for {UserId}", userId);
             }
             
             var user = await _policy.ExecuteAsync(async () =>
@@ -77,7 +77,7 @@ namespace Accounts.Infrastructure.Persistance
 
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    _logger.LogDebug("Got user by userId for {userId} : {user}", userId, user);
+                    _logger.LogDebug("Got user by userId for {UserId} : {User}", userId, user);
                 }
 
                 return user;
@@ -90,7 +90,7 @@ namespace Accounts.Infrastructure.Persistance
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Getting user status by userId for {userId}", userId);
+                _logger.LogDebug("Getting user status by userId for {UserId}", userId);
             }
 
             var userStatus = await _policy.ExecuteAsync(async () =>
@@ -102,7 +102,7 @@ namespace Accounts.Infrastructure.Persistance
 
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    _logger.LogDebug("Got user status by userId for {userId} : {user}", userId, user);
+                    _logger.LogDebug("Got user status by userId for {UserId} : {User}", userId, user);
                 }
 
                 return user?.Status;
@@ -115,7 +115,7 @@ namespace Accounts.Infrastructure.Persistance
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Getting tenant user by email for {email} in tenant {tenantId}", email, tenantId);
+                _logger.LogDebug("Getting tenant user by email for {Email} in tenant {TenantId}", email, tenantId);
             }
 
             if (string.IsNullOrWhiteSpace(email))
@@ -138,7 +138,7 @@ namespace Accounts.Infrastructure.Persistance
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Got tenant user by email for {email} in tenant {tenantId} : {user}", email, tenantId, user);
+                _logger.LogDebug("Got tenant user by email for {Email} in tenant {TenantId} : {User}", email, tenantId, user);
             }
 
             return user;

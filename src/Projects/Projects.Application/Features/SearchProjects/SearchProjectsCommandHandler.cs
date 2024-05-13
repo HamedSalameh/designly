@@ -47,7 +47,7 @@ namespace Projects.Application.Features.SearchProjects
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Request {SearchProjectsCommand} was handled and returned {results}", nameof(SearchProjectsCommand), results?.Count());
+                _logger.LogDebug("Request {SearchProjectsCommand} was handled and returned {Results}", nameof(SearchProjectsCommand), results?.Count());
             }
 
             return new Result<IEnumerable<BasicProject>>(results ?? []);

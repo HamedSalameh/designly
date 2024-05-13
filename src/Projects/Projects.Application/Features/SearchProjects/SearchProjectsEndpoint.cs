@@ -35,7 +35,7 @@ namespace Projects.Application.Features.SearchProjects
 
             if (searchProjectsRequest == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(searchProjectsRequest));
+                logger.LogError("Invalid value for {Request}", nameof(searchProjectsRequest));
                 return Results.BadRequest("The submitted search project object is not valid or empty");
             }
 

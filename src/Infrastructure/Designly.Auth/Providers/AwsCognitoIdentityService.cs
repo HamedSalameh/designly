@@ -48,7 +48,7 @@ namespace Designly.Auth.Providers
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("AWS Region is set to {awsRegion}", awsRegion.DisplayName);
+                _logger.LogDebug("AWS Region is set to {AWSRegion}", awsRegion.DisplayName);
             }
         }
 

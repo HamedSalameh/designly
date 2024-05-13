@@ -34,7 +34,7 @@ namespace Projects.Application.Features.DeleteTask
 
             if (projectId == Guid.Empty || taskId == Guid.Empty)
             {
-                logger.LogError("Invalid value for {projectId} or {taskId}", nameof(projectId), nameof(taskId));
+                logger.LogError("Invalid value for {ProjectId} or {TaskId}", nameof(projectId), nameof(taskId));
                 return Results.BadRequest("The submitted project id or task id is not valid or empty");
             }
 
@@ -48,11 +48,11 @@ namespace Projects.Application.Features.DeleteTask
             {
                 if (operationResult.IsSuccess)
                 {
-                    logger.LogDebug("Task with id {taskId} was deleted from project with id {projectId}", taskId, projectId);
+                    logger.LogDebug("Task with id {TaskId} was deleted from project with id {ProjectId}", taskId, projectId);
                 }
                 else
                 {
-                    logger.LogError("Failed to delete task with id {taskId} from project with id {projectId}", taskId, projectId);
+                    logger.LogError("Failed to delete task with id {TaskId} from project with id {ProjectId}", taskId, projectId);
                 }
             }
 

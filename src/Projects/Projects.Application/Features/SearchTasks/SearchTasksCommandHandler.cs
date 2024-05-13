@@ -46,7 +46,7 @@ namespace Projects.Application.Features.SearchTasks
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Request {SearchTasksCommand} was handled and returned {results}", nameof(SearchTasksCommand), results?.Count());
+                _logger.LogDebug("Request {SearchTasksCommand} was handled and returned {Results}", nameof(SearchTasksCommand), results?.Count());
             }
 
             return new Result<IEnumerable<TaskItem>>(results ?? []);

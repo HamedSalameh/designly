@@ -20,13 +20,13 @@ namespace IdentityService.Application.Commands
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Handling request {SigninRequestHandler} for {username}", nameof(SigninRequestHandler), request.Username);
+                logger.LogDebug("Handling request {SigninRequestHandler} for {UserName}", nameof(SigninRequestHandler), request.Username);
             }
 
             var username = request.Username;
             var password = request.Password;
 
-            logger.LogDebug("Handling request {SigninRequestHandler} for {username}", nameof(SigninRequestHandler), username);
+            logger.LogDebug("Handling request {SigninRequestHandler} for {UserName}", nameof(SigninRequestHandler), username);
             var tokenResponse = await _identityService.LoginJwtAsync(username, password, cancellationToken);
 
             return tokenResponse;

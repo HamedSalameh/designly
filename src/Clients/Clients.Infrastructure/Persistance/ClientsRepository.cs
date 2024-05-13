@@ -83,7 +83,7 @@ namespace Clients.Infrastructure.Persistance
         {
             if (client == null)
             {
-                _logger.LogError("Invalid value for {nameof(client)}: {client}", nameof(client), client);
+                _logger.LogError("Invalid value for {nameof(client)}: {Client}", nameof(client), client);
                 throw new ArgumentException($"Invalid value of client object");
             }
             if (client.Id == Guid.Empty)
@@ -179,7 +179,7 @@ namespace Clients.Infrastructure.Persistance
             dynamic.Add(nameof(clientId), clientId);
             dynamic.Add(nameof(tenantId), tenantId);
 
-            _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
+            _logger.LogDebug("{SqlCommand} : {SqlParameters}", sqlCommand, dynamic);
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
