@@ -90,7 +90,7 @@ namespace Projects.Infrastructure.Persistance
         {
             if (basicProject is null)
             {
-                _logger.LogError($"{nameof(basicProject)} is null");
+                _logger.LogError("{BaiscProject} is null", nameof(basicProject));
                 throw new ArgumentNullException(nameof(basicProject));
             }
 
@@ -140,7 +140,7 @@ namespace Projects.Infrastructure.Persistance
         {
             if (basicProject is null)
             {
-                _logger.LogError($"{nameof(basicProject)} is null");
+                _logger.LogError("{BasicProject} is null", nameof(basicProject));
                 throw new ArgumentNullException(nameof(basicProject));
             }
 

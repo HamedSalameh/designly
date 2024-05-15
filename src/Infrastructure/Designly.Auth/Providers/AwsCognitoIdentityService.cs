@@ -56,12 +56,12 @@ namespace Designly.Auth.Providers
         {
             if (string.IsNullOrEmpty(username))
             {
-                _logger.LogError($"{nameof(username)} must not be null or empty");
+                _logger.LogError("{UserName} must not be null or empty", nameof(username));
                 throw new ConfigurationException($"{nameof(username)} must not be null or empty");
             }
             if (string.IsNullOrEmpty(password))
             {
-                _logger.LogError($"{nameof(password)} must not be null or empty");
+                _logger.LogError("{Password} must not be null or empty", nameof(password));
                 throw new ConfigurationException($"{nameof(password)} must not be null or empty");
             }
 

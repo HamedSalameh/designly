@@ -13,7 +13,7 @@ namespace Designly.Auth.Policies
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug($"Checking if user is a service account");
+                _logger.LogDebug("Checking if user is a service account");
             }
 
             var requirement = context.Requirements.FirstOrDefault(r => r is MustBeServiceAccountRequirement);
@@ -44,7 +44,7 @@ namespace Designly.Auth.Policies
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Error while checking the user group membership");
+                _logger.LogError(exception, "Error while checking the user group membership: {Error}", exception.Message);
             }
 
             return false;

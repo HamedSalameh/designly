@@ -35,7 +35,7 @@ namespace Projects.Application.Features.DeleteProject
 
             if (projectId == Guid.Empty)
             {
-                logger.LogError($"Invalid value for {nameof(projectId)}");
+                logger.LogError("Invalid value for {ProjectId}", nameof(projectId));
                 return Results.BadRequest($"The submitted project Id is not valid or empty");
             }
 

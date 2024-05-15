@@ -35,7 +35,7 @@ namespace Accounts.Application.Features.CreateAccount
 
             if (createAccountRequestDto == null)
             {
-                logger.LogError($"Invalid value for {nameof(createAccountRequestDto)}");
+                logger.LogError("Invalid value for {CreateAccountRequestDto}", nameof(createAccountRequestDto));
                 return Results.BadRequest($"Invalid value for {nameof(createAccountRequestDto)}");
             }
 
