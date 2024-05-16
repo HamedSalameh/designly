@@ -22,7 +22,7 @@ namespace Accounts.Application.Features.CreateAccount
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {CreateAccountCommandHandler} for {request.Name}", nameof(CreateAccountCommandHandler), request.Name);
+                _logger.LogDebug("Handling request {CreateAccountCommandHandler} for {Name}", nameof(CreateAccountCommandHandler), request.Name);
             }
 
             try
@@ -71,12 +71,12 @@ namespace Accounts.Application.Features.CreateAccount
             }
             catch (BusinessLogicException businessLogicException)
             {
-                _logger.LogError(businessLogicException, "Could not create new account due to error: {exceptionType}: {exception.Message}", businessLogicException.GetType().Name, businessLogicException.Message);
+                _logger.LogError(businessLogicException, "Could not create new account due to error: {ExceptionType}: {Message}", businessLogicException.GetType().Name, businessLogicException.Message);
                 return new Result<Guid>(businessLogicException);
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                _logger.LogError(exception, "Could not create new account due to error: {ExceptionType}: {Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

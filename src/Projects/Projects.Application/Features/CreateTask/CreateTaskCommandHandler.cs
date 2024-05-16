@@ -40,7 +40,7 @@ namespace Projects.Application.Features.CreateTask
             var projectValidationResult = await _businessLogicValidator.ValidateAsync(new CreateTasksValidationRequest(request.ProjectId, request.TenantId), cancellationToken);
             if (projectValidationResult != null)
             {
-                _logger.LogInformation("Tasks cannot be created for project {Project} under account {Account} due to business logic rules violation: {Response}",
+                _logger.LogInformation("Tasks cannot be created for project {Project} under account {TenantId} due to business logic rules violation: {ProjectValidationResult}",
                     request.ProjectId, request.TenantId, projectValidationResult);
                 return new Result<Guid>(projectValidationResult);
             }

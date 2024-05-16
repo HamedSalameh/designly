@@ -26,7 +26,7 @@ namespace IdentityService.Application.Commands
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {CreateUserCommandHandler} for {request.Email}, {request.FirstName}, {request.LastName}", 
+                _logger.LogDebug("Handling request {CreateUserCommandHandler} for {Email}, {FirstName}, {LastName}", 
                                                        nameof(CreateUserCommandHandler), request.Email, request.FirstName, request.LastName);
             }
 

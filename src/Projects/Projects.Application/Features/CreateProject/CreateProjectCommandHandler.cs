@@ -71,7 +71,7 @@ namespace Projects.Application.Features.CreateProject
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Could not create project due to error : {ex.Message}", ex.Message);
+                _logger.LogError(ex, "Could not create project due to error : {Message}", ex.Message);
                 throw;
             }
         }

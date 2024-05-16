@@ -35,7 +35,7 @@ namespace Projects.Application.Features.UpdateProject
 
             if (updateProjectRequestDto == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(updateProjectRequestDto));
+                logger.LogError("Invalid value for {Request}", nameof(updateProjectRequestDto));
                 return Results.BadRequest("The submitted project object is not valid or empty");
             }
 

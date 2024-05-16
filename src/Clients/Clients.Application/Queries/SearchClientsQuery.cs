@@ -22,13 +22,13 @@ namespace Clients.Application.Queries
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {SearchClientsQueryHandler} for {request?.FirstName}, {request?.FamilyName}, {request?.City}", 
+                _logger.LogDebug("Handling request {SearchClientsQueryHandler} for {FirstName}, {FamilyName}, {City}", 
                                        nameof(SearchClientsQueryHandler), request?.FirstName, request?.FamilyName, request?.City);
             }
 
             if (request == null)
             {
-                _logger.LogError("Invalid value for {nameof(request)}: {request}", nameof(request), request);
+                _logger.LogError("Invalid value for {RequestName}: {Request}", nameof(request), request);
                 throw new ArgumentNullException(nameof(request), "Invalid value of request object");
             }
             var tenantId = request.TenantId;

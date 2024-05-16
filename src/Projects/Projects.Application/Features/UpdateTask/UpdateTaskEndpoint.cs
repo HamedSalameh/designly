@@ -35,7 +35,7 @@ namespace Projects.Application.Features.UpdateTask
 
             if (updateTaskRequestDto == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(updateTaskRequestDto));
+                logger.LogError("Invalid value for {Request}", nameof(updateTaskRequestDto));
                 return Results.BadRequest("The submitted task object is not valid or empty");
             }
 

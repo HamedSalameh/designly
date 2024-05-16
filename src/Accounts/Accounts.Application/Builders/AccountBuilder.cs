@@ -21,7 +21,7 @@ namespace Accounts.Application.Builders
             if (string.IsNullOrWhiteSpace(accountName))
             {
                 _logger.LogError("Invalid value for {AccountName}", nameof(accountName));
-                throw new ArgumentException($"The submitted account name is not valid or empty");
+                throw new ArgumentException("The submitted account name is not valid or empty");
             }
 
             account = new Account(accountName);

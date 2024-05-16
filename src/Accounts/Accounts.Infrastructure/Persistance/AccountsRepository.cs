@@ -67,7 +67,7 @@ namespace Accounts.Infrastructure.Persistance
             catch (Exception exception)
             {
                 await transaction.RollbackAsync(cancellationToken);
-                _logger.LogError(exception, "Could not update account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
+                _logger.LogError(exception, "Could not update account due to error: {ExceptionType}: {Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

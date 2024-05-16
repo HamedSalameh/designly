@@ -38,7 +38,7 @@ namespace Projects.Application.Features.SearchProjects
             if (sqlQuery == null)
             {
                 var errorMessage = "The query builder failed to build the query.";
-                _logger.LogError(errorMessage);
+                _logger.LogError("{ErrorMessage}", errorMessage);
 
                 return new Result<IEnumerable<BasicProject>>(new BusinessLogicException(errorMessage));
             }

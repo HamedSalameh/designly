@@ -19,7 +19,7 @@ namespace Clients.Application.Commands
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Handling request {UpdateClientCommandHandler} for {request.Client}", nameof(UpdateClientCommandHandler), request.Client);
+                logger.LogDebug("Handling request {UpdateClientCommandHandler} for {Client}", nameof(UpdateClientCommandHandler), request.Client);
             }
 
             var client = request.Client;
@@ -31,7 +31,7 @@ namespace Clients.Application.Commands
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, "Could not save changes to client due to error: {exception.Message}", exception.Message);
+                logger.LogError(exception, "Could not save changes to client due to error: {Message}", exception.Message);
                 throw;
             }
         }

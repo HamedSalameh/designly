@@ -16,7 +16,7 @@ namespace Clients.Application.Commands
             ArgumentNullException.ThrowIfNull(request);
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {DeleteClientCommandHandler} for {request.clientId}", nameof(DeleteClientCommandHandler), request.ClientId);
+                _logger.LogDebug("Handling request {DeleteClientCommandHandler} for {ClientId}", nameof(DeleteClientCommandHandler), request.ClientId);
             }
 
             if (request.ClientId == Guid.Empty) {
@@ -29,7 +29,7 @@ namespace Clients.Application.Commands
             await unitOfWork.ClientsRepository.
                 DeleteClientAsync(tenantId, clientId, cancellationToken).
                 ConfigureAwait(false);
-            _logger.LogDebug("Deleted client {request.Id}", clientId);
+            _logger.LogDebug("Deleted client {Id}", clientId);
 
             return Unit.Value;
         }

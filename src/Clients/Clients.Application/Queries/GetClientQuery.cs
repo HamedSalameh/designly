@@ -23,7 +23,7 @@ namespace Clients.Application.Queries
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {GetClientQueryHandler} for {request.Id}", nameof(GetClientQueryHandler), request.Id);
+                _logger.LogDebug("Handling request {GetClientQueryHandler} for {Id}", nameof(GetClientQueryHandler), request.Id);
             }
 
             var tenantId = request.TenantId;
@@ -31,7 +31,7 @@ namespace Clients.Application.Queries
             var client = await _unitOfWork.ClientsRepository.GetClientAsyncWithDapper(tenantId, clientId, cancellationToken).ConfigureAwait(false);
             if (client == null)
             {
-                _logger.LogInformation("Could not get entity with Id {request.Id}.", request.Id);
+                _logger.LogInformation("Could not get entity with Id {Id}.", request.Id);
                 throw new EntityNotFoundException(nameof(Client));
             }
 

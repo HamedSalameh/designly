@@ -71,7 +71,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not retrieve project {id} under account {tenant}", projectId, tenantId);
+                    _logger.LogError(exception, "Could not retrieve project {Id} under account {TenantId}", projectId, tenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
@@ -121,7 +121,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Error updating project {id} under account {tenant}", basicProject.Id, basicProject.TenantId);
+                    _logger.LogError(exception, "Error updating project {Id} under account {TenantId}", basicProject.Id, basicProject.TenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
@@ -232,7 +232,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not delete project {id} under account {tenant}", projectId, tenantId);
+                    _logger.LogError(exception, "Could not delete project {Id} under account {TenantId}", projectId, tenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }

@@ -32,7 +32,7 @@ namespace Projects.Application.Features.DeleteProject
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not delete project due to error: {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not delete project due to error: {Message}", exception.Message);
                 throw;
             }
         }

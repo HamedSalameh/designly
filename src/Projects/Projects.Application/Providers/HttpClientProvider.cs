@@ -46,7 +46,7 @@ namespace Projects.Application.Providers
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Added {scheme} successfully to http client", nameof(Designly.Auth.Consts.BearerAuthenicationScheme));
+                _logger.LogDebug("Added {Scheme} successfully to http client", nameof(Designly.Auth.Consts.BearerAuthenicationScheme));
             }
         }
     }

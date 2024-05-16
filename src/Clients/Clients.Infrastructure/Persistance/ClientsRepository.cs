@@ -70,7 +70,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not create client entity due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not create client entity due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -83,12 +83,12 @@ namespace Clients.Infrastructure.Persistance
         {
             if (client == null)
             {
-                _logger.LogError("Invalid value for {nameof(client)}: {Client}", nameof(client), client);
+                _logger.LogError("Invalid value for {NameOfClient}: {ClientId}", nameof(client), client);
                 throw new ArgumentException($"Invalid value of client object");
             }
             if (client.Id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {nameof(client.Id)}: {client.Id}", nameof(client.Id), client.Id);
+                _logger.LogError("Invalid value for {NameOfClientId}: {ClientId}", nameof(client.Id), client.Id);
                 throw new ArgumentException("Client object has invalid value for Id property.");
             }
 
@@ -118,7 +118,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not update client entity due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not update client entity due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -156,7 +156,7 @@ namespace Clients.Infrastructure.Persistance
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not delete client entity due to error : {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not delete client entity due to error : {Message}", exception.Message);
                 transaction.Rollback();
                 throw;
             }

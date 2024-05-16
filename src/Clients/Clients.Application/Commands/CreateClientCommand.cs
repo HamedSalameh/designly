@@ -17,7 +17,7 @@ namespace Clients.Application.Commands
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {request.Client}", nameof(CreateClientCommandHandler), request.Client);
+                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {Client}", nameof(CreateClientCommandHandler), request.Client);
             }
 
             var client = request.Client;
@@ -31,7 +31,7 @@ namespace Clients.Application.Commands
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new client due to error: {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not create new client due to error: {Message}", exception.Message);
                 throw;
             }
         }

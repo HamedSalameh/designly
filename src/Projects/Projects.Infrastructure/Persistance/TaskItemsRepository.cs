@@ -75,7 +75,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not create item due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not create item due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -113,7 +113,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not create item due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not create item due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -148,7 +148,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not delete taskitems under {projectId} in tenant {tenantId} due to error : {exception.Message}", 
+                    _logger.LogError(exception, "Could not delete taskitems under {ProjectId} in tenant {TenantId} due to error : {Message}", 
                         projectId.Id,
                         tenantId.Id,
                         exception.Message);
@@ -195,7 +195,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not update item due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not update item due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -233,7 +233,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not retrieve item due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not retrieve item due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -271,7 +271,7 @@ namespace Projects.Infrastructure.Persistance
                     }
                     catch (Exception exception)
                     {
-                        _logger.LogError(exception, "Could not retrieve items due to error : {exception.Message}", exception.Message);
+                        _logger.LogError(exception, "Could not retrieve items due to error : {Message}", exception.Message);
                         transaction.Rollback();
                         throw;
                     }
