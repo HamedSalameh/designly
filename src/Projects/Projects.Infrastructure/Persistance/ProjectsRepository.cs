@@ -245,8 +245,6 @@ namespace Projects.Infrastructure.Persistance
                     }
                 }
             });
-
-            return;
         }
 
         public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)

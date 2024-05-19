@@ -9,7 +9,7 @@ namespace Projects.Application.LogicValidation
         {
             var assembly = Assembly.GetExecutingAssembly();
             var types = assembly.GetTypes()
-                .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBusinessLogicValidationHandler<>)));
+                .Where(t => t.GetInterfaces().Exists(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBusinessLogicValidationHandler<>)));
 
             foreach (var type in types)
             {

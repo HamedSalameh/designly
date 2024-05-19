@@ -88,7 +88,7 @@ namespace IdentityService.API.Controllers
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not sign in user due to error: {exceptionType}: {Message}", exception.GetType().Name, exception.Message);
+                _logger.LogError(exception, "Could not sign in user due to error: {ExceptionType}: {Message}", exception.GetType().Name, exception.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

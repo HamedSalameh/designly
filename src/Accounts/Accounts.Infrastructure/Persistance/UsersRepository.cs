@@ -13,10 +13,10 @@ namespace Accounts.Infrastructure.Persistance
     public sealed class UsersRepository : IUsersRepository
     {
         private readonly AccountsDbContext _context;
-        private readonly ILogger<AccountsRepository> _logger;
+        private readonly ILogger<UsersRepository> _logger;
         private readonly AsyncPolicyWrap _policy;
 
-        public UsersRepository(AccountsDbContext context, ILogger<AccountsRepository> logger)
+        public UsersRepository(AccountsDbContext context, ILogger<UsersRepository> logger)
         {
             ArgumentNullException.ThrowIfNull(context);
             ArgumentNullException.ThrowIfNull(logger);

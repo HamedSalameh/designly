@@ -111,11 +111,11 @@ namespace Accounts.Domain
             }
             if (Status == AccountStatus.Deleted)
             {
-                throw new AccountException("Account is deleted");
+                throw new AccountException(AccountErrors.AccountIsDeleted.Description);
             }
             if (Status == AccountStatus.MarkedForDeletion)
             {
-                throw new AccountException("Account is marked for deletion");
+                throw new AccountException(AccountErrors.AccountIsMarkedForDeletion.Description);
             }
             
             Status = AccountStatus.Active;
@@ -127,11 +127,11 @@ namespace Accounts.Domain
 
             if (Status == AccountStatus.Deleted)
             {
-                throw new AccountException("Account is deleted");
+                throw new AccountException(AccountErrors.AccountIsDeleted.Description);
             }
             if (Status == AccountStatus.MarkedForDeletion)
             {
-                throw new AccountException("Account is marked for deletion");
+                throw new AccountException(AccountErrors.AccountIsMarkedForDeletion.Description);
             }
 
             Status = AccountStatus.Suspended;
@@ -143,11 +143,11 @@ namespace Accounts.Domain
 
             if (Status == AccountStatus.Deleted)
             {
-                throw new AccountException("Account is deleted");
+                throw new AccountException(AccountErrors.AccountIsDeleted.Description);
             }
             if (Status == AccountStatus.MarkedForDeletion)
             {
-                throw new AccountException("Account is marked for deletion");
+                throw new AccountException(AccountErrors.AccountIsMarkedForDeletion.Description);
             }
 
             Status = AccountStatus.Disabled;
@@ -159,7 +159,7 @@ namespace Accounts.Domain
 
             if (Status == AccountStatus.Deleted)
             {
-                throw new AccountException("Account is deleted");
+                throw new AccountException(AccountErrors.AccountIsDeleted.Description);
             }
 
             Status = AccountStatus.MarkedForDeletion;
