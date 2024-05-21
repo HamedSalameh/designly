@@ -77,7 +77,7 @@ namespace Accounts.Application.Features.CreateAccount
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Could not create new account due to error: {ExceptionType}: {Message}", exception.GetType().Name, exception.Message);
-                throw;
+                return new Result<Guid>(exception);
             }
         }
 
