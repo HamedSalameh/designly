@@ -64,10 +64,10 @@ namespace Accounts.Infrastructure.Persistance
 
                 transaction.Commit();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
+                // Rollback whatever changes we attempted to make
                 await transaction.RollbackAsync(cancellationToken);
-                _logger.LogError(exception, "Could not update account due to error: {ExceptionType}: {Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

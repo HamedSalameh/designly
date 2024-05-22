@@ -7,7 +7,6 @@ namespace Clients.Application.Commands
 {
     public record CreateClientCommand(Client Client) : IRequest<Guid>;
 
-    // Starting .Net 8.8, use primary constructor instead of constructor
     public class CreateClientCommandHandler(ILogger<CreateClientCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<CreateClientCommand, Guid>
     {
         private readonly ILogger<CreateClientCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -5,6 +5,7 @@ using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
 using Projects.Application.LogicValidation.Requests;
 using Projects.Infrastructure.Interfaces;
+using System;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -72,7 +73,7 @@ namespace Projects.Application.Features.CreateProject
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Could not create project due to error : {Message}", ex.Message);
-                throw;
+                return new Result<Guid>(ex);
             }
         }
     }
