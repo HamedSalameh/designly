@@ -24,7 +24,8 @@ namespace Clients.API.Controllers
         private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         private readonly ITenantProvider _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
 
-        private static readonly string InvalidTenantIdMessage = "The submitted tenant Id is not valid or empty";
+        private const string InvalidTenantIdMessage = "The submitted tenant Id is not valid or empty";
+        private const string InvalidIdMessage = "The submitted Id is not valid or empty";
 
         [HttpPost]
         [Authorize(Policy = IdentityData.AccountOwnerPolicyName)]
@@ -44,7 +45,7 @@ namespace Clients.API.Controllers
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError(InvalidTenantIdMessage);
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
                 return BadRequest(InvalidTenantIdMessage);
             }
 
@@ -70,14 +71,14 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {Id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError(InvalidTenantIdMessage);
+                _logger.LogError("{InvalidTenantId}",InvalidTenantIdMessage);
                 return BadRequest(InvalidTenantIdMessage);
             }
 
@@ -102,7 +103,7 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {Id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
@@ -130,12 +131,12 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {Id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
             if (tenantId == Guid.Empty)
             {
-                _logger.LogError(InvalidTenantIdMessage);
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
                 return BadRequest(InvalidTenantIdMessage);
             }
 
@@ -162,7 +163,7 @@ namespace Clients.API.Controllers
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError(InvalidTenantIdMessage);
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
                 return BadRequest(InvalidTenantIdMessage);
             }
 
@@ -183,14 +184,14 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {Id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError(InvalidTenantIdMessage);
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
                 return BadRequest(InvalidTenantIdMessage);
             }
 

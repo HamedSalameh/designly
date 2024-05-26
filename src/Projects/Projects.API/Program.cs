@@ -1,16 +1,10 @@
 using Designly.Auth;
 using Designly.Auth.Extentions;
-using Designly.Auth.Identity;
 using Designly.Auth.Models;
-using Designly.Auth.Policies;
 using Designly.Base.Exceptions;
 using Designly.Configuration;
-using Designly.Shared;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Features.CreateProject;
@@ -22,6 +16,7 @@ using Projects.Application.Features.SearchTasks;
 using Projects.Application.Features.UpdateProject;
 using Projects.Application.Features.UpdateTask;
 using Serilog;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -144,11 +139,13 @@ static void AttachNamedHttpClient<T>(WebApplicationBuilder builder, string secti
     var clientName = accountsServiceConfig.ServiceName;
     var baseAddress = accountsServiceConfig.BaseUrl;
     var serviceUri = accountsServiceConfig.ServiceUrl;
+    var apiVersion = accountsServiceConfig.ApiVersion;
 
     builder.Services.AddHttpClient(clientName, client =>
     {
         client.BaseAddress = new Uri($"{baseAddress}/{serviceUri}");
-        client.DefaultRequestHeaders.Add(
-        nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
+        client.DefaultRequestHeaders.Add(nameof(HeaderNames.Accept), MediaTypeNames.Application.Json);
+        client.DefaultRequestHeaders.Add(Designly.Shared.Consts.ApiVersionHeaderEntry, apiVersion);
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
     });
 }

@@ -41,8 +41,6 @@ namespace Projects.Application.Providers
             var authenticationHeaderValue = new AuthenticationHeaderValue(Designly.Auth.Consts.BearerAuthenicationScheme, accessToken);
 
             client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-            client.DefaultRequestHeaders.Add(Consts.ApiVersionHeaderEntry, "1.0"); // TODO: Get from configuration
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
