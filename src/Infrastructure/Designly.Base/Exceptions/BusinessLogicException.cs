@@ -5,7 +5,9 @@
     /// </summary>
     public class BusinessLogicException : Exception
     {
-        public BusinessLogicException(string? message = "One or more business logic failures have occurred.")
+        private const string OneOrMoreBusinessLogicFailures = "One or more business logic failures have occurred.";
+
+        public BusinessLogicException(string? message = OneOrMoreBusinessLogicFailures)
             : base(message)
         {
             Errors = new Dictionary<string, string>();
@@ -24,7 +26,7 @@
         /// </summary>
         /// <param name="errors"></param>
         /// <param name="message"></param>
-        public BusinessLogicException(IDictionary<string, string> errors, string message = "One or more business logic failures have occurred.") : this(
+        public BusinessLogicException(IDictionary<string, string> errors, string message = OneOrMoreBusinessLogicFailures) : this(
                        message)
         {
             Errors = errors;
@@ -37,7 +39,7 @@
         /// </summary>
         /// <param name="error"></param>
         /// <param name="message"></param>
-        public BusinessLogicException(KeyValuePair<string, string> error, string message = "One or more business logic failures have occurred.") : this(
+        public BusinessLogicException(KeyValuePair<string, string> error, string message = OneOrMoreBusinessLogicFailures) : this(
                                   message)
         {
             Errors = new Dictionary<string, string>
@@ -57,7 +59,7 @@
         /// <param name="key">The property that failed the business logic validation</param>
         /// <param name="keyValidationMessage">Description of the business logic failure and reason</param>
         /// <param name="message"></param>
-        public BusinessLogicException(string key, string keyValidationMessage, string message = "One or more business logic failures have occurred.") : this(
+        public BusinessLogicException(string key, string keyValidationMessage, string message = OneOrMoreBusinessLogicFailures) : this(
                                              message)
         {
             Errors = new Dictionary<string, string>
@@ -66,7 +68,7 @@
             };
         }
 
-        public BusinessLogicException(Error error, string message = "One or more business logic failures have occurred.") : this(
+        public BusinessLogicException(Error error, string message = OneOrMoreBusinessLogicFailures) : this(
                                                         message)
         {
             DomainErrors = new List<KeyValuePair<string, string>>
@@ -75,7 +77,7 @@
             };
         }
 
-        public BusinessLogicException(List<Error> errors, string message = "One or more business logic failures have occurred.") : this(
+        public BusinessLogicException(List<Error> errors, string message = OneOrMoreBusinessLogicFailures) : this(
                                                                    message)
         {
             DomainErrors = errors.Select(x => new KeyValuePair<string, string>(x.Code, x.Description)).ToList();
