@@ -22,7 +22,7 @@ namespace Projects.Application.LogicValidation.Handlers
 
         public ClientValidationRequestHandler(IHttpClientProvider httpClientProvider, ILogger<ClientValidationRequestHandler> logger)
         {
-            _policy = PollyPolicyFactory.WrappedNetworkRetries();
+            _policy = PollyPolicyFactory.WrappedNetworkRetries(logger);
             _httpClientProvider = httpClientProvider ?? throw new ArgumentNullException(nameof(httpClientProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

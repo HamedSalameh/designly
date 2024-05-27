@@ -28,7 +28,7 @@ namespace Projects.Infrastructure.Persistance
             _logger = logger;
             _dbConnectionStringProvider = dbConnectionStringProvider;
 
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             AddTypeHandler(new JsonbTypeHandler<List<string>>());

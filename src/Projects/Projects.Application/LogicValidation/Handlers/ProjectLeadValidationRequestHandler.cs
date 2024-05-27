@@ -21,7 +21,7 @@ namespace Projects.Application.LogicValidation.Handlers
 
         public ProjectLeadValidationRequestHandler(ILogger<ProjectLeadValidationRequestHandler> logger, IHttpClientProvider httpClientProvider)
         {
-            _policy = PollyPolicyFactory.WrappedNetworkRetries();
+            _policy = PollyPolicyFactory.WrappedNetworkRetries(logger);
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClientProvider = httpClientProvider ?? throw new ArgumentNullException(nameof(httpClientProvider));
         }

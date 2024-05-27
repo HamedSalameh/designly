@@ -27,7 +27,7 @@ namespace Clients.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
             
             _logger = logger;
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
             this.dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;

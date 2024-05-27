@@ -4,7 +4,6 @@ using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Accounts.Application.Extensions
@@ -25,7 +24,7 @@ namespace Accounts.Application.Extensions
                         BusinessLogicException businessLogicException => Results.UnprocessableEntity(businessLogicException.ToDesignlyProblemDetails()),
                         Exception exception => CreateInternalServerError(exception),
                         _ => Results.BadRequest(ex.Message)
-                    }; ;
+                    };
 
                     return result;
                 });

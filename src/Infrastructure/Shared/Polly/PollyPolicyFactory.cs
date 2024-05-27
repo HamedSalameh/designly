@@ -3,6 +3,8 @@ using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Timeout;
 using Polly.Wrap;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Designly.Shared.Polly
 {
@@ -11,58 +13,60 @@ namespace Designly.Shared.Polly
         private const int defaultRetryCount = 5;
         private const int defaultTimeout = 30;
 
-        public static AsyncRetryPolicy RetryWithJitterAsync(int retryCount = defaultRetryCount)
+        public static AsyncRetryPolicy RetryWithJitterAsync(ILogger logger, int retryCount = defaultRetryCount)
         {
             var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: retryCount);
 
             var retryPolicy = Policy
                 .Handle<Exception>()
-                .WaitAndRetryAsync(delay);
+                .WaitAndRetryAsync(delay, onRetry: (exception, timeSpan, retryCount, context) =>
+                {
+                    logger.LogWarning("Retry {RetryCount} after {TimeSpan} due to {Exception}.", retryCount, timeSpan, exception.Message);
+                });
 
             return retryPolicy;
         }
 
-        public static AsyncRetryPolicy NetworkRetryAsync(int retryCount, TimeSpan initialDelay)
+        public static AsyncRetryPolicy NetworkRetryAsync(ILogger logger, int retryCount, TimeSpan initialDelay)
         {
             return Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(
                     retryCount,
                     retryAttempt => initialDelay * Math.Pow(2, retryAttempt),
-                    (exception, timeSpan, retryCount, context) =>
+                    onRetry: (exception, timeSpan, retryCount, context) => 
                     {
+                        logger.LogWarning("Network retry {RetryCount} after {TimeSpan} due to {Exception}.", retryCount, timeSpan, exception.Message);
                     }
                 );
         }
 
-        public static AsyncTimeoutPolicy TimeoutAsync(int timeoutInSeconds = defaultTimeout)
+        public static AsyncTimeoutPolicy TimeoutAsync(ILogger logger, int timeoutInSeconds = defaultTimeout)
         {
             var policy = Policy.TimeoutAsync(timeoutInSeconds, TimeoutStrategy.Pessimistic,
-              onTimeoutAsync: (context, timespan, _, _) =>
-              {
-                  // TODO: Log here?
-                  return Task.CompletedTask;
-              });
+               onTimeoutAsync: async (context, timespan, task, exception) =>
+               {
+                   logger.LogError("Operation timed out after {Timeout} seconds. Context: {Context}. Exception: {Exception}", timespan.TotalSeconds, context, exception?.Message);
+                   await Task.CompletedTask;
+               });
 
             return policy;
         }
 
-        public static AsyncPolicyWrap WrappedAsyncPolicies()
+        public static AsyncPolicyWrap WrappedAsyncPolicies(ILogger logger)
         {
             var wrappedPolicy = Policy.WrapAsync(
-                RetryWithJitterAsync(),
-                TimeoutAsync()
-                );
+                RetryWithJitterAsync(logger),
+                TimeoutAsync(logger));
 
             return wrappedPolicy;
         }
 
-        public static AsyncPolicyWrap WrappedNetworkRetries()
+        public static AsyncPolicyWrap WrappedNetworkRetries(ILogger logger)
         {
             var wrappedPolicy = Policy.WrapAsync(
-                NetworkRetryAsync(defaultRetryCount, TimeSpan.FromSeconds(1)),
-                TimeoutAsync()
-                                              );
+                NetworkRetryAsync(logger, defaultRetryCount, TimeSpan.FromSeconds(1)),
+                TimeoutAsync(logger));
             return wrappedPolicy;
         }
     }

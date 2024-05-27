@@ -23,7 +23,7 @@ namespace Accounts.Infrastructure.Persistance
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
-            _policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            _policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
             _context = context;
             _logger = logger;
         }
