@@ -32,7 +32,6 @@ namespace IdentityService.Application.Commands
 
             var response = await _identityService.CreateUserAsync(request.Email, request.FirstName, request.LastName, cancellationToken);
             return response;
-
         }
     }
 }

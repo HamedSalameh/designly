@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using LanguageExt.Common;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Projects.Infrastructure.Interfaces;
 
 namespace Projects.Application.Features.DeleteProject
 {
-    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
+    public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand, Result<bool>>
     {
         private readonly ILogger<DeleteProjectCommandHandler> _logger;
         private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +16,7 @@ namespace Projects.Application.Features.DeleteProject
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
@@ -28,12 +29,12 @@ namespace Projects.Application.Features.DeleteProject
 
                 await _unitOfWork.ProjectsRepository.DeleteProjectAsync(request.ProjectId, request.TenantId, cancellationToken);
 
-                return Unit.Value;
+                return true;
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Could not delete project due to error: {Message}", exception.Message);
-                throw;
+                return new Result<bool>(exception);
             }
         }
     }

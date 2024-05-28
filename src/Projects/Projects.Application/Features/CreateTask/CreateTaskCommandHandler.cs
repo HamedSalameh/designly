@@ -36,33 +36,41 @@ namespace Projects.Application.Features.CreateTask
                 _logger.LogDebug("Handling request {CreateTaskCommand} for {Name}", nameof(CreateTaskCommandHandler), request.Name);
             }
 
-            // Step 1: Validate the project by Id, can we create task under this project
-            var projectValidationResult = await _businessLogicValidator.ValidateAsync(new CreateTasksValidationRequest(request.ProjectId, request.TenantId), cancellationToken);
-            if (projectValidationResult != null)
+            try
             {
-                _logger.LogInformation("Tasks cannot be created for project {Project} under account {TenantId} due to business logic rules violation: {ProjectValidationResult}",
-                    request.ProjectId, request.TenantId, projectValidationResult);
-                return new Result<Guid>(projectValidationResult);
+                // Step 1: Validate the project by Id, can we create task under this project
+                var projectValidationResult = await _businessLogicValidator.ValidateAsync(new CreateTasksValidationRequest(request.ProjectId, request.TenantId), cancellationToken);
+                if (projectValidationResult != null)
+                {
+                    _logger.LogInformation("Tasks cannot be created for project {Project} under account {TenantId} due to business logic rules violation: {ProjectValidationResult}",
+                        request.ProjectId, request.TenantId, projectValidationResult);
+                    return new Result<Guid>(projectValidationResult);
+                }
+
+                var taskItem = _taskItemBuilder
+                    .CreateTaskItem(request.Name, request.ProjectId, request.Description)
+                    .WithAssignedTo(request.AssignedTo)
+                    .WithAssignedBy(request.AssignedBy)
+                    .WithDueDate(request.DueDate)
+                    .WithCompletedAt(request.CompletedAt)
+                    .WithStatus(request.taskItemStatus)
+                    .Build();
+
+                var taskId = await _unitOfWork.TaskItemsRepository.AddAsync(taskItem, cancellationToken).ConfigureAwait(false);
+
+                if (_logger.IsEnabled(LogLevel.Debug))
+                {
+                    _logger.LogDebug("Created task {Task} for project {Project} under account {TenantId})",
+                        taskItem.Id, taskItem.ProjectId, taskItem.TenantId);
+                }
+
+                return taskId;
             }
-
-            var taskItem = _taskItemBuilder
-                .CreateTaskItem(request.Name, request.ProjectId, request.Description)
-                .WithAssignedTo(request.AssignedTo)
-                .WithAssignedBy(request.AssignedBy)
-                .WithDueDate(request.DueDate)
-                .WithCompletedAt(request.CompletedAt)
-                .WithStatus(request.taskItemStatus)
-                .Build();
-
-            var taskId = await _unitOfWork.TaskItemsRepository.AddAsync(taskItem, cancellationToken).ConfigureAwait(false);
-
-            if (_logger.IsEnabled(LogLevel.Debug))
+            catch (Exception exception)
             {
-                _logger.LogDebug("Created task {Task} for project {Project} under account {TenantId})",
-                    taskItem.Id, taskItem.ProjectId, taskItem.TenantId);
+                _logger.LogError(exception, "Could not create new task due to error: {Message}", exception.Message);
+                return new Result<Guid>(exception);
             }
-
-            return taskId;
         }
     }
 }

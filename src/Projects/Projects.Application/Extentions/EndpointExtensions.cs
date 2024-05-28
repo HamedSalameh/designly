@@ -1,7 +1,9 @@
-﻿using Designly.Base.Exceptions;
+﻿using Designly.Base;
+using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Projects.Application.Extentions
 {
@@ -17,11 +19,29 @@ namespace Projects.Application.Extentions
                     {
                         ValidationException validationException => Results.BadRequest(validationException.ToDesignlyProblemDetails()),
                         BusinessLogicException businessLogicException => Results.UnprocessableEntity(businessLogicException.ToDesignlyProblemDetails()),
+                        Exception exception => CreateInternalServerError(exception),
                         _ => Results.BadRequest(ex.Message)
                     };
 
                     return result;
                 });
+        }
+
+        private static IResult CreateInternalServerError(Exception exception)
+        {
+            var problemDetail = "See the error list for more information";
+
+            ArgumentNullException.ThrowIfNull(exception);
+
+            var problemDetails = new DesignlyProblemDetails(
+                title: problemDetail,
+                statusCode: (int)HttpStatusCode.InternalServerError,
+                detail: exception.Message
+                );
+
+            // return the respone
+            return Results.Problem(problemDetails);
+
         }
     }
 }

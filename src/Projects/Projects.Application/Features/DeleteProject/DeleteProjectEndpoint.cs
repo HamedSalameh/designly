@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Extentions;
 
 namespace Projects.Application.Features.DeleteProject
 {
@@ -47,8 +48,8 @@ namespace Projects.Application.Features.DeleteProject
                 ProjectId = projectId
             };
 
-            await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
-            return Results.NoContent();
+            var deleteStatus =await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
+            return deleteStatus.ToActionResult(res => Results.NoContent());
         }
     }
 }
