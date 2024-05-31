@@ -15,7 +15,7 @@ namespace Projects.Application.LogicValidation
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<BusinessLogicException?> ValidateAsync(IBusinessLogicValidationRequest request, CancellationToken cancellationToken)
+        public async Task<Exception?> ValidateAsync(IBusinessLogicValidationRequest request, CancellationToken cancellationToken)
         {
             Type handlerType = typeof(IBusinessLogicValidationHandler<>).MakeGenericType(request.GetType());
             dynamic handler = _serviceProvider.GetService(handlerType) ?? throw new NotImplementedException("Could not get any business logic validation handler from DI container");
