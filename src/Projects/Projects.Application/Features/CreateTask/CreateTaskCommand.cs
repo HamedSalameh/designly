@@ -9,8 +9,6 @@ namespace Projects.Application.Features.CreateTask
     {
         public TenantId TenantId { get; set; }
         public required string Name { get; set; }
-        //public required Guid TaskGroupId { get; set; }
-        //public TaskGroup TaskGroup { get; set; }
         public required ProjectId ProjectId { get; set; }
         public Guid? AssignedTo { get; set; }
         public Guid? AssignedBy { get; set; }

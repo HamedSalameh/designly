@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Extentions;
 
 namespace Projects.Application.Features.DeleteProject
 {
@@ -35,7 +36,7 @@ namespace Projects.Application.Features.DeleteProject
 
             if (projectId == Guid.Empty)
             {
-                logger.LogError($"Invalid value for {nameof(projectId)}");
+                logger.LogError("Invalid value for {ProjectId}", nameof(projectId));
                 return Results.BadRequest($"The submitted project Id is not valid or empty");
             }
 
@@ -47,8 +48,8 @@ namespace Projects.Application.Features.DeleteProject
                 ProjectId = projectId
             };
 
-            await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
-            return Results.NoContent();
+            var deleteStatus =await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
+            return deleteStatus.ToActionResult(res => Results.NoContent());
         }
     }
 }

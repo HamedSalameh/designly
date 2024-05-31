@@ -11,7 +11,7 @@ namespace Projects.Application.Features.UpdateTask
 
         public UpdateTaskValidationRequestHandler(IUnitOfWork unitOfWork)
         {
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+            ArgumentNullException.ThrowIfNull(unitOfWork);
 
             _unitOfWork = unitOfWork;
         }

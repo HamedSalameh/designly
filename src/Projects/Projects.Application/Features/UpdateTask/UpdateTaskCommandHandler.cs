@@ -20,10 +20,10 @@ namespace Projects.Application.Features.UpdateTask
             IBusinessLogicValidator businessLogicValidator, 
             ITaskItemBuilder taskItemBuilder)
         {
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(taskItemBuilder, nameof(taskItemBuilder));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(businessLogicValidator);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(taskItemBuilder);
 
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -41,7 +41,7 @@ namespace Projects.Application.Features.UpdateTask
             var taskValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateTaskValidationRequest(request.TenantId, request.ProjectId, request.TaskItemId), cancellationToken);
             if (taskValidationResult != null)
             {
-                _logger.LogInformation("Tasks cannot be updated for project {project} under account {account} due to business logic rules violation: {response}",
+                _logger.LogInformation("Tasks cannot be updated for project {Project} under account {Account} due to business logic rules violation: {TaskValidationResult}",
                                        request.ProjectId, request.TenantId, taskValidationResult);
                 return new Result<TaskItem>(taskValidationResult);
             }
@@ -62,7 +62,7 @@ namespace Projects.Application.Features.UpdateTask
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Task {TaskId} for project {projectId} under account {accountId} has been updated", 
+                _logger.LogDebug("Task {TaskId} for project {ProjectId} under account {AccountId} has been updated", 
                     taskItem.Id, taskItem.ProjectId, taskItem.TenantId);
             }
 

@@ -13,14 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Load configuration from appsettings.json
 builder.Configuration
             .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
 var configuration = builder.Configuration;
 
 // Configure Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
-    .WriteTo.Console()  // TODO: Read from configuration
-    .MinimumLevel.Debug()
-    );
+    .ReadFrom.Configuration(configuration));
 
 // API versioning
 ConfigureVersioning(builder);

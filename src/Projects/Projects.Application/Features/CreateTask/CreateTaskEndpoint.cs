@@ -35,7 +35,7 @@ namespace Projects.Application.Features.CreateTask
 
             if (createTaskRequestDto == null )
             {
-                logger.LogError("Invalid value for {request}", nameof(createTaskRequestDto));
+                logger.LogError("Invalid value for {Request}", nameof(createTaskRequestDto));
                 return Results.BadRequest("The submitted task object is not valid or empty");
             }
 

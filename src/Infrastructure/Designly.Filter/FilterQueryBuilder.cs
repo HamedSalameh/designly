@@ -17,8 +17,8 @@ namespace Designly.Filter
 
         public FilterQueryBuilder(Compiler compiler, ILogger<FilterQueryBuilder> logger)
         {
-            ArgumentNullException.ThrowIfNull(compiler, nameof(compiler));
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
+            ArgumentNullException.ThrowIfNull(compiler);
+            ArgumentNullException.ThrowIfNull(logger);
 
             _compiler = compiler;
             _logger = logger;
@@ -52,7 +52,7 @@ namespace Designly.Filter
                 _logger.LogDebug("Building query for filter conditions");
             }
 
-            ArgumentNullException.ThrowIfNull(filterDefinition, nameof(filterDefinition));
+            ArgumentNullException.ThrowIfNull(filterDefinition);
 
             if (filterDefinition.Conditions.Count == 0)
             {
@@ -97,7 +97,7 @@ namespace Designly.Filter
             _conditionBuilders[operatorType](field, fieldValues, query);
         }
 
-        private string getColumnName(string columnName)
+        private static string getColumnName(string columnName)
         {
             if (string.IsNullOrEmpty(columnName))
             {
@@ -113,7 +113,7 @@ namespace Designly.Filter
                 // Skip the first uppercase character
                 if (char.IsUpper(c))
                 {
-                    snakeCaseColumnName.Append("_");
+                    snakeCaseColumnName.Append('_');
                 }
                 snakeCaseColumnName.Append(char.ToLower(c));
             }

@@ -42,7 +42,6 @@ namespace Accounts.Tests
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => accountBuilder.CreateBasicAccount(invalidAccountName));
-            _logger.Received(1).LogError($"Invalid value for accountName");
         }
 
         [Test]

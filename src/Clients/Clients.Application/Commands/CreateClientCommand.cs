@@ -7,7 +7,6 @@ namespace Clients.Application.Commands
 {
     public record CreateClientCommand(Client Client) : IRequest<Guid>;
 
-    // Starting .Net 8.8, use primary constructor instead of constructor
     public class CreateClientCommandHandler(ILogger<CreateClientCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<CreateClientCommand, Guid>
     {
         private readonly ILogger<CreateClientCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -17,7 +16,7 @@ namespace Clients.Application.Commands
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {request.Client}", nameof(CreateClientCommandHandler), request.Client);
+                _logger.LogDebug("Handling request {CreateClientCommandHandler} for {Client}", nameof(CreateClientCommandHandler), request.Client);
             }
 
             var client = request.Client;
@@ -25,13 +24,13 @@ namespace Clients.Application.Commands
             try
             {
                 var clientId = await _unitOfWork.ClientsRepository.CreateClientAsyncWithDapper(client, cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug("Created client: {clientId}", clientId);
+                _logger.LogDebug("Created client: {ClientId}", clientId);
 
                 return clientId;
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not create new client due to error: {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not create new client due to error: {Message}", exception.Message);
                 throw;
             }
         }

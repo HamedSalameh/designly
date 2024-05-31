@@ -27,7 +27,7 @@ namespace Clients.Infrastructure.Persistance
             ArgumentNullException.ThrowIfNull(dbConnectionStringProvider);
             
             _logger = logger;
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
             this.dbConnectionStringProvider = dbConnectionStringProvider;
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
@@ -70,7 +70,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not create client entity due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not create client entity due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -83,12 +83,12 @@ namespace Clients.Infrastructure.Persistance
         {
             if (client == null)
             {
-                _logger.LogError("Invalid value for {nameof(client)}: {client}", nameof(client), client);
+                _logger.LogError("Invalid value for {NameOfClient}: {ClientId}", nameof(client), client);
                 throw new ArgumentException($"Invalid value of client object");
             }
             if (client.Id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {nameof(client.Id)}: {client.Id}", nameof(client.Id), client.Id);
+                _logger.LogError("Invalid value for {NameOfClientId}: {ClientId}", nameof(client.Id), client.Id);
                 throw new ArgumentException("Client object has invalid value for Id property.");
             }
 
@@ -118,7 +118,7 @@ namespace Clients.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not update client entity due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not update client entity due to error : {Message}", exception.Message);
                     transaction.Rollback();
                     throw;
                 }
@@ -127,22 +127,22 @@ namespace Clients.Infrastructure.Persistance
             return client;
         }
 
-        public async Task DeleteClientAsync(Guid TenantId, Guid clientId, CancellationToken cancellationToken)
+        public async Task DeleteClientAsync(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
             if (clientId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
 
-            if (TenantId == Guid.Empty)
+            if (tenantId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(TenantId));
+                throw new ArgumentNullException(nameof(tenantId));
             }
 
             // use dapper to delete client
             var parameters = new DynamicParameters();
             parameters.Add("id", clientId, DbType.Guid);
-            parameters.Add("tenant_id", TenantId, DbType.Guid);
+            parameters.Add("tenant_id", tenantId, DbType.Guid);
 
             var sqlCommand = "DELETE FROM clients WHERE id=@id AND tenant_id=@tenant_id";
 
@@ -156,30 +156,30 @@ namespace Clients.Infrastructure.Persistance
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Could not delete client entity due to error : {exception.Message}", exception.Message);
+                _logger.LogError(exception, "Could not delete client entity due to error : {Message}", exception.Message);
                 transaction.Rollback();
                 throw;
             }
         }
 
-        public async Task<Client?> GetClientAsyncWithDapper(Guid TenantId, Guid ClientId, CancellationToken cancellationToken)
+        public async Task<Client?> GetClientAsyncWithDapper(Guid tenantId, Guid clientId, CancellationToken cancellationToken)
         {
-            if (TenantId == Guid.Empty)
+            if (tenantId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(TenantId));
+                throw new ArgumentNullException(nameof(tenantId));
             }
-            if (ClientId == Guid.Empty)
+            if (clientId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(ClientId));
+                throw new ArgumentNullException(nameof(clientId));
             }
 
             var sqlCommand = "SELECT * FROM clients WHERE id=@ClientId AND tenant_id=@TenantId";
 
             var dynamic = new DynamicParameters();
-            dynamic.Add(nameof(ClientId), ClientId);
-            dynamic.Add(nameof(TenantId), TenantId);
+            dynamic.Add(nameof(clientId), clientId);
+            dynamic.Add(nameof(tenantId), tenantId);
 
-            _logger.LogDebug("{sqlCommand} : {sqlParameters}", sqlCommand, dynamic);
+            _logger.LogDebug("{SqlCommand} : {SqlParameters}", sqlCommand, dynamic);
             using (var connection = new NpgsqlConnection(dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);

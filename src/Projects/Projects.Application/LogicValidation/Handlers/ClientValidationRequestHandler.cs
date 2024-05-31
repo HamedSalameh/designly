@@ -22,7 +22,7 @@ namespace Projects.Application.LogicValidation.Handlers
 
         public ClientValidationRequestHandler(IHttpClientProvider httpClientProvider, ILogger<ClientValidationRequestHandler> logger)
         {
-            _policy = PollyPolicyFactory.WrappedNetworkRetries();
+            _policy = PollyPolicyFactory.WrappedNetworkRetries(logger);
             _httpClientProvider = httpClientProvider ?? throw new ArgumentNullException(nameof(httpClientProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -31,7 +31,7 @@ namespace Projects.Application.LogicValidation.Handlers
         {
             DoValidateRequest(request);
 
-            using var httpClient = await _httpClientProvider.CreateHttpClient(ClientsServiceConfiguration.Position); // await CreateHttpClient(ClientsServiceConfiguration.Position);
+            using var httpClient = await _httpClientProvider.CreateHttpClient(ClientsServiceConfiguration.Position);
             var validationResponse = await _policy.ExecuteAsync(async () =>
             {
                 return await DoClientValidation(request, httpClient, cancellationToken).ConfigureAwait(false);
@@ -42,10 +42,8 @@ namespace Projects.Application.LogicValidation.Handlers
 
         private void DoValidateRequest(ClientValidationRequest request)
         {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            ArgumentNullException.ThrowIfNull(request);
+            
             if (request.ClientId == ClientId.Empty)
             {
                 _logger.LogInformation("Invalid value for {ClientId}", nameof(request.ClientId));

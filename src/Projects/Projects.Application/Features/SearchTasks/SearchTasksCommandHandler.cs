@@ -1,6 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
-using Designly.Auth.Identity;
-using Designly.Base.Exceptions;
+﻿using Designly.Base.Exceptions;
 using Designly.Filter;
 using LanguageExt.Common;
 using MediatR;
@@ -15,19 +13,16 @@ namespace Projects.Application.Features.SearchTasks
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<SearchTasksCommandHandler> _logger;
-        private readonly ITenantProvider _tenantProvider;
         private readonly IQueryBuilder _queryBuilder;
 
-        public SearchTasksCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchTasksCommandHandler> logger, ITenantProvider tenantProvider, IQueryBuilder queryBuilder)
+        public SearchTasksCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchTasksCommandHandler> logger, IQueryBuilder queryBuilder)
         {
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(tenantProvider, nameof(tenantProvider));
-            ArgumentNullException.ThrowIfNull(queryBuilder, nameof(queryBuilder));
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(queryBuilder);
 
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _tenantProvider = tenantProvider;
             _queryBuilder = queryBuilder;
         }
 
@@ -37,12 +32,12 @@ namespace Projects.Application.Features.SearchTasks
             {
                 _logger.LogDebug("Handling request {SearchTasksCommand}", nameof(SearchTasksCommand));
             }
-            FilterDefinition filterDefinition = getFilterDefinition(request);
+            FilterDefinition filterDefinition = GetFilterDefinition(request);
             var sqlQuery = _queryBuilder.BuildAsync(filterDefinition);
             if (sqlQuery == null)
             {
                 var errorMessage = "The query builder failed to build the query.";
-                _logger.LogError(errorMessage);
+                _logger.LogError("{ErrorMessage}", errorMessage);
 
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
@@ -51,17 +46,17 @@ namespace Projects.Application.Features.SearchTasks
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Request {SearchTasksCommand} was handled and returned {results}", nameof(SearchTasksCommand), results?.Count());
+                _logger.LogDebug("Request {SearchTasksCommand} was handled and returned {Results}", nameof(SearchTasksCommand), results?.Count());
             }
 
             return new Result<IEnumerable<TaskItem>>(results ?? []);
         }
 
-        private FilterDefinition getFilterDefinition(SearchTasksCommand request)
+        private static FilterDefinition GetFilterDefinition(SearchTasksCommand request)
         {
             var filters = request.filters;
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, new List<object> { request.projectId.Id }));
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.tenantId.Id }));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, [request.projectId.Id]));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.tenantId.Id]));
             return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
         }
     }

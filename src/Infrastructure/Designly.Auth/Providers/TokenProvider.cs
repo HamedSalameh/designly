@@ -137,7 +137,7 @@ namespace Designly.Auth.Providers
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                _logger.LogError("Could not get access token from AWS due to error (status code: {response.StatusCode})", response.StatusCode);
+                _logger.LogError("Could not get access token from AWS due to error (status code: {StatusCode})", response.StatusCode);
                 return null;
             }
 

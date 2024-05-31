@@ -30,11 +30,31 @@ namespace Projects.Application.Features.DeleteTask
             ILoggerFactory loggerFactory,
             CancellationToken cancellationToken)
         {
+            ILogger logger = loggerFactory.CreateLogger("DeleteTaskFeature");
+
+            if (projectId == Guid.Empty || taskId == Guid.Empty)
+            {
+                logger.LogError("Invalid value for {ProjectId} or {TaskId}", nameof(projectId), nameof(taskId));
+                return Results.BadRequest("The submitted project id or task id is not valid or empty");
+            }
+
             var tenantId = tenantProvider.GetTenantId();
 
             var deleteTaskCommand = new DeleteTaskCommand(tenantId, projectId, taskId);
 
             var operationResult = await sender.Send(deleteTaskCommand, cancellationToken).ConfigureAwait(false);
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                if (operationResult.IsSuccess)
+                {
+                    logger.LogDebug("Task with id {TaskId} was deleted from project with id {ProjectId}", taskId, projectId);
+                }
+                else
+                {
+                    logger.LogError("Failed to delete task with id {TaskId} from project with id {ProjectId}", taskId, projectId);
+                }
+            }
 
             return operationResult.ToActionResult(res => Results.NoContent());
         }

@@ -42,7 +42,7 @@ namespace Projects.Application.Builders
         {
             if (_taskItem == null)
             {
-                throw new BusinessLogicException("Task item is not created yet.");
+                throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
             _taskItem.AssignedBy = Assigner;
@@ -53,7 +53,7 @@ namespace Projects.Application.Builders
         {
             if (_taskItem == null)
             {
-                throw new BusinessLogicException("Task item is not created yet.");
+                throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
             _taskItem.AssignedTo = Assignee;
@@ -64,7 +64,7 @@ namespace Projects.Application.Builders
         {
             if (_taskItem == null)
             {
-                throw new BusinessLogicException("Task item is not created yet.");
+                throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
             if (!CompletedAt.HasValue)
@@ -84,7 +84,7 @@ namespace Projects.Application.Builders
         {
             if (_taskItem == null)
             {
-                throw new BusinessLogicException("Task item is not created yet.");
+                throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
             if (!DueDate.HasValue)
@@ -100,7 +100,7 @@ namespace Projects.Application.Builders
         {
             if (_taskItem == null)
             {
-                throw new BusinessLogicException("Task item is not created yet.");
+                throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
             // If completedAt is not set, set it to current date

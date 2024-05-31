@@ -19,12 +19,7 @@ namespace Projects.Tests
             var request = new ClientValidationRequest(ClientId.New, TenantId.New);
 
             IServiceProvider _serviceProvider;
-            var services = new ServiceCollection();
-            services.AddScoped<IBusinessLogicValidationHandler<ClientValidationRequest>, ClientValidationRequestHandler>();
-            services.AddScoped<IBusinessLogicValidationHandler<ProjectLeadValidationRequest>, ProjectLeadValidationRequestHandler>();
-            // setup IHttpClientProvider
-            services.AddLogging();
-            services.AddScoped<IHttpClientProvider, HttpClientProvider>();
+            ServiceCollection services = SetupServices();
 
             var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
             // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
@@ -32,6 +27,306 @@ namespace Projects.Tests
             messageHandlerMock.SetupAnyRequest()
                 .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
 
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+            var result = sut.ValidateAsync(new ClientValidationRequest(ClientId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ClientValidationRequest_ShouldFail_CliendId()
+        {
+            var request = new ClientValidationRequest(ClientId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            Assert.That(() => sut.ValidateAsync(new ClientValidationRequest(ClientId.Empty, TenantId.New), CancellationToken.None), Throws.Exception);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ClientValidationRequest_ShouldFail_ResponseUnprocessableEntity()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            // mock return 422 UnprocessableEntity
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsResponse(System.Net.HttpStatusCode.UnprocessableEntity);
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            var validationResponse = sut.ValidateAsync(new ClientValidationRequest(ClientId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(validationResponse, Is.Not.Null);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ClientValidationRequest_ShouldFail_InternalServerError()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            // mock return 422 UnprocessableEntity
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsResponse(System.Net.HttpStatusCode.InternalServerError);
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            var validationResponse = sut.ValidateAsync(new ClientValidationRequest(ClientId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(validationResponse, Is.Not.Null);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ClientValidationRequest_ShouldFail_TenantId()
+        {
+            var request = new ClientValidationRequest(ClientId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            Assert.That(() => sut.ValidateAsync(new ClientValidationRequest(ClientId.New, TenantId.Empty), CancellationToken.None), Throws.Exception);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ProjectLeadValidationRequest_ShouldPass()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+            var result = sut.ValidateAsync(new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ProjectLeadValidationRequest_ShouldFail_ProjectLeadId()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            Assert.That(() => sut.ValidateAsync(new ProjectLeadValidationRequest(ProjectLeadId.Empty, TenantId.New), CancellationToken.None), Throws.Exception);    
+
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ProjectLeadValidationRequest_ShouldFail_TenantId()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsJsonResponse(new { Code = 0, Description = "Active" });
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            Assert.That(() => sut.ValidateAsync(new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.Empty), CancellationToken.None), Throws.Exception);    
+
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ProjectLeadValidationRequest_ShouldFail_ResponseUnprocessableEntity()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            // mock return 422 UnprocessableEntity
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsResponse(System.Net.HttpStatusCode.UnprocessableEntity);
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            var validationResponse = sut.ValidateAsync(new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(validationResponse, Is.Not.Null);
+        }
+
+        [Test]
+        public void BusinessLogicValidator_ProjectLeadValidationRequest_ShouldFail_InternalServerError()
+        {
+            var request = new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New);
+
+            IServiceProvider _serviceProvider;
+            ServiceCollection services = SetupServices();
+
+            var messageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Loose);
+            // handle MockException: HttpMessageHandler.Dispose(True) invocation failed with mock behavior Strict.
+
+            // mock return 422 UnprocessableEntity
+            messageHandlerMock.SetupAnyRequest()
+                .ReturnsResponse(System.Net.HttpStatusCode.InternalServerError);
+
+            SetupMock(services, messageHandlerMock);
+
+            // add the BusinessLogicValidator to the services
+            services.AddScoped<BusinessLogicValidator>();
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
+
+            //
+            Assert.That(sut, Is.Not.Null);
+
+            var validationResponse = sut.ValidateAsync(new ProjectLeadValidationRequest(ProjectLeadId.New, TenantId.New), CancellationToken.None).Result;
+
+            // Assert
+            Assert.That(validationResponse, Is.Not.Null);
+        }
+
+        private static void SetupMock(ServiceCollection services, Mock<HttpMessageHandler> messageHandlerMock)
+        {
             var httpClientFactoryMock = new Mock<IHttpClientFactory>();
             var httpClient = new HttpClient(messageHandlerMock.Object);
             httpClient.BaseAddress = new Uri("http://localhost");
@@ -47,20 +342,17 @@ namespace Projects.Tests
             tokenProviderMock.Setup(x => x.GetAccessTokenAsync()).ReturnsAsync("token");
 
             services.AddScoped<ITokenProvider, ITokenProvider>(_ => tokenProviderMock.Object);
+        }
 
-            // add the BusinessLogicValidator to the services
-            services.AddScoped<BusinessLogicValidator>();
-
-            _serviceProvider = services.BuildServiceProvider();
-
-            var sut = _serviceProvider.GetService<BusinessLogicValidator>();
-
-            //
-            Assert.That(sut, Is.Not.Null);
-            var result = sut.ValidateAsync(new ClientValidationRequest(ClientId.New, TenantId.New), CancellationToken.None).Result;
-
-            // Assert
-            Assert.That(result, Is.Null);
+        private static ServiceCollection SetupServices()
+        {
+            var services = new ServiceCollection();
+            services.AddScoped<IBusinessLogicValidationHandler<ClientValidationRequest>, ClientValidationRequestHandler>();
+            services.AddScoped<IBusinessLogicValidationHandler<ProjectLeadValidationRequest>, ProjectLeadValidationRequestHandler>();
+            // setup IHttpClientProvider
+            services.AddLogging();
+            services.AddScoped<IHttpClientProvider, HttpClientProvider>();
+            return services;
         }
     }
 }

@@ -1,23 +1,16 @@
 ﻿using Designly.Base.Exceptions;
 using Designly.Filter;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SqlKata.Compilers;
-using System.Runtime.CompilerServices;
 
 namespace Projects.Tests.Filter
 {
     [TestFixture]
     public class QueryBuilderTests
     {
-        private Mock<ILogger<FilterQueryBuilder>> loggerMock;
+        private readonly Mock<ILogger<FilterQueryBuilder>> loggerMock = new Mock<ILogger<FilterQueryBuilder>>();
         private FilterQueryBuilder sut;
-
-        public QueryBuilderTests()
-        {
-            loggerMock = new Mock<ILogger<FilterQueryBuilder>>();
-        }
 
         [SetUp]
         public void Setup()
@@ -31,7 +24,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Equals, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -42,9 +35,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicCondition)));
                 Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Name\" = @p0").IgnoreCase);
@@ -57,7 +50,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotEquals, new List<object>{"John"})
+                new("Name", FilterConditionOperator.NotEquals, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -68,9 +61,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicCondition)));
                 Assert.That(result.Sql, Is.EqualTo("SELECT * FROM \"Users\" WHERE NOT (\"Name\" = @p0)").IgnoreCase);
@@ -83,7 +76,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Contains, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Contains, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -94,9 +87,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicStringCondition)));
                 Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" WHERE \"Name\" ilike @p0").IgnoreCase);
@@ -109,7 +102,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotContains, new List<object>{"John"})
+                new("Name", FilterConditionOperator.NotContains, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -120,9 +113,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicStringCondition)));
                 Assert.That(result.Sql, Is.EqualTo("SELECT * FROM \"Users\" WHERE NOT (\"Name\" ilike @p0)").IgnoreCase);
@@ -135,7 +128,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.In, new List<object>{"John", "Doe"})
+                new("Name", FilterConditionOperator.In, ["John", "Doe"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -146,9 +139,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.InCondition<object>)));
                 Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Name\" in (@p0, @p1)").IgnoreCase);
@@ -161,7 +154,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.NotIn, new List<object>{"John", "Doe"})
+                new("Name", FilterConditionOperator.NotIn, ["John", "Doe"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -172,9 +165,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.InCondition<object>)));
                 Assert.That(result.Sql, Is.EqualTo("SELECT * FROM \"Users\" WHERE \"Name\" NOT IN (@p0, @p1)").IgnoreCase);
@@ -187,7 +180,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18})
+                new("Age", FilterConditionOperator.GreaterThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -198,9 +191,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicCondition)));
                 Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Age\" > @p0").IgnoreCase);
@@ -213,7 +206,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Age", FilterConditionOperator.LessThan, new List<object>{18})
+                new("Age", FilterConditionOperator.LessThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -224,9 +217,9 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
             Assert.Multiple(() =>
             {
+                Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
                 Assert.That(result.Query.Clauses[1].GetType(), Is.EqualTo(typeof(SqlKata.BasicCondition)));
                 Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Age\" < @p0").IgnoreCase);
@@ -239,7 +232,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.StartsWith, new List<object>{"John"})
+                new("Name", FilterConditionOperator.StartsWith, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -250,7 +243,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -265,7 +258,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.EndsWith, new List<object>{"John"})
+                new("Name", FilterConditionOperator.EndsWith, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -276,7 +269,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -291,7 +284,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.IsNull, new List<object>())
+                new("Name", FilterConditionOperator.IsNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -302,7 +295,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -317,7 +310,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.IsNotNull, new List<object>())
+                new("Name", FilterConditionOperator.IsNotNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -328,7 +321,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -343,7 +336,7 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Like, new List<object>{"John"})
+                new("Name", FilterConditionOperator.Like, ["John"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -354,7 +347,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(2));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(2));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -383,8 +376,8 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -395,7 +388,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(3));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(3));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -411,9 +404,9 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -424,7 +417,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(4));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(4));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -441,10 +434,10 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -455,7 +448,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(5));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(5));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -473,11 +466,11 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"}),
-                new FilterCondition("Street", FilterConditionOperator.NotContains, new List<object>{"Main"})
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"]),
+                new("Street", FilterConditionOperator.NotContains, ["Main"])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -488,7 +481,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(6));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(6));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -507,12 +500,12 @@ namespace Projects.Tests.Filter
             // arrange
             var filterConditions = new List<FilterCondition>()
             {
-                new FilterCondition("Name", FilterConditionOperator.Equals, new List<object>{"John"}),
-                new FilterCondition("Age", FilterConditionOperator.GreaterThan, new List<object>{18}),
-                new FilterCondition("Country", FilterConditionOperator.In, new List<object>{"USA", "Canada"}),
-                new FilterCondition("City", FilterConditionOperator.NotEquals, new List<object>{"New York"}),
-                new FilterCondition("Street", FilterConditionOperator.NotContains, new List<object>{"Main"}),
-                new FilterCondition("ZipCode", FilterConditionOperator.IsNull, new List<object>())
+                new("Name", FilterConditionOperator.Equals, ["John"]),
+                new("Age", FilterConditionOperator.GreaterThan, [18]),
+                new("Country", FilterConditionOperator.In, ["USA", "Canada"]),
+                new("City", FilterConditionOperator.NotEquals, ["New York"]),
+                new("Street", FilterConditionOperator.NotContains, ["Main"]),
+                new("ZipCode", FilterConditionOperator.IsNull, [])
             };
             var filterDefinition = new FilterDefinition("Users", filterConditions);
 
@@ -523,7 +516,7 @@ namespace Projects.Tests.Filter
 
             // assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Query.Clauses.Count, Is.EqualTo(7));
+            Assert.That(result.Query.Clauses, Has.Count.EqualTo(7));
             Assert.Multiple(() =>
             {
                 Assert.That(result.Query.Clauses[0].GetType(), Is.EqualTo(typeof(SqlKata.FromClause)));
@@ -533,7 +526,7 @@ namespace Projects.Tests.Filter
                 Assert.That(result.Query.Clauses[4].GetType(), Is.EqualTo(typeof(SqlKata.BasicCondition)));
                 Assert.That(result.Query.Clauses[5].GetType(), Is.EqualTo(typeof(SqlKata.BasicStringCondition)));
                 Assert.That(result.Query.Clauses[6].GetType(), Is.EqualTo(typeof(SqlKata.NullCondition)));
-                Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Name\" = @p0 and \"Age\" > @p1 and \"Country\" in (@p2, @p3) and not (\"City\" = @p4) and NOT (\"Street\" ilike @p5) and \"ZipCode\" IS NULL").IgnoreCase);
+                Assert.That(result.Sql, Is.EqualTo("select * from \"Users\" where \"Name\" = @p0 and \"Age\" > @p1 and \"Country\" in (@p2, @p3) and not (\"City\" = @p4) and NOT (\"Street\" ilike @p5) and \"zip_code\" IS NULL").IgnoreCase);
             });
         }
 

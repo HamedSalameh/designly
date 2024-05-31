@@ -22,11 +22,29 @@ namespace Accounts.Application.Extensions
                         ValidationException validationException => Results.BadRequest(validationException.ToDesignlyProblemDetails()),
                         AccountException accountException => Results.UnprocessableEntity(accountException.ToDesignlyProblemDetails()),
                         BusinessLogicException businessLogicException => Results.UnprocessableEntity(businessLogicException.ToDesignlyProblemDetails()),
+                        Exception exception => CreateInternalServerError(exception),
                         _ => Results.BadRequest(ex.Message)
                     };
 
                     return result;
                 });
+        }
+
+        private static IResult CreateInternalServerError(Exception exception)
+        {
+            var problemDetail = "See the error list for more information";
+
+            ArgumentNullException.ThrowIfNull(exception);
+
+            var problemDetails = new DesignlyProblemDetails(
+                title: problemDetail,
+                statusCode: (int)HttpStatusCode.InternalServerError,
+                detail: exception.Message
+                );
+
+            // return the respone
+            return Results.Problem(problemDetails);
+
         }
 
         public static DesignlyProblemDetails ToDesignlyProblemDetails(this AccountException accountException,

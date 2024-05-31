@@ -20,10 +20,10 @@ namespace Projects.Application.Features.UpdateProject
                                   IBusinessLogicValidator businessLogicValidator, 
                                              IProjectBuilder projectBuilder)
         {
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(businessLogicValidator, nameof(businessLogicValidator));
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(projectBuilder, nameof(projectBuilder));
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(businessLogicValidator);
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(projectBuilder);
 
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -41,7 +41,7 @@ namespace Projects.Application.Features.UpdateProject
             var projectValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateProjectValidationRequest(request.TenantId, request.ProjectId), cancellationToken);
             if (projectValidationResult != null)
             {
-                _logger.LogInformation("Project {project} cannot be updated under account {account} due to business logic rules violation: {response}",
+                _logger.LogInformation("Project {Project} cannot be updated under account {Account} due to business logic rules violation: {Response}",
                     request.ProjectId, request.TenantId, projectValidationResult);
                 return new Result<BasicProject>(projectValidationResult);
             }

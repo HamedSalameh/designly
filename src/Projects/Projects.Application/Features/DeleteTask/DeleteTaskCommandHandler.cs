@@ -30,7 +30,7 @@ namespace Projects.Application.Features.DeleteTask
             var deleteTaskValidationResult = await _businessLogicValidator.ValidateAsync(new DeleteTasksValidationRequest(request.TaskId, request.ProjectId, request.TenantId), cancellationToken);
             if (deleteTaskValidationResult != null)
             {
-                _logger.LogInformation("Tasks cannot be deleted for project {project} under account {account} due to business logic rules violation: {response}",
+                _logger.LogInformation("Tasks cannot be deleted for project {Project} under account {Account} due to business logic rules violation: {Response}",
                                        request.ProjectId, request.TenantId, deleteTaskValidationResult);
                 return new Result<Task>(deleteTaskValidationResult);
             }
@@ -39,7 +39,7 @@ namespace Projects.Application.Features.DeleteTask
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Deleted task {task} for project {project} under account {TenantId})", request.TaskId, request.ProjectId, request.TenantId);
+                _logger.LogDebug("Deleted task {Task} for project {Project} under account {TenantId})", request.TaskId, request.ProjectId, request.TenantId);
             }
 
             return Task.CompletedTask;

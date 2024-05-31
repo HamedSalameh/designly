@@ -5,6 +5,7 @@ using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
 using Projects.Application.LogicValidation.Requests;
 using Projects.Infrastructure.Interfaces;
+using System;
 
 namespace Projects.Application.Features.CreateProject
 {
@@ -23,7 +24,7 @@ namespace Projects.Application.Features.CreateProject
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _projectBuilder = projectBuilder ?? throw new ArgumentNullException(nameof(projectBuilder));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _businessLogicValidator = businessLogicValidator ?? throw new ArgumentNullException(nameof(_businessLogicValidator));
+            _businessLogicValidator = businessLogicValidator ?? throw new ArgumentNullException(nameof(businessLogicValidator));
         }
 
         public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -71,8 +72,8 @@ namespace Projects.Application.Features.CreateProject
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Could not create project due to error : {ex.Message}", ex.Message);
-                throw;
+                _logger.LogError(ex, "Could not create project due to error : {Message}", ex.Message);
+                return new Result<Guid>(ex);
             }
         }
     }

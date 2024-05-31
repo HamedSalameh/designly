@@ -1,11 +1,8 @@
-﻿using Amazon.Runtime.Internal.Util;
-using Designly.Auth.Identity;
-using Designly.Base.Exceptions;
+﻿using Designly.Base.Exceptions;
 using Designly.Filter;
 using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Projects.Application.Features.SearchTasks;
 using Projects.Domain;
 using Projects.Infrastructure.Filter;
 using Projects.Infrastructure.Interfaces;
@@ -17,19 +14,16 @@ namespace Projects.Application.Features.SearchProjects
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<SearchProjectsCommandHandler> _logger;
-        private readonly ITenantProvider _tenantProvider;
         private readonly IQueryBuilder _queryBuilder;
 
-        public SearchProjectsCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchProjectsCommandHandler> logger, ITenantProvider tenantProvider, IQueryBuilder queryBuilder)
+        public SearchProjectsCommandHandler(IUnitOfWork unitOfWork, ILogger<SearchProjectsCommandHandler> logger, IQueryBuilder queryBuilder)
         {
-            ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-            ArgumentNullException.ThrowIfNull(logger, nameof(logger));
-            ArgumentNullException.ThrowIfNull(tenantProvider, nameof(tenantProvider));
-            ArgumentNullException.ThrowIfNull(queryBuilder, nameof(queryBuilder));
+            ArgumentNullException.ThrowIfNull(unitOfWork);
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(queryBuilder);
 
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _tenantProvider = tenantProvider;
             _queryBuilder = queryBuilder;
         }
 
@@ -39,12 +33,12 @@ namespace Projects.Application.Features.SearchProjects
             {
                 _logger.LogDebug("Handling request {SearchProjectsCommand}", nameof(SearchProjectsCommand));
             }
-            FilterDefinition filterDefinition = getFilterDefinition(searchProjectsCommand);
+            FilterDefinition filterDefinition = GetFilterDefinition(searchProjectsCommand);
             var sqlQuery = _queryBuilder.BuildAsync(filterDefinition);
             if (sqlQuery == null)
             {
                 var errorMessage = "The query builder failed to build the query.";
-                _logger.LogError(errorMessage);
+                _logger.LogError("{ErrorMessage}", errorMessage);
 
                 return new Result<IEnumerable<BasicProject>>(new BusinessLogicException(errorMessage));
             }
@@ -53,16 +47,16 @@ namespace Projects.Application.Features.SearchProjects
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Request {SearchProjectsCommand} was handled and returned {results}", nameof(SearchProjectsCommand), results?.Count());
+                _logger.LogDebug("Request {SearchProjectsCommand} was handled and returned {Results}", nameof(SearchProjectsCommand), results?.Count());
             }
 
             return new Result<IEnumerable<BasicProject>>(results ?? []);
         }
 
-        private FilterDefinition getFilterDefinition(SearchProjectsCommand request)
+        private static FilterDefinition GetFilterDefinition(SearchProjectsCommand request)
         {
             var filters = request.FilterConditions;
-            filters.Add(new FilterCondition(ProjectFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, new List<object> { request.TenantId.Id }));
+            filters.Add(new FilterCondition(ProjectFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.TenantId.Id]));
             return new FilterDefinition(ProjectFieldToColumnMapping.ProjectsTable, request.FilterConditions);
         }
     }

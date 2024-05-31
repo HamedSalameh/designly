@@ -1,26 +1,29 @@
-﻿using System.Collections.Concurrent;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Concurrent;
+using System.Collections.Immutable;
 
 namespace Designly.Filter
 {
     // validate the FilterConditionDto Field property can only be one if the FilterFields
     public static class SupportedFilterConditionOperators
     {
-        public static ConcurrentDictionary<string, FilterConditionOperator> FilterConditionOperatorsDic = new ConcurrentDictionary<string, FilterConditionOperator>
-        {
-            [FilterConditionOperatorStringMapping.Equal] = FilterConditionOperator.Equals,
-            [FilterConditionOperatorStringMapping.NotEqual] = FilterConditionOperator.NotEquals,
-            [FilterConditionOperatorStringMapping.Contains] = FilterConditionOperator.Contains,
-            [FilterConditionOperatorStringMapping.NotContains] = FilterConditionOperator.NotContains,
-            [FilterConditionOperatorStringMapping.In] = FilterConditionOperator.In,
-            [FilterConditionOperatorStringMapping.NotIn] = FilterConditionOperator.NotIn,
-            [FilterConditionOperatorStringMapping.GreaterThan] = FilterConditionOperator.GreaterThan,
-            [FilterConditionOperatorStringMapping.LessThan] = FilterConditionOperator.LessThan,
-            [FilterConditionOperatorStringMapping.StartsWith] = FilterConditionOperator.StartsWith,
-            [FilterConditionOperatorStringMapping.EndsWith] = FilterConditionOperator.EndsWith,
-            [FilterConditionOperatorStringMapping.IsNull] = FilterConditionOperator.IsNull,
-            [FilterConditionOperatorStringMapping.IsNotNull] = FilterConditionOperator.IsNotNull,
-            [FilterConditionOperatorStringMapping.Like] = FilterConditionOperator.Like
-        };
+        // Switched to ImmutableDictionary from ConcurrentDictionary
+        // As there is no need to modify the dictionary after initialization, ImmutableDictionary is a better choice
+        public static readonly ImmutableDictionary<string, FilterConditionOperator> FilterConditionOperatorsDictionary =
+            ImmutableDictionary<string, FilterConditionOperator>.Empty
+                .Add(FilterConditionOperatorStringMapping.Equal, FilterConditionOperator.Equals)
+                .Add(FilterConditionOperatorStringMapping.NotEqual, FilterConditionOperator.NotEquals)
+                .Add(FilterConditionOperatorStringMapping.Contains, FilterConditionOperator.Contains)
+                .Add(FilterConditionOperatorStringMapping.NotContains, FilterConditionOperator.NotContains)
+                .Add(FilterConditionOperatorStringMapping.In, FilterConditionOperator.In)
+                .Add(FilterConditionOperatorStringMapping.NotIn, FilterConditionOperator.NotIn)
+                .Add(FilterConditionOperatorStringMapping.GreaterThan, FilterConditionOperator.GreaterThan)
+                .Add(FilterConditionOperatorStringMapping.LessThan, FilterConditionOperator.LessThan)
+                .Add(FilterConditionOperatorStringMapping.StartsWith, FilterConditionOperator.StartsWith)
+                .Add(FilterConditionOperatorStringMapping.EndsWith, FilterConditionOperator.EndsWith)
+                .Add(FilterConditionOperatorStringMapping.IsNull, FilterConditionOperator.IsNull)
+                .Add(FilterConditionOperatorStringMapping.IsNotNull, FilterConditionOperator.IsNotNull)
+                .Add(FilterConditionOperatorStringMapping.Like, FilterConditionOperator.Like);
     }
 
     public static class FilterConditionOperatorStringMapping

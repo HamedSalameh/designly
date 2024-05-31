@@ -25,7 +25,7 @@ namespace IdentityService.Application.Commands
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Handling request {RefreshTokenCommandHandler} for {request.RefreshToken}", nameof(RefreshTokenCommandHandler), request.RefreshToken);
+                _logger.LogDebug("Handling request {RefreshTokenCommandHandler} for {RefreshToken}", nameof(RefreshTokenCommandHandler), request.RefreshToken);
             }
 
             var response = await _identityService.RefreshToken(request.RefreshToken, cancellationToken);

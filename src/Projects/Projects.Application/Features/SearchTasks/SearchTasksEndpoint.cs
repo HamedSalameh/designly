@@ -35,7 +35,7 @@ namespace Projects.Application.Features.SearchTasks
 
             if (searchTaskRequest == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(searchTaskRequest));
+                logger.LogError("Invalid value for {Request}", nameof(searchTaskRequest));
                 return Results.BadRequest("The submitted search task object is not valid or empty");
             }
 
@@ -48,11 +48,11 @@ namespace Projects.Application.Features.SearchTasks
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchTaskRequest.filters)
             {
-                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDic.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
+                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDictionary.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
-                if (!SupportedTaskItemFieldNames.TaskItemFieldNamesDic.TryGetValue(filter.Field, out var filterConditionField))
+                if (!SupportedTaskItemFieldNames.TaskItemFieldNamesDictionary.TryGetValue(filter.Field, out var filterConditionField))
                 { 
                     return Results.BadRequest("We could not parse a filter field for one of the filter conditions.");
                 }

@@ -22,7 +22,7 @@ namespace Accounts.Infrastructure.Persistance
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
             _context = context;
         }
 
@@ -64,10 +64,10 @@ namespace Accounts.Infrastructure.Persistance
 
                 transaction.Commit();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
+                // Rollback whatever changes we attempted to make
                 await transaction.RollbackAsync(cancellationToken);
-                _logger.LogError(exception, "Could not update account due to error: {exceptionType}: {exception.Message}", exception.GetType().Name, exception.Message);
                 throw;
             }
         }

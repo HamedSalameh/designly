@@ -24,27 +24,39 @@ namespace Accounts.Application.Features.ValidateUser
                 _logger.LogDebug("Handling request {ValidateUserCommandHandler} for {UserId}", nameof(ValidateUserCommandHandler), request.UserId);
             }
 
-            var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.UserId, request.TenantId, cancellationToken).ConfigureAwait(false);
-
-            if (userStatus is null)
+            try
             {
-                var userValidationException = new AccountException(AccountErrors.UserNotFound.Description, AccountErrors.UserNotFound);
-                return new Result<bool>(userValidationException);
+                var userStatus = await unitOfWork.UsersRepository.GetUserStatusAsync(request.UserId, request.TenantId, cancellationToken).ConfigureAwait(false);
+
+                if (userStatus is null)
+                {
+                    var userValidationException = new AccountException(AccountErrors.UserNotFound.Description, AccountErrors.UserNotFound);
+                    return new Result<bool>(userValidationException);
+                }
+
+                Result<bool> validationResult = userStatus switch
+                {
+                    Consts.UserStatus.BeforeActivation => new Result<bool>(new AccountException(AccountErrors.UserIsNotActivated)),
+                    Consts.UserStatus.Active => new Result<bool>(true),
+                    Consts.UserStatus.Suspended => new Result<bool>(new AccountException(AccountErrors.UserIsSuspended)),
+                    Consts.UserStatus.Disabled => new Result<bool>(new AccountException(AccountErrors.UserIsDisabled)),
+                    Consts.UserStatus.MarkedForDeletion => new Result<bool>(new AccountException(AccountErrors.UserIsMarkedForDeletion)),
+                    Consts.UserStatus.Deleted => new Result<bool>(new AccountException(AccountErrors.UserIsDeleted)),
+                    Consts.UserStatus.Blacklisted => new Result<bool>(new AccountException(AccountErrors.UserIsBlacklisted)),
+                    _ => throw new AccountException(AccountErrors.UnsupportedUserStatus)
+                };
+
+                return validationResult;
             }
-
-            Result<bool> validationResult = userStatus switch
+            catch (AccountException accountException)
             {
-                Consts.UserStatus.BeforeActivation => new Result<bool>(new AccountException(AccountErrors.UserIsNotActivated)),
-                Consts.UserStatus.Active => new Result<bool>(true),
-                Consts.UserStatus.Suspended => new Result<bool>(new AccountException(AccountErrors.UserIsSuspended)),
-                Consts.UserStatus.Disabled => new Result<bool>(new AccountException(AccountErrors.UserIsDisabled)),
-                Consts.UserStatus.MarkedForDeletion => new Result<bool>(new AccountException(AccountErrors.UserIsMarkedForDeletion)),
-                Consts.UserStatus.Deleted => new Result<bool>(new AccountException(AccountErrors.UserIsDeleted)),
-                Consts.UserStatus.Blacklisted => new Result<bool>(new AccountException(AccountErrors.UserIsBlacklisted)),
-                _ => throw new AccountException(AccountErrors.UnsupportedUserStatus)
-            };
-
-            return validationResult;
+                return new Result<bool>(accountException);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Could not validate user due to error: {Message}", exception.Message);
+                return new Result<bool>(exception);
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Projects.Application.Features.SearchProjects
 
             if (searchProjectsRequest == null)
             {
-                logger.LogError("Invalid value for {request}", nameof(searchProjectsRequest));
+                logger.LogError("Invalid value for {Request}", nameof(searchProjectsRequest));
                 return Results.BadRequest("The submitted search project object is not valid or empty");
             }
 
@@ -47,11 +47,11 @@ namespace Projects.Application.Features.SearchProjects
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchProjectsRequest.filters)
             {
-                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDic.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
+                if (!SupportedFilterConditionOperators.FilterConditionOperatorsDictionary.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
                 }
-                if (!SupportedProjectFieldNames.ProjectFieldNamesDic.TryGetValue(filter.Field, out var filterConditionField))
+                if (!SupportedProjectFieldNames.ProjectFieldNamesDictionary.TryGetValue(filter.Field, out var filterConditionField))
                 {
                     return Results.BadRequest("We could not parse a filter field for one of the filter conditions.");
                 }

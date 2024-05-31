@@ -20,8 +20,8 @@ namespace Accounts.Application.Builders
             // validate values
             if (string.IsNullOrWhiteSpace(accountName))
             {
-                _logger.LogError($"Invalid value for {nameof(accountName)}");
-                throw new ArgumentException($"The submitted account name is not valid or empty");
+                _logger.LogError("Invalid value for {AccountName}", nameof(accountName));
+                throw new ArgumentException("The submitted account name is not valid or empty");
             }
 
             account = new Account(accountName);

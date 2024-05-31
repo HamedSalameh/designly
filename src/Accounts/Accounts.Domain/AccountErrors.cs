@@ -12,6 +12,8 @@ namespace Accounts.Domain
         public static readonly Error AccountOwnerEmailAlreadyExists = new("account_owner_email_already_exists", "Account owner email already exists.");
         public static readonly Error AccountOwnerEmailNotFound = new("account_owner_email_not_found", "Account owner email not found.");
         public static readonly Error AccountOwnerEmailNotValid = new("account_owner_email_not_valid", "Account owner email not valid.");
+        public static readonly Error AccountIsDeleted = new("account_is_deleted", "Account is deleted.");
+        public static readonly Error AccountIsMarkedForDeletion = new("account_marked_for_deletion", "Account is marked for deletion.");
 
         // User account errors        
         public static readonly Error UserNotFound = new("user_not_found", "User not found.");

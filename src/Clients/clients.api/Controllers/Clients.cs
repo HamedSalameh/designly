@@ -24,6 +24,9 @@ namespace Clients.API.Controllers
         private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         private readonly ITenantProvider _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
 
+        private const string InvalidTenantIdMessage = "The submitted tenant Id is not valid or empty";
+        private const string InvalidIdMessage = "The submitted Id is not valid or empty";
+
         [HttpPost]
         [Authorize(Policy = IdentityData.AccountOwnerPolicyName)]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -35,15 +38,15 @@ namespace Clients.API.Controllers
         {
             if (clientDto == null)
             {
-                _logger.LogError("Invalid value for {clientDto}", nameof(clientDto));
+                _logger.LogError("Invalid value for {ClientDto}", nameof(clientDto));
                 return BadRequest($"The submitted client object is not valid or empty");
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest($"The submitted tenant Id is not valid or empty");
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             var draftClient = _mapper.Map<Client>(clientDto);
@@ -68,15 +71,15 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest($"The submitted tenant Id is not valid or empty");
+                _logger.LogError("{InvalidTenantId}",InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             clientDto.Id = id;
@@ -100,15 +103,15 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if ( Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest($"The submitted tenant Id is not valid or empty");
+                _logger.LogError(InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             var client = await _mediator.Send(new GetClientQuery(tenantId, id), cancellationToken).ConfigureAwait(false);
@@ -128,13 +131,13 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
             if (tenantId == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest(tenantId);
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             // Try get user status from the database and respond with the status
@@ -153,15 +156,15 @@ namespace Clients.API.Controllers
         {
             if (clientSearchDto == null)
             {
-                _logger.LogError( "Invalid value for {clientSearchDto}", nameof(clientSearchDto));
+                _logger.LogError( "Invalid value for {ClientSearchDto}", nameof(clientSearchDto));
                 return BadRequest($"The submitted search object is not valid or empty");
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest($"The submitted tenant Id is not valid or empty");
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             var clientSearchQuery = new SearchClientsQuery(tenantId, clientSearchDto.FirstName, clientSearchDto.FamilyName, clientSearchDto.City);
@@ -181,15 +184,15 @@ namespace Clients.API.Controllers
         {
             if (id == Guid.Empty)
             {
-                _logger.LogError("Invalid value for {id}", nameof(id));
+                _logger.LogError("{InvalidId}", InvalidIdMessage);
                 return BadRequest(id);
             }
 
             var tenantId = _tenantProvider.GetTenantId();
             if (Guid.Empty == tenantId)
             {
-                _logger.LogError("Invalid value for {tenantId}", nameof(tenantId));
-                return BadRequest($"The submitted tenant Id is not valid or empty");
+                _logger.LogError("{InvalidTenantId}", InvalidTenantIdMessage);
+                return BadRequest(InvalidTenantIdMessage);
             }
 
             var deleteClientCommand = new DeleteClientCommand(tenantId, id);

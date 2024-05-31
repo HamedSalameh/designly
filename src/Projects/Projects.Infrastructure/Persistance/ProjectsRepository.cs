@@ -24,7 +24,7 @@ namespace Projects.Infrastructure.Persistance
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dbConnectionStringProvider = dbConnectionStringProvider ?? throw new ArgumentNullException(nameof(dbConnectionStringProvider));
 
-            policy = PollyPolicyFactory.WrappedAsyncPolicies();
+            policy = PollyPolicyFactory.WrappedAsyncPolicies(logger);
 
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new JsonbTypeHandler<List<string>>());
@@ -71,7 +71,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not retrieve project {id} under account {tenant}", projectId, tenantId);
+                    _logger.LogError(exception, "Could not retrieve project {Id} under account {TenantId}", projectId, tenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
@@ -90,7 +90,7 @@ namespace Projects.Infrastructure.Persistance
         {
             if (basicProject is null)
             {
-                _logger.LogError($"{nameof(basicProject)} is null");
+                _logger.LogError("{BaiscProject} is null", nameof(basicProject));
                 throw new ArgumentNullException(nameof(basicProject));
             }
 
@@ -121,7 +121,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Error updating project {id} under account {tenant}", basicProject.Id, basicProject.TenantId);
+                    _logger.LogError(exception, "Error updating project {Id} under account {TenantId}", basicProject.Id, basicProject.TenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
@@ -140,7 +140,7 @@ namespace Projects.Infrastructure.Persistance
         {
             if (basicProject is null)
             {
-                _logger.LogError($"{nameof(basicProject)} is null");
+                _logger.LogError("{BasicProject} is null", nameof(basicProject));
                 throw new ArgumentNullException(nameof(basicProject));
             }
 
@@ -232,7 +232,7 @@ namespace Projects.Infrastructure.Persistance
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not delete project {id} under account {tenant}", projectId, tenantId);
+                    _logger.LogError(exception, "Could not delete project {Id} under account {TenantId}", projectId, tenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
@@ -245,21 +245,20 @@ namespace Projects.Infrastructure.Persistance
                     }
                 }
             });
-
-            return;
         }
 
         public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(tenantId, nameof(tenantId));
-            ArgumentNullException.ThrowIfNull(sqlResult, nameof(sqlResult));
+            ArgumentNullException.ThrowIfNull(tenantId);
+            ArgumentNullException.ThrowIfNull(sqlResult);
 
             var sqlQuery = sqlResult.Sql;
             var parameters = sqlResult.NamedBindings;
-
+            
+            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             return policy.ExecuteAsync(async (ct) =>
             {
-                using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+                
                 await connection.OpenAsync(ct);
                 using var transaction = connection.BeginTransaction();
                 try
