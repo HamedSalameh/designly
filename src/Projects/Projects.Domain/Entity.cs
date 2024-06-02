@@ -26,7 +26,7 @@ namespace Projects.Domain
             // TenantId is not nullable, so we can't use the ?? operator
             if (TenantId == TenantId.Empty)
             {
-                throw new ArgumentException(nameof(TenantId), "TenantId cannot be null");
+                throw new ArgumentException("TenantId cannot be null or default", nameof(TenantId));
             }
 
             this.TenantId = TenantId;

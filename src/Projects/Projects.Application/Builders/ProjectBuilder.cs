@@ -46,7 +46,7 @@ namespace Projects.Application.Builders
 
         public IProjectBuilder WithName(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException($"{nameof(name)} : must not be null or empty");
             }
@@ -93,6 +93,19 @@ namespace Projects.Application.Builders
         public BasicProject BuildBasicProject()
         {
             var tenantId = _tenantProvider.GetTenantId();
+
+            if (_projectLeadId == Guid.Empty)
+            {
+                throw new ArgumentException("{ProjectLeadId} : has not been set", nameof(_projectLeadId));
+            }
+            if (_clientId == Guid.Empty)
+            {
+                throw new ArgumentException("{ClientId} : has not been set", nameof(_clientId));
+            }
+            if (string.IsNullOrWhiteSpace(_name))
+            {
+                throw new ArgumentException("{Name} : has not been set", nameof(_name));
+            }
 
             var basicProject = new BasicProject(tenantId, _projectLeadId, _clientId, _name);
             basicProject.SetDescription(_description);

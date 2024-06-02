@@ -36,7 +36,7 @@ namespace Projects.Tests.Tasks
             var exception = Assert.Throws<ArgumentException>(() => new TaskItem(tenantId, projectId, name, description));
 
             // Assert
-            Assert.That(exception.Message, Is.EqualTo("TenantId (Parameter 'TenantId cannot be null')"));
+            Assert.That(exception.Message, Is.EqualTo("TenantId cannot be null or default (Parameter 'TenantId')"));
         }
 
         [Test]
