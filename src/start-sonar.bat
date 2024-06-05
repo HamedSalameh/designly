@@ -1,1 +1,1 @@
-docker run -d --name sonarqubeserver -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 -v %cd%\sonar-project.properties:/usr/src/sonar-project.properties sonarqube:latest
+docker run -d --name sonarqubeserver -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
