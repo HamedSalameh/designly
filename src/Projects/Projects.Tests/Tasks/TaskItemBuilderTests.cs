@@ -1,8 +1,6 @@
 ﻿using Designly.Auth.Identity;
 using Designly.Base.Exceptions;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NSubstitute;
 using Projects.Application.Builders;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
@@ -34,8 +32,11 @@ namespace Projects.Tests.Tasks
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Name, Is.EqualTo(name));
-            Assert.That(result.ProjectId, Is.EqualTo(projectId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Name, Is.EqualTo(name));
+                Assert.That(result.ProjectId, Is.EqualTo(projectId));
+            });
         }
 
         [TestCase("")]
