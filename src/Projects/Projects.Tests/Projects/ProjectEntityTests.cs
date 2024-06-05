@@ -269,5 +269,120 @@ namespace Projects.Tests.Projects
 
             Assert.Throws<ArgumentOutOfRangeException>(() => basicProject.SetDeadline(deadline));
         }
+
+        // Testing SetId method
+        [Test]
+        public void SetId_WithValidId_SetsId()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            Guid newId = Guid.NewGuid();
+
+            // Act
+            basicProject.SetId(newId);
+
+            // Assert
+            Assert.That(basicProject.Id, Is.EqualTo(newId));
+        }
+
+        [Test]
+        public void SetId_WithEmptyId_ThrowsArgumentException()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            Guid newId = Guid.Empty;
+
+            // Act
+            var ex = Assert.Throws<ArgumentException>(() => basicProject.SetId(newId));
+
+            // Assert
+            Assert.That(ex.Message, Is.EqualTo($"projectId : must not be empty"));
+        }
+
+        // Test IsCompleted method
+        [Test]
+        public void IsCompleted_WithCompletedProject_ReturnsTrue()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            basicProject.CompleteProject(DateOnly.FromDateTime(DateTime.Now));
+
+            // Act
+            var result = basicProject.IsCompleted;
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        // Test SetStartDate method
+        [Test]
+        public void SetStartDate_WithValidStartDate_SetsStartDate()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            var startDate = DateOnly.FromDateTime(DateTime.Now);
+
+            // Act
+            basicProject.SetStartDate(startDate);
+
+            // Assert
+            Assert.That(basicProject.StartDate, Is.EqualTo(startDate));
+        }
+
+        [Test]
+        public void SetStartDate_WithStartDateAfterCompletionDate_ThrowsArgumentException()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            var startDate = DateOnly.FromDateTime(DateTime.Now);
+            var completionDate = DateOnly.FromDateTime(DateTime.Now - TimeSpan.FromDays(1));
+            basicProject.CompleteProject(completionDate);
+
+            // Act
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => basicProject.SetStartDate(startDate));
+
+            // Assert
+            Assert.That(ex.Message, Is.EqualTo($"{nameof(startDate)} : must be before CompletedAt (Parameter '{nameof(startDate)}')"));
+        }
+
+        [Test]
+        public void SetStartDate_WithStartDateAfterDeadline_ThrowsArgumentException()
+        {
+            // Arrange
+            Guid tenantId = Guid.NewGuid();
+            Guid projectLeadId = Guid.NewGuid();
+            Guid clientId = Guid.NewGuid();
+            string projectName = "Test Project";
+            var basicProject = new BasicProject(tenantId, projectLeadId, clientId, projectName);
+            var startDate = DateOnly.FromDateTime(DateTime.Now);
+            var deadline = DateOnly.FromDateTime(DateTime.Now - TimeSpan.FromDays(1));
+            basicProject.SetDeadline(deadline);
+
+            // Act
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => basicProject.SetStartDate(startDate));
+
+            // Assert
+            Assert.That(ex.Message, Is.EqualTo($"{nameof(startDate)} : must be before Deadline (Parameter '{nameof(startDate)}')"));
+        }
     }
 }
