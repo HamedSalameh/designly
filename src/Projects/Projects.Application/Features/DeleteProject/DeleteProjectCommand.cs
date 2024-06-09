@@ -1,11 +1,10 @@
 ﻿using LanguageExt.Common;
 using MediatR;
+using Projects.Domain.StonglyTyped;
 
 namespace Projects.Application.Features.DeleteProject
 {
-    public class DeleteProjectCommand : IRequest<Result<bool>>
+    public record DeleteProjectCommand(ProjectId ProjectId, TenantId TenantId) : IRequest<Result<bool>>
     {
-        public Guid TenantId { get; set; }
-        public Guid ProjectId { get; set; }
     }
 }

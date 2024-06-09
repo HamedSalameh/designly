@@ -42,11 +42,7 @@ namespace Projects.Application.Features.DeleteProject
 
             var tenantId = tenantProvider.GetTenantId();
 
-            var deleteProjectCommand = new DeleteProjectCommand()
-            {
-                TenantId = tenantId,
-                ProjectId = projectId
-            };
+            var deleteProjectCommand = new DeleteProjectCommand(projectId, tenantId);
 
             var deleteStatus =await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
             return deleteStatus.ToActionResult(res => Results.NoContent());
