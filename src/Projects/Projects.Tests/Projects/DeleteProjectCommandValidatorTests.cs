@@ -20,7 +20,7 @@ namespace Projects.Tests.Projects
         }
 
         [Test]
-        public void should_have_error_when_ProjectId_is_empty()
+        public void Should_have_error_when_ProjectId_is_empty()
         {
             var command = new DeleteProjectCommand(Guid.Empty, Guid.NewGuid());
 
@@ -30,7 +30,7 @@ namespace Projects.Tests.Projects
         }
 
         [Test]
-        public void should_have_error_when_TenantId_is_empty()
+        public void Should_have_error_when_TenantId_is_empty()
         {
             var command = new DeleteProjectCommand(Guid.NewGuid(), Guid.Empty);
 
@@ -40,7 +40,7 @@ namespace Projects.Tests.Projects
         }
 
         [Test]
-        public void should_not_have_error_when_all_properties_are_set()
+        public void Should_not_have_error_when_all_properties_are_set()
         {
             var command = new DeleteProjectCommand(Guid.NewGuid(), Guid.NewGuid());
 

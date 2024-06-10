@@ -15,7 +15,7 @@ namespace Projects.Application.Features.UpdateProject
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Exception?>? ValidateAsync(UpdateProjectValidationRequest request, CancellationToken cancellationToken)
+        public async Task<Exception?> ValidateAsync(UpdateProjectValidationRequest request, CancellationToken cancellationToken)
         {
             // Check if the project exists
             var project = await _unitOfWork.ProjectsRepository.GetByIdAsync(request.ProjectId, request.TenantId, cancellationToken).ConfigureAwait(false);

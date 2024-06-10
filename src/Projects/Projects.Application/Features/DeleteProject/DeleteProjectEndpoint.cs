@@ -23,7 +23,7 @@ namespace Projects.Application.Features.DeleteProject
                 .Produces(StatusCodes.Status403Forbidden)
                 .Produces(StatusCodes.Status400BadRequest);
 
-            return new List<IEndpointConventionBuilder>() { endPoint };
+            return [endPoint];
         }
 
         private static async Task<IResult> DeleteProjectEndpointMethodAsync([FromRoute] Guid projectId,

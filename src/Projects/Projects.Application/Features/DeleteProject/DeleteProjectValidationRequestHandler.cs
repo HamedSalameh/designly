@@ -2,9 +2,9 @@
 
 namespace Projects.Application.Features.DeleteProject
 {
-    internal class DeleteProjectValidationRequestHandler : IBusinessLogicValidationHandler<DeleteProjectValidationRequest>
+    public class DeleteProjectValidationRequestHandler : IBusinessLogicValidationHandler<DeleteProjectValidationRequest>
     {
-        public Task<Exception?>? ValidateAsync(DeleteProjectValidationRequest request, CancellationToken cancellationToken)
+        public Task<Exception?> ValidateAsync(DeleteProjectValidationRequest request, CancellationToken cancellationToken)
         {
             // Project deletion validation based on business logic
 
@@ -16,3 +16,4 @@ namespace Projects.Application.Features.DeleteProject
         }
     }
 }
+    

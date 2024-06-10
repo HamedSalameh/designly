@@ -15,7 +15,7 @@ namespace Projects.Tests.Tasks
         }
 
         [Test]
-        public void should_have_error_when_ProjectId_is_empty()
+        public void Should_have_error_when_ProjectId_is_empty()
         {
             var command = new DeleteTaskCommand(Guid.NewGuid(), Guid.Empty, Guid.NewGuid());
 
@@ -25,7 +25,7 @@ namespace Projects.Tests.Tasks
         }
 
         [Test]
-        public void should_have_error_when_TenantId_is_empty()
+        public void Should_have_error_when_TenantId_is_empty()
         {
             var command = new DeleteTaskCommand(Guid.Empty, Guid.NewGuid(), Guid.NewGuid());
 
@@ -35,7 +35,7 @@ namespace Projects.Tests.Tasks
         }
 
         [Test]
-        public void should_have_error_when_TaskId_is_empty()
+        public void Should_have_error_when_TaskId_is_empty()
         {
             var command = new DeleteTaskCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.Empty);
 
@@ -45,7 +45,7 @@ namespace Projects.Tests.Tasks
         }
 
         [Test]
-        public void should_not_have_error_when_all_properties_are_set()
+        public void Should_not_have_error_when_all_properties_are_set()
         {
             var command = new DeleteTaskCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
