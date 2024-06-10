@@ -23,7 +23,7 @@ namespace Projects.Application.Features.DeleteProject
                 .Produces(StatusCodes.Status403Forbidden)
                 .Produces(StatusCodes.Status400BadRequest);
 
-            return new List<IEndpointConventionBuilder>() { endPoint };
+            return [endPoint];
         }
 
         private static async Task<IResult> DeleteProjectEndpointMethodAsync([FromRoute] Guid projectId,
@@ -42,11 +42,7 @@ namespace Projects.Application.Features.DeleteProject
 
             var tenantId = tenantProvider.GetTenantId();
 
-            var deleteProjectCommand = new DeleteProjectCommand()
-            {
-                TenantId = tenantId,
-                ProjectId = projectId
-            };
+            var deleteProjectCommand = new DeleteProjectCommand(projectId, tenantId);
 
             var deleteStatus =await sender.Send(deleteProjectCommand, cancellationToken).ConfigureAwait(false);
             return deleteStatus.ToActionResult(res => Results.NoContent());

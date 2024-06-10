@@ -11,6 +11,6 @@ namespace Projects.Application.Features.CreateTask
         public DateTime? DueDate { get; set; }  
         public DateTime? CompletedAt { get; set; }
         public string? Description { get; set; }
-        public TaskItemStatus taskItemStatus { get; set; }
+        public TaskItemStatus TaskItemStatus { get; set; }
     }
 }

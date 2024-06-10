@@ -81,5 +81,61 @@ namespace Projects.Tests.Projects
             Assert.That(sut.IsSuccess);
 
         }
+
+        // Testing: Project Lead Validation in case client validation fails
+        [Test]
+        public async Task CreateProject_ShouldFail_ClientValidationFails()
+        {
+            var mockProjectName = "Test Project";
+            var mockProjectLeadId = ProjectLeadId.New;
+            var mockClientId = ClientId.New;
+            var mockProjectId = ProjectId.New;
+            var mockTenantId = TenantId.New;
+            var mockBasicProject = new BasicProject(mockTenantId, mockProjectLeadId, mockClientId, mockProjectName);
+
+            // mock client validation
+            _businessLogicValidator.Setup(x => x.ValidateAsync(It.IsAny<ClientValidationRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new BusinessLogicException());
+
+            var sut = await _handler.Handle(new CreateProjectCommand
+            {
+                TenantId = mockTenantId,
+                Name = mockProjectName,
+                ProjectLeadId = mockProjectLeadId,
+                ClientId = mockClientId
+            }, CancellationToken.None);
+
+            Assert.That(sut.IsFaulted);
+        }
+
+        // Testing: Project Lead Validation in case project lead validation fails
+        [Test]
+        public async Task CreateProject_ShouldFail_ProjectLeadValidationFails()
+        {
+            var mockProjectName = "Test Project";
+            var mockProjectLeadId = ProjectLeadId.New;
+            var mockClientId = ClientId.New;
+            var mockProjectId = ProjectId.New;
+            var mockTenantId = TenantId.New;
+            var mockBasicProject = new BasicProject(mockTenantId, mockProjectLeadId, mockClientId, mockProjectName);
+
+            // mock client validation
+            _businessLogicValidator.Setup(x => x.ValidateAsync(It.IsAny<ClientValidationRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((BusinessLogicException)null!);
+
+            // mock project lead validation
+            _businessLogicValidator.Setup(x => x.ValidateAsync(It.IsAny<ProjectLeadValidationRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new BusinessLogicException());
+
+            var sut = await _handler.Handle(new CreateProjectCommand
+            {
+                TenantId = mockTenantId,
+                Name = mockProjectName,
+                ProjectLeadId = mockProjectLeadId,
+                ClientId = mockClientId
+            }, CancellationToken.None);
+
+            Assert.That(sut.IsFaulted);
+        }
     }
 }

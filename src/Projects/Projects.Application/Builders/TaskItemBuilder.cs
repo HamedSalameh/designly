@@ -67,11 +67,7 @@ namespace Projects.Application.Builders
                 throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
-            if (!CompletedAt.HasValue)
-            {
-                throw new BusinessLogicException($"{nameof(CompletedAt)} : must have a valid date value");
-            }
-            if (CompletedAt.Value.Date > DateTime.UtcNow.Date)
+            if (CompletedAt.HasValue && CompletedAt.Value.Date > DateTime.UtcNow.Date)
             {
                 throw new BusinessLogicException($"{nameof(CompletedAt)} : cannot have a future date value");
             }
@@ -87,9 +83,9 @@ namespace Projects.Application.Builders
                 throw new BusinessLogicException(TaskItemErrors.TaskItemNotCreatedYet);
             }
 
-            if (!DueDate.HasValue)
+            if (DueDate.HasValue && DueDate.Value.Date < DateTime.UtcNow.Date)
             {
-                throw new BusinessLogicException($"{nameof(DueDate)} : must have a valid date value");
+                throw new BusinessLogicException(TaskItemErrors.DueDateCannotBeInThePast);
             }
 
             _taskItem.DueDate = DueDate;

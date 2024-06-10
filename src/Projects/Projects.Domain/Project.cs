@@ -133,6 +133,11 @@ namespace Projects.Domain
             {
                 throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} : must be before {nameof(Deadline)}");
             }
+            if (CompletedAt.HasValue && startDate > CompletedAt)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} : must be before {nameof(CompletedAt)}");
+            }
+
             StartDate = startDate;
         }
 
