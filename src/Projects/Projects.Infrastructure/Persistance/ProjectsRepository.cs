@@ -54,7 +54,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_id", projectId.Id);
             dynamicParameters.Add("p_tenant_id", tenantId.Id);
 
-            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             return await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
@@ -74,14 +74,6 @@ namespace Projects.Infrastructure.Persistance
                     _logger.LogError(exception, "Could not retrieve project {Id} under account {TenantId}", projectId, tenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
-                }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                        connection.Dispose();
-                    }
                 }
             });
         }
@@ -106,7 +98,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.DateTime);
             dynamicParameters.Add("p_status", basicProject.Status, DbType.Int16);
 
-            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
@@ -124,14 +116,6 @@ namespace Projects.Infrastructure.Persistance
                     _logger.LogError(exception, "Error updating project {Id} under account {TenantId}", basicProject.Id, basicProject.TenantId);
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
-                }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                        connection.Dispose();
-                    }
                 }
             });
         }
@@ -157,7 +141,7 @@ namespace Projects.Infrastructure.Persistance
 
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
-            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             return await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
@@ -181,14 +165,6 @@ namespace Projects.Infrastructure.Persistance
                     _logger.LogError(exception, "Error creating basic project");
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
-                }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                        connection.Dispose();
-                    }
                 }
             });
         }
@@ -216,7 +192,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_id", projectId.Id);
             dynamicParameters.Add("p_tenant_id", tenantId.Id);
 
-            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
@@ -236,18 +212,10 @@ namespace Projects.Infrastructure.Persistance
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                        connection.Dispose();
-                    }
-                }
             });
         }
 
-        public Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<BasicProject>> SearchProjectsAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(tenantId);
             ArgumentNullException.ThrowIfNull(sqlResult);
@@ -255,34 +223,22 @@ namespace Projects.Infrastructure.Persistance
             var sqlQuery = sqlResult.Sql;
             var parameters = sqlResult.NamedBindings;
             
-            using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
-            return policy.ExecuteAsync(async (ct) =>
+            await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            return await policy.ExecuteAsync(async (ct) =>
             {
-                
-                await connection.OpenAsync(ct);
-                using var transaction = connection.BeginTransaction();
                 try
                 {
+                    await connection.OpenAsync(ct);
+
                     var results = await connection.QueryAsync<BasicProject>(sqlQuery,
                     parameters,
-                    transaction: transaction,
                     commandType: CommandType.Text);
-                    transaction.Commit();
-                    return results ?? [];
+                    return results ?? Enumerable.Empty<BasicProject>();
                 }
                 catch (Exception exception)
                 {
                     _logger.LogError(exception, "Could not retrieve projects search results due to error : {exception.Message}", exception.Message);
-                    transaction.Rollback();
                     throw;
-                }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                        connection.Dispose();
-                    }
                 }
             }, cancellationToken);
         }

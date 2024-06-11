@@ -57,7 +57,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
             dynamicParameters.Add("p_task_item_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
-            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = connection.BeginTransaction();
@@ -79,13 +79,6 @@ namespace Projects.Infrastructure.Persistance
                     transaction.Rollback();
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                    }
-                }
 
                 return taskItem.Id;
             }
@@ -99,7 +92,7 @@ namespace Projects.Infrastructure.Persistance
 
             var sqlScript = "delete from task_items where id = @id and project_id = @project_id and tenant_id = @tenant_id";
 
-            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = connection.BeginTransaction();
@@ -117,13 +110,6 @@ namespace Projects.Infrastructure.Persistance
                     transaction.Rollback();
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                    }
-                }
             }
         }
 
@@ -134,7 +120,7 @@ namespace Projects.Infrastructure.Persistance
 
             var sqlScript = "delete from task_items where project_id = @project_id and tenant_id = @tenant_id";
 
-            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = connection.BeginTransaction();
@@ -155,13 +141,6 @@ namespace Projects.Infrastructure.Persistance
                     transaction.Rollback();
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                    }
-                }
             }
         }
 
@@ -181,7 +160,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_completed_at", taskItem.CompletedAt, DbType.DateTime);
             dynamicParameters.Add("p_task_item_status", taskItem.TaskItemStatus, DbType.Int16);
 
-            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = connection.BeginTransaction();
@@ -199,13 +178,6 @@ namespace Projects.Infrastructure.Persistance
                     transaction.Rollback();
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                    }
-                }
             }
         }
 
@@ -217,7 +189,7 @@ namespace Projects.Infrastructure.Persistance
 
             var sqlScript = "select * from task_items where id = @id and project_id = @project_id and tenant_id = @tenant_id";
 
-            using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
                 using var transaction = connection.BeginTransaction();
@@ -237,26 +209,20 @@ namespace Projects.Infrastructure.Persistance
                     transaction.Rollback();
                     throw;
                 }
-                finally
-                {
-                    if (connection.State != ConnectionState.Closed)
-                    {
-                        await connection.CloseAsync();
-                    }
-                }
+                
             }
         }
 
-        public Task<IEnumerable<TaskItem>> SearchAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TaskItem>> SearchAsync(TenantId tenantId, SqlResult sqlResult, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(sqlResult);
             var sqlQuery = sqlResult.Sql;
             var parameters = sqlResult.NamedBindings;
 
             // execute the provided query inside a polling policy
-            return policy.ExecuteAsync(async (ct) =>
+            return await policy.ExecuteAsync(async (ct) =>
             {
-                using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+                await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
                 {
                     await connection.OpenAsync(ct);
                     using var transaction = connection.BeginTransaction();
@@ -274,13 +240,6 @@ namespace Projects.Infrastructure.Persistance
                         _logger.LogError(exception, "Could not retrieve items due to error : {Message}", exception.Message);
                         transaction.Rollback();
                         throw;
-                    }
-                    finally
-                    {
-                        if (connection.State != ConnectionState.Closed)
-                        {
-                            await connection.CloseAsync();
-                        }
                     }
                 }
             }, cancellationToken);

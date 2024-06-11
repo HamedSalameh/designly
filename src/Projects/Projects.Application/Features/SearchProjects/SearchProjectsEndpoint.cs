@@ -47,6 +47,10 @@ namespace Projects.Application.Features.SearchProjects
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchProjectsRequest.filters)
             {
+                if (filter == null || filter.Operator is null || filter.Field is null)
+                {
+                    return Results.BadRequest("One of the filter conditions is not valid.");
+                }
                 if (!SupportedFilterConditionOperators.FilterConditionOperatorsDictionary.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");

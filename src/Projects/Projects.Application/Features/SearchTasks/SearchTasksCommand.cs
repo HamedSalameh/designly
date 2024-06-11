@@ -8,8 +8,8 @@ namespace Projects.Application.Features.SearchTasks
 {
     public class SearchTasksCommand : IRequest<Result<IEnumerable<TaskItem>>>
     {
-        public TenantId tenantId { get; set; }
-        public ProjectId projectId { get; set; }
-        public List<FilterCondition> filters { get; set; } = [];
+        public TenantId TenantId { get; set; }
+        public ProjectId ProjectId { get; set; }
+        public List<FilterCondition> Filters { get; set; } = [];
     }
 }

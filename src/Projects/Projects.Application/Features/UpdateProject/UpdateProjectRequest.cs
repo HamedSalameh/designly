@@ -2,7 +2,7 @@
 
 namespace Projects.Application.Features.UpdateProject
 {
-    public class UpdateProjectRequestDto
+    public class UpdateProjectRequest
     {
         public required string Name { get; set; }
         public string? Description { get; set; }

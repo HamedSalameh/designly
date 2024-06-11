@@ -5,7 +5,7 @@ namespace Projects.Application.Features.SearchTasks
 {
     public class SearchTaskRequest
     {
-        public ProjectId projectId { get; set; }
-        public List<FilterConditionDto> filters { get; set; } = [];
+        required public ProjectId projectId { get; set; }
+        required public List<FilterConditionDto> filters { get; set; } = [];
     }
 }

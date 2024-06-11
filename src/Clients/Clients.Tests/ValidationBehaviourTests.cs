@@ -16,7 +16,7 @@ namespace Clients.Tests
         {
             // Arrange
             var validators = Enumerable.Empty<IValidator<TestRequest>>();
-            var behavior = new ValidationBehaviour<TestRequest, string>(validators);
+            var behavior = new ValidationBehavior<TestRequest, string>(validators);
 
             var next = Substitute.For<RequestHandlerDelegate<string>>();
             next.Invoke().Returns("Result");
@@ -44,7 +44,7 @@ namespace Clients.Tests
 
             var validators = new List<IValidator<TestRequest>> { validator };
 
-            var behavior = new ValidationBehaviour<TestRequest, string>(validators);
+            var behavior = new ValidationBehavior<TestRequest, string>(validators);
 
             var next = Substitute.For<RequestHandlerDelegate<string>>();
 
@@ -66,7 +66,7 @@ namespace Clients.Tests
 
             var validators = new List<IValidator<TestRequest>> { validator };
 
-            var behavior = new ValidationBehaviour<TestRequest, string>(validators);
+            var behavior = new ValidationBehavior<TestRequest, string>(validators);
 
             var next = Substitute.For<RequestHandlerDelegate<string>>();
             next.Invoke().Returns("Result");
