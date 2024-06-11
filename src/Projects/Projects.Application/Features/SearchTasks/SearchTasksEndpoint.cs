@@ -42,12 +42,17 @@ namespace Projects.Application.Features.SearchTasks
             var tenantId = tenantProvider.GetTenantId();
 
             var searchTasksCommand = new SearchTasksCommand();
-            searchTasksCommand.projectId = searchTaskRequest.projectId;
-            searchTasksCommand.tenantId = tenantId;
+            searchTasksCommand.ProjectId = searchTaskRequest.projectId;
+            searchTasksCommand.TenantId = tenantId;
 
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchTaskRequest.filters)
             {
+                // if the filter is not valid, return a bad request
+                if (filter == null || filter.Operator is null || filter.Field is null)
+                {
+                    return Results.BadRequest("One of the filter conditions is not valid.");
+                }
                 if (!SupportedFilterConditionOperators.FilterConditionOperatorsDictionary.TryGetValue(filter.Operator.ToLower(), out var filterConditionOperator))
                 {
                     return Results.BadRequest("We could not parse a filter operator for one of the filter conditions.");
@@ -62,7 +67,7 @@ namespace Projects.Application.Features.SearchTasks
 
                 filterConditions.Add(new FilterCondition(filterConditionField, filterConditionOperator, valuesList ));
             }
-            searchTasksCommand.filters = filterConditions;
+            searchTasksCommand.Filters = filterConditions;
 
             var tasks = await sender.Send(searchTasksCommand, cancellationToken);
 

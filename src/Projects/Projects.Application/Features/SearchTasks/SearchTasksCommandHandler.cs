@@ -42,7 +42,7 @@ namespace Projects.Application.Features.SearchTasks
                 return new Result<IEnumerable<TaskItem>>(new BusinessLogicException(errorMessage));
             }
 
-            var results = await _unitOfWork.TaskItemsRepository.SearchAsync(request.tenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
+            var results = await _unitOfWork.TaskItemsRepository.SearchAsync(request.TenantId, sqlQuery, cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
@@ -54,10 +54,10 @@ namespace Projects.Application.Features.SearchTasks
 
         private static FilterDefinition GetFilterDefinition(SearchTasksCommand request)
         {
-            var filters = request.filters;
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, [request.projectId.Id]));
-            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.tenantId.Id]));
-            return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.filters);
+            var filters = request.Filters;
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.ProjectId, FilterConditionOperator.Equals, [request.ProjectId.Id]));
+            filters.Add(new FilterCondition(TaskItemFieldToColumnMapping.TenantId, FilterConditionOperator.Equals, [request.TenantId.Id]));
+            return new FilterDefinition(TaskItemFieldToColumnMapping.TaskItemTable, request.Filters);
         }
     }
 }

@@ -24,7 +24,7 @@ public static class DependencyInjection
 
         // MediatR
         services.AddMediatR(Assembly.GetExecutingAssembly());
-        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         return services;
     }

@@ -14,20 +14,26 @@ namespace Projects.Application.Features.SearchProjects
 
         private void FilterValidation(List<FilterCondition> list, ValidationContext<SearchProjectsCommand> context)
         {
+            if (list == null)
+            {
+                context.AddFailure("Filter conditions are required");
+                return;
+            }
+
             // validate each filter condition
             foreach (var filter in list)
             {
                 if (filter == null)
                 {
                     context.AddFailure("Filter condition is required");
+                    return;
                 }
-                else
+
+                if (string.IsNullOrWhiteSpace(filter.Field))
                 {
-                    if (filter.Values == null || !filter.Values.Any())
-                    {
-                        context.AddFailure("Filter values are required");
-                    }
+                    context.AddFailure("Filter field is required");
                 }
+
             }
         }
     }

@@ -20,7 +20,7 @@ namespace Clients.Application
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
             // Add MediatR Pipeline Behaviors
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviors.ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviors.ValidationBehavior<,>));
 
             return services;
         }

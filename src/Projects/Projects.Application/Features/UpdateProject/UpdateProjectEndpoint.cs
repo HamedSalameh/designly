@@ -25,7 +25,7 @@ namespace Projects.Application.Features.UpdateProject
             return endpoint;
         }
 
-        public static async Task<IResult> UpdateProjectEndpointMethodAsync([FromRoute] Guid projectId, [FromBody] UpdateProjectRequestDto updateProjectRequestDto,
+        public static async Task<IResult> UpdateProjectEndpointMethodAsync([FromRoute] Guid projectId, [FromBody] UpdateProjectRequest updateProjectRequestDto,
                        ITenantProvider tenantProvider,
                        ISender sender,
                        ILoggerFactory loggerFactory,
