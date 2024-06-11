@@ -238,6 +238,124 @@ namespace Projects.Tests.Tasks
             // Assert
             Assert.Throws<InvalidOperationException>(() => taskItem.SetId(TaskItemId.New));
         }
+
+        // Unit testing for the base Entity class (parent class of TaskItem)
+        [Test]
+        public void Entity_IsTransient_WhenIdIsEmpty_ReturnsTrue()
+        {
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem = new TaskItem(tenantId, projectId, name, description);
+
+            // Assert
+            Assert.That(taskItem.IsTransient(), Is.True);
+        }
+
+        // Testing GetHashCode
+        [Test]
+        public void Entity_GetHashCode_ShouldBeDifferentForDifferentEntities()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem1 = new TaskItem(tenantId, projectId, name, description);
+            var taskItem2 = new TaskItem(tenantId, projectId, name, description);
+
+            // Act
+            var hashCode1 = taskItem1.GetHashCode();
+            var hashCode2 = taskItem2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
         
+        }
+
+        // Testing GetHashCode
+        [Test]
+        public void Entity_GetHashCode_ShouldBeSameForSameEntities()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem1 = new TaskItem(tenantId, projectId, name, description);
+            var taskItem2 = taskItem1;
+
+            // Act
+            var hashCode1 = taskItem1.GetHashCode();
+            var hashCode2 = taskItem2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
+        }
+
+        // Unit test for Equals method
+        [Test]
+        public void Entity_Equals_WhenEntitiesAreSame_ReturnsTrue()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem1 = new TaskItem(tenantId, projectId, name, description);
+            var taskItem2 = taskItem1;
+
+            // Assert
+            Assert.That(taskItem1.Equals(taskItem2), Is.True);
+        }
+
+        // Unit test for Equals method
+        [Test]
+        public void Entity_Equals_WhenEntitiesAreDifferent_ReturnsFalse()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem1 = new TaskItem(tenantId, projectId, name, description);
+            var taskItem2 = new TaskItem(tenantId, projectId, name, description);
+
+            // Assert
+            Assert.That(taskItem1, Is.Not.EqualTo(taskItem2));
+        }
+
+        [Test]
+        public void Entity_Equals_WhenEntitiesAreDifferentTypes_ReturnsFalse()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem = new TaskItem(tenantId, projectId, name, description);
+            var other = new object();
+
+            // Assert
+            Assert.That(taskItem, Is.Not.EqualTo(other));
+        }
+
+        [Test]
+        public void Entity_NotEqualOperator_WhenEntitiesAreDifferent_ReturnsTrue()
+        {
+            // Arrange
+            var tenantId = new TenantId(Guid.NewGuid());
+            var projectId = new ProjectId(Guid.NewGuid());
+            var name = "Name";
+            var description = "Description";
+            var taskItem1 = new TaskItem(tenantId, projectId, name, description);
+            var taskItem2 = new TaskItem(tenantId, projectId, name, description);
+
+            // Assert
+#pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
+            Assert.That(taskItem1 != taskItem2, Is.True);
+#pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
+        }
     }
 }
