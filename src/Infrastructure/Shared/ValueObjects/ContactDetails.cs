@@ -4,13 +4,28 @@ namespace Designly.Shared.ValueObjects
 {
     public class ContactDetails
     {
-        public string PrimaryPhoneNumber { get; set; }
+        private string _primaryPhoneNumber = Consts.Strings.ValueNotSet;
+        public string PrimaryPhoneNumber
+        {
+            get => _primaryPhoneNumber;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException(value);
+
+                if (value.Length > Consts.MaxPhoneNumberLength)
+                    throw new ArgumentException($"Phone number cannot be longer than {Consts.MaxPhoneNumberLength} characters");
+
+                _primaryPhoneNumber = value;
+            }
+
+        }
         public string SecondaryPhoneNumber { get; } = "";
         public string EmailAddress { get; set; } = "";
 
         public ContactDetails(string primaryPhoneNumber, string secondaryPhoneNumber = "", string emailAddress = "")
         {
-            if (string.IsNullOrEmpty(primaryPhoneNumber))
+            if (string.IsNullOrWhiteSpace(primaryPhoneNumber))
                 throw new ArgumentNullException(primaryPhoneNumber);
 
             if (primaryPhoneNumber.Length > Consts.MaxPhoneNumberLength)

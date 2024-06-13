@@ -29,43 +29,6 @@ namespace Clients.Tests
             // Assert
             result.ShouldNotHaveAnyValidationErrors();
         }
-        
-        [Test]
-        public void CreateClientCommandValidator_ShouldFail_MissingPrimaryPhoneNumber()
-        {
-            // Arrange
-            var validator = new CreateClientCommandValidator();
-            
-            var invalidCommand = new CreateClientCommand(
-                new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId));
-            
-            // inject invalid values
-            invalidCommand.Client.ContactDetails.PrimaryPhoneNumber = string.Empty;
-            
-            // Act
-            var result = validator.TestValidate(invalidCommand);
-            
-            // Assert
-            result.ShouldHaveValidationErrorFor(command => command.Client.ContactDetails.PrimaryPhoneNumber);
-        }
-        
-        [Test]
-        public void CreateClientCommandValidator_ShouldFail_MissingCity()
-        {
-            // Arrange
-            var validator = new CreateClientCommandValidator();
-            
-            var invalidCommand = new CreateClientCommand(
-                new Client(FirstName, FamilyName, new Address(City), new ContactDetails(PrimaryPhoneNumber), TenantId));
-            
-            // inject invalid values
-            invalidCommand.Client.Address.City = string.Empty;
-            
-            // Act
-            var result = validator.TestValidate(invalidCommand);
-            
-            // Assert
-            result.ShouldHaveValidationErrorFor(command => command.Client.Address.City);
-        }
+       
     }
 }

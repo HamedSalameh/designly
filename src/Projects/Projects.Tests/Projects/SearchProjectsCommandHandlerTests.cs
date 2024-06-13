@@ -1,6 +1,4 @@
-﻿
-
-using Designly.Auth.Identity;
+﻿using Designly.Auth.Identity;
 using Designly.Filter;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -137,7 +135,7 @@ namespace Projects.Tests.Projects
             };
 
             _queryBuilderMock.Setup(x => x.BuildAsync(It.IsAny<FilterDefinition>()))
-                .Returns((SqlResult)null);
+                .Returns((SqlResult)null!);
 
             // Act
             var result = await sut.Handle(request, CancellationToken.None);

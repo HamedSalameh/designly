@@ -4,7 +4,17 @@ namespace Designly.Shared.ValueObjects
 {
     public class Address
     {
-        public string City { get; set; }
+        private string _city = Consts.Strings.ValueNotSet;
+        public string City
+        {
+            get => _city;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException(value);
+                _city = value;
+            }
+        }
         public string Street { get; set; } = "N/A";
         public string BuildingNumber { get; set; } = "N/A";
         public List<string>? AddressLines { get; set; }
