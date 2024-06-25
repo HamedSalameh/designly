@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 using System.Net.Mime;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MediatR;
 
 namespace Clients.API
 {

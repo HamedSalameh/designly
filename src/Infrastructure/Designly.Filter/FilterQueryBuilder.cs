@@ -72,7 +72,7 @@ namespace Designly.Filter
                 // the logical operator between each condition is AND
                 var fieldValues = condition.Values;
                 var operatorType = condition.Operator;
-                var field = getColumnName(condition.Field);
+                var field = GetColumnName(condition.Field);
 
                 BuildWhereQueryCondition(query, field, fieldValues, operatorType);
             }
@@ -97,14 +97,14 @@ namespace Designly.Filter
             _conditionBuilders[operatorType](field, fieldValues, query);
         }
 
-        private static string getColumnName(string columnName)
+        private static string GetColumnName(string columnName)
         {
             if (string.IsNullOrEmpty(columnName))
             {
                 return columnName;
             }
 
-            StringBuilder snakeCaseColumnName = new StringBuilder();
+            StringBuilder snakeCaseColumnName = new();
             snakeCaseColumnName.Append(char.ToLower(columnName[0]));
 
             for (int i = 1; i < columnName.Length; i++)
