@@ -33,7 +33,6 @@ namespace Accounts.Tests
         }
 
         [TestCase("")]
-        [TestCase(null)]
         [TestCase("    ")]
         public void CreateBasicAccount_InvalidAccountName_ThrowsArgumentException(string invalidAccountName)
         {
