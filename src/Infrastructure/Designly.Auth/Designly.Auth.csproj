@@ -9,7 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Amazon.AspNetCore.Identity.Cognito" Version="3.0.2" />
 		<PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.5.4" />
-		<PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.306.4" />
+		<PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.306.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
