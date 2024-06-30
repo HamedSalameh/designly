@@ -48,7 +48,6 @@ namespace Clients.API
             builder.Services.AddProblemDetails();
 
             // Configure Services
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddHttpClient();
             builder.Services.AddApplication(configuration);
 
