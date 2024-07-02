@@ -1,6 +1,5 @@
 using Clients.Application;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
@@ -13,6 +12,23 @@ namespace IdentityService.API;
 
 public static class Program
 {
+    static void ConfigureVersioning(WebApplicationBuilder builder)
+    {
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = Asp.Versioning.ApiVersionReader.Combine(
+                new Asp.Versioning.UrlSegmentApiVersionReader(),
+                new Asp.Versioning.HeaderApiVersionReader(Designly.Shared.Consts.ApiVersionHeaderEntry));
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'V";
+        });
+    }
+
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
@@ -37,16 +53,9 @@ public static class Program
         });
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddApiVersioning(v =>
-        {
-            v.AssumeDefaultVersionWhenUnspecified = true;
-            v.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-            v.ReportApiVersions = true;
-            v.ApiVersionReader = ApiVersionReader.Combine(
-                new QueryStringApiVersionReader("api-version"),
-                new HeaderApiVersionReader("api-version"),
-                new MediaTypeApiVersionReader("ver"));
-        });
+        
+        ConfigureVersioning(builder);
+        
         builder.Services.AddEndpointsApiExplorer();
 
         // Enabled authentication
