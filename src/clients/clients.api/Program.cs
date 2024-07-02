@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 using System.Net.Mime;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MediatR;
 
 namespace Clients.API
 {
@@ -47,7 +48,6 @@ namespace Clients.API
             builder.Services.AddProblemDetails();
 
             // Configure Services
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddHttpClient();
             builder.Services.AddApplication(configuration);
 

@@ -5,6 +5,7 @@ using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
 using Projects.Application.Features.CreateProject;

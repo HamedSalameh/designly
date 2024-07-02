@@ -8,6 +8,7 @@ using Designly.Base.Exceptions;
 using IdentityService.Service;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Designly.Auth.Providers
 {
@@ -139,7 +140,7 @@ namespace Designly.Auth.Providers
                     Password = password
                 };
 
-                var authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
+                var authResponse = await user.StartWithSrpAuthAsync(authRequest, cancellationToken).ConfigureAwait(false);
 
                 var tokenResponse = new TokenResponse
                 {

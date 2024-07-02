@@ -27,7 +27,7 @@ namespace Projects.Application.LogicValidation.Handlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Exception?>? ValidateAsync(ClientValidationRequest request, CancellationToken cancellationToken)
+        public async Task<Exception?> ValidateAsync(ClientValidationRequest request, CancellationToken cancellationToken)
         {
             DoValidateRequest(request);
 

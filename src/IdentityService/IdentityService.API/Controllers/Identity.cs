@@ -1,4 +1,5 @@
-﻿using Designly.Base.Exceptions;
+﻿using Asp.Versioning;
+using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using IdentityService.API.DTO;
 using IdentityService.Application.Commands;

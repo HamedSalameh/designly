@@ -11,7 +11,7 @@ namespace Clients.Application.Commands
         private readonly ILogger<DeleteClientCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
-        public async Task<Unit> Handle(DeleteClientCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteClientCommand request, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(request);
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -30,8 +30,6 @@ namespace Clients.Application.Commands
                 DeleteClientAsync(tenantId, clientId, cancellationToken).
                 ConfigureAwait(false);
             _logger.LogDebug("Deleted client {Id}", clientId);
-
-            return Unit.Value;
         }
     }
 }

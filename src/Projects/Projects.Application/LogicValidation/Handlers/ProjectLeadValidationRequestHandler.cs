@@ -26,7 +26,7 @@ namespace Projects.Application.LogicValidation.Handlers
             _httpClientProvider = httpClientProvider ?? throw new ArgumentNullException(nameof(httpClientProvider));
         }
 
-        public async Task<Exception?>? ValidateAsync(ProjectLeadValidationRequest request, CancellationToken cancellationToken)
+        public async Task<Exception?> ValidateAsync(ProjectLeadValidationRequest request, CancellationToken cancellationToken)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
