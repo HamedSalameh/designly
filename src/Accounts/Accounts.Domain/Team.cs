@@ -55,6 +55,12 @@ namespace Accounts.Domain
 
             Members ??= new List<User>();
 
+            // do not add the same user twice
+            if (Members.Contains(user))
+            {
+                return;
+            }
+
             Members.Add(user);
         }
 
@@ -75,6 +81,12 @@ namespace Accounts.Domain
             
             foreach (var user in users)
             {
+                // do not add the same user twice
+                if (Members.Contains(user))
+                {
+                    continue;
+                }
+
                 Members.Add(user);
             }
         }
