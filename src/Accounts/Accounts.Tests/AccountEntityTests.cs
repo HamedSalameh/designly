@@ -11,258 +11,515 @@ namespace Accounts.Tests
         private readonly string userFirstName = "test_user_fn";
         private readonly string userLastName = "test_user_ln";
         private readonly string userEmail = "email@mail.com";
-        
+
+        // unit tests for AccountEntity
 
         [Test]
-        public void CreateAccount_WithNullName_ThrowsArgumentNullException()
+        public void AccountEntity_WithoutOwner_ShouldBeCreated()
         {
-            // Arrange
-            Assert.Throws<ArgumentNullException>(() => new Account(null!));
+            var account = new Account(accountName);
+
+            Assert.That(account.Name, Is.EqualTo(accountName));
         }
 
         [Test]
-        public void CreateAccount_WithEmptyName_ThrowsArgumentNullException()
+        public void AccountEntity_WithOwner_ShouldBeCreated()
         {
-            // Arrange
+            var user = new User(userFirstName, userLastName, userEmail, new Account(accountName));
+            var account = new Account(accountName, user);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Name, Is.EqualTo(accountName));
+                Assert.That(account.Owner, Is.EqualTo(user));
+            });
+        }
+
+        [Test]
+        public void AccountEntity_WithNullOwner_ShouldThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new Account(accountName, null!));
+        }
+
+        [Test]
+        public void AccountEntity_WithEmptyName_ShouldThrowArgumentNullException()
+        {
             Assert.Throws<ArgumentNullException>(() => new Account(string.Empty));
         }
 
         [Test]
-        public void CreateAccount_WithNullOwner_ThrowsArgumentNullException()
+        public void AccountEntity_WithWhiteSpaceName_ShouldThrowArgumentNullException()
         {
-            // Arrange
-            Assert.Throws<ArgumentNullException>(() => new Account("Test", null!));
+            Assert.Throws<ArgumentNullException>(() => new Account(" "));
         }
 
         [Test]
-        public void CreateAccount_WithValidNameAndOwner_CreatesAccountWithStatusInProcessRegisteration()
+        public void AccountEntity_WhenCreated_ShouldHaveInProcessRegisterationStatus()
         {
-            // Arrange
-            
-            // Act
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
 
-            Assert.Multiple(() =>
-            {
-                // Assert
-                Assert.That(account.Name, Is.EqualTo(accountName));
-                Assert.That(account.Status, Is.EqualTo(AccountStatus.InProcessRegisteration));
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(0));
-            });
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.InProcessRegisteration));
         }
 
         [Test]
-        public void AssignOwner_WithNullOwner_ThrowsArgumentNullException()
+        public void AccountEntity_WhenOwnerAssigned_ShouldHaveOwner()
         {
-            // Arrange
             var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+
+            Assert.That(account.Owner, Is.EqualTo(user));
+        }
+
+        [Test]
+        public void AccountEntity_WhenOwnerAssignedWithNull_ShouldThrowArgumentNullException()
+        {
+            var account = new Account(accountName);
+
             Assert.Throws<ArgumentNullException>(() => account.AssignOwner(null!));
         }
 
         [Test]
-        public void AssignOwner_WithValidOwner_AssignsOwner()
+        public void AccountEntity_WhenDefaultTeamCreated_ShouldHaveDefaultTeam()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
 
-            // Act
-            account.AssignOwner(accountOwner);
+            account.CreateDefaultTeam();
 
-            // Assert
-            Assert.That(account.Owner, Is.EqualTo(accountOwner));
+            Assert.That(account.Teams, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
         }
 
         [Test]
-        public void CreateDefaultTeam_WithNullTeams_CreatesDefaultTeam()
+        public void AccountEntity_WhenDefaultTeamCreatedTwice_ShouldHaveOneDefaultTeam()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
 
-            // Act
+            account.CreateDefaultTeam();
             account.CreateDefaultTeam();
 
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
-            });
+            Assert.That(account.Teams, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
         }
 
         [Test]
-        public void CreateDefaultTeam_WithEmptyTeams_CreatesDefaultTeam()
+        public void AccountEntity_WhenUserAddedToDefaultTeam_ShouldHaveUserInDefaultTeam()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-
-            // Act
-            account.CreateDefaultTeam();
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
-            });
-        }
-
-        [Test]
-        public void CreateDefaultTeam_WithDefaultTeam_CreatesDefaultTeam()
-        {
-            // Arrange
-            var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            account.CreateDefaultTeam();
-
-            // Act
-            account.CreateDefaultTeam();
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
-            });
-        }
-
-        [Test]
-        public void AddUserToDefaultTeam_WithNullUser_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            account.CreateDefaultTeam();
-
-            // Act
-            Assert.Throws<ArgumentNullException>(() => account.AddUserToDefaultTeam(null!));
-        }
-
-        [Test]
-        public void AddUserToDefaultTeam_WithValidUser_AddsUserToDefaultTeam()
-        {
-            // Arrange
-            var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            account.CreateDefaultTeam();
             var user = new User(userFirstName, userLastName, userEmail, account);
 
-            // Act
+            account.CreateDefaultTeam();
             account.AddUserToDefaultTeam(user);
 
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
-                Assert.That(account.Teams.First().Members, Is.Not.Null);
-                Assert.That(account.Teams.First().Members, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First().Members.First(), Is.EqualTo(user));
-            });
+            Assert.That(account.Teams.First().Members, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First().Members.First(), Is.EqualTo(user));
         }
 
         [Test]
-        public void AddTeam_WithNullTeam_ThrowsArgumentNullException()
+        public void AccountEntity_WhenUserAddedToDefaultTeamTwice_ShouldHaveUserInDefaultTeamOnce()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
+            var user = new User(userFirstName, userLastName, userEmail, account);
 
-            // Act
+            account.CreateDefaultTeam();
+            account.AddUserToDefaultTeam(user);
+            account.AddUserToDefaultTeam(user);
+
+            Assert.That(account.Teams.First().Members, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First().Members.First(), Is.EqualTo(user));
+        }
+
+        // add, remove teams methods unit testing
+        [Test]
+        public void AccountEntity_WhenTeamAdded_ShouldHaveTeam()
+        {
+            var account = new Account(accountName);
+            var team = new Team("test_team", account);
+
+            account.AddTeam(team);
+
+            Assert.That(account.Teams, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First(), Is.EqualTo(team));
+        }
+
+        [Test]
+        public void AccountEntity_WhenTeamAddedTwice_ShouldHaveTeamOnce()
+        {
+            var account = new Account(accountName);
+            var team = new Team("test_team", account);
+
+            account.AddTeam(team);
+            account.AddTeam(team);
+
+            Assert.That(account.Teams, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First(), Is.EqualTo(team));
+        }
+
+        [Test]
+        public void AccountEntity_WhenTeamAddedWithNull_ShouldThrowArgumentNullException()
+        {
+            var account = new Account(accountName);
+
             Assert.Throws<ArgumentNullException>(() => account.AddTeam(null!));
         }
 
         [Test]
-        public void AddTeam_WithValidTeam_AddsTeam()
+        public void AccountEntity_WhenTeamRemoved_ShouldNotHaveTeam()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
             var team = new Team("test_team", account);
 
-            // Act
             account.AddTeam(team);
+            account.RemoveTeam(team);
 
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First(), Is.EqualTo(team));
-            });
+            Assert.That(account.Teams, Has.Count.EqualTo(0));
         }
 
         [Test]
-        public void RemoveTeam_WithNullTeam_ThrowsArgumentNullException()
+        public void AccountEntity_WhenTeamRemovedTwice_ShouldNotThrowException()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
+            var team = new Team("test_team", account);
 
-            // Act
+            account.AddTeam(team);
+            account.RemoveTeam(team);
+            account.RemoveTeam(team);
+
+            Assert.That(account.Teams, Has.Count.EqualTo(0));
+        }
+
+        [Test]
+        public void AccountEntity_WhenTeamRemovedWithNull_ShouldThrowArgumentNullException()
+        {
+            var account = new Account(accountName);
+
             Assert.Throws<ArgumentNullException>(() => account.RemoveTeam(null!));
         }
 
+
+        // Activate Account unit tests
         [Test]
-        public void RemoveTeam_WithValidTeam_RemovesTeam()
+        public void AccountEntity_WhenActivated_WithNoOwner_ShouldThrowAccountException()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            var team = new Team("test_team", account);
-            account.AddTeam(team);
 
-            // Act
-            account.RemoveTeam(team);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(0));
-            });
+            Assert.Throws<AccountException>(() => account.ActivateAccount());
         }
 
         [Test]
-        public void RemoveTeam_WithValidTeamAndOtherTeams_RemovesTeam()
+        public void AccountEntity_WhenActivated_WithTransientAccount_ShouldThrowAccountException()
         {
-            // Arrange
             var account = new Account(accountName);
-            var accountOwner = new User(userFirstName, userLastName, userEmail, account);
-            var team = new Team("test_team", account);
-            var team2 = new Team("test_team2", account);
-            account.AddTeam(team);
-            account.AddTeam(team2);
+            var user = new User(userFirstName, userLastName, userEmail, account);
 
-            // Act
-            account.RemoveTeam(team);
+            account.AssignOwner(user);
 
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(account.Teams, Is.Not.Null);
-                Assert.That(account.Teams, Has.Count.EqualTo(1));
-                Assert.That(account.Teams.First(), Is.EqualTo(team2));
-            });
+            Assert.Throws<AccountException>(() => account.ActivateAccount());
         }
 
         [Test]
-        public void RemoveTeam_WithValidTeamAndNoTeams_ThrowsException()
+        public void AccountEntity_WhenActivated_ShouldHaveActiveStatus()
         {
-            // Arrange
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Active));
+        }
+
+        [Test]
+        public void AccountEntity_WhenActivated_ShouldHaveDefaultTeam()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            Assert.That(account.Teams, Has.Count.EqualTo(1));
+            Assert.That(account.Teams.First().Name, Is.EqualTo(DefaultTeamName));
+        }
+
+        [Test]
+        public void AccountEntity_WhenActivated_WithMarkedAsDeleted_ShouldThrowAccountException()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.MarkAccountForDeletion();
+
+            Assert.Throws<AccountException>(() => account.ActivateAccount());
+        }
+
+        [Test]
+        public void AccountEntity_WhenActivated_WithActiveStatus_ShouldNotChangeStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.ActivateAccount();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Active));
+        }
+
+        // Suspended Account unit tests
+        [Test]
+        public void AccountEntity_WhenSuspended_ShouldHaveSuspendedStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.SuspendAccount();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Suspended));
+        }
+
+        [Test]
+        public void AccountEntity_WhenSuspended_WithMarkedAsDeleted_ShouldThrowAccountException()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.MarkAccountForDeletion();
+
+            Assert.Throws<AccountException>(() => account.SuspendAccount());
+        }
+
+        [Test]
+        public void AccountEntity_WhenSuspended_WithSuspendedStatus_ShouldNotChangeStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.SuspendAccount();
+            account.SuspendAccount();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Suspended));
+        }
+
+        // Disable Account unit tests
+        [Test]
+        public void AccountEntity_WhenDisabled_ShouldHaveDisabledStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.DisableAccount();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Disabled));
+        }
+
+        [Test]
+        public void AccountEntity_WhenDisabled_WithMarkedAsDeleted_ShouldThrowAccountException()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.MarkAccountForDeletion();
+
+            Assert.Throws<AccountException>(() => account.DisableAccount());
+        }
+
+        [Test]
+        public void AccountEntity_WhenDisabled_WithDisabledStatus_ShouldNotChangeStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.ActivateAccount();
+            account.DisableAccount();
+            account.DisableAccount();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.Disabled));
+        }
+
+        // Mark Account For Deletion unit tests
+        [Test]
+        public void AccountEntity_WhenMarkedForDeletion_ShouldHaveMarkedForDeletionStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.MarkAccountForDeletion();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.MarkedForDeletion));
+        }
+
+        [Test]
+        public void AccountEntity_WhenMarkedForDeletion_WithMarkedForDeletionStatus_ShouldNotChangeStatus()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+            account.CreateDefaultTeam();
+            
+            // Simulate account is saved and already has an Id
+            account.Id = Guid.NewGuid();
+
+            account.MarkAccountForDeletion();
+            account.MarkAccountForDeletion();
+
+            Assert.That(account.Status, Is.EqualTo(AccountStatus.MarkedForDeletion));
+        }
+
+        // ToString method unit tests
+        [Test]
+        public void AccountEntity_ToString_ShouldReturnAccountName()
+        {
             var account = new Account(accountName);
 
-            // Act
-            Assert.That(account.Teams, Is.Not.Null);
-            Assert.That(account.Teams, Has.Count.EqualTo(0));
-        }       
+            Assert.That(account.ToString(), Is.EqualTo(accountName + ", " + Enum.GetName( AccountStatus.InProcessRegisteration)));
+        }
+
+        [Test]
+        public void AccountEntity_ToString_WithOwner_ShouldReturnAccountNameAndOwnerName()
+        {
+            var account = new Account(accountName);
+            var user = new User(userFirstName, userLastName, userEmail, account);
+
+            account.AssignOwner(user);
+
+            Assert.That(account.ToString(), Is.EqualTo(accountName + ", " + user.ToString() + ", " +  Enum.GetName(AccountStatus.InProcessRegisteration)));
+        }
+
+        // unit test Equals method
+        [Test]
+        public void AccountEntity_Equals_WithNull_ShouldReturnFalse()
+        {
+            var account = new Account(accountName);
+
+            Assert.That(account.Equals(null), Is.False);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithDifferentType_ShouldReturnFalse()
+        {
+            var account = new Account(accountName);
+
+            Assert.That(account.Equals(new object()), Is.False);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithDifferentAccount_ShouldReturnFalse()
+        {
+            var account = new Account(accountName);
+            var account2 = new Account("test_account2");
+
+            Assert.That(account.Equals(account2), Is.False);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithSameAccount_ShouldReturnTrue()
+        {
+            var account = new Account(accountName);
+
+            Assert.That(account.Equals(account), Is.True);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithTransientAccount_ShouldReturnFalse()
+        {
+            var account = new Account(accountName);
+            var account2 = new Account(accountName);
+
+            Assert.That(account.Equals(account2), Is.False);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithSameAccountId_ShouldReturnTrue()
+        {
+            var account = new Account(accountName);
+            var account2 = new Account(accountName);
+
+            account.Id = Guid.NewGuid();
+            account2.Id = account.Id;
+
+            Assert.That(account.Equals(account2), Is.True);
+        }
+
+        [Test]
+        public void AccountEntity_Equals_WithDifferentAccountId_ShouldReturnFalse()
+        {
+            var account = new Account(accountName);
+            var account2 = new Account(accountName);
+
+            account.Id = Guid.NewGuid();
+            account2.Id = Guid.NewGuid();
+
+            Assert.That(account.Equals(account2), Is.False);
+        }
+
     }
 }
