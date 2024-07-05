@@ -36,14 +36,14 @@ namespace Accounts.Application.Features.ValidateUser
 
                 Result<bool> validationResult = userStatus switch
                 {
-                    Consts.UserStatus.BeforeActivation => new Result<bool>(new AccountException(AccountErrors.UserIsNotActivated)),
+                    Consts.UserStatus.BeforeActivation => new Result<bool>(new AccountException(AccountErrors.UserIsNotActivated.Description, AccountErrors.UserIsNotActivated)),
                     Consts.UserStatus.Active => new Result<bool>(true),
-                    Consts.UserStatus.Suspended => new Result<bool>(new AccountException(AccountErrors.UserIsSuspended)),
-                    Consts.UserStatus.Disabled => new Result<bool>(new AccountException(AccountErrors.UserIsDisabled)),
-                    Consts.UserStatus.MarkedForDeletion => new Result<bool>(new AccountException(AccountErrors.UserIsMarkedForDeletion)),
-                    Consts.UserStatus.Deleted => new Result<bool>(new AccountException(AccountErrors.UserIsDeleted)),
-                    Consts.UserStatus.Blacklisted => new Result<bool>(new AccountException(AccountErrors.UserIsBlacklisted)),
-                    _ => throw new AccountException(AccountErrors.UnsupportedUserStatus)
+                    Consts.UserStatus.Suspended => new Result<bool>(new AccountException(AccountErrors.UserIsSuspended.Description, AccountErrors.UserIsSuspended)),
+                    Consts.UserStatus.Disabled => new Result<bool>(new AccountException(AccountErrors.UserIsDisabled.Description, AccountErrors.UserIsDisabled)),
+                    Consts.UserStatus.MarkedForDeletion => new Result<bool>(new AccountException(AccountErrors.UserIsMarkedForDeletion.Description, AccountErrors.UserIsMarkedForDeletion)),
+                    Consts.UserStatus.Deleted => new Result<bool>(new AccountException(AccountErrors.UserIsDeleted.Description, AccountErrors.UserIsDeleted)),
+                    Consts.UserStatus.Blacklisted => new Result<bool>(new AccountException(AccountErrors.UserIsBlacklisted.Description, AccountErrors.UserIsBlacklisted)),
+                    _ => throw new AccountException(AccountErrors.UnsupportedUserStatus.Description, AccountErrors.UnsupportedUserStatus)
                 };
 
                 return validationResult;

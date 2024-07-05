@@ -30,7 +30,7 @@ namespace Accounts.Domain
 
         public Account(string Name)
         {
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
                 throw new ArgumentNullException(nameof(Name));
             }
@@ -72,6 +72,10 @@ namespace Accounts.Domain
         {
             var defaultTeam = Teams.FirstOrDefault(t => t.Name == DefaultTeamName)
                 ?? throw new AccountException("The default team is not created yet");
+            
+            // do not add the same user twice
+            if (defaultTeam.Members.Contains(user)) return;
+
             defaultTeam.AddMember(user);
         }
 
@@ -80,6 +84,9 @@ namespace Accounts.Domain
             ArgumentNullException.ThrowIfNull(team);
 
             Teams ??= new List<Team>();
+
+            // do not add the same team twice
+            if (Teams.Contains(team)) return;
 
             Teams.Add(team);
         }
@@ -190,7 +197,7 @@ namespace Accounts.Domain
         {
             StringBuilder sb = new();
             sb.Append(Name);
-            sb.Append(", ").Append(Owner?.ToString());
+            if (Owner != null) sb.Append(", ").Append(Owner?.ToString());
             sb.Append(", ").Append(Status.ToString());
             return sb.ToString();
         }
