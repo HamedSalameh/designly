@@ -521,5 +521,31 @@ namespace Accounts.Tests
             Assert.That(account.Equals(account2), Is.False);
         }
 
+        // Get Hashcode method unit tests
+        [Test]
+        public void AccountEntity_GetHashCode_ShouldReturnValue()
+        {
+            var account = new Account(accountName);
+
+            Assert.That(account.GetHashCode(), Is.Not.EqualTo(0));
+        }
+
+        [Test]
+        public void AccountEntity_DiffernetAccount_GetHashCode_ShouldNotBeEqual()
+        {
+            var account = new Account(accountName);
+            var account2 = new Account("test_account2");
+
+            Assert.That(account.GetHashCode(), Is.Not.EqualTo(account2.GetHashCode()));
+        }
+
+        [Test]
+        public void AccountEntity_SameAccount_GetHashCode_ShouldBeEqual()
+        {
+            var account = new Account(accountName);
+            var account2 = account;
+
+            Assert.That(account.GetHashCode(), Is.EqualTo(account2.GetHashCode()));
+        }
     }
 }
