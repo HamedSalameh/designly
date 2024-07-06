@@ -85,6 +85,6 @@ namespace Accounts.Application.Features.CreateAccount
         private static bool UserAlreadyExists(User? existingUser) => existingUser is not null;
 
         private static AccountException CreateBlacklistedUserException() => new(AccountErrors.UserEmailIsBlacklisted.Description, AccountErrors.UserEmailIsBlacklisted);
-        private static AccountException CreateExistingUserException() => new(AccountErrors.AccountAlreadyExists.Description, AccountErrors.AccountOwnerEmailAlreadyExists);
+        private static AccountException CreateExistingUserException() => new(AccountErrors.UserEmailAlreadyExists.Description, AccountErrors.UserEmailAlreadyExists);
     }
 }

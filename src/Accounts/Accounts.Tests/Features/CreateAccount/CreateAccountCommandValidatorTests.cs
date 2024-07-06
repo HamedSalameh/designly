@@ -8,6 +8,7 @@ namespace Accounts.Tests.Features.CreateAccount
     {
         private CreateAccountCommandValidator _validator;
 
+        private string accountName = "Account Name";
         private string ownerFirstName = "John";
         private string ownerLastName = "Doe";
         private string ownerEmail = "john_d@gmail.com";
@@ -33,7 +34,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerFirstNameIsNull()
         {
-            var command = new CreateAccountCommand("Account Name", string.Empty, ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, string.Empty, ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -43,7 +44,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerLastNameIsNull()
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName, string.Empty, ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName, string.Empty, ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -56,7 +57,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [TestCase(" ")]
         public void ShouldHaveError_WhenOwnerEmailIsNull(string email)
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName, ownerLastName, email, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName, ownerLastName, email, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -67,7 +68,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerNameLengthIsLessThanMinimum()
         {
-            var command = new CreateAccountCommand("Account Name", "A", ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, "A", ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -77,7 +78,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerFirstNameLongerThanMaxLength()
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName.PadLeft(Designly.Shared.Consts.FirstNameMaxLength + 1, 'N'), ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName.PadLeft(Designly.Shared.Consts.FirstNameMaxLength + 1, 'N'), ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -87,7 +88,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerLastLengthIsLessThanMinimum()
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName, "J", ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName, "J", ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -97,7 +98,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerLastNameLongerThanMaxLength()
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName, ownerLastName.PadLeft(Designly.Shared.Consts.FirstNameMaxLength + 1, 'N'), ownerEmail, ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName, ownerLastName.PadLeft(Designly.Shared.Consts.FirstNameMaxLength + 1, 'N'), ownerEmail, ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
@@ -107,7 +108,7 @@ namespace Accounts.Tests.Features.CreateAccount
         [Test]
         public void ShouldHaveError_WhenOwnerEmailLengthIsGreaterThanMaxLength()
         {
-            var command = new CreateAccountCommand("Account Name", ownerFirstName, ownerLastName, ownerEmail.PadLeft(Designly.Shared.Consts.MaxEmailAddressLength + 1, 'N'), ownertJobTitle, ownerPassword);
+            var command = new CreateAccountCommand(accountName, ownerFirstName, ownerLastName, ownerEmail.PadLeft(Designly.Shared.Consts.MaxEmailAddressLength + 1, 'N'), ownertJobTitle, ownerPassword);
 
             var result = _validator.TestValidate(command);
 
