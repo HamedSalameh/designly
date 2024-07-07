@@ -3,6 +3,7 @@ using Accounts.Application.Features.CreateAccount;
 using Accounts.Domain;
 using Accounts.Infrastructure.Interfaces;
 using Designly.Auth.Providers;
+using Designly.Base.Exceptions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -85,6 +86,119 @@ namespace Accounts.Tests.Features.CreateAccount
 
             Assert.That(message, Is.EqualTo(AccountErrors.UserEmailAlreadyExists.Description));
         }
-        
+
+        [Test]
+        public async Task Handle_WhenAccountIsCreated_ShouldReturnSuccess()
+        {
+            // Arrange
+            var command = new CreateAccountCommand(accountName, ownerFirstName, ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
+            Account account = new Account(accountName);
+            var user = new User(ownerFirstName, ownerLastName, ownerEmail, account);
+
+            _unitOfWorkMock.Setup(x => x.UsersRepository.GetUserByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((User)null);
+
+            _accountBuilderMock.Setup(x => x.CreateBasicAccount(It.IsAny<string>()))
+                .Returns(_accountBuilderMock.Object);
+            _accountBuilderMock.Setup(x => x.Build())
+                .Returns(account);
+            account.Id = Guid.NewGuid();
+            
+            _unitOfWorkMock.Setup(x => x.AccountsRepository.CreateAccountAsync(It.IsAny<Account>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(account.Id);
+            _accountBuilderMock.Setup(x => x.ConfigureAccount(It.IsAny<User>()))
+                .Returns(_accountBuilderMock.Object);
+            _accountBuilderMock.Setup(x => x.Build())
+                .Returns(account);
+
+            _unitOfWorkMock.Setup(x => x.AccountsRepository.UpdateAccountAsync(It.IsAny<Account>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            _identityServiceMock.Setup(x => x.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _identityServiceMock.Setup(x => x.CreateGroupAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _identityServiceMock.Setup(x => x.AddUserToGroupAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _identityServiceMock.Setup(x => x.SetUserPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            // act
+
+            _sut = new CreateAccountCommandHandler(_loggerMock.Object, _accountBuilderMock.Object, _unitOfWorkMock.Object, _identityServiceMock.Object);
+
+            var result = await _sut.Handle(command, CancellationToken.None);
+            
+            Assert.That(account.Owner, Is.Null);
+            Assert.That(result.IsSuccess, Is.True);
+
+            var accountId = result.Match(
+                Succ: id => id,
+                Fail: ex => Guid.Empty);
+
+            Assert.That(accountId, Is.Not.EqualTo(Guid.Empty));
+            Assert.That(accountId, Is.EqualTo(account.Id));
+        }
+
+        [Test]
+        public async Task Handle_WhenIdentityServiceFails_CannotCreateUser()
+        {
+            // Arrange
+            var command = new CreateAccountCommand(accountName, ownerFirstName, ownerLastName, ownerEmail, ownertJobTitle, ownerPassword);
+            Account account = new Account(accountName);
+            var user = new User(ownerFirstName, ownerLastName, ownerEmail, account);
+
+            _unitOfWorkMock.Setup(x => x.UsersRepository.GetUserByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((User)null);
+
+            _accountBuilderMock.Setup(x => x.CreateBasicAccount(It.IsAny<string>()))
+                .Returns(_accountBuilderMock.Object);
+            _accountBuilderMock.Setup(x => x.Build())
+                .Returns(account);
+            account.Id = Guid.NewGuid();
+
+            _unitOfWorkMock.Setup(x => x.AccountsRepository.CreateAccountAsync(It.IsAny<Account>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(account.Id);
+            _accountBuilderMock.Setup(x => x.ConfigureAccount(It.IsAny<User>()))
+                .Returns(_accountBuilderMock.Object);
+            _accountBuilderMock.Setup(x => x.Build())
+                .Returns(account);
+
+            _unitOfWorkMock.Setup(x => x.AccountsRepository.UpdateAccountAsync(It.IsAny<Account>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            _identityServiceMock.Setup(x => x.CreateUserAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Throws(new BusinessLogicException("Cannot create user"));
+
+            _identityServiceMock.Setup(x => x.CreateGroupAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _identityServiceMock.Setup(x => x.AddUserToGroupAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _identityServiceMock.Setup(x => x.SetUserPasswordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            // act
+
+            _sut = new CreateAccountCommandHandler(_loggerMock.Object, _accountBuilderMock.Object, _unitOfWorkMock.Object, _identityServiceMock.Object);
+
+            var result = await _sut.Handle(command, CancellationToken.None);
+
+            // assert
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            var message = result.Match(
+                Succ: id => string.Empty,
+                Fail: ex => ex.Message);
+
+            Assert.That(message, Is.EqualTo("Cannot create user"));
+
+
+        }
     }
 }
