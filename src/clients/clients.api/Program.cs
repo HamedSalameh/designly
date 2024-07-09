@@ -50,6 +50,7 @@ namespace Clients.API
             // Configure Services
             builder.Services.AddHttpClient();
             builder.Services.AddApplication(configuration);
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // Configure Health checks
             builder.Services.AddHealthChecks();
