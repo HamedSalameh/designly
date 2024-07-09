@@ -3,6 +3,8 @@
     public static class Consts
     {
         public static readonly int AccountNameMaxLength = 100;
+        public static readonly int AccountNameMinLength = 3;
+
         public static readonly int TeamNameMaxLength = 50;
 
         public static readonly int JobTitleMaxLength = 50;

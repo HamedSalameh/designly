@@ -14,7 +14,10 @@
         public static readonly byte MaxClientNameLength = 100;
 
         public static readonly byte FirstNameMaxLength = 50;
+        public static readonly byte FirstNameMinLength = 2;
+
         public static readonly byte LastNameMaxLength = 50;
+        public static readonly byte LastNameMinLength = 2;
 
         public static readonly byte DefaultMaxLimitedStringLength = 255;
 
