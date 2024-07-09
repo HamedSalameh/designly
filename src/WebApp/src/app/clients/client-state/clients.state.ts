@@ -17,13 +17,3 @@ export const InitialClientsState: IClientState = ClientsAdapter.getInitialState(
   editMode: false,
   selectedClientModel: null,
 });
-
-// export const InitialClientsState: IClientState = {
-//   selectedClientId: null,
-//   editMode: false,
-//   //draftEntity: null,
-//   selectedClientModel: null,
-// };
-
-
-// refactor using NGRX Entity
