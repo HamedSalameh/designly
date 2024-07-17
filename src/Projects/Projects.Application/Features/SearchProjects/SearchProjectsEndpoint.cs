@@ -15,7 +15,7 @@ namespace Projects.Application.Features.SearchProjects
         public static IEndpointConventionBuilder MapSearchFeature(this IEndpointRouteBuilder endpoints, string pattern)
         {
             var endPoint = endpoints
-                .MapGet(pattern, SearchProjectsEndpointMethodAsync)
+                .MapPost(pattern, SearchProjectsEndpointMethodAsync)
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)

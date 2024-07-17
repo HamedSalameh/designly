@@ -5,6 +5,7 @@ using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
@@ -63,6 +64,10 @@ AttachNamedHttpClient<ClientsServiceConfiguration>(builder, ClientsServiceConfig
 builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
 
 builder.Services.AddApplication(configuration);
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = null;
+});
 
 var app = builder.Build();
 

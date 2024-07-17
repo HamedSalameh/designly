@@ -1,6 +1,8 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { Client } from "src/app/clients/models/client.model";
 
+export const CLIENTS_STATE_NAME = 'clients';
+
 export interface IClientState extends EntityState<Client> {
   selectedClientId: string | null;
   editMode: boolean;

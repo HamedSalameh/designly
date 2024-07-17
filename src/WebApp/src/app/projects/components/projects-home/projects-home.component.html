@@ -1,0 +1,9 @@
+<p>projects-home works!</p>
+
+<!-- ngFor iterate over project in projects and and show details -->
+
+<div *ngFor="let project of tableData">
+  <h2>{{ project.Name }}</h2>
+    <p>{{ project.Description }}</p>
+    <p>{{ project.Status }}</p>
+</div>

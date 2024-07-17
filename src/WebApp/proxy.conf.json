@@ -1,11 +1,23 @@
 {
-    "/api": {
-        "target": "https://127.0.0.1:7246/",
+    "/clients-api/*": {
+        "target": "https://127.0.0.1:7246/api/",
         "secure": false,
         "changeOrigin": true,
-        "logLevel": "debug"
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/clients-api": ""
+        }
     },
-
+    "/projects-api/*": {
+        "target": "https://127.0.0.1:7174/api/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/projects-api": ""
+        }
+    },
+    
     "/auth": {
         "target": "https://127.0.0.1:7119/api/v1/Identity",
         "secure": false,
