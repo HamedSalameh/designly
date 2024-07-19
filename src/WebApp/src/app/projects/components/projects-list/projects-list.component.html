@@ -1,0 +1,35 @@
+<app-table [data]="tableData" [cols]="tableColumns" [toolbarItems]="tableToolbarItems" key="Id">
+
+    <ng-template #detailTemplate let-data>
+        <div class="project-info">
+            <div class="project-info-row">
+                <div class="project-info__item">
+                    <span class="project-info__label">Project Name:</span>
+                    <span class="project-info__value">{{ data.Name }}</span>
+                </div>
+                <div class="project-info__item">
+                    <span class="project-info__label">Project Description:</span>
+                    <span class="project-info__value">{{ data.Description }}</span>
+                </div>
+                <div class="project-info__item">
+                    <span class="project-info__label">Client:</span>
+                    <span class="project-info__value">{{ data.ClientId }}</span>
+                </div>
+                <div class="project-info__item">
+                    <span class="project-info__label">Project Lead:</span>
+                    <span class="project-info__value">{{ data.ProjectLeadId }}</span>
+                </div>
+                <div class="project-info__item">
+                    <span class="project-info__label">Project Status</span>
+                    <span class="project-info__value">{{ data.Status }}</span>
+                </div>
+            </div>
+
+            <div class="project-info-row">
+                Quick overview of the project
+            </div>
+
+        </div>
+    </ng-template>
+
+</app-table>

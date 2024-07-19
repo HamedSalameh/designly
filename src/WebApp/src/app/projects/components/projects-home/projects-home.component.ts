@@ -12,38 +12,5 @@ import { Project } from '../../models/project.model';
 })
 export class ProjectsHomeComponent {
 
-  tableData: Project[] = [];
 
-  constructor(private store: Store<IApplicationState>) { }
-
-  ngOnInit(): void {
-
-    this.store.dispatch(getProjectsRequest({
-      searchProjectsRequest: {
-        filters: []
-      }
-    }));
-
-    this.store.select(getProjects).subscribe((projects) => {
-      console.log('projects', projects);
-      this.tableData = projects.map((project) => this.mapProjectToViewModel(project));
-    });
-  }
-
-  private mapProjectToViewModel(project: Project) {
-    return {
-      Id: project.Id,
-      Name: project.Name,
-      Description: project.Description,
-      StartDate: project.StartDate,
-      Deadline: project.Deadline,
-      Status: project.Status,
-      IsCompleted: project.IsCompleted,
-      CreatedAt: project.CreatedAt,
-      ModifiedAt: project.ModifiedAt,
-      ProjectLeadId: project.ProjectLeadId,
-      ClientId: project.ClientId,
-      TenantId: project.TenantId
-    };
-  }
 }

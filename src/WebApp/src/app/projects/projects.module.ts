@@ -8,14 +8,18 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { PROJECTS_STATE_NAME } from './projects-state/projects.state';
 import { ProjectsStateReducer } from './projects-state/projects.reducers';
 import { ProjectsEffects } from './projects-state/projects.effects';
+import { ProjectsListComponent } from './components/projects-list/projects-list.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
-    ProjectsHomeComponent
+    ProjectsHomeComponent,
+    ProjectsListComponent
   ],
   imports: [
     ProjectsRoutingModule,
     CommonModule,
+    SharedModule,
     StoreModule.forFeature(PROJECTS_STATE_NAME, ProjectsStateReducer),
     EffectsModule.forFeature([ProjectsEffects]),
     StoreDevtoolsModule.instrument({

@@ -1,0 +1,32 @@
+@import "main";
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: $gap-normal;
+}
+
+.project-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin: $gap-normal 0px $gap-normal 0px;
+  padding: 12px;
+}
+
+.project-info__item {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-info__label {
+    font-size: $font-size-default;
+    font-weight: 500;
+    color: $color-v1-black-40;
+}
+
+.project-info__value {
+    font-size: $font-size-medium !important;
+    font-weight: 400;
+    color: $color-v1-black;
+}
