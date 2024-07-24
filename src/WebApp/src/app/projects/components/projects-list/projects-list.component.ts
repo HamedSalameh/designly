@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ContentChild, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { Project } from '../../models/project.model';
 import { getProjects } from '../../projects-state/projects.selectors';
 import { getProjectsRequest } from '../../projects-state/projects.actions';
 import { ProjectsStrings } from '../../strings';
+import { Column } from '@syncfusion/ej2-angular-grids';
+import { dataFormatProperty } from '@syncfusion/ej2/documenteditor';
+import { ColumnDefinition } from '@syncfusion/ej2/diagrams';
 
 @Component({
   selector: 'app-projects-list',
@@ -13,6 +16,9 @@ import { ProjectsStrings } from '../../strings';
 })
 export class ProjectsListComponent {
 
+
+  @ViewChild('projectStatusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
+  
   columnsDefinition = [
     {
       ColumnHeader: ProjectsStrings.ProjectName,
@@ -21,6 +27,11 @@ export class ProjectsListComponent {
     {
       ColumnHeader: ProjectsStrings.ProjectDescription,
       DataField: 'Description',
+    },
+    {
+      ColumnHeader: ProjectsStrings.ProjectStatus,
+      DataField: 'Status',
+      Template: 'custom'
     }
   ];
 
@@ -28,6 +39,12 @@ export class ProjectsListComponent {
   tableColumns: any[] = [];
   tableToolbarItems : any[] = [];
 
+  // localizations
+  projectName = ProjectsStrings.ProjectName;
+  projectDescription = ProjectsStrings.ProjectDescription;
+  projectLead = ProjectsStrings.ProjectLead;
+  client = ProjectsStrings.Client;
+  projectStatus = ProjectsStrings.ProjectStatus;
 
   constructor(private store: Store<IApplicationState>) {}
 
@@ -45,8 +62,20 @@ export class ProjectsListComponent {
       this.tableColumns = this.columnsDefinition.map((column) => ({
         field: column.DataField,
         header: column.ColumnHeader,
+        template: this.getColumnTemplate(column.DataField) //column.Template === 'custom' ? this.customTemplate : undefined
       }));
     });
+  }
+
+  private getColumnTemplate(dataField: any) {
+    switch (dataField) {
+      case 'Name':
+        return undefined
+      case 'Status':
+        return this.statusTemplate;
+      default:
+        return undefined;
+    }
   }
 
   private mapProjectToViewModel(project: Project) {

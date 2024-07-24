@@ -5,4 +5,5 @@ export class ProjectsStrings {
     static ProjectLead = $localize`:@@Projects.ProjectLead:Project Lead`;
     static Client = $localize`:@@Projects.Client:Client`;
 
+    static ProjectStatus = $localize`:@@Projects.ProjectStatus:Project Status`;
 }

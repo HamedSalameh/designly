@@ -111,8 +111,8 @@
         <target>הוספת לקוח חדש</target>
       </trans-unit>
       <trans-unit id="Errors.NotFound" datatype="html">
-        <source>The requested resource was not found.</source>
-        <target>המשאב המבוקש לא נמצא.</target>
+        <source>We were unable to find the requested resource.</source>
+        <target state="new">המשאב המבוקש לא נמצא.</target>
       </trans-unit>
       <trans-unit id="Yes" datatype="html">
         <source>Yes</source>
@@ -203,7 +203,7 @@
         <target state="new">משהו לא טוב קרה בצד שלנו, אנא נסה שנית</target>
       </trans-unit>
       <trans-unit id="Errors.BadRequest" datatype="html">
-        <source>The request was invalid.</source>
+        <source>Your request is invalid.</source>
         <target state="new">הפעולה לא הייתה תקינה</target>
       </trans-unit>
       <trans-unit id="Errors.Unauthorized" datatype="html">
@@ -245,6 +245,26 @@
       <trans-unit id="Global.Login" datatype="html">
         <source>Login</source>
         <target state="new">התחברות</target>
+      </trans-unit>
+      <trans-unit id="Projects.ProjectName" datatype="html">
+        <source>Project Name</source>
+        <target state="new">שם הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Projects.ProjectDescription" datatype="html">
+        <source>Project Description</source>
+        <target state="new">תיאור הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Projects.ProjectLead" datatype="html">
+        <source>Project Lead</source>
+        <target state="new">מוביל הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Projects.Client" datatype="html">
+        <source>Client</source>
+        <target state="new">לקוח</target>
+      </trans-unit>
+      <trans-unit id="Projects.ProjectStatus" datatype="html">
+        <source>Project Status</source>
+        <target state="new">סטאטוס</target>
       </trans-unit>
     </body>
   </file>

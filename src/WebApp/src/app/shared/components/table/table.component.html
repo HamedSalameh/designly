@@ -1,29 +1,12 @@
-<ejs-grid
-  [dataSource]="this.data"
-  [searchSettings]="searchOptions"
-  [toolbar]="toolbarOptions"
-  [allowSorting]="true"
-  [allowPaging]='true'
-
-  [detailTemplate]="detailTemplate"
-  
-  [selectionSettings]="selectionOptions"
-  [pageSettings]="pageSettings"
-  [rowHeight]="60"
-
-  (rowSelected)="onRowSelect($event)"
-  (toolbarClick)="toolbarClickHandler($event)"
-  enableRtl="true"
->
+<ejs-grid [dataSource]="this.data" [searchSettings]="searchOptions" [toolbar]="toolbarOptions" [allowSorting]="true"
+  [allowPaging]='true' [detailTemplate]="detailTemplate" [selectionSettings]="selectionOptions"
+  [pageSettings]="pageSettings" [rowHeight]="60" (rowSelected)="onRowSelect($event)"
+  (toolbarClick)="toolbarClickHandler($event)" enableRtl="true">
   <e-columns>
-    <e-column
-      *ngFor="let col of this.cols"
-      [field]="col.field"
-      [headerText]="col.header"
-    >
+    <e-column *ngFor="let col of this.cols" [field]="col.field" [headerText]="col.header" [template]="col.template" >
     </e-column>
   </e-columns>
 
-  <ng-template  [ngTemplateOutlet]="detailTemplate" [ngTemplateOutletContext]="{ $implicit: data }"></ng-template>
+  <ng-template [ngTemplateOutlet]="detailTemplate" [ngTemplateOutletContext]="{ $implicit: data }"></ng-template>
 
 </ejs-grid>

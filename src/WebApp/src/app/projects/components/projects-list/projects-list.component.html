@@ -1,27 +1,28 @@
 <app-table [data]="tableData" [cols]="tableColumns" [toolbarItems]="tableToolbarItems" key="Id">
 
+    <ng-template #projectStatusTemplate let-data>
+        <!-- Your custom template content here -->
+        <div>{{ data.Name }} - Custom Template</div>
+    </ng-template>
+
     <ng-template #detailTemplate let-data>
         <div class="project-info">
             <div class="project-info-row">
                 <div class="project-info__item">
-                    <span class="project-info__label">Project Name:</span>
+                    <span class="project-info__label">{{ this.projectName }}</span>
                     <span class="project-info__value">{{ data.Name }}</span>
                 </div>
                 <div class="project-info__item">
-                    <span class="project-info__label">Project Description:</span>
+                    <span class="project-info__label"> {{ this.projectDescription }} </span>
                     <span class="project-info__value">{{ data.Description }}</span>
                 </div>
                 <div class="project-info__item">
-                    <span class="project-info__label">Client:</span>
+                    <span class="project-info__label">{{ this.client }}</span>
                     <span class="project-info__value">{{ data.ClientId }}</span>
                 </div>
                 <div class="project-info__item">
-                    <span class="project-info__label">Project Lead:</span>
+                    <span class="project-info__label"> {{this.projectLead }}</span>
                     <span class="project-info__value">{{ data.ProjectLeadId }}</span>
-                </div>
-                <div class="project-info__item">
-                    <span class="project-info__label">Project Status</span>
-                    <span class="project-info__value">{{ data.Status }}</span>
                 </div>
             </div>
 
