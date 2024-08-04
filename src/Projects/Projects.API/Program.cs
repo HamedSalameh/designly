@@ -110,10 +110,10 @@ static void MapEndoints(WebApplication app)
     projectsRouteGroup.MapUpdateFeature("{projectId}");
     projectsRouteGroup.MapSearchFeature("search");
 
-    projectsRouteGroup.MapCreateTaskFeature("tasks");
+    projectsRouteGroup.MapCreateTaskFeature("{projectId}/tasks");
     projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");
     projectsRouteGroup.MapUpdateTaskFeature("{projectId}/tasks/{taskId}");
-    projectsRouteGroup.MapSearchTasksEndpoint("tasks/search");
+    projectsRouteGroup.MapSearchTasksEndpoint("{projectId}/tasks/search");
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)
