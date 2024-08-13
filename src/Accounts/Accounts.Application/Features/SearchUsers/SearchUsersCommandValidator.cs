@@ -1,18 +1,18 @@
 ﻿using Designly.Filter;
 using FluentValidation;
 
-namespace Projects.Application.Features.SearchProjects
+namespace Accounts.Application.Features.SearchUsers
 {
-    public class SearchProjectsCommandValidator : AbstractValidator<SearchProjectsCommand>
+    public class SearchUsersCommandValidator : AbstractValidator<SearchUsersCommand>
     {
-        public SearchProjectsCommandValidator()
+        public SearchUsersCommandValidator()
         {
             RuleFor(x => x.TenantId).NotEmpty().WithMessage("Tenant id is required");
 
             RuleFor(x => x.FilterConditions).Custom(FilterValidation);
         }
 
-        private void FilterValidation(List<FilterCondition> list, ValidationContext<SearchProjectsCommand> context)
+        private void FilterValidation(List<FilterCondition> list, ValidationContext<SearchUsersCommand> context)
         {
             if (list == null)
             {
@@ -33,6 +33,7 @@ namespace Projects.Application.Features.SearchProjects
                 {
                     context.AddFailure("Filter field is required");
                 }
+
             }
         }
     }

@@ -7,6 +7,7 @@ using Accounts.API.Extensions;
 using Designly.Shared.Middleware;
 using Accounts.Application.Features.ValidateUser;
 using Designly.Auth;
+using Accounts.Application.Features.SearchUsers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,7 @@ static void MapEndoints(WebApplication app)
 
     routeGroup.MapCreateAccountFeature();
     routeGroup.MapValidateUserFeature();
+    routeGroup.MapSearchUsersEndpoint("/search");
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)

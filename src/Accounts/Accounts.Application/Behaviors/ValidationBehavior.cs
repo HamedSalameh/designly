@@ -37,12 +37,26 @@ namespace Accounts.Application.Behaviors
                 return await next().ConfigureAwait(false);
             }
 
-            // convert the List<ValidationFailure> to a List<Key, Value> where Key is the name of the property and Value is the error message
-            var errors = failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage);
+            //// convert the List<ValidationFailure> to a List<Key, Value> where Key is the name of the property and Value is the error message
+            //var errors = failures.ToDictionary(failure => failure.PropertyName, failure => failure.ErrorMessage);
+
+            var errors = new Dictionary<string, List<string>>();
+            foreach (var failure in failures)
+            {
+                if (errors.ContainsKey(failure.PropertyName))
+                {
+                    errors[failure.PropertyName].Add(failure.ErrorMessage);
+                }
+                else
+                {
+                    errors.Add(failure.PropertyName, new List<string> { failure.ErrorMessage });
+                }
+            }
 
             // fail the validation and fail the resut
+            var errorsAsString = string.Join(Environment.NewLine, errors.SelectMany(kvp => kvp.Value.Select(v => $"{kvp.Key}: {v}")));
 
-            throw new Designly.Base.Exceptions.ValidationException(errors);
+            throw new Designly.Base.Exceptions.ValidationException(errorsAsString);
         }
     }
 }

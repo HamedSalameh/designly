@@ -76,19 +76,9 @@ export class ProjectsListComponent {
       this.tableColumns = this.columnsDefinition.map((column) => ({
         field: column.DataField,
         header: column.ColumnHeader,
-        template: this.getColumnTemplate(column.DataField) //column.Template === 'custom' ? this.customTemplate : undefined
+        template: this.getColumnTemplate(column.DataField)
       }));
     });
-
-    // this.store.select(getProjects).subscribe((projects) => {
-    //   console.log('projects', projects);
-    //   this.tableData = projects.map((project) => this.mapProjectToViewModel(project));
-    //   this.tableColumns = this.columnsDefinition.map((column) => ({
-    //     field: column.DataField,
-    //     header: column.ColumnHeader,
-    //     template: this.getColumnTemplate(column.DataField) //column.Template === 'custom' ? this.customTemplate : undefined
-    //   }));
-    // });
   }
 
   private mapProjectToViewModel1(project: Project, clients: Client[]): ProjectViewModel {
@@ -117,22 +107,5 @@ export class ProjectsListComponent {
       default:
         return undefined;
     }
-  }
-
-  private mapProjectToViewModel(project: Project) {
-    return {
-      Id: project.Id,
-      Name: project.Name,
-      Description: project.Description,
-      StartDate: project.StartDate,
-      Deadline: project.Deadline,
-      Status: project.Status,
-      IsCompleted: project.IsCompleted,
-      CreatedAt: project.CreatedAt,
-      ModifiedAt: project.ModifiedAt,
-      ProjectLeadId: project.ProjectLeadId,
-      ClientId: project.ClientId,
-      TenantId: project.TenantId
-    };
   }
 }

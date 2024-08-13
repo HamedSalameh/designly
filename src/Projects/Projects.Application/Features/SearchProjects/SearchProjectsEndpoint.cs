@@ -41,8 +41,10 @@ namespace Projects.Application.Features.SearchProjects
 
             var tenantId = tenantProvider.GetTenantId();
 
-            var searchProjectsCommand = new SearchProjectsCommand();
-            searchProjectsCommand.TenantId = tenantId;
+            var searchProjectsCommand = new SearchProjectsCommand
+            {
+                TenantId = tenantId
+            };
 
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchProjectsRequest.filters)
