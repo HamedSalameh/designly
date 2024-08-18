@@ -68,7 +68,7 @@ export class ProjectsListComponent {
       this.store.select(getClients)
     ]).pipe(
       map(([projects, clients]) => {
-        return projects.map(project => this.mapProjectToViewModel1(project, clients));
+        return projects.map(project => this.mapResponseToViewModel(project, clients));
       })
     ).subscribe((projects) => {
       console.log('projects', projects);
@@ -81,7 +81,7 @@ export class ProjectsListComponent {
     });
   }
 
-  private mapProjectToViewModel1(project: Project, clients: Client[]): ProjectViewModel {
+  private mapResponseToViewModel(project: Project, clients: Client[]): ProjectViewModel {
     const client = clients.find(client => client.Id === project.ClientId.Id);
     return {
       Id: project.Id,

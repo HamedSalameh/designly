@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { ToastrService } from "ngx-toastr";
 import { catchError, map, mergeMap, of } from "rxjs";
-import { ErrorTranslationService } from "src/app/shared/services/error-handling.service";
+import { HttpErrorHandlingService } from "src/app/shared/services/error-handling.service";
 import { Strings } from "src/app/shared/strings";
 import { getProjectsRequest, getProjectsRequestSuccess } from "./projects.actions";
 import { ProjectsService } from "../services/projects.service";
@@ -16,7 +16,7 @@ export class ProjectsEffects {
         private action$: Actions,
         private projectsService: ProjectsService,
         private toastr: ToastrService,
-        private errorHandlingService: ErrorTranslationService
+        private errorHandlingService: HttpErrorHandlingService
     ) {}
 
     // Get Projects List

@@ -73,12 +73,12 @@ static void MapEndoints(WebApplication app)
         .Build();
 
     var routeGroup = app
-        .MapGroup("api/v{version:apiVersion}")
+        .MapGroup("api/v{version:apiVersion}/accounts")
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
-    routeGroup.MapCreateAccountFeature();
-    routeGroup.MapValidateUserFeature();
+    routeGroup.MapCreateAccountEndpoint();
+    routeGroup.MapValidateUserEndpoint();
     routeGroup.MapSearchUsersEndpoint("/search");
 }
 

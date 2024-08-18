@@ -11,7 +11,7 @@ namespace Accounts.Application.Features.ValidateUser
 {
     public static class ValidateUserEndpoint
     {
-        public static IEndpointConventionBuilder MapValidateUserFeature(this IEndpointRouteBuilder routeBuilder, string pattern = "accounts/{tenantId}/users/{userId}/validate") {
+        public static IEndpointConventionBuilder MapValidateUserEndpoint(this IEndpointRouteBuilder routeBuilder, string pattern = "{tenantId}/users/{userId}/validate") {
             var endpoint = routeBuilder.MapGet(pattern, ValidateUserEndpointAsync)
                 .RequireAuthorization(policyBuilder => policyBuilder.AddRequirements(new MustBeServiceAccountRequirement()))
                 .Produces(StatusCodes.Status200OK)

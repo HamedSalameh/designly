@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 import { toastOptionsFactory } from 'src/app/shared/providers/toast-options.factory';
 import { Update } from '@ngrx/entity';
 import { Client } from '../models/client.model';
-import { ErrorTranslationService } from 'src/app/shared/services/error-handling.service';
+import { HttpErrorHandlingService } from 'src/app/shared/services/error-handling.service';
 import { Strings } from 'src/app/shared/strings';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class ClientsEffects {
     private actions$: Actions,
     private clientsService: ClientsService,
     private toastr: ToastrService,
-    private errorHandlingService: ErrorTranslationService
+    private errorHandlingService: HttpErrorHandlingService
   ) {}
 
     getClientsList$ = createEffect(() => 
