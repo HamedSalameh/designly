@@ -12,10 +12,10 @@ namespace Accounts.Application.Features.SearchUsers
 {
     public static class SearchUsersEndpoint
     {
-        public static IEndpointConventionBuilder MapSearchUsersEndpoint(this IEndpointRouteBuilder builder, string pattern)
+        public static IEndpointConventionBuilder MapSearchAccountUsersEndpoint(this IEndpointRouteBuilder builder, string pattern = "{accountId}/users/search")
         {
             var endpoint = builder
-                .MapPost(pattern, SearchUsersEndpointMethodAsync)
+                .MapPost(pattern, SearchAccountUsersEndpointMethodAsync)
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)
@@ -25,7 +25,7 @@ namespace Accounts.Application.Features.SearchUsers
             return endpoint;
         }
 
-        private static async Task<IResult> SearchUsersEndpointMethodAsync([FromBody] SearchUsersRequest searchUsersRequest,
+        private static async Task<IResult> SearchAccountUsersEndpointMethodAsync([FromRoute] Guid accountId, [FromBody] SearchUsersRequest searchUsersRequest,
             ITenantProvider tenantProvider,
             ISender sender,
             ILoggerFactory loggerFactory,
@@ -39,7 +39,8 @@ namespace Accounts.Application.Features.SearchUsers
                 return Results.BadRequest("The submitted search user object is not valid or empty");
             }
 
-            var tenantId = tenantProvider.GetTenantId();
+            // TODO: How to maintain security that only admin or account owner search? where does tenant from token goes ?
+            var tenantId = accountId;
 
             var searchUsersCommand = new SearchUsersCommand(tenantId);
 

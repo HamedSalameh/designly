@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SearchAccountUsersRequest } from '../models/search-account-users.request';
 
 @Injectable({
     providedIn: 'root'
@@ -10,13 +11,8 @@ export class AccountService {
 
     constructor(private http: HttpClient) { }
 
-    public getAccountUsers(accountId: string): Observable<any> {
-        console.debug('[AccountService] [getAccountUsers] ', accountId);
-        return this.http.get(`${this.serviceAddress}/accounts/${accountId}/users`);
-    }
-
-    public getAccounts(): Observable<any> {
-        console.debug('[AccountService] [getAccounts]');
-        return this.http.post(`${this.serviceAddress}/accounts/search`, {});        
+    public getAccountUsers(accountId:  string, searchAccountUsersRequest: SearchAccountUsersRequest): Observable<any> {
+        console.debug('[AccountService] [getAccountUsers] ', searchAccountUsersRequest);
+        return this.http.post(`${this.serviceAddress}/accounts/${accountId}/users/search`, searchAccountUsersRequest);
     }
 }

@@ -17,6 +17,15 @@
             "^/projects-api": ""
         }
     },
+    "/accounts-api/*": {
+        "target": "https://127.0.0.1:7241/api/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug",
+        "pathRewrite": {
+            "^/accounts-api": ""
+        }
+    },
     
     "/auth": {
         "target": "https://127.0.0.1:7119/api/v1/Identity",

@@ -4,6 +4,7 @@ namespace Accounts.Application.Features.SearchUsers
 {
     public class UserDto
     {
+        public Guid Id { get; set; }
         public Guid Account { get; set; }
 
         public string FirstName { get; set; } = Designly.Shared.Consts.Strings.ValueNotSet;

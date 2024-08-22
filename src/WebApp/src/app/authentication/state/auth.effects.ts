@@ -16,7 +16,7 @@ import * as moment from 'moment';
 import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { Buffer } from 'buffer';
-import { User } from './auth.state';
+import { AuthenticatedUser } from './auth.state';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -98,14 +98,14 @@ export class AuthenitcationEffects {
       })
   ));
   
-  private decodeIdToken(idToken: string) : User {
+  private decodeIdToken(idToken: string) : AuthenticatedUser {
     const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
     const parsedToken = JSON.parse(decodedToken);
 
     const tenantClaim = parsedToken['cognito:groups']?.find((group: string) => group.startsWith('tenant_'));
     const tenant_id: string | undefined = tenantClaim?.substring('tenant_'.length);
 
-    const user: User = {
+    const user: AuthenticatedUser = {
       email : parsedToken.email,
       family_name : parsedToken.family_name,
       given_name : parsedToken.given_name,

@@ -51,6 +51,7 @@ namespace Accounts.Application.Features.SearchUsers
             {
                 return new UserDto()
                 {
+                    Id = u.Id,
                     Account = u.AccountId,
                     FirstName = u.FirstName,
                     LastName = u.LastName,

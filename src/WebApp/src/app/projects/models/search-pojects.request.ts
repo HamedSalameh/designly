@@ -1,3 +1,5 @@
+import { Filter } from "../../shared/models/filter.model";
+
 /*
 {
   "filters": [
@@ -13,12 +15,6 @@
   */
 export interface SearchProjectsRequest {
     filters: Filter[];
-}
-
-export interface Filter {
-    field: string;
-    operator: string;
-    value: string[];
 }
 
 export interface SearchProjectsResponse {

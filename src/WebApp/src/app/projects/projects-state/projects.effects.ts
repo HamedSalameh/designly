@@ -12,10 +12,8 @@ import { ProjectsService } from "../services/projects.service";
 export class ProjectsEffects {
     
     constructor(
-        private store: Store,
         private action$: Actions,
         private projectsService: ProjectsService,
-        private toastr: ToastrService,
         private errorHandlingService: HttpErrorHandlingService
     ) {}
 

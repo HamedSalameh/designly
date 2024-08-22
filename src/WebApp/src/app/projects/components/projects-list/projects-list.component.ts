@@ -1,18 +1,18 @@
-import { Component, ContentChild, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { Project } from '../../models/project.model';
 import { getProjects } from '../../projects-state/projects.selectors';
 import { getProjectsRequest } from '../../projects-state/projects.actions';
 import { ProjectsStrings } from '../../strings';
-import { Column } from '@syncfusion/ej2-angular-grids';
-import { dataFormatProperty } from '@syncfusion/ej2/documenteditor';
-import { ColumnDefinition } from '@syncfusion/ej2/diagrams';
-import { getClientRequest, getClientsRequest } from 'src/app/clients/client-state/clients.actions';
+import { getClientsRequest } from 'src/app/clients/client-state/clients.actions';
 import { combineLatest, map } from 'rxjs';
 import { getClients } from 'src/app/clients/client-state/clients.selectors';
 import { Client } from 'src/app/clients/models/client.model';
 import { ProjectViewModel } from '../../models/ProjectViewModel';
+import { getAccountUsersRequest } from 'src/app/account/state/account.actions';
+import { getAccountUsersFromState } from 'src/app/account/state/account.selectors';
+import { Member } from 'src/app/account/models/member.model';
 
 @Component({
   selector: 'app-projects-list',
@@ -63,12 +63,19 @@ export class ProjectsListComponent {
 
     this.store.dispatch(getClientsRequest());
 
+    this.store.dispatch(getAccountUsersRequest({
+      searchUsersRequest: {
+        filters: []
+      }
+    }));
+
     combineLatest([
       this.store.select(getProjects),
-      this.store.select(getClients)
+      this.store.select(getClients),
+      this.store.select(getAccountUsersFromState)
     ]).pipe(
-      map(([projects, clients]) => {
-        return projects.map(project => this.mapResponseToViewModel(project, clients));
+      map(([projects, clients, users]) => {
+        return projects.map(project => this.mapResponseToViewModel(project, clients, users));
       })
     ).subscribe((projects) => {
       console.log('projects', projects);
@@ -81,8 +88,10 @@ export class ProjectsListComponent {
     });
   }
 
-  private mapResponseToViewModel(project: Project, clients: Client[]): ProjectViewModel {
+  private mapResponseToViewModel(project: Project, clients: Client[], users: Member[]): ProjectViewModel {
     const client = clients.find(client => client.Id === project.ClientId.Id);
+    const projectLead = users.find(user => user.id === project.ProjectLeadId.Id);
+
     return {
       Id: project.Id,
       Name: project.Name,
@@ -93,7 +102,7 @@ export class ProjectsListComponent {
       IsCompleted: project.IsCompleted,
       CreatedAt: project.CreatedAt,
       ModifiedAt: project.ModifiedAt,
-      ProjectLead: project.ProjectLeadId.Id,
+      ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
       Client: `${client?.FamilyName} ${client?.FirstName}`,
     };
   }

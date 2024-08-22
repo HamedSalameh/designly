@@ -79,7 +79,7 @@ static void MapEndoints(WebApplication app)
 
     routeGroup.MapCreateAccountEndpoint();
     routeGroup.MapValidateUserEndpoint();
-    routeGroup.MapSearchUsersEndpoint("/search");
+    routeGroup.MapSearchAccountUsersEndpoint();
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)
