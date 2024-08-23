@@ -18,6 +18,7 @@ import { SharedStateReducer } from './state/shared/shared.reducers';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ModalComponent } from './components/modal-component/modal-component.component';
 import { ModalService } from './services/modal-service.service';
+import { StatusChipComponent } from './components/status-chip/status-chip.component';
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
@@ -28,6 +29,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     NotificationMessageComponent,
     LoadingSpinnerComponent,
     ModalComponent,
+    StatusChipComponent,
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     BreadcrumbComponent,
     NotificationMessageComponent,   
     LoadingSpinnerComponent,
-    ModalComponent
+    ModalComponent,
+    StatusChipComponent,
   ],
   providers: [
     // syncfusion

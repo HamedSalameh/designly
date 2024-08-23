@@ -1,4 +1,5 @@
 import { TenantId } from "../types/tenant-id.type";
+import { ProjectStatus } from "./project-status.enum";
 
 
 export interface ProjectViewModel {
@@ -7,7 +8,7 @@ export interface ProjectViewModel {
     Description: string;
     StartDate?: Date;
     Deadline?: Date;
-    Status: string;
+    Status: ProjectStatus;
     IsCompleted?: boolean;
     CreatedAt: Date;
     ModifiedAt: Date;

@@ -1,36 +1,11 @@
 <app-table [data]="tableData" [cols]="tableColumns" [toolbarItems]="tableToolbarItems" key="Id">
 
-    <ng-template #projectStatusTemplate let-data>
-        <!-- Your custom template content here -->
-        <div>{{ data.Name }} - Custom Template</div>
+    <ng-template #projectNameTemplate let-data>
+        <a [routerLink]="['/projects', data.Id]">{{ data.Name }}</a>
     </ng-template>
-
-    <ng-template #detailTemplate let-data>
-        <div class="project-info">
-            <div class="project-info-row">
-                <div class="project-info__item">
-                    <span class="project-info__label">{{ this.projectName }}</span>
-                    <span class="project-info__value">{{ data.Name }}</span>
-                </div>
-                <div class="project-info__item">
-                    <span class="project-info__label"> {{ this.projectDescription }} </span>
-                    <span class="project-info__value">{{ data.Description }}</span>
-                </div>
-                <div class="project-info__item">
-                    <span class="project-info__label">{{ this.client }}</span>
-                    <span class="project-info__value">{{ data.Client }}</span>
-                </div>
-                <div class="project-info__item">
-                    <span class="project-info__label"> {{this.projectLead }}</span>
-                    <span class="project-info__value">{{ data.ProjectLead }}</span>
-                </div>
-            </div>
-
-            <div class="project-info-row">
-                Quick overview of the project
-            </div>
-
-        </div>
+    
+    <ng-template #projectStatusTemplate let-data>
+        <app-status-chip [status]="data.Status"></app-status-chip>
     </ng-template>
 
 </app-table>

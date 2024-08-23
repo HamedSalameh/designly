@@ -23,26 +23,38 @@ export class ProjectsListComponent {
 
 
   @ViewChild('projectStatusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
-  
+  @ViewChild('projectNameTemplate', { static: true }) nameTemplate!: TemplateRef<any>;
+
   columnsDefinition = [
+    // {
+    //   ColumnHeader: ProjectsStrings.ProjectName,
+    //   DataField: 'Name',
+    // },
     {
       ColumnHeader: ProjectsStrings.ProjectName,
-      DataField: 'Name',
+      DataField: 'Name'
     },
     {
       ColumnHeader: ProjectsStrings.ProjectDescription,
       DataField: 'Description',
     },
     {
+      ColumnHeader: ProjectsStrings.ProjectLead,
+      DataField: 'ProjectLead',
+    },
+    {
+      ColumnHeader: ProjectsStrings.Client,
+      DataField: 'Client',
+    },
+    {
       ColumnHeader: ProjectsStrings.ProjectStatus,
-      DataField: 'Status',
-      Template: 'custom'
+      DataField: 'Status'
     }
   ];
 
   tableData: ProjectViewModel[] = [];
   tableColumns: any[] = [];
-  tableToolbarItems : any[] = [];
+  tableToolbarItems: any[] = [];
 
   // localizations
   projectName = ProjectsStrings.ProjectName;
@@ -51,7 +63,7 @@ export class ProjectsListComponent {
   client = ProjectsStrings.Client;
   projectStatus = ProjectsStrings.ProjectStatus;
 
-  constructor(private store: Store<IApplicationState>) {}
+  constructor(private store: Store<IApplicationState>) { }
 
   ngOnInit(): void {
 
@@ -103,14 +115,14 @@ export class ProjectsListComponent {
       CreatedAt: project.CreatedAt,
       ModifiedAt: project.ModifiedAt,
       ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
-      Client: `${client?.FamilyName} ${client?.FirstName}`,
+      Client: `${client?.FirstName} ${client?.FamilyName}`
     };
   }
 
   private getColumnTemplate(dataField: any) {
     switch (dataField) {
       case 'Name':
-        return undefined
+        return this.nameTemplate;
       case 'Status':
         return this.statusTemplate;
       default:

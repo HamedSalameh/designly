@@ -10,11 +10,13 @@ import { ProjectsStateReducer } from './projects-state/projects.reducers';
 import { ProjectsEffects } from './projects-state/projects.effects';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { ProjectDetailsComponent } from './components/project-details/project-details.component';
 
 @NgModule({
   declarations: [
     ProjectsHomeComponent,
-    ProjectsListComponent
+    ProjectsListComponent,
+    ProjectDetailsComponent
   ],
   imports: [
     ProjectsRoutingModule,
