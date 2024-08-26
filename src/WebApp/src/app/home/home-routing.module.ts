@@ -60,6 +60,12 @@ const routes: Routes = [
         data: { breadcrumb: ModuleRoutes.get('projects')?.breadcrumb },
         loadChildren: () =>
           import('../projects/projects.module').then((m) => m.ProjectsModule),
+      },
+      {
+        // default route
+        path: '',
+        redirectTo: '',
+        pathMatch: 'full',
       }
     ],
   },

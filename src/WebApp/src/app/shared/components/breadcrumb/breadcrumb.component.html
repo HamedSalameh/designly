@@ -2,7 +2,7 @@
   <span class="breadcrumb-item">
     <!-- inject icon -->
     <i *ngIf="breadcrumb.icon" class="{{ breadcrumb.icon }}"></i>
-    <a [href]="breadcrumb.url">{{ breadcrumb.label }}</a>
+    <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
   </span>
   <ng-container *ngIf="!last">
     <span class="separator">/</span>

@@ -35,8 +35,8 @@ export class SideNavComponent {
   }
 
   handleClick(module: ApplicationModule): void {
-    if (module.fullRoute) {
-      this.router.navigate([module.fullRoute]);
+    if (module.route) {
+      this.router.navigate([module.route], { relativeTo: this.router.routerState.root });
       this.store.dispatch(SetActiveModule(module.path));
     } else {
       console.error(`Module ${module.label} does not have a route defined.`);

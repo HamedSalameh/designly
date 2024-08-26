@@ -6,3 +6,5 @@ export const ProjectsState = createFeatureSelector<IProjectsState>(PROJECTS_STAT
 export const projectsSelector = ProjectsAdapter.getSelectors();
 
 export const getProjects = createSelector(ProjectsState, projectsSelector.selectAll);
+
+export const getProjectById = (id: string) => createSelector(ProjectsState, (state) => state.entities[id]);

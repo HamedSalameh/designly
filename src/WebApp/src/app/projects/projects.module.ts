@@ -10,13 +10,17 @@ import { ProjectsStateReducer } from './projects-state/projects.reducers';
 import { ProjectsEffects } from './projects-state/projects.effects';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
 import { SharedModule } from '../shared/shared.module';
-import { ProjectDetailsComponent } from './components/project-details/project-details.component';
+import { ManageProjectComponent } from './components/manage-project/manage-project.component';
+import { ProjectDetailsCardComponent } from './components/project-details-card/project-details-card.component';
+import { ProjectWorkspaceComponent } from './components/project-workspace/project-workspace.component';
 
 @NgModule({
   declarations: [
     ProjectsHomeComponent,
     ProjectsListComponent,
-    ProjectDetailsComponent
+    ManageProjectComponent,
+    ProjectDetailsCardComponent,
+    ProjectWorkspaceComponent
   ],
   imports: [
     ProjectsRoutingModule,

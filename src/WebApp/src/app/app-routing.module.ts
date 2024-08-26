@@ -18,19 +18,17 @@ const homeRoute = RouteFactory.createRoute(
 ApplicationRoutes.set(ApplicationModules.home.path, homeRoute);
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   {
     path: ApplicationRoutes.get('home')?.path, // 'home',
     canActivate: [AuthenticationGuard],
     data: ApplicationRoutes.get('home'),
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
-  },
-  { path: '**', redirectTo: '/login' }, // Optional: Redirect any unknown routes to the login page
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), HomeModule],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

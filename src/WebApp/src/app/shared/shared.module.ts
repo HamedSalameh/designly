@@ -19,6 +19,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { ModalComponent } from './components/modal-component/modal-component.component';
 import { ModalService } from './services/modal-service.service';
 import { StatusChipComponent } from './components/status-chip/status-chip.component';
+import { RouterModule } from '@angular/router';
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
@@ -35,6 +36,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     StoreModule.forFeature(ERROR_STATE_NAME, ErrorStateReducer),
     StoreModule.forFeature(SHARED_STATE_NAME, SharedStateReducer),
 
