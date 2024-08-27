@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { logout } from 'src/app/authentication/state/auth.actions';
 import { getUser } from 'src/app/authentication/state/auth.selectors';
@@ -56,5 +56,11 @@ export class ProfileMenuComponent {
     this.store.dispatch(logout());
   }
 
+  @HostListener('document:click', ['$event'])
+  onClick(event: any) {
+    if (!event.target.closest('.profile-menu')) {
+      this.isMenuOpen = false;
+    }
+  }
   
 }

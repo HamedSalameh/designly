@@ -29,3 +29,4 @@ export const getSingleClient = createSelector(
     return clientId ? clients[clientId] : null;
   }
 )
+export const getClientById = (id: string) => createSelector(ClientState, (state) => state.entities[id]);

@@ -1,4 +1,3 @@
-import { TenantId } from "../types/tenant-id.type";
 import { ProjectStatus } from "./project-status.enum";
 
 

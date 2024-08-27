@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, of, switchMap, take, tap } from 'rxjs';
 import { Client } from '../../models/client.model';
 import { NEW_CLIENT_ID } from 'src/app/shared/constants';
-import { getSelectedClientIdFromState, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
+import { getSelectedClientIdFromState, getClientById, getSingleClient } from 'src/app/clients/client-state/clients.selectors';
 import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { CreateDraftClient } from '../../factories/client.factory';

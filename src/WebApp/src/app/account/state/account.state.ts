@@ -8,7 +8,7 @@ export interface IAccountState extends EntityState<Member> {
 }
 
 export const AccountAdapter = createEntityAdapter<Member>({
-  selectId: (user: Member) => user.email,
+  selectId: (user: Member) => user.id,
   sortComparer: false,
 });
 

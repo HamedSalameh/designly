@@ -1,5 +1,5 @@
 import { ApplicationInitStatus, NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { provideRouter, RouterModule, Routes, withComponentInputBinding } from '@angular/router';
 import { AuthenticationGuard } from './authentication/authentication.guard';
 import { HomeModule } from './home/home.module';
 import { LoginComponent } from './login/components/login.component';
@@ -28,7 +28,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes), HomeModule],
-  exports: [RouterModule],
+  imports: [
+    RouterModule.forRoot(routes, {
+      bindToComponentInputs: true,
+    }), 
+    HomeModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

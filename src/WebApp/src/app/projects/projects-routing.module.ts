@@ -1,5 +1,5 @@
 import { inject, NgModule } from '@angular/core';
-import { Routes, RouterModule, ResolveFn } from '@angular/router';
+import { Routes, RouterModule, ResolveFn, provideRouter, withComponentInputBinding } from '@angular/router';
 import { ProjectsHomeComponent } from './components/projects-home/projects-home.component';
 import { AuthenticationGuard } from '../authentication/authentication.guard';
 import { RouteConfiguration } from '../shared/models/route-configuration.model';
