@@ -1,11 +1,20 @@
 <div class="a-card">
     <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
         <div class="card-header form-row m-bottom-3">
+            <label class="a-input-label"> name </label>
             <div class="card-title">
                 <label class="section-title">
                     {{ activeProject?.Name }}
                 </label>
             </div>
         </div>
+
+        <div class="form-row" *ngIf="activeProject?.Address">
+            <i class="ph ph-map-pin"></i>
+            <label class="details">
+                {{ activeProject?.Address?.Street }}
+                {{ activeProject?.Address?.BuildingNumber }},
+                {{ activeProject?.Address?.City }}
+            </label>
     </div>
 </div>

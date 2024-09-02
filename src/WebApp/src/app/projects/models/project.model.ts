@@ -1,3 +1,4 @@
+import { Address } from "src/app/shared/models/address.model";
 import { ClientId } from "../types/client-id.type";
 import { ProjectLeadId } from "../types/project-lead-it.type";
 import { TenantId } from "../types/tenant-id.type";
@@ -20,4 +21,6 @@ export interface Project {
     IsCompleted: boolean
     CreatedAt: Date;
     ModifiedAt: Date;
+
+    Address: Address;
 }

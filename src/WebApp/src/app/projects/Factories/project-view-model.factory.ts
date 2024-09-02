@@ -24,7 +24,8 @@ export function mapProjectToViewModel(project: Project, clients: Client[], users
         CreatedAt: project.CreatedAt,
         ModifiedAt: project.ModifiedAt,
         ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
-        Client: `${client?.FirstName} ${client?.FamilyName}`
+        Client: `${client?.FirstName} ${client?.FamilyName}`,
+        Address: project.Address
     };
 }
 
@@ -61,7 +62,8 @@ export function BuildProjectViewModelForProjectId(store: Store, ProjectId: strin
                         CreatedAt: project.CreatedAt!,
                         ModifiedAt: project.ModifiedAt!,
                         ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
-                        Client: `${client?.FirstName} ${client?.FamilyName}`
+                        Client: `${client?.FirstName} ${client?.FamilyName}`,
+                        Address: project.Address
                     };
                 })
             );

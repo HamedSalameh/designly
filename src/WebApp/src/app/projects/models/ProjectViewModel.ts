@@ -1,3 +1,4 @@
+import { Address } from "src/app/shared/models/address.model";
 import { ProjectStatus } from "./project-status.enum";
 
 
@@ -13,4 +14,5 @@ export interface ProjectViewModel {
     ModifiedAt: Date;
     ProjectLead: string;
     Client: string;
+    Address: Address;
 }
