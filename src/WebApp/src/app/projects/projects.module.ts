@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ManageProjectComponent } from './components/manage-project/manage-project.component';
 import { ProjectDetailsCardComponent } from './components/project-details-card/project-details-card.component';
 import { ProjectWorkspaceComponent } from './components/project-workspace/project-workspace.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ProjectWorkspaceComponent } from './components/project-workspace/projec
     ProjectsRoutingModule,
     CommonModule,
     SharedModule,
+    ReactiveFormsModule,
     StoreModule.forFeature(PROJECTS_STATE_NAME, ProjectsStateReducer),
     EffectsModule.forFeature([ProjectsEffects]),
     StoreDevtoolsModule.instrument({

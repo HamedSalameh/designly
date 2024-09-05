@@ -1,14 +1,14 @@
 <div class="a-card" *ngIf="(this.selectedClient$ | async) as  selectedClient" >
   <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
-    <div class="card-header form-row m-bottom-3">
-      <div class="card-title">
+    <div class="a-card-header form-row m-bottom-3">
+      <div class="a-card-title">
         <label class="section-title"
           >{{ selectedClient.FirstName }}
           {{ selectedClient.FamilyName }}
         </label>
       </div>
       
-      <div class="card-buttons">
+      <div class="a-card-buttons">
         <!-- Icon button to edit  -->
         <button class="btn icon-btn icon-btn-medium" (click)="onEdit()">
           <i class="ph ph-pencil-simple"></i>

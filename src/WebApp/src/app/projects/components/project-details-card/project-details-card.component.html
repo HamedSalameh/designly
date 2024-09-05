@@ -1,20 +1,164 @@
 <div class="a-card">
     <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
-        <div class="card-header form-row m-bottom-3">
-            <label class="a-input-label"> name </label>
-            <div class="card-title">
-                <label class="section-title">
-                    {{ activeProject?.Name }}
-                </label>
-            </div>
-        </div>
+        <ng-container [formGroup]="ProjectDetails">
+            <div class="a-card-header form-row m-bottom-1">
+                <!-- Project Name -->
+                <div class="a-card-title flex flex-column">
+                    <label class="a-input-label">פרטי פרויקט</label>
 
-        <div class="form-row" *ngIf="activeProject?.Address">
+                    <div class="details" [ngSwitch]="editMode['Name']">
+                        <!-- Show project name when not in edit mode -->
+                        <div *ngSwitchCase="false">
+                            <label class="details">
+                                {{ activeProject?.Name }}
+                            </label>
+                        </div>
+
+                        <!-- Show input field when in edit mode -->
+                        <input *ngSwitchCase="true" type="text" class="a-input" formControlName="name" />
+
+                        <!-- Show default in case no condition matches (optional, here for completeness) -->
+                        <div *ngSwitchDefault>No data</div>
+
+
+                        <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Name')">
+                            <i *ngIf="!editMode['Name']" class="ph ph-pencil-simple"></i>
+                            <i *ngIf="editMode['Name']" class="ph ph-check"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="form-section">
+                <div class="grid-container">
+                    <!-- Project Name -->
+                    <div class="grid-item">
+                        <div class="a-input-label"> לקוח </div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="details" [ngSwitch]="editMode['Client']">
+                            <!-- Show project name when not in edit mode -->
+                            <div *ngSwitchCase="false">
+                                <label class="details">
+                                    {{ activeProject?.Client }}
+                                </label>
+                            </div>
+
+                            <!-- Show input field when in edit mode -->
+                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="client" />
+
+                            <!-- Show default in case no condition matches (optional, here for completeness) -->
+                            <div *ngSwitchDefault>No data</div>
+
+
+                            <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Client')">
+                                <i *ngIf="!editMode['Client']" class="ph ph-pencil-simple"></i>
+                                <i *ngIf="editMode['Client']" class="ph ph-check"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project Lead -->
+                    <div class="grid-item">
+                        <div class="a-input-label"> ראש פרויקט </div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="details" [ngSwitch]="editMode['Lead']">
+                            <!-- Show project lead when not in edit mode -->
+                            <div *ngSwitchCase="false">
+                                <label class="details">
+                                    {{ activeProject?.ProjectLead }}
+                                </label>
+                            </div>
+
+                            <!-- Show input field when in edit mode -->
+                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="lead" />
+
+                            <!-- Show default in case no condition matches (optional, here for completeness) -->
+                            <div *ngSwitchDefault>No data</div>
+                        </div>
+                    </div>
+
+                    <!-- Project Description -->
+                    <div class="grid-item">
+                        <div class="a-input-label"> תיאור </div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="details" [ngSwitch]="editMode['Description']">
+                            <!-- Show project description when not in edit mode -->
+                            <div *ngSwitchCase="false">
+                                <label class="details">
+                                    {{ activeProject?.Description }}
+                                </label>
+                            </div>
+
+                            <!-- Show input field when in edit mode -->
+                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="description" />
+
+                            <!-- Show default in case no condition matches (optional, here for completeness) -->
+                            <div *ngSwitchDefault>No data</div>
+
+
+                            <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Description')">
+                                <i *ngIf="!editMode['Name']" class="ph ph-pencil-simple"></i>
+                                <i *ngIf="editMode['Name']" class="ph ph-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider" />
+
+            <div class="form-section">
+                <div class="grid-container">
+                    <!-- Project Name -->
+                    <div class="grid-item">
+                        <div class="a-input-label"> שם </div>
+                    </div>
+                    <div class="grid-item">
+                        <div class="details" [ngSwitch]="editMode['Name']">
+                            <!-- Show project name when not in edit mode -->
+                            <div *ngSwitchCase="false">
+                                <label class="details">
+                                    {{ activeProject?.Name }}
+                                </label>
+                            </div>
+
+                            <!-- Show input field when in edit mode -->
+                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="name" />
+
+                            <!-- Show default in case no condition matches (optional, here for completeness) -->
+                            <div *ngSwitchDefault>No data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- <div class="form-row">
             <i class="ph ph-map-pin"></i>
             <label class="details">
-                {{ activeProject?.Address?.Street }}
-                {{ activeProject?.Address?.BuildingNumber }},
-                {{ activeProject?.Address?.City }}
+                {{ activeProject?.Address?.Street || "Street" }},
+                {{ activeProject?.Address?.BuildingNumber || "01" }},
+                {{ activeProject?.Address?.City || "City" }}
             </label>
+        </div> -->
+
+        <!-- <ng-container [formGroup]="ProjectDetails">
+            <div class="form-section">
+                <ng-container formGroupName="ProjectDetails">
+                    <div class="form-row">
+                        <div>
+                            <label class="a-input-label"> name </label>
+                            <app-dropdown [options]="options" (valueChange)="onClientChange($event)"></app-dropdown>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container> -->
     </div>
 </div>

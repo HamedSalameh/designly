@@ -20,6 +20,7 @@ import { ModalComponent } from './components/modal-component/modal-component.com
 import { ModalService } from './services/modal-service.service';
 import { StatusChipComponent } from './components/status-chip/status-chip.component';
 import { RouterModule } from '@angular/router';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
@@ -31,6 +32,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     LoadingSpinnerComponent,
     ModalComponent,
     StatusChipComponent,
+    DropdownComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     LoadingSpinnerComponent,
     ModalComponent,
     StatusChipComponent,
+    DropdownComponent,
   ],
   providers: [
     // syncfusion

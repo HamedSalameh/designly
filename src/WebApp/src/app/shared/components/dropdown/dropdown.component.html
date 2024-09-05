@@ -1,0 +1,13 @@
+<div class="dropdown-container" [ngClass]="{ 'open': isOpen }" (click)="toggleDropdown()">
+    <div class="dropdown-container-panel">
+        <div class="dropdown-label">{{ selectedLabel }}</div>
+        <i class="ph ph-caret-down caret-icon" [ngClass]="{ 'open': isOpen }"></i>
+    </div>
+
+    <ul class="dropdown-list" *ngIf="isOpen">
+        <li *ngFor="let option of options" (click)="selectOption(option, $event)"
+            [ngClass]="{ 'selected': option.value === value }">
+            {{ option.label }}
+        </li>
+    </ul>
+</div>

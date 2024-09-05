@@ -7,7 +7,7 @@ export interface ProjectViewModel {
     Name: string;
     Description: string;
     StartDate?: Date;
-    Deadline?: Date;
+Deadline?: Date;
     Status: ProjectStatus;
     IsCompleted?: boolean;
     CreatedAt: Date;

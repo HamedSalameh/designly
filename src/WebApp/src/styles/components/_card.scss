@@ -1,4 +1,23 @@
 .a-card {
     box-shadow: $shadow-md;
     background-color: white;
-}
+  
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+  
+    &-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $color-v1-black;
+    }
+  
+    &-buttons {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }

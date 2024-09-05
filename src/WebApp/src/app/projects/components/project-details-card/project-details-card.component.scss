@@ -1,0 +1,53 @@
+@import "main";
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: $gap-small;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+hr.divider {
+    border-top: $divider-width solid $divider-color;
+}
+
+.a-select {
+
+    width: 15rem;
+    height: $font-size-default * 2 + 4;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    box-shadow: $shadow-xs;
+    appearance: none; // Removes default browser styling
+
+    option {
+        font-family: $font-family;
+        font-size: $font-size-default;
+        color: $color-v1-black;
+        margin-bottom: 5px;
+    }
+
+    .a-select:focus {
+        outline: none;
+        box-shadow: $focus-ring;
+    }
+
+    .a-select::placeholder {
+        color: $grey-500;
+    }
+
+    .a-select:disabled {
+        background-color: $grey-100;
+        color: $grey-500;
+        cursor: not-allowed;
+    }
+}
