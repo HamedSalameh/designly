@@ -78,6 +78,15 @@ export class ProjectDetailsCardComponent {
 
   }
 
+  public onConfirmEdit(key: string) {
+    this.toggleEditMode(key);
+    console.debug('Form data', this.ProjectDetails.value);
+  }
+
+  public onCancelEdit(key: string) {
+    this.toggleEditMode(key);
+  }
+
   public onClientChange(clientId: any) {
     console.log(clientId);
   }

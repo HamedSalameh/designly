@@ -10,7 +10,12 @@
   padding: 0 10px;
   margin-bottom: 10px;
   box-shadow: $shadow-xs;
+
+  &-clickable {
+    cursor: pointer;
+  }
 }
+
 
 .a-input:focus {
   outline: none;

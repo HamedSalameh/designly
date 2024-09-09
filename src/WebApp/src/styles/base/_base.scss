@@ -15,6 +15,12 @@
   gap: 8px;
   font-family: $font-family;
   color: $color-v1-black;
+  margin-bottom: 10px;
+  height: $font-size-default * 2 + 4;
+
+  &-clickable {
+    cursor: pointer;
+  }
 }
 
 .section-title {

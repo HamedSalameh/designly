@@ -1,5 +1,6 @@
 <div class="a-card">
     <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
+
         <ng-container [formGroup]="ProjectDetails">
             <div class="a-card-header form-row m-bottom-1">
                 <!-- Project Name -->
@@ -30,11 +31,9 @@
                 </div>
             </div>
 
-
-
             <div class="form-section">
                 <div class="grid-container">
-                    <!-- Project Name -->
+                    <!-- Client Name -->
                     <div class="grid-item">
                         <div class="a-input-label"> לקוח </div>
                     </div>
@@ -42,7 +41,7 @@
                         <div class="details" [ngSwitch]="editMode['Client']">
                             <!-- Show project name when not in edit mode -->
                             <div *ngSwitchCase="false">
-                                <label class="details">
+                                <label class="details details-clickable" (click)="toggleEditMode('Client')">
                                     {{ activeProject?.Client }}
                                 </label>
                             </div>
@@ -53,11 +52,16 @@
                             <!-- Show default in case no condition matches (optional, here for completeness) -->
                             <div *ngSwitchDefault>No data</div>
 
+                            <div class="flex flex-row" *ngIf="editMode['Client']">
+                                <button class="btn icon-btn icon-btn-small" (click)="onConfirmEdit('Client')">
+                                    <i class="ph ph-check"></i>
+                                </button>
+                                <!-- cancel -->
+                                <button class="btn icon-btn icon-btn-small" (click)="onCancelEdit('Client')">
+                                    <i class="ph ph-x"></i>
+                                </button>
+                            </div>
 
-                            <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Client')">
-                                <i *ngIf="!editMode['Client']" class="ph ph-pencil-simple"></i>
-                                <i *ngIf="editMode['Client']" class="ph ph-check"></i>
-                            </button>
                         </div>
                     </div>
 
@@ -66,19 +70,9 @@
                         <div class="a-input-label"> ראש פרויקט </div>
                     </div>
                     <div class="grid-item">
-                        <div class="details" [ngSwitch]="editMode['Lead']">
-                            <!-- Show project lead when not in edit mode -->
-                            <div *ngSwitchCase="false">
-                                <label class="details">
-                                    {{ activeProject?.ProjectLead }}
-                                </label>
-                            </div>
-
-                            <!-- Show input field when in edit mode -->
-                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="lead" />
-
-                            <!-- Show default in case no condition matches (optional, here for completeness) -->
-                            <div *ngSwitchDefault>No data</div>
+                        <div class="details">
+                            <app-dropdown [options]="options" (valueChange)="onClientChange($event)">
+                            </app-dropdown>
                         </div>
                     </div>
 
@@ -90,7 +84,7 @@
                         <div class="details" [ngSwitch]="editMode['Description']">
                             <!-- Show project description when not in edit mode -->
                             <div *ngSwitchCase="false">
-                                <label class="details">
+                                <label class="details details-clickable" (click)="toggleEditMode('Description')">
                                     {{ activeProject?.Description }}
                                 </label>
                             </div>
@@ -101,11 +95,16 @@
                             <!-- Show default in case no condition matches (optional, here for completeness) -->
                             <div *ngSwitchDefault>No data</div>
 
+                            <div class="flex flex-row" *ngIf="editMode['Description']">
+                                <button class="btn icon-btn icon-btn-small" (click)="onConfirmEdit('Description')">
+                                    <i class="ph ph-check"></i>
+                                </button>
+                                <!-- cancel -->
+                                <button class="btn icon-btn icon-btn-small" (click)="onCancelEdit('Description')">
+                                    <i class="ph ph-x"></i>
+                                </button>
+                            </div>
 
-                            <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Description')">
-                                <i *ngIf="!editMode['Name']" class="ph ph-pencil-simple"></i>
-                                <i *ngIf="editMode['Name']" class="ph ph-check"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
