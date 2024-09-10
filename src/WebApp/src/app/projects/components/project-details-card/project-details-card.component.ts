@@ -6,6 +6,7 @@ import { map, switchMap } from 'rxjs';
 import { BuildProjectViewModelForProjectId } from '../../Factories/project-view-model.factory';
 import { ProjectViewModel } from '../../models/ProjectViewModel';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { getAccountUsersFromState } from 'src/app/account/state/account.selectors';
 
 @Component({
   selector: 'app-project-details-card',
@@ -14,18 +15,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class ProjectDetailsCardComponent {
 
-  projetcId$ = this.route.params.pipe(map((params) => params['id']));
+  projectIds = this.route.params.pipe(map((params) => params['id']));
   projectId!: string;
 
   activeProject?: ProjectViewModel;
   editMode: { [key: string]: boolean } = {};
 
   ProjectDetails!: FormGroup
-  projectLeads = ['Lead 1', 'Lead 2', 'Lead 3']; // Example list of project leads
-  options = [
-    { label: 'Option 1', value: 1 },
-    { label: 'Option 2', value: 2 },
-    { label: 'Option 3', value: 3 },
+  projectLeads : { label: string; value: string; }[] = [
   ];
 
   constructor(  
@@ -48,21 +45,39 @@ export class ProjectDetailsCardComponent {
 
   ngOnInit(): void {
     
-    this.projetcId$.pipe(
+    this.projectIds.pipe(
       switchMap((id) => BuildProjectViewModelForProjectId(this.store, id))
     ).subscribe((project) => {
       console.log(project);
       this.activeProject = project;
       this.initializeEditMode();
+      this.initializeProjectLeadsList();
       this.createForm();
     });
 
   }
 
+  private initializeProjectLeadsList(){
+    this.store.select(getAccountUsersFromState).pipe(
+      map((users) => {
+        return users.map((user) => {
+          return { label: `${user.firstName} ${user.lastName}`, value: user.id }
+        });
+      })
+    ).subscribe((users) => {
+      this.projectLeads = users;
+    });
+
+  }
+
+  private getAssignedProjectLead(projectLeadId: string | undefined) {
+    return this.projectLeads.find((lead) => lead.value === projectLeadId)?.value;
+  }
+
   private createForm() {
     this.ProjectDetails = this.formBuilder.group({
       name: new FormControl(this.activeProject?.Name, [Validators.required]),
-      projectLead: new FormControl(this.activeProject?.ProjectLead),
+      projectLead: new FormControl(this.getAssignedProjectLead(this.activeProject?.ProjectLead.Id), [Validators.required]),
       client: new FormControl(this.activeProject?.Client, [Validators.required]),
       startDate: new FormControl(this.activeProject?.StartDate),
       deadLine: new FormControl(this.activeProject?.Deadline),

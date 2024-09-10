@@ -23,7 +23,11 @@ export function mapProjectToViewModel(project: Project, clients: Client[], users
         IsCompleted: project.IsCompleted,
         CreatedAt: project.CreatedAt,
         ModifiedAt: project.ModifiedAt,
-        ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
+        ProjectLead: {
+            Id: projectLead?.id || '',
+            FirstName: projectLead?.firstName || '',
+            LastName: projectLead?.lastName || ''
+        },
         Client: `${client?.FirstName} ${client?.FamilyName}`,
         Address: project.Address
     };
@@ -61,7 +65,11 @@ export function BuildProjectViewModelForProjectId(store: Store, ProjectId: strin
                         IsCompleted: project.IsCompleted,
                         CreatedAt: project.CreatedAt!,
                         ModifiedAt: project.ModifiedAt!,
-                        ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
+                        ProjectLead: {
+                            Id: projectLead?.id || '',
+                            FirstName: projectLead?.firstName || '',
+                            LastName: projectLead?.lastName || ''
+                        },
                         Client: `${client?.FirstName} ${client?.FamilyName}`,
                         Address: project.Address
                     };

@@ -12,7 +12,13 @@ export interface ProjectViewModel {
     IsCompleted?: boolean;
     CreatedAt: Date;
     ModifiedAt: Date;
-    ProjectLead: string;
+    ProjectLead: ProjectLeadViewModel;
     Client: string;
     Address: Address;
+}
+
+export interface ProjectLeadViewModel {
+    Id: string;
+    FirstName: string;
+    LastName: string;
 }
