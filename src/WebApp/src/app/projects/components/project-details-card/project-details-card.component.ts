@@ -77,7 +77,7 @@ export class ProjectDetailsCardComponent {
   private createForm() {
     this.ProjectDetails = this.formBuilder.group({
       name: new FormControl(this.activeProject?.Name, [Validators.required]),
-      projectLead: new FormControl(this.getAssignedProjectLead(this.activeProject?.ProjectLead.Id), [Validators.required]),
+      projectLead: new FormControl(this.getAssignedProjectLead(this.activeProject?.ProjectLeadId), [Validators.required]),
       client: new FormControl(this.activeProject?.Client, [Validators.required]),
       startDate: new FormControl(this.activeProject?.StartDate),
       deadLine: new FormControl(this.activeProject?.Deadline),

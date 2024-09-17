@@ -23,11 +23,8 @@ export function mapProjectToViewModel(project: Project, clients: Client[], users
         IsCompleted: project.IsCompleted,
         CreatedAt: project.CreatedAt,
         ModifiedAt: project.ModifiedAt,
-        ProjectLead: {
-            Id: projectLead?.id || '',
-            FirstName: projectLead?.firstName || '',
-            LastName: projectLead?.lastName || ''
-        },
+        ProjectLeadId: project.ProjectLeadId.Id,
+        ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
         Client: `${client?.FirstName} ${client?.FamilyName}`,
         Address: project.Address
     };
@@ -38,7 +35,6 @@ export function BuildProjectViewModelForProjectId(store: Store, ProjectId: strin
         console.warn('ProjectId is not defined');
         return new Observable<ProjectViewModel>();
     }
-
 
     return store.select(getProjectById(ProjectId)).pipe(
         switchMap(project => {
@@ -65,11 +61,8 @@ export function BuildProjectViewModelForProjectId(store: Store, ProjectId: strin
                         IsCompleted: project.IsCompleted,
                         CreatedAt: project.CreatedAt!,
                         ModifiedAt: project.ModifiedAt!,
-                        ProjectLead: {
-                            Id: projectLead?.id || '',
-                            FirstName: projectLead?.firstName || '',
-                            LastName: projectLead?.lastName || ''
-                        },
+                        ProjectLeadId: project.ProjectLeadId.Id,
+                        ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
                         Client: `${client?.FirstName} ${client?.FamilyName}`,
                         Address: project.Address
                     };

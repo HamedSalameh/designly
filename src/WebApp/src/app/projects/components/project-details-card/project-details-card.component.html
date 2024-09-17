@@ -71,7 +71,8 @@
                     </div>
                     <div class="grid-item">
                         <div class="details">
-                            <app-dropdown [options]="projectLeads" formControlName="projectLead" (valueChange)="onClientChange($event)">
+                            <app-dropdown [options]="projectLeads" formControlName="projectLead"
+                                (valueChange)="onClientChange($event)">
                             </app-dropdown>
                         </div>
                     </div>
@@ -133,6 +134,15 @@
                             <!-- Show default in case no condition matches (optional, here for completeness) -->
                             <div *ngSwitchDefault>No data</div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <div class="a-input-label"> תאריך התחלה </div>
+                    </div>
+                    <div class="grid-item">
+                        <app-des-datepicker formControlName="startDate"></app-des-datepicker>
                     </div>
                 </div>
             </div>
