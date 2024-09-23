@@ -1,4 +1,5 @@
 ﻿using Designly.Shared;
+using Designly.Shared.ValueObjects;
 using Newtonsoft.Json.Linq;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
@@ -45,6 +46,9 @@ namespace Projects.Domain
 
         public bool IsCompleted => CompletedAt.HasValue && Status == ProjectStatus.Completed;
 
+        // Address of the project (the property under work)
+        public Address Address { get; private set; }
+
 
         /// <summary>
         /// List of task items for the project, general tasks
@@ -65,6 +69,8 @@ namespace Projects.Domain
             StartDate = null;
             Deadline = null;
             CompletedAt = null;
+            Status = ProjectStatus.NotStarted;
+            Address = new Address(Consts.Strings.ValueNotSet);
         }
 
         // Used by Dapper for automatic object initialization
@@ -78,6 +84,7 @@ namespace Projects.Domain
             Deadline = null;
             CompletedAt = null;
             TaskItems = [];
+            Address = new Address(Consts.Strings.ValueNotSet);
         }
 
         public void SetId(ProjectId projectId)
@@ -149,6 +156,15 @@ namespace Projects.Domain
             }
             Deadline = deadline;
         }
+
+        public void SetAddress(Address address)
+        {
+            if (address == null)
+            {
+                throw new ArgumentNullException(nameof(address));
+            }
+
+            Address = address;
     }
 
     // Out of scope for MVP

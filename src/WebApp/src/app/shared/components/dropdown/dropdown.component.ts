@@ -20,55 +20,22 @@ interface DropdownOption {
 })
 export class DropdownComponent {
 
+  @Input() data: DropdownOption[] = [];
+  @Input() allowFiltering: boolean = true;
+  @Input() placeholder: string = '';
 
-  @Input() options: DropdownOption[] = [];
-  @Output() selectionChange = new EventEmitter<any>();
+  @Output() valueChange = new EventEmitter<any>();
 
-  isOpen = false;
-  value: any;
-  selectedLabel: string = '';
+  fields: Object = { text: 'label', value: 'value' };
 
-  onChange: any = () => { };
-  onTouched: any = () => { };
-
-  toggleDropdown() {
-    this.isOpen = !this.isOpen;
+  onValueChange(event: any) {
+    this.valueChange.emit(event.value);
   }
 
-  selectOption(option: DropdownOption, event: Event) {
-    this.value = option.value;
-    this.selectedLabel = option.label;
-    this.isOpen = false;
-    this.onChange(this.value);
-    this.onTouched();
-    this.selectionChange.emit(this.value);
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    const targetElement = event.target as HTMLElement;
-    if (targetElement && !targetElement.closest('.dropdown-container')) {
-      this.isOpen = false;
-    }
-  }
-
-  writeValue(value: any): void {
-    this.value = value;
-    const selectedOption = this.options.find(option => option.value === value);
-    if (selectedOption) {
-      this.selectedLabel = selectedOption.label;
-    }
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    // Optionally handle the disabled state
+  // Handle filtering event
+  onFiltering(event: any) {
+    const query = event.text.toLowerCase();
+    const filteredData = this.data.filter(option => option.label.toLowerCase().includes(query));
+    event.updateData(filteredData);
   }
 }

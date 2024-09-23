@@ -36,6 +36,10 @@ export class ProjectDetailsCardComponent {
       Object.keys(this.activeProject).forEach(key => {
         this.editMode[key] = false;
       });
+
+      Object.keys(this.activeProject.Address).forEach(key => {
+        this.editMode[key] = false;
+      });
     }
   }
 
@@ -55,6 +59,13 @@ export class ProjectDetailsCardComponent {
       this.createForm();
     });
 
+  }
+
+  // when we leave the component, we need to reset the edit mode and clear the form, clear the active project
+  ngOnDestroy(): void {
+    this.activeProject = undefined;
+    this.editMode = {};
+    this.ProjectDetails.reset();
   }
 
   private initializeProjectLeadsList(){
