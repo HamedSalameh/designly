@@ -1,6 +1,6 @@
 @import "main";
 
-.grid-container2 {
+.grid-container {
     display: grid;
     grid-template-columns: auto 25%;
     grid-template-rows: repeat(3, 1fr);
@@ -30,6 +30,7 @@
     .proj-start-date {
         grid-column: 2;
         grid-row: 2;
+
     }
 
     .proj-deadline-date {

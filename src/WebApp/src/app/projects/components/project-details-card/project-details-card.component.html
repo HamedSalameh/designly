@@ -29,7 +29,7 @@
             </div>
 
 
-            <div class="grid-container2">
+            <div class="grid-container">
                 <div class="grid-item proj-desc">
                     <div class="">
                         <label class="a-input-label"> תיאור </label>
@@ -205,7 +205,10 @@
                 <div class="grid-item proj-start-date">
                     <div class="">
                         <label class="a-input-label"> תאריך התחלה </label>
-                        <app-des-datepicker formControlName="startDate"></app-des-datepicker>
+                        <div class="details">
+                            <app-des-datepicker formControlName="startDate"></app-des-datepicker>
+                        </div>
+
                     </div>
                 </div>
 
@@ -213,7 +216,10 @@
                 <div class="grid-item proj-deadline-date">
                     <div class="">
                         <label class="a-input-label"> תאריך סיום </label>
-                        <app-des-datepicker formControlName="deadLine"></app-des-datepicker>
+                        <div class="details">
+                            <app-des-datepicker formControlName="deadLine"></app-des-datepicker>
+                        </div>
+
                     </div>
                 </div>
             </div>

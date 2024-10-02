@@ -64,7 +64,7 @@ export function BuildProjectViewModelForProjectId(store: Store, ProjectId: strin
                         ProjectLeadId: project.ProjectLeadId.Id,
                         ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
                         Client: `${client?.FirstName} ${client?.FamilyName}`,
-                        Address: project.Address
+                        Property: project.Property || null             
                     };
                 })
             );

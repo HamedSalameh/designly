@@ -1,6 +1,5 @@
 ﻿using Designly.Shared;
 using Designly.Shared.ValueObjects;
-using Newtonsoft.Json.Linq;
 using Projects.Domain.StonglyTyped;
 using Projects.Domain.Tasks;
 
@@ -46,9 +45,7 @@ namespace Projects.Domain
 
         public bool IsCompleted => CompletedAt.HasValue && Status == ProjectStatus.Completed;
 
-        // Address of the project (the property under work)
-        public Address Address { get; private set; }
-
+        public Property Property { get; private set; }
 
         /// <summary>
         /// List of task items for the project, general tasks
@@ -165,42 +162,43 @@ namespace Projects.Domain
             }
 
             Address = address;
+        }
+
+        // Out of scope for MVP
+        //public class Project : BasicProject
+        //{
+        //    // Populated by Dapper
+        //    public List<Property> PropertyList;
+        //    public List<TaskGroup> TaskGroups { get; set; }
+
+        //    public Project(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
+        //    {
+        //        PropertyList = [];
+        //        TaskGroups = [];
+        //    }
+        //}
+
+        //public class FullProject : Project
+        //{
+        //    // Additional
+        //    //public Budget ProjectBudget { get; set; }       // project budget allocated by the customer
+        //    //public Inventory Inventory { get; set; }        // כתב כמויות
+        //    //public Contract Contract { get; set; }
+        //    //public List<Documents> Plans { get; set; }      // תוכניות
+        //    //public List<Documents> Files { get; set; }      // קבצים, תמונות, וידאו
+        //    //public Questionare questionare { get; set; }    // שאלון לקוח
+        //    //public List<Questionare> Answers { get; set; }  // תשובות לשאלון לקוח
+        //    //public List<Documents> Reports { get; set; }    // דוחות
+        //    //public List<Documents> Invoices { get; set; }   // חשבוניות
+        //    //public List<Documents> Receipts { get; set; }   // קבלות
+        //    //public List<Documents> Expenses { get; set; }   // הוצאות
+        //    //public List<Note> Notes { get; set; }      // הערות
+
+        //    public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
+        //    {
+        //        PropertyList = [];
+        //        TaskGroups = [];
+        //    }
+        //}
     }
-
-    // Out of scope for MVP
-    //public class Project : BasicProject
-    //{
-    //    // Populated by Dapper
-    //    public List<Property> PropertyList;
-    //    public List<TaskGroup> TaskGroups { get; set; }
-
-    //    public Project(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
-    //    {
-    //        PropertyList = [];
-    //        TaskGroups = [];
-    //    }
-    //}
-
-    //public class FullProject : Project
-    //{
-    //    // Additional
-    //    //public Budget ProjectBudget { get; set; }       // project budget allocated by the customer
-    //    //public Inventory Inventory { get; set; }        // כתב כמויות
-    //    //public Contract Contract { get; set; }
-    //    //public List<Documents> Plans { get; set; }      // תוכניות
-    //    //public List<Documents> Files { get; set; }      // קבצים, תמונות, וידאו
-    //    //public Questionare questionare { get; set; }    // שאלון לקוח
-    //    //public List<Questionare> Answers { get; set; }  // תשובות לשאלון לקוח
-    //    //public List<Documents> Reports { get; set; }    // דוחות
-    //    //public List<Documents> Invoices { get; set; }   // חשבוניות
-    //    //public List<Documents> Receipts { get; set; }   // קבלות
-    //    //public List<Documents> Expenses { get; set; }   // הוצאות
-    //    //public List<Note> Notes { get; set; }      // הערות
-
-    //    public FullProject(Guid TenantId, Guid ProjectLeadId, Guid ClientId, string Name) : base(TenantId, ProjectLeadId, ClientId, Name)
-    //    {
-    //        PropertyList = [];
-    //        TaskGroups = [];
-    //    }
-    //}
 }

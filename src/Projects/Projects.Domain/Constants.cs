@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Projects.Domain
+﻿namespace Projects.Domain
 {
     public static class Constants
     {

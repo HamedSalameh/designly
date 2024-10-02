@@ -13,6 +13,7 @@ CREATE OR REPLACE PROCEDURE insert_project(
     p_deadline DATE,
     p_completed_at DATE,
     p_status INT,
+    p_property_id UUID,
     OUT p_project_id UUID
 )
 LANGUAGE plpgsql AS '
@@ -27,6 +28,7 @@ LANGUAGE plpgsql AS '
             deadline,
             completed_at,
             status,
+            property_id,
             created_at,
             modified_at
         ) VALUES (
@@ -39,6 +41,7 @@ LANGUAGE plpgsql AS '
             p_deadline,
             p_completed_at,
             p_status,
+            p_property_id,
             NOW(),
             NOW()
         )

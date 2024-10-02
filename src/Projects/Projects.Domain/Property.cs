@@ -5,17 +5,15 @@ namespace Projects.Domain
 {
     public class Property : Entity
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public PropertyType PropertyType { get; set; }
         public required Address Address { get; set; }
         public required List<Floor> Floors { get; set; }
+        public int NumberOfFloors => Floors.Count;
         public double TotalArea { get; set; }
 
         public Property(Guid TenantId, string Name, Address Address) : base(TenantId)
         {
-            if (string.IsNullOrEmpty(Name))
-            {
-                throw new ArgumentException($"{nameof(Name)} : must not be null or empty");
-            }
             this.Name = Name;
             this.Address = Address;
             Floors = [];
