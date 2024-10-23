@@ -10,7 +10,7 @@ namespace Projects.Application.Features.UpdateProject
         public ProjectId ProjectId { get; set; }
         public TenantId TenantId { get; set; }
         public required string Name { get; set; }
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         public Guid ProjectLeadId { get; set; }
         public Guid ClientId { get; set; }
         public DateOnly? StartDate { get; set; }

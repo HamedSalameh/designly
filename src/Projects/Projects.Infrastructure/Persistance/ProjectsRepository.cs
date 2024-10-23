@@ -83,7 +83,7 @@ namespace Projects.Infrastructure.Persistance
         {
             if (basicProject is null)
             {
-                _logger.LogError("{BaiscProject} is null", nameof(basicProject));
+                _logger.LogError("{BasicProject} is null", nameof(basicProject));
                 throw new ArgumentNullException(nameof(basicProject));
             }
 
@@ -94,28 +94,29 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_description", basicProject.Description, DbType.String);
             dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id, DbType.Guid);
             dynamicParameters.Add("p_client_id", basicProject.ClientId.Id, DbType.Guid);
-            dynamicParameters.Add("p_start_date", basicProject.StartDate, DbType.DateTime);
-            dynamicParameters.Add("p_deadline", basicProject.Deadline, DbType.DateTime);
-            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.DateTime);
-            dynamicParameters.Add("p_status", basicProject.Status, DbType.Int16);
+            dynamicParameters.Add("p_start_date", basicProject.StartDate); // Assuming StartDate is of type DateOnly
+            dynamicParameters.Add("p_deadline", basicProject.Deadline); // Assuming Deadline is of type DateOnly
+            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt); // Handle nullable DateOnly
+            dynamicParameters.Add("p_status", basicProject.Status, DbType.Int32); // Ensure the status is of the correct type
 
             // Serialize the Property object to JSON
             var serializedProperty = JsonConvert.SerializeObject(basicProject.Property);
-
-            dynamicParameters.Add("p_property", serializedProperty, DbType.String);
+            dynamicParameters.Add("p_property", serializedProperty, DbType.Object); // JSON is typically treated as an object
 
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             await policy.ExecuteAsync(async () =>
             {
                 await connection.OpenAsync(cancellationToken);
-                using var transaction = await connection.BeginTransactionAsync();
+                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
                 try
                 {
-                    await connection.ExecuteAsync(sql: "update_basicproject",
-                                               param: dynamicParameters,
-                                               commandType: CommandType.StoredProcedure,
-                                               transaction: transaction);
-                    await transaction.CommitAsync();
+                    await connection.ExecuteAsync(
+                        sql: "update_project",
+                        param: dynamicParameters,
+                        commandType: CommandType.StoredProcedure,
+                        transaction: transaction
+                    );
+                    await transaction.CommitAsync(cancellationToken);
                 }
                 catch (Exception exception)
                 {
@@ -125,6 +126,7 @@ namespace Projects.Infrastructure.Persistance
                 }
             });
         }
+
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {

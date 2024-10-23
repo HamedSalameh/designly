@@ -43,19 +43,25 @@ namespace Projects.Application.Features.UpdateProject
 
             var tenantId = tenantProvider.GetTenantId();
 
-            TypeAdapterConfig<PropertyDto, Property>.NewConfig()
-                .ConstructUsing(dto => new Property(
-                    Guid.NewGuid(),
-                    dto.Name ?? "Default Name",
-                    new Address(dto.Address.City, dto.Address.Street, dto.Address.BuildingNumber, dto.Address.AddressLines),
-                    new List<Floor>()
-                ))
-                .Map(dest => dest.Floors, src => src.Floors)
-                .Map(dest => dest.TotalArea, src => src.TotalArea);
+            // Build the command object from the request
+            var updateProjectCommand = new UpdateProjectCommand()
+            {
+                ProjectId = projectId,
+                TenantId = tenantId,
 
-            var updateProjectCommand = updateProjectRequestDto.Adapt<UpdateProjectCommand>();
-            updateProjectCommand.TenantId = tenantId;
-            updateProjectCommand.ProjectId = projectId;
+                Name = updateProjectRequestDto.Name,
+                Description = updateProjectRequestDto.Description,
+                ProjectLeadId = updateProjectRequestDto.ProjectLeadId,
+                ClientId = updateProjectRequestDto.ClientId,
+                StartDate = updateProjectRequestDto.StartDate,
+                Deadline = updateProjectRequestDto.Deadline,
+                CompletedAt = updateProjectRequestDto.CompletedAt,
+                Property = updateProjectRequestDto.Property != null ?
+                new Property(tenantId,
+                        updateProjectRequestDto.Property.Name!,
+                        updateProjectRequestDto.Property.Address.Adapt<Address>(),
+                        updateProjectRequestDto.Property.Floors ?? new List<Floor>()) : null
+            };
 
             var updatedProjectId = await sender.Send(updateProjectCommand, cancellationToken);
 

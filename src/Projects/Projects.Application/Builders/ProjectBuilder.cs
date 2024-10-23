@@ -18,7 +18,7 @@ namespace Projects.Application.Builders
         private DateOnly? _startDate;
         private DateOnly? _deadline;
         private DateOnly? _completedAt;
-        private Property? Property;
+        private Property? _property;
         public ProjectBuilder(ITenantProvider tenantProvider)
         {
             _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
@@ -92,7 +92,7 @@ namespace Projects.Application.Builders
 
         public IProjectBuilder WithProperty(Property? property)
         {
-            Property = property;
+            _property = property;
             return this;
         }
 
@@ -115,6 +115,7 @@ namespace Projects.Application.Builders
 
             var basicProject = new BasicProject(tenantId, _projectLeadId, _clientId, _name);
             basicProject.SetDescription(_description);
+            if (_property is not null) basicProject.AddProperty(_property);
             if (_startDate.HasValue) basicProject.SetStartDate(_startDate.Value);
             if (_deadline.HasValue) basicProject.SetDeadline(_deadline.Value);
             if (_completedAt.HasValue) basicProject.CompleteProject(_completedAt.Value);
