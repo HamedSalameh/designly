@@ -18,7 +18,7 @@ namespace Projects.Application.Builders
         private DateOnly? _startDate;
         private DateOnly? _deadline;
         private DateOnly? _completedAt;
-
+        private Property? Property;
         public ProjectBuilder(ITenantProvider tenantProvider)
         {
             _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
@@ -87,6 +87,12 @@ namespace Projects.Application.Builders
                 throw new ArgumentException($"{nameof(completedAt)} : must be after {nameof(_startDate)}");
             }
             _completedAt = completedAt;
+            return this;
+        }
+
+        public IProjectBuilder WithProperty(Property? property)
+        {
+            Property = property;
             return this;
         }
 

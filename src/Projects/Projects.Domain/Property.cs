@@ -7,16 +7,16 @@ namespace Projects.Domain
     {
         public string? Name { get; set; }
         public PropertyType PropertyType { get; set; }
-        public required Address Address { get; set; }
-        public required List<Floor> Floors { get; set; }
+        public Address Address { get; set; }
+        public List<Floor> Floors { get; set; }
         public int NumberOfFloors => Floors.Count;
         public double TotalArea { get; set; }
 
-        public Property(Guid TenantId, string Name, Address Address) : base(TenantId)
+        public Property(Guid TenantId, string Name, Address Address, List<Floor> Floors) : base(TenantId)
         {
             this.Name = Name;
             this.Address = Address;
-            Floors = [];
+            this.Floors = Floors;
             TotalArea = 0;
         }
 

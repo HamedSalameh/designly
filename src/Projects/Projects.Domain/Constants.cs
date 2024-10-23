@@ -12,5 +12,7 @@
         public static readonly ushort SearchValueMaxLength = 100;
         public static readonly ushort OperatorMaxLength = 10;
         public static readonly ushort FieldMaxLength = 50;
+
+        
     }
 }

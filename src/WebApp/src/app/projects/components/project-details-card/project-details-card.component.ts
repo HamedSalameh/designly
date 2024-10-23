@@ -36,10 +36,6 @@ export class ProjectDetailsCardComponent {
       Object.keys(this.activeProject).forEach(key => {
         this.editMode[key] = false;
       });
-
-      Object.keys(this.activeProject.Address).forEach(key => {
-        this.editMode[key] = false;
-      });
     }
   }
 
@@ -93,13 +89,7 @@ export class ProjectDetailsCardComponent {
       startDate: new FormControl(this.activeProject?.StartDate),
       deadLine: new FormControl(this.activeProject?.Deadline),
       status: new FormControl(this.activeProject?.Status),
-      description: new FormControl(this.activeProject?.Description),
-      address: this.formBuilder.group({
-        city: new FormControl(this.activeProject?.Address?.City) || 'City',
-        street: new FormControl(this.activeProject?.Address?.Street),
-        buildingNumber: new FormControl(this.activeProject?.Address?.BuildingNumber),
-        addressLine1: new FormControl(this.activeProject?.Address?.AddressLines),
-      })
+      description: new FormControl(this.activeProject?.Description)
     });
 
   }

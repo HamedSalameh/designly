@@ -1,6 +1,7 @@
 ﻿using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
 using Projects.Domain;
@@ -54,6 +55,7 @@ namespace Projects.Application.Features.UpdateProject
                     .WithStartDate(request.StartDate)
                     .WithDeadline(request.Deadline)
                     .WithCompletedAt(request.CompletedAt)
+                    .WithProperty(request.Property)
                     .BuildBasicProject();
 
             // Since this is an update flow of an existing project we need to set the id

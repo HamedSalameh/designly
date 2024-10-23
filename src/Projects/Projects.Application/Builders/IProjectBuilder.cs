@@ -12,5 +12,6 @@ namespace Projects.Application.Builders
         IProjectBuilder WithStartDate(DateOnly? startDate);
         IProjectBuilder WithDeadline(DateOnly? deadline);
         IProjectBuilder WithCompletedAt(DateOnly? completedAt);
+        IProjectBuilder WithProperty(Property? property);
     }
 }

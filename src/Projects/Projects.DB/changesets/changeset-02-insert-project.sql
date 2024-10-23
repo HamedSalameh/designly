@@ -1,7 +1,5 @@
---liquibase formatted sql
-
---changeset Hamed.Salameh:insert_project_procedure
---comment: A stored procedure to insert a project.
+--changeset Hamed.Salameh:insert_project_procedure_v2
+--comment: A stored procedure to insert a project with property stored as JSON.
 
 CREATE OR REPLACE PROCEDURE insert_project(
     p_tenant_id UUID,
@@ -13,7 +11,6 @@ CREATE OR REPLACE PROCEDURE insert_project(
     p_deadline DATE,
     p_completed_at DATE,
     p_status INT,
-    p_property_id UUID,
     OUT p_project_id UUID
 )
 LANGUAGE plpgsql AS '
@@ -28,7 +25,6 @@ LANGUAGE plpgsql AS '
             deadline,
             completed_at,
             status,
-            property_id,
             created_at,
             modified_at
         ) VALUES (
@@ -41,12 +37,11 @@ LANGUAGE plpgsql AS '
             p_deadline,
             p_completed_at,
             p_status,
-            p_property_id,
             NOW(),
             NOW()
         )
     RETURNING id INTO p_project_id;
     EXCEPTION WHEN unique_violation THEN
-        RAISE EXCEPTION ''A project with the provided ID already exists.'';
+        RAISE EXCEPTION ''A project with the provided ID already exists.''; 
     END;
 ';

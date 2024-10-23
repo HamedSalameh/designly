@@ -45,7 +45,7 @@ namespace Projects.Domain
 
         public bool IsCompleted => CompletedAt.HasValue && Status == ProjectStatus.Completed;
 
-        public Property Property { get; private set; }
+        public Property? Property { get; private set; }
 
         /// <summary>
         /// List of task items for the project, general tasks
@@ -67,7 +67,7 @@ namespace Projects.Domain
             Deadline = null;
             CompletedAt = null;
             Status = ProjectStatus.NotStarted;
-            Address = new Address(Consts.Strings.ValueNotSet);
+            Property = null;
         }
 
         // Used by Dapper for automatic object initialization
@@ -81,7 +81,7 @@ namespace Projects.Domain
             Deadline = null;
             CompletedAt = null;
             TaskItems = [];
-            Address = new Address(Consts.Strings.ValueNotSet);
+            Property = null;
         }
 
         public void SetId(ProjectId projectId)
@@ -154,14 +154,14 @@ namespace Projects.Domain
             Deadline = deadline;
         }
 
-        public void SetAddress(Address address)
+        public void AddProperty(Property property)
         {
-            if (address == null)
+            if (property == null)
             {
-                throw new ArgumentNullException(nameof(address));
+                throw new ArgumentNullException(nameof(property));
             }
 
-            Address = address;
+            Property = property;
         }
 
         // Out of scope for MVP

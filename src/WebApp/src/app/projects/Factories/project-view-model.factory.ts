@@ -2,7 +2,6 @@ import { Member } from "src/app/account/models/member.model";
 import { Client } from "src/app/clients/models/client.model";
 import { Project } from "../models/project.model";
 import { ProjectViewModel } from "../models/ProjectViewModel";
-import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { combineLatest, map, Observable, of, switchMap } from "rxjs";
 import { getProjectById } from "../projects-state/projects.selectors";
@@ -26,7 +25,7 @@ export function mapProjectToViewModel(project: Project, clients: Client[], users
         ProjectLeadId: project.ProjectLeadId.Id,
         ProjectLead: `${projectLead?.firstName} ${projectLead?.lastName}`,
         Client: `${client?.FirstName} ${client?.FamilyName}`,
-        Address: project.Address
+        Property: project.Property || null
     };
 }
 

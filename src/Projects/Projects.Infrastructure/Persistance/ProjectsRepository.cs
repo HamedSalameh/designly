@@ -2,6 +2,7 @@
 using Designly.Shared.ConnectionProviders;
 using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Npgsql;
 using Polly.Wrap;
 using Projects.Domain;
@@ -97,6 +98,11 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_deadline", basicProject.Deadline, DbType.DateTime);
             dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.DateTime);
             dynamicParameters.Add("p_status", basicProject.Status, DbType.Int16);
+
+            // Serialize the Property object to JSON
+            var serializedProperty = JsonConvert.SerializeObject(basicProject.Property);
+
+            dynamicParameters.Add("p_property", serializedProperty, DbType.String);
 
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
             await policy.ExecuteAsync(async () =>

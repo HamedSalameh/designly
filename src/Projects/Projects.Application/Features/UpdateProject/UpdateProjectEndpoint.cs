@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Identity;
+using Designly.Shared.ValueObjects;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
+using Projects.Domain;
 
 namespace Projects.Application.Features.UpdateProject
 {
@@ -40,6 +42,16 @@ namespace Projects.Application.Features.UpdateProject
             }
 
             var tenantId = tenantProvider.GetTenantId();
+
+            TypeAdapterConfig<PropertyDto, Property>.NewConfig()
+                .ConstructUsing(dto => new Property(
+                    Guid.NewGuid(),
+                    dto.Name ?? "Default Name",
+                    new Address(dto.Address.City, dto.Address.Street, dto.Address.BuildingNumber, dto.Address.AddressLines),
+                    new List<Floor>()
+                ))
+                .Map(dest => dest.Floors, src => src.Floors)
+                .Map(dest => dest.TotalArea, src => src.TotalArea);
 
             var updateProjectCommand = updateProjectRequestDto.Adapt<UpdateProjectCommand>();
             updateProjectCommand.TenantId = tenantId;
