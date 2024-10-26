@@ -3,7 +3,7 @@ using Designly.Shared.ValueObjects;
 
 namespace Projects.Domain
 {
-    public class Property : Entity
+    public class Property
     {
         public string? Name { get; set; }
         public PropertyType PropertyType { get; set; } = PropertyType.Unset;
@@ -12,7 +12,7 @@ namespace Projects.Domain
         public int NumberOfFloors => Floors?.Count ?? 0;
         public double TotalArea { get; set; }
 
-        public Property(Guid TenantId, string Name, Address Address, List<Floor> Floors) : base(TenantId)
+        public Property(Guid TenantId, string Name, Address Address, List<Floor> Floors)
         {
             this.Name = Name;
             this.Address = Address ?? throw new ArgumentNullException(nameof(Address));
@@ -21,7 +21,7 @@ namespace Projects.Domain
         }
 
         // Used by Dapper for automatic object initialization
-        protected Property() : base()
+        protected Property()
         {
             Name = Consts.Strings.ValueNotSet;
             Address = new Address(Consts.Strings.ValueNotSet);

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Newtonsoft.Json;
 using Projects.Domain.StonglyTyped;
 using System.Data;
 

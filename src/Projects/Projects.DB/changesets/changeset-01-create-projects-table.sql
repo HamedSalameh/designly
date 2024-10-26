@@ -18,7 +18,7 @@ CREATE TABLE public.projects (
     completed_at DATE,
     status INT NOT NULL,
     -- JSONB column to store property objecct
-    property JSONB,
+    property JSON,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     -- Constraints --

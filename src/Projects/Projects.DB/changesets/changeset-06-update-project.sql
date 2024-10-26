@@ -14,21 +14,21 @@ CREATE OR REPLACE PROCEDURE update_project(
     p_deadline DATE,
     p_completed_at DATE,
     p_status INT,
-    p_property JSONB)
-LANGUAGE plpgsql AS '
-    BEGIN
-        UPDATE public.projects
-        SET
-            name = p_name,
-            description = p_description,
-            project_lead_id = p_project_lead_id,
-            client_id = p_client_id,
-            start_date = p_start_date,
-            deadline = p_deadline,
-            completed_at = p_completed_at,
-            status = p_status,
-            property = p_property,
-            modified_at = NOW()
-        WHERE tenant_id = p_tenant_id AND id = p_id;
-    END;
-';
+    p_property JSON)
+LANGUAGE plpgsql AS $$
+BEGIN
+    UPDATE public.projects
+    SET
+        name = COALESCE(p_name, name),
+        description = COALESCE(p_description, description),
+        project_lead_id = COALESCE(p_project_lead_id, project_lead_id),
+        client_id = COALESCE(p_client_id, client_id),
+        start_date = COALESCE(p_start_date, start_date),
+        deadline = COALESCE(p_deadline, deadline),
+        completed_at = COALESCE(p_completed_at, completed_at),
+        status = COALESCE(p_status, status),
+        property = COALESCE(p_property, property),
+        modified_at = NOW()
+    WHERE tenant_id = p_tenant_id AND id = p_id;
+END;
+$$;

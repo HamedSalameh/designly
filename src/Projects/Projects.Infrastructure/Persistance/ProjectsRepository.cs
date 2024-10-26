@@ -4,6 +4,7 @@ using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Npgsql;
+using NpgsqlTypes;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Domain.StonglyTyped;
@@ -36,6 +37,7 @@ namespace Projects.Infrastructure.Persistance
             SqlMapper.AddTypeHandler(new DapperTaskItemIdTypeHandler());
             SqlMapper.AddTypeHandler(new DapperProjectLeadIdTypeHandler());
             SqlMapper.AddTypeHandler(new DapperClientIdTypeHandler());
+            SqlMapper.AddTypeHandler(new PropertyTypeHandler());
         }
 
         public async Task<BasicProject?> GetByIdAsync(ProjectId projectId, TenantId tenantId, CancellationToken cancellationToken = default)
@@ -79,6 +81,9 @@ namespace Projects.Infrastructure.Persistance
             });
         }
 
+        // UpdateProjectAsync
+        // This method uses Npgsql to update a project in the database, by applying the parameters and using a stored procedure
+        // The method uses Polly to handle exceptions and retries
         public async Task UpdateAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {
             if (basicProject is null)
@@ -87,35 +92,34 @@ namespace Projects.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(basicProject));
             }
 
-            var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("p_id", basicProject.Id, DbType.Guid);
-            dynamicParameters.Add("p_tenant_id", basicProject.TenantId.Id, DbType.Guid);
-            dynamicParameters.Add("p_name", basicProject.Name, DbType.String);
-            dynamicParameters.Add("p_description", basicProject.Description, DbType.String);
-            dynamicParameters.Add("p_project_lead_id", basicProject.ProjectLeadId.Id, DbType.Guid);
-            dynamicParameters.Add("p_client_id", basicProject.ClientId.Id, DbType.Guid);
-            dynamicParameters.Add("p_start_date", basicProject.StartDate); // Assuming StartDate is of type DateOnly
-            dynamicParameters.Add("p_deadline", basicProject.Deadline); // Assuming Deadline is of type DateOnly
-            dynamicParameters.Add("p_completed_at", basicProject.CompletedAt); // Handle nullable DateOnly
-            dynamicParameters.Add("p_status", basicProject.Status, DbType.Int32); // Ensure the status is of the correct type
-
-            // Serialize the Property object to JSON
-            var serializedProperty = JsonConvert.SerializeObject(basicProject.Property);
-            dynamicParameters.Add("p_property", serializedProperty, DbType.Object); // JSON is typically treated as an object
-
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await connection.OpenAsync(cancellationToken);
             await policy.ExecuteAsync(async () =>
             {
-                await connection.OpenAsync(cancellationToken);
-                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+                await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
                 try
                 {
-                    await connection.ExecuteAsync(
-                        sql: "update_project",
-                        param: dynamicParameters,
-                        commandType: CommandType.StoredProcedure,
-                        transaction: transaction
-                    );
+                    await using var command = connection.CreateCommand();
+                    command.Transaction = transaction;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "update_project";
+
+                    command.Parameters.AddWithValue("p_id", NpgsqlDbType.Uuid, basicProject.Id);
+                    command.Parameters.AddWithValue("p_tenant_id", NpgsqlDbType.Uuid, basicProject.TenantId.Id);
+                    command.Parameters.AddWithValue("p_name", NpgsqlDbType.Varchar, basicProject.Name);
+                    command.Parameters.AddWithValue("p_description", NpgsqlDbType.Varchar, basicProject.Description ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("p_project_lead_id", NpgsqlDbType.Uuid, basicProject.ProjectLeadId.Id);
+                    command.Parameters.AddWithValue("p_client_id", NpgsqlDbType.Uuid, basicProject.ClientId.Id);
+                    command.Parameters.AddWithValue("p_start_date", NpgsqlDbType.Date, basicProject.StartDate ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("p_deadline", NpgsqlDbType.Date, basicProject.Deadline ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("p_completed_at", NpgsqlDbType.Date, basicProject.CompletedAt ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("p_status", NpgsqlDbType.Integer, (int)basicProject.Status);
+
+                    // Serialize the Property object to JSON and add as a string parameter
+                    var serializedProperty = JsonConvert.SerializeObject(basicProject.Property);
+                    command.Parameters.AddWithValue("p_property", NpgsqlDbType.Json, serializedProperty ?? (object)DBNull.Value);
+
+                    await command.ExecuteNonQueryAsync(cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                 }
                 catch (Exception exception)
@@ -124,9 +128,9 @@ namespace Projects.Infrastructure.Persistance
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
-            });
+            }
+            );
         }
-
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {
@@ -150,9 +154,9 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await connection.OpenAsync(cancellationToken);
             return await policy.ExecuteAsync(async () =>
             {
-                await connection.OpenAsync(cancellationToken);
                 using var transaction = await connection.BeginTransactionAsync();
                 try
                 {
@@ -230,25 +234,28 @@ namespace Projects.Infrastructure.Persistance
 
             var sqlQuery = sqlResult.Sql;
             var parameters = sqlResult.NamedBindings;
-            
+
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
+            await connection.OpenAsync(cancellationToken); // Open the connection outside the retry block
+
             return await policy.ExecuteAsync(async (ct) =>
             {
                 try
                 {
-                    await connection.OpenAsync(ct);
-
-                    var results = await connection.QueryAsync<BasicProject>(sqlQuery,
-                    parameters,
-                    commandType: CommandType.Text);
+                    var results = await connection.QueryAsync<BasicProject>(
+                        sql: sqlQuery,
+                        param: parameters,
+                        commandType: CommandType.Text
+                    );
                     return results ?? Enumerable.Empty<BasicProject>();
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "Could not retrieve projects search results due to error : {exception.Message}", exception.Message);
+                    _logger.LogError(exception, "Could not retrieve projects search results due to error: {Message}", exception.Message);
                     throw;
                 }
             }, cancellationToken);
         }
+
     }
 }
