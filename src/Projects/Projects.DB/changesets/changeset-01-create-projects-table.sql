@@ -17,8 +17,7 @@ CREATE TABLE public.projects (
     deadline DATE,
     completed_at DATE,
     status INT NOT NULL,
-    -- JSONB column to store property objecct
-    property JSON,
+    property_id UUID,  -- This is a reference to the property table
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     -- Constraints --

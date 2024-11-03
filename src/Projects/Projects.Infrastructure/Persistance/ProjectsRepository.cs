@@ -101,23 +101,24 @@ namespace Projects.Infrastructure.Persistance
                 {
                     await using var command = connection.CreateCommand();
                     command.Transaction = transaction;
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandText = "update_project";
+                    command.CommandType = CommandType.StoredProcedure; // Change to CommandType.StoredProcedure for stored procedures
+                    command.CommandText = "update_project"; // Ensure this matches your stored procedure name
 
+                    // Map parameters to match the stored procedure
                     command.Parameters.AddWithValue("p_id", NpgsqlDbType.Uuid, basicProject.Id);
                     command.Parameters.AddWithValue("p_tenant_id", NpgsqlDbType.Uuid, basicProject.TenantId.Id);
                     command.Parameters.AddWithValue("p_name", NpgsqlDbType.Varchar, basicProject.Name);
                     command.Parameters.AddWithValue("p_description", NpgsqlDbType.Varchar, basicProject.Description ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("p_project_lead_id", NpgsqlDbType.Uuid, basicProject.ProjectLeadId.Id);
                     command.Parameters.AddWithValue("p_client_id", NpgsqlDbType.Uuid, basicProject.ClientId.Id);
+                    command.Parameters.AddWithValue("p_status", NpgsqlDbType.Integer, (int)basicProject.Status);
                     command.Parameters.AddWithValue("p_start_date", NpgsqlDbType.Date, basicProject.StartDate ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("p_deadline", NpgsqlDbType.Date, basicProject.Deadline ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("p_completed_at", NpgsqlDbType.Date, basicProject.CompletedAt ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("p_status", NpgsqlDbType.Integer, (int)basicProject.Status);
+                    command.Parameters.AddWithValue("p_property_id", NpgsqlDbType.Uuid, basicProject.PropertyId ?? (object)DBNull.Value); // Use the property ID or DBNull
 
-                    // Serialize the Property object to JSON and add as a string parameter
-                    var serializedProperty = JsonConvert.SerializeObject(basicProject.Property);
-                    command.Parameters.AddWithValue("p_property", NpgsqlDbType.Json, serializedProperty ?? (object)DBNull.Value);
+                    // Add modified_at parameter
+                    command.Parameters.AddWithValue("p_modified_at", NpgsqlDbType.TimestampTz, DateTime.UtcNow); // or use a specific DateTime if needed
 
                     await command.ExecuteNonQueryAsync(cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
@@ -128,9 +129,9 @@ namespace Projects.Infrastructure.Persistance
                     await transaction.RollbackAsync(cancellationToken);
                     throw;
                 }
-            }
-            );
+            });
         }
+
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {

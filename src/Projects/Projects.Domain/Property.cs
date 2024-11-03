@@ -3,7 +3,7 @@ using Designly.Shared.ValueObjects;
 
 namespace Projects.Domain
 {
-    public class Property
+    public class Property : Entity
     {
         public string? Name { get; set; }
         public PropertyType PropertyType { get; set; } = PropertyType.Unset;

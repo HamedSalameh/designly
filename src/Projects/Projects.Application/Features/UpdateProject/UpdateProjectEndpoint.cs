@@ -56,11 +56,7 @@ namespace Projects.Application.Features.UpdateProject
                 StartDate = updateProjectRequestDto.StartDate,
                 Deadline = updateProjectRequestDto.Deadline,
                 CompletedAt = updateProjectRequestDto.CompletedAt,
-                Property = updateProjectRequestDto.Property != null ?
-                new Property(tenantId,
-                        updateProjectRequestDto.Property.Name!,
-                        updateProjectRequestDto.Property.Address.Adapt<Address>(),
-                        updateProjectRequestDto.Property.Floors ?? new List<Floor>()) : null
+                PropertyId = updateProjectRequestDto.PropertyId
             };
 
             var updatedProjectId = await sender.Send(updateProjectCommand, cancellationToken);
