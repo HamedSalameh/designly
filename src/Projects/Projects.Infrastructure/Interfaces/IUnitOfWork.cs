@@ -4,5 +4,6 @@
     {
         IProjectsRepository ProjectsRepository { get; }
         ITaskItemsRepository TaskItemsRepository { get; }
+        IPropertiesRepository PropertiesRepository { get; }
     }
 }

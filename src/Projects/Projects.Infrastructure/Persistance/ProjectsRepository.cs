@@ -2,13 +2,11 @@
 using Designly.Shared.ConnectionProviders;
 using Designly.Shared.Polly;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
 using Polly.Wrap;
 using Projects.Domain;
 using Projects.Domain.StonglyTyped;
-using Projects.Domain.Tasks;
 using Projects.Infrastructure.Interfaces;
 using SqlKata;
 using System.Data;
@@ -131,7 +129,6 @@ namespace Projects.Infrastructure.Persistance
                 }
             });
         }
-
 
         public async Task<Guid> CreateBasicProjectAsync(BasicProject basicProject, CancellationToken cancellationToken = default)
         {

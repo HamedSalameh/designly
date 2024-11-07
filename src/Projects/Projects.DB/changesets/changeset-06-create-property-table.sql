@@ -14,7 +14,7 @@ BEGIN
     END IF;
 END$$;
 
-CREATE TABLE public.property (
+CREATE TABLE public.properties (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     tenant_id UUID NOT NULL,
     name VARCHAR(255),
@@ -27,8 +27,8 @@ CREATE TABLE public.property (
     number_of_floors INT GENERATED ALWAYS AS (jsonb_array_length(floors)) STORED,  -- Calculate from floors
     total_area DOUBLE PRECISION NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    modified_at TIMESTAMP WITH TIME ZONE DEFAULT now() ON UPDATE CURRENT_TIMESTAMP
+    modified_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
 -- Index for faster lookup by tenant_id
-CREATE INDEX idx_property_tenant_id ON public.property (tenant_id);
+CREATE INDEX idx_properties_tenant_id ON public.properties (tenant_id);

@@ -21,6 +21,7 @@ namespace Projects.Infrastructure
 
             services.AddScoped<IProjectsRepository, ProjectsRepository>();
             services.AddScoped<ITaskItemsRepository, TaskItemsRepository>();
+            services.AddScoped<IPropertiesRepository, PropertiesRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
