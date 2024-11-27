@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
+using Projects.Application.Features.CreateOrUpdateProperty;
 using Projects.Application.Features.CreateProject;
 using Projects.Application.Features.CreateTask;
 using Projects.Application.Features.DeleteProject;
@@ -105,6 +106,11 @@ static void MapEndoints(WebApplication app)
         .RequireAuthorization()
         .WithApiVersionSet(versionSet);
 
+    var realEstatePropertyRouteGroup = app
+        .MapGroup("api/v{version:apiVersion}/realestate")
+        .RequireAuthorization()
+        .WithApiVersionSet(versionSet);
+
     projectsRouteGroup.MapCreateFeature();
     projectsRouteGroup.MapDeleteFeature("{projectId}");
     projectsRouteGroup.MapUpdateFeature("{projectId}");
@@ -114,6 +120,9 @@ static void MapEndoints(WebApplication app)
     projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");
     projectsRouteGroup.MapUpdateTaskFeature("{projectId}/tasks/{taskId}");
     projectsRouteGroup.MapSearchTasksEndpoint("{projectId}/tasks/search");
+
+    // Property management endpoints
+    realEstatePropertyRouteGroup.MapCreateOrUpdatePropertyEndpoint("properties");
 }
 
 static void ConfigureVersioning(WebApplicationBuilder builder)

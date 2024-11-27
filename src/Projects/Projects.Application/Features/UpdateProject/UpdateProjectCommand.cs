@@ -17,6 +17,5 @@ namespace Projects.Application.Features.UpdateProject
         public DateOnly? Deadline { get; set; }
         public DateOnly? CompletedAt { get; set; }
         public ProjectStatus Status { get; set; }
-        public Guid? PropertyId { get; set; }
     }
 }

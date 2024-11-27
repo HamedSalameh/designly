@@ -12,11 +12,12 @@ namespace Projects.Domain
         public int NumberOfFloors => Floors?.Count ?? 0;
         public double TotalArea { get; set; }
 
-        public Property(Guid TenantId, string Name, Address Address, List<Floor> Floors)
+        public Property(Guid TenantId, string Name, PropertyType PropertyType, Address Address, List<Floor> Floors) : base(TenantId)
         {
             this.Name = Name;
             this.Address = Address ?? throw new ArgumentNullException(nameof(Address));
             this.Floors = Floors;
+            this.PropertyType = PropertyType;
             TotalArea = 0;
         }
 

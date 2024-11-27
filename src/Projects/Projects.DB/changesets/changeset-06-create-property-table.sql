@@ -18,11 +18,8 @@ CREATE TABLE public.properties (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     tenant_id UUID NOT NULL,
     name VARCHAR(255),
-    property_type propertytype NOT NULL DEFAULT 'Unset',
-    city VARCHAR(255) NOT NULL,
-    street VARCHAR(255) NOT NULL,
-    building_number VARCHAR(255) NOT NULL,
-    address_lines JSONB,
+    property_type INT NOT NULL DEFAULT 0,
+    address JSONB,
     floors JSONB,
     number_of_floors INT GENERATED ALWAYS AS (jsonb_array_length(floors)) STORED,  -- Calculate from floors
     total_area DOUBLE PRECISION NOT NULL DEFAULT 0,

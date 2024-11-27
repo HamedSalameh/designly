@@ -58,17 +58,6 @@ namespace Projects.Application.Features.UpdateProject
                 return new Result<BasicProject>(projectLeadValidationResult);
             }
 
-            // Step 3: Validate the property by Id
-            if (request.PropertyId.HasValue)
-            {
-                var propertyValidationResult = await _businessLogicValidator.ValidateAsync(new PropertyValidationRequest(request.PropertyId.Value, request.TenantId), cancellationToken);
-                if (propertyValidationResult != null)
-                {
-                    _logger.LogInformation("Property validation failed for {PropertyId} under account {TenantId}", request.PropertyId, request.TenantId);
-                    return new Result<BasicProject>(propertyValidationResult);
-                }
-            }
-
             var projectValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateProjectValidationRequest(request.TenantId, request.ProjectId), cancellationToken);
             if (projectValidationResult != null)
             {
@@ -85,7 +74,6 @@ namespace Projects.Application.Features.UpdateProject
                     .WithStartDate(request.StartDate)
                     .WithDeadline(request.Deadline)
                     .WithCompletedAt(request.CompletedAt)
-                    .WithProperty(request.PropertyId)
                     .BuildBasicProject();
 
             // Since this is an update flow of an existing project we need to set the id
