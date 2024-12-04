@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<IHttpClientProvider, HttpClientProvider>();
         services.AddScoped<IProjectBuilder, ProjectBuilder>();
         services.AddScoped<ITaskItemBuilder, TaskItemBuilder>();
+        services.AddScoped<IPropertyBuilder, PropertyBuilder>();
         // Add SqlKata Compiler
         services.AddScoped<Compiler, PostgresCompiler>();
         services.AddScoped<IQueryBuilder, FilterQueryBuilder>();

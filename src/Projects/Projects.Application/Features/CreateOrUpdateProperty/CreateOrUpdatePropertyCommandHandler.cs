@@ -2,23 +2,21 @@
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Projects.Application.Builders;
 using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects.Application.Features.CreateOrUpdateProperty
 {
     public class CreateOrUpdatePropertyCommandHandler(
         IUnitOfWork unitOfWork,
+        IPropertyBuilder propertyBuilder,
         ILogger<CreateOrUpdatePropertyCommandHandler> logger) 
         : IRequestHandler<CreateOrUpdatePropertyCommand, Result<Property>>
     {
         private readonly ILogger<CreateOrUpdatePropertyCommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        private readonly IPropertyBuilder _propertyBuilder = propertyBuilder ?? throw new ArgumentNullException(nameof(propertyBuilder));
 
         public async Task<Result<Property>> Handle(CreateOrUpdatePropertyCommand request, CancellationToken cancellationToken)
         {
@@ -26,12 +24,13 @@ namespace Projects.Application.Features.CreateOrUpdateProperty
             {
                 _logger.LogDebug("Handling request {CreateOrUpdatePropertyCommand} for {Name}", nameof(CreateOrUpdatePropertyCommandHandler), request.Name);
             }
-            
-            // This endpoint will either create a new property or update an existing one
-            // If the property does not exist, it will be created
-            // If the property exists, it will be updated
-                        
-            var property = new Property(request.TenantId, request.Name ?? "N/A", (PropertyType)request.PropertyType, request.Address, request.Floors);
+            var property = _propertyBuilder.WithId(request.Id)
+                .WithName(request.Name)
+                .WithPropertyType((PropertyType)request.PropertyType)
+                .WithAddress(request.Address)
+                .WithFloors(request.Floors)
+                .WithTotalArea(request.TotalArea)
+                .BuildProperty();
             
             var propertyId = await _unitOfWork.PropertiesRepository.CreatePropertyAsync(property, cancellationToken);
 

@@ -60,11 +60,12 @@ namespace Projects.Infrastructure.Persistance
 
             await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
 
-            var command = new NpgsqlCommand("create_property", connection)
+            var command = new NpgsqlCommand("create_or_update_property", connection)
             {
                 CommandType = CommandType.StoredProcedure,
                 Parameters =
                 {
+                    new("p_id", property.Id),
                     new("p_tenant_id", property.TenantId.Id),
                     new("p_name", property.Name),
                     new("p_property_type", (int) property.PropertyType),

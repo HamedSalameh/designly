@@ -46,13 +46,16 @@ namespace Projects.Application.Features.CreateOrUpdateProperty
 
             var createOrUpdatePropertyCommand = new CreateOrUpdatePropertyCommand()
             {
+                Id = createOrUpdatePropertyRequestDto.Id,
                 Name = createOrUpdatePropertyRequestDto.Name,
                 Address = new Address(
                     createOrUpdatePropertyRequestDto.Address.City, 
                     createOrUpdatePropertyRequestDto.Address.Street,
                     createOrUpdatePropertyRequestDto.Address.BuildingNumber,
                     createOrUpdatePropertyRequestDto.Address.AddressLines),
-                Floors = createOrUpdatePropertyRequestDto.Floors?.Select(f => new Floor(f.FloorNumber, f.Area)).ToList()
+                Floors = createOrUpdatePropertyRequestDto.Floors?.Select(f => new Floor(f.FloorNumber, f.Area)).ToList(),
+                PropertyType = createOrUpdatePropertyRequestDto.PropertyType,
+                TotalArea = createOrUpdatePropertyRequestDto.TotalArea
             };
             createOrUpdatePropertyCommand.TenantId = tenantId;
 
