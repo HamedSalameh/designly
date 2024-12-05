@@ -21,10 +21,6 @@ namespace Projects.Application.Builders
         private List<Floor>? _floors;
         private double _totalArea;
 
-        public PropertyBuilder()
-        {
-        }
-
         public Property BuildProperty()
         {
             if (_address is null)

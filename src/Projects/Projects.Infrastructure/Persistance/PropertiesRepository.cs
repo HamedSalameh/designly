@@ -105,7 +105,7 @@ namespace Projects.Infrastructure.Persistance
             }
         }
 
-        public Task<bool> PropertyExistsAsync(Guid propertyId, TenantId tenantId, CancellationToken cancellationToken = default)
+        public async Task<bool> PropertyExistsAsync(Guid propertyId, TenantId tenantId, CancellationToken cancellationToken = default)
         {
             if (propertyId == Guid.Empty)
             {
@@ -123,12 +123,49 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_id", propertyId);
             dynamicParameters.Add("p_tenant_id", tenantId.Id);
 
-            return policy.ExecuteAsync(async () =>
+            return await policy.ExecuteAsync(async () =>
             {
                 await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);
                 await connection.OpenAsync(cancellationToken);
                 return await connection.ExecuteScalarAsync<bool>(sqlScript, dynamicParameters);
             });
+        }
+
+        public async Task DeleteAsync(Guid propertyId, TenantId tenantId, CancellationToken cancellationToken = default)
+        {
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Invalid value for property Id");
+            }
+
+            if (tenantId == TenantId.Empty)
+            {
+                throw new ArgumentException("Invalid value for tenant Id");
+            }
+
+            var sqlScript = "delete from properties where id=@p_id and tenant_id=@p_tenant_id";
+
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("p_id", propertyId);
+            dynamicParameters.Add("p_tenant_id", tenantId.Id);
+
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using var transaction = connection.BeginTransaction();
+
+                try
+                {
+                    await connection.ExecuteAsync(sqlScript, dynamicParameters, transaction);
+                    transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not delete property due to error: {}", exception.Message);
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }
