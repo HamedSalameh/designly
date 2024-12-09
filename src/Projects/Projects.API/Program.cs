@@ -5,17 +5,9 @@ using Designly.Base.Exceptions;
 using Designly.Configuration;
 using Designly.Shared.Extensions;
 using Designly.Shared.Middleware;
-using Microsoft.IdentityModel.Logging;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Net.Http.Headers;
 using Projects.Application;
-using Projects.Application.Features.CreateProject;
-using Projects.Application.Features.CreateTask;
-using Projects.Application.Features.DeleteProject;
-using Projects.Application.Features.DeleteTask;
-using Projects.Application.Features.SearchProjects;
-using Projects.Application.Features.SearchTasks;
-using Projects.Application.Features.UpdateProject;
-using Projects.Application.Features.UpdateTask;
 using Serilog;
 using System.Net.Http.Headers;
 using System.Net.Mime;
@@ -63,6 +55,10 @@ AttachNamedHttpClient<ClientsServiceConfiguration>(builder, ClientsServiceConfig
 builder.Services.Configure<OAuth2ServiceProviderConfiguration>(configuration.GetSection(nameof(OAuth2ServiceProviderConfiguration)));
 
 builder.Services.AddApplication(configuration);
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = null;
+});
 
 var app = builder.Build();
 
@@ -75,7 +71,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 
-MapEndoints(app);
+EndpointsExtentions.MapEndoints(app);
 
 app.UseHttpsRedirection();
 
@@ -86,30 +82,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
-static void MapEndoints(WebApplication app)
-{
-    var versionSet = app.NewApiVersionSet()
-        .HasApiVersion(new Asp.Versioning.ApiVersion(1))
-        .ReportApiVersions()
-        .Build();
-
-    var projectsRouteGroup = app
-        .MapGroup("api/v{version:apiVersion}/projects")
-        .RequireAuthorization()
-        .WithApiVersionSet(versionSet);
-
-    projectsRouteGroup.MapCreateFeature();
-    projectsRouteGroup.MapDeleteFeature("{projectId}");
-    projectsRouteGroup.MapUpdateFeature("{projectId}");
-    projectsRouteGroup.MapSearchFeature("search");
-
-    projectsRouteGroup.MapCreateTaskFeature("tasks");
-    projectsRouteGroup.MapDeleteTaskFeature("{projectId}/tasks/{taskId}");
-    projectsRouteGroup.MapUpdateTaskFeature("{projectId}/tasks/{taskId}");
-    projectsRouteGroup.MapSearchTasksEndpoint("tasks/search");
-}
 
 static void ConfigureVersioning(WebApplicationBuilder builder)
 {

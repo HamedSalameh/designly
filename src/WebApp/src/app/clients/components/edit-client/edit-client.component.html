@@ -1,12 +1,12 @@
 <div class="a-card">
   <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
-      <div class="card-header form-row m-bottom-3">
-        <div class="card-title">
+      <div class="a-card-header form-row m-bottom-3">
+        <div class="a-card-title">
           <label *ngIf="this.selectedClient?.Id !== this.newClientDraftId" class="section-title"
             >{{ this.selectedClient?.FirstName }}
             {{ this.selectedClient?.FamilyName }}
           </label>
-          <label *ngIf="this.selectedClient?.Id === this.newClientDraftId"> {{ localizedNewClient }} </label>
+          <label *ngIf="this.selectedClient?.Id === this.newClientDraftId" class="section-title"> {{ localizedNewClient }} </label>
         </div>
     </div>
 
@@ -20,7 +20,6 @@
                 formControlName="FirstName"
                 type="text"
                 class="a-input"
-                placeholder="{{ localizedFirstName }}"
                 [ngClass]="{
                   'is-invalid':
                     ClientInfo.get('BasicInfo.FirstName')?.invalid &&

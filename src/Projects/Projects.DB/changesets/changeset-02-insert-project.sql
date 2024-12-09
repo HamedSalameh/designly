@@ -1,7 +1,5 @@
---liquibase formatted sql
-
---changeset Hamed.Salameh:insert_project_procedure
---comment: A stored procedure to insert a project.
+--changeset Hamed.Salameh:insert_project_procedure_v2
+--comment: A stored procedure to insert a project with property stored as JSON.
 
 CREATE OR REPLACE PROCEDURE insert_project(
     p_tenant_id UUID,
@@ -44,6 +42,6 @@ LANGUAGE plpgsql AS '
         )
     RETURNING id INTO p_project_id;
     EXCEPTION WHEN unique_violation THEN
-        RAISE EXCEPTION ''A project with the provided ID already exists.'';
+        RAISE EXCEPTION ''A project with the provided ID already exists.''; 
     END;
 ';

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Projects.Domain
+﻿namespace Projects.Domain
 {
     public static class Constants
     {
@@ -14,5 +12,7 @@ namespace Projects.Domain
         public static readonly ushort SearchValueMaxLength = 100;
         public static readonly ushort OperatorMaxLength = 10;
         public static readonly ushort FieldMaxLength = 50;
+
+        
     }
 }

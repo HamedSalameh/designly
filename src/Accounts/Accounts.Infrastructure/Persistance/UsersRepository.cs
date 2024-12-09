@@ -3,9 +3,12 @@ using Accounts.Infrastructure.Interfaces;
 using Accounts.Infrastructure.Persistance.Configuration;
 using Dapper;
 using Designly.Shared.Polly;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using Polly.Wrap;
+using SqlKata;
 using static Accounts.Domain.Consts;
 
 namespace Accounts.Infrastructure.Persistance
@@ -142,6 +145,51 @@ namespace Accounts.Infrastructure.Persistance
             }
 
             return user;
+        }
+
+        public async Task<IEnumerable<User>> GetUsersAsync(Guid tenantId, SqlResult sqlResult, CancellationToken cancellationToken = default)
+        {
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Getting users for tenant {TenantId}", tenantId);
+            }
+
+            ArgumentNullException.ThrowIfNull(sqlResult);
+
+            if (tenantId == Guid.Empty)
+            {
+                _logger.LogError("Provided tenantId is empty");
+                throw new ArgumentNullException(nameof(tenantId));
+            }
+
+            var sqlResultQuery = sqlResult.Sql;
+
+            // extract the parameters from the sql result
+            var parameters = sqlResult.NamedBindings;
+            // we need to convert the parameters to a dictionary so that we can pass them to the FromSqlRaw method
+            var parametersDictionary = parameters.ToDictionary(p => p.Key, p => p.Value);
+
+            // Convert the dictionary to an array of NpgsqlParameter
+            var npgsqlParameters = parametersDictionary
+                .Select(p => new NpgsqlParameter(p.Key, p.Value))
+                .ToArray();
+
+            // activate raw sql using ef core
+            var query = _context.Users
+                .FromSqlRaw(sqlResultQuery, npgsqlParameters)
+                .Include(u => u.Account)
+                .Include(u => u.Teams)
+                .AsNoTracking();
+
+
+            var users = await query.ToListAsync(cancellationToken);
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Got users for tenant {TenantId} : {Users}", tenantId, users);
+            }
+
+            return users;
         }
     }
 }

@@ -1,6 +1,8 @@
 import { EntityState, createEntityAdapter } from "@ngrx/entity";
 import { Client } from "src/app/clients/models/client.model";
 
+export const CLIENTS_STATE_NAME = 'clients';
+
 export interface IClientState extends EntityState<Client> {
   selectedClientId: string | null;
   editMode: boolean;
@@ -17,13 +19,3 @@ export const InitialClientsState: IClientState = ClientsAdapter.getInitialState(
   editMode: false,
   selectedClientModel: null,
 });
-
-// export const InitialClientsState: IClientState = {
-//   selectedClientId: null,
-//   editMode: false,
-//   //draftEntity: null,
-//   selectedClientModel: null,
-// };
-
-
-// refactor using NGRX Entity

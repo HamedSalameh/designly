@@ -17,6 +17,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor.service';
+import { AccountModule } from './account/account.module';
+import { provideRouter } from '@angular/router';
 
 
 @NgModule({
@@ -32,11 +34,14 @@ import { AuthInterceptor } from './core/interceptors/auth-interceptor.service';
     CoreModule,
     
     HomeModule,
+    AccountModule,    // Eager loaded module
     LoginModule,
     ToastrModule.forRoot(),
-    GridModule, PagerModule, StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    GridModule, PagerModule, 
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [  
+    // provide the global error handler
     { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorsInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

@@ -46,7 +46,7 @@
 .modules-block {
     display: flex;
     flex-direction: column;
-    margin-top: 24px;
+    //margin-top: 24px;
 }
 
 span {
@@ -67,9 +67,8 @@ span {
     background-color: transparent;
     border: none;
     
-    height: 4em;
-
     align-items: center;
+    line-height: 40px;
 
     font-family: $font-family;
     font-size: $font-size-medium;

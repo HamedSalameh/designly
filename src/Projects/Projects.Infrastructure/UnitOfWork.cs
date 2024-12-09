@@ -6,11 +6,13 @@ namespace Projects.Infrastructure
     {
         public IProjectsRepository ProjectsRepository { get; }
         public ITaskItemsRepository TaskItemsRepository { get; }
+        public IPropertiesRepository PropertiesRepository { get; }
 
-        public UnitOfWork(IProjectsRepository projectsRepository, ITaskItemsRepository taskItemsRepository)
+        public UnitOfWork(IProjectsRepository projectsRepository, ITaskItemsRepository taskItemsRepository, IPropertiesRepository propertiesRepository)
         {
             ProjectsRepository = projectsRepository ?? throw new ArgumentNullException(nameof(projectsRepository));
             TaskItemsRepository = taskItemsRepository ?? throw new ArgumentNullException(nameof(taskItemsRepository));
+            PropertiesRepository = propertiesRepository ?? throw new ArgumentNullException(nameof(propertiesRepository));
         }
     }
 }

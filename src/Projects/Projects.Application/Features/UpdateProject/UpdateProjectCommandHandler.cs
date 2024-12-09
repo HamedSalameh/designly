@@ -1,8 +1,10 @@
 ﻿using LanguageExt.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Projects.Application.Builders;
 using Projects.Application.LogicValidation;
+using Projects.Application.LogicValidation.Requests;
 using Projects.Domain;
 using Projects.Infrastructure.Interfaces;
 
@@ -15,9 +17,9 @@ namespace Projects.Application.Features.UpdateProject
         private readonly ILogger<UpdateProjectCommandHandler> _logger;
         private readonly IProjectBuilder _projectBuilder;
 
-        public UpdateProjectCommandHandler(ILogger<UpdateProjectCommandHandler> logger, 
-                       IUnitOfWork unitOfWork, 
-                                  IBusinessLogicValidator businessLogicValidator, 
+        public UpdateProjectCommandHandler(ILogger<UpdateProjectCommandHandler> logger,
+                       IUnitOfWork unitOfWork,
+                                  IBusinessLogicValidator businessLogicValidator,
                                              IProjectBuilder projectBuilder)
         {
             ArgumentNullException.ThrowIfNull(logger);
@@ -33,9 +35,27 @@ namespace Projects.Application.Features.UpdateProject
 
         public async Task<Result<BasicProject>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
+            // to un-assign a property, we just the value of property id to null
+
             if (_logger.IsEnabled(LogLevel.Debug))
             {
                 _logger.LogDebug("Handling request {UpdateProjectCommand} for {Name}", nameof(UpdateProjectCommandHandler), request.Name);
+            }
+
+            // Step 1: Validate the customer by Id
+            var clientValidationResult = await _businessLogicValidator.ValidateAsync(new ClientValidationRequest(request.ClientId, request.TenantId), cancellationToken);
+            if (clientValidationResult != null)
+            {
+                _logger.LogInformation("Client validation failed for {ClientId} under account {TenantId}", request.ClientId, request.TenantId);
+                return new Result<BasicProject>(clientValidationResult);
+            }
+
+            // Step 2: Validate the project lead by Id
+            var projectLeadValidationResult = await _businessLogicValidator.ValidateAsync(new ProjectLeadValidationRequest(request.ProjectLeadId, request.TenantId), cancellationToken);
+            if (projectLeadValidationResult != null)
+            {
+                _logger.LogInformation("Project lead validation failed for {ProjectLeadId} under account {TenantId}", request.ProjectLeadId, request.TenantId);
+                return new Result<BasicProject>(projectLeadValidationResult);
             }
 
             var projectValidationResult = await _businessLogicValidator.ValidateAsync(new UpdateProjectValidationRequest(request.TenantId, request.ProjectId), cancellationToken);
@@ -45,7 +65,7 @@ namespace Projects.Application.Features.UpdateProject
                     request.ProjectId, request.TenantId, projectValidationResult);
                 return new Result<BasicProject>(projectValidationResult);
             }
-            
+
             var basicProject = _projectBuilder
                     .WithProjectLead(request.ProjectLeadId)
                     .WithClient(request.ClientId)

@@ -1,4 +1,4 @@
-export interface User {
+export interface AuthenticatedUser {
     name: string;
     given_name: string;
     family_name: string;
@@ -11,7 +11,7 @@ export interface User {
 }
 
 export interface AuthenticationState {
-    User?: User | null;
+User?: AuthenticatedUser | null;
     IdToken: string;
     AccessToken: string;
     RefreshToken: string;

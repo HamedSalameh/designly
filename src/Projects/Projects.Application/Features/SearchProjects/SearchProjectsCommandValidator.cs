@@ -33,7 +33,6 @@ namespace Projects.Application.Features.SearchProjects
                 {
                     context.AddFailure("Filter field is required");
                 }
-
             }
         }
     }

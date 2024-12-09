@@ -15,7 +15,7 @@ namespace Projects.Application.Features.SearchProjects
         public static IEndpointConventionBuilder MapSearchFeature(this IEndpointRouteBuilder endpoints, string pattern)
         {
             var endPoint = endpoints
-                .MapGet(pattern, SearchProjectsEndpointMethodAsync)
+                .MapPost(pattern, SearchProjectsEndpointMethodAsync)
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status500InternalServerError)
                 .Produces(StatusCodes.Status401Unauthorized)
@@ -41,8 +41,10 @@ namespace Projects.Application.Features.SearchProjects
 
             var tenantId = tenantProvider.GetTenantId();
 
-            var searchProjectsCommand = new SearchProjectsCommand();
-            searchProjectsCommand.TenantId = tenantId;
+            var searchProjectsCommand = new SearchProjectsCommand
+            {
+                TenantId = tenantId
+            };
 
             var filterConditions = new List<FilterCondition>();
             foreach (var filter in searchProjectsRequest.filters)

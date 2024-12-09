@@ -1,4 +1,5 @@
 ﻿using Designly.Auth.Identity;
+using Designly.Shared.ValueObjects;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Projects.Application.Extentions;
+using Projects.Domain;
 
 namespace Projects.Application.Features.UpdateProject
 {
@@ -41,9 +43,20 @@ namespace Projects.Application.Features.UpdateProject
 
             var tenantId = tenantProvider.GetTenantId();
 
-            var updateProjectCommand = updateProjectRequestDto.Adapt<UpdateProjectCommand>();
-            updateProjectCommand.TenantId = tenantId;
-            updateProjectCommand.ProjectId = projectId;
+            // Build the command object from the request
+            var updateProjectCommand = new UpdateProjectCommand()
+            {
+                ProjectId = projectId,
+                TenantId = tenantId,
+
+                Name = updateProjectRequestDto.Name,
+                Description = updateProjectRequestDto.Description,
+                ProjectLeadId = updateProjectRequestDto.ProjectLeadId,
+                ClientId = updateProjectRequestDto.ClientId,
+                StartDate = updateProjectRequestDto.StartDate,
+                Deadline = updateProjectRequestDto.Deadline,
+                CompletedAt = updateProjectRequestDto.CompletedAt,
+            };
 
             var updatedProjectId = await sender.Send(updateProjectCommand, cancellationToken);
 

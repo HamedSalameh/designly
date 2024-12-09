@@ -7,6 +7,8 @@ using Accounts.Infrastructure;
 using Accounts.Application.Builders;
 using Designly.Auth.Extentions;
 using Accounts.Application.Behaviors;
+using Designly.Filter;
+using SqlKata.Compilers;
 
 namespace Projects.Application;
 
@@ -21,6 +23,10 @@ public static class DependencyInjection
         services.AddInfrastructureCore(configuration);
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // Add SqlKata Compiler
+        services.AddScoped<Compiler, PostgresCompiler>();
+        services.AddScoped<IQueryBuilder, FilterQueryBuilder>();
 
         // MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

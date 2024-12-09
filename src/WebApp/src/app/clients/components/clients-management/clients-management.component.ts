@@ -14,6 +14,7 @@ import {
   deleteClientRequest,
 } from 'src/app/clients/client-state/clients.actions';
 import {
+  getClientById,
   getSingleClient,
   getViewModeFromState,
 } from 'src/app/clients/client-state/clients.selectors';

@@ -1,59 +1,12 @@
-<ejs-grid
-  [dataSource]="this.data"
-  [searchSettings]="searchOptions"
-  [toolbar]="toolbarOptions"
-  [allowSorting]="true"
-  [allowPaging]='true'
-  
-  [selectionSettings]="selectionOptions"
-  [pageSettings]="pageSettings"
-  [rowHeight]="48"
-
-  (rowSelected)="onRowSelect($event)"
-  (toolbarClick)="toolbarClickHandler($event)"
-  enableRtl="true"
->
+<ejs-grid [dataSource]="this.data" [searchSettings]="searchOptions" [toolbar]="toolbarOptions" [allowSorting]="true"
+  [allowPaging]='true' [detailTemplate]="detailTemplate" [selectionSettings]="selectionOptions"
+  [pageSettings]="pageSettings" [rowHeight]="60" (rowSelected)="onRowSelect($event)"
+  (toolbarClick)="toolbarClickHandler($event)" enableRtl="true">
   <e-columns>
-    <e-column
-      *ngFor="let col of this.cols"
-      [field]="col.field"
-      [headerText]="col.header"
-    >
+    <e-column *ngFor="let col of this.cols" [field]="col.field" [headerText]="col.header" [template]="col.template" >
     </e-column>
   </e-columns>
+
+  <ng-template [ngTemplateOutlet]="detailTemplate" [ngTemplateOutletContext]="{ $implicit: data }"></ng-template>
+
 </ejs-grid>
-
-<!-- <div class="p-fluid m-bottom-1">
-  <form [formGroup]="formGroup">
-      <p-chips formControlName="values" [placeholder]="this.FilterChipsPlaceholder"></p-chips>
-  </form>
-</div>
-
-<p-table
-  #dt1
-  [value]="data"
-  styleClass=""
-  selectionMode="single"
-  [(selection)]="selectedItem"
-  [dataKey]="this.key"
-  [paginator]="true"
-  [rows]="this.defaultRowsPerPage"
-  [rowsPerPageOptions]="this.RowsPerPageOptions"
-  (onRowUnselect)="onRowUnselect($event)"
-  (onRowSelect)="onRowSelect($event)"
-  [scrollable]="true" scrollHeight="80vh"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th *ngFor="let col of cols" [pSortableColumn]="col.field">
-        {{ col.header }}
-        <p-sortIcon [field]="col.field"></p-sortIcon>
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-rowData>
-    <tr [pSelectableRow]="rowData">
-      <td *ngFor="let col of cols">{{ rowData[col.field] }}</td>
-    </tr>
-  </ng-template>
-</p-table> -->

@@ -13,7 +13,7 @@ import { ClientStateReducer } from './client-state/clients.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ClientsEffects } from './client-state/clients.effects';
-import { CLIENTS_STATE_NAME } from './client-state/clients.selectors';
+import { CLIENTS_STATE_NAME } from './client-state/clients.state';
 
 @NgModule({
   declarations: [

@@ -5,25 +5,24 @@ namespace Projects.Domain
 {
     public class Property : Entity
     {
-        public string Name { get; set; }
-        public required Address Address { get; set; }
-        public required List<Floor> Floors { get; set; }
+        public string? Name { get; set; }
+        public PropertyType PropertyType { get; set; } = PropertyType.Unset;
+        public Address Address { get; set; }
+        public List<Floor>? Floors { get; set; } = new List<Floor>();
+        public int NumberOfFloors => Floors?.Count ?? 0;
         public double TotalArea { get; set; }
 
-        public Property(Guid TenantId, string Name, Address Address) : base(TenantId)
+        public Property(Guid TenantId, string? Name, PropertyType PropertyType, Address Address, List<Floor> Floors) : base(TenantId)
         {
-            if (string.IsNullOrEmpty(Name))
-            {
-                throw new ArgumentException($"{nameof(Name)} : must not be null or empty");
-            }
             this.Name = Name;
-            this.Address = Address;
-            Floors = [];
+            this.Address = Address ?? throw new ArgumentNullException(nameof(Address));
+            this.Floors = Floors;
+            this.PropertyType = PropertyType;
             TotalArea = 0;
         }
 
         // Used by Dapper for automatic object initialization
-        protected Property() : base()
+        protected Property()
         {
             Name = Consts.Strings.ValueNotSet;
             Address = new Address(Consts.Strings.ValueNotSet);

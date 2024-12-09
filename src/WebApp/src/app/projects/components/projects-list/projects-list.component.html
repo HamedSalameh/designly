@@ -1,0 +1,11 @@
+<app-table [data]="tableData" [cols]="tableColumns" [toolbarItems]="tableToolbarItems" key="Id">
+
+    <ng-template #projectNameTemplate let-data>
+        <a [routerLink]="['/projects', data.Id]">{{ data.Name }}</a>
+    </ng-template>
+    
+    <ng-template #projectStatusTemplate let-data>
+        <app-status-chip [status]="data.Status"></app-status-chip>
+    </ng-template>
+
+</app-table>

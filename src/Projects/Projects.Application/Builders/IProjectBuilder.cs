@@ -7,10 +7,11 @@ namespace Projects.Application.Builders
         BasicProject BuildBasicProject();
         IProjectBuilder WithClient(Guid clientId);
         IProjectBuilder WithName(string name);
-        IProjectBuilder WithDescription(string description);
+        IProjectBuilder WithDescription(string? description);
         IProjectBuilder WithProjectLead(Guid projectLeadId);
         IProjectBuilder WithStartDate(DateOnly? startDate);
         IProjectBuilder WithDeadline(DateOnly? deadline);
         IProjectBuilder WithCompletedAt(DateOnly? completedAt);
+        IProjectBuilder WithProperty(Guid? propertyId);
     }
 }

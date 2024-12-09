@@ -43,6 +43,8 @@ export class Strings {
 
   // Error messages
   static UnableToLoadClientsList = $localize`:@@Errors.Client.UnableToLoadClients:We were unable to load the clients list. Please try again.`;
+  static UnableToLoadProjectsList = $localize`:@@Errors.Client.UnableToLoadClients:We were unable to load the projects list. Please try again.`;
+  static UnableToLoadAccountUsers = $localize`:@@Errors.Client.UnableToLoadClients:We were unable to load the account users. Please try again.`;
 
   static BadRequest: string = $localize`:@@Errors.BadRequest:Your request is invalid.`;
   static Unauthorized: string = $localize`:@@Errors.Unauthorized:You are not authorized to perform this action.`;

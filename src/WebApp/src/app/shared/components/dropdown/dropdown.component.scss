@@ -1,0 +1,74 @@
+@import "main.scss";
+
+.dropdown-container {
+    font-family: $font-family;
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    box-shadow: $shadow-xs;
+    background-color: white;
+    cursor: pointer;
+
+    &.open {
+        box-shadow: $focus-ring;
+    }
+
+    &-panel {
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-label {
+        height: $font-size-default * 2 + 4;
+        line-height: $font-size-default * 2 + 4;
+        color: $color-v1-black;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-list {
+        background-color: white;
+        border-top: 1px solid $border-color;
+        border-radius: 0 0 $border-radius $border-radius;
+        margin-top: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+
+        li {
+            list-style-type: none;
+            padding: 10px;
+            font-family: $font-family;
+            font-size: $font-size-default;
+            color: $color-v1-black;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $grey-100;
+            }
+
+            &.selected {
+                background-color: $grey-100;
+            }
+        }
+    }
+}
+
+.dropdown-container:disabled {
+    background-color: $grey-100;
+    color: $grey-500;
+    cursor: not-allowed;
+}
+
+.caret-icon {
+    font-size: $font-size-default;
+    transition: transform 0.3s ease;
+    margin-inline-start: auto; // Automatically align based on text direction
+
+    &.open {
+        transform: rotate(-180deg);
+    }
+}

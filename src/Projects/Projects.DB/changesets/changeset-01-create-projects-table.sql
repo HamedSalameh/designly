@@ -17,6 +17,7 @@ CREATE TABLE public.projects (
     deadline DATE,
     completed_at DATE,
     status INT NOT NULL,
+    property_id UUID,  -- This is a reference to the property table
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     modified_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     -- Constraints --
@@ -25,4 +26,3 @@ CREATE TABLE public.projects (
     -- completed_at cannot be before start_date
     CONSTRAINT completed_at_after_start_date CHECK (completed_at >= start_date)
 );
-    

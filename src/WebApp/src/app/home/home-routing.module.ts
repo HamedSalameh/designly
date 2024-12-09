@@ -24,6 +24,15 @@ const dashboardRoute = RouteFactory.createRoute(
 );
 ModuleRoutes.set(ApplicationModules.dashboard.path, dashboardRoute);
 
+// Projects module route
+const projectsRoute = RouteFactory.createRoute(
+  ApplicationModules.projects.path,
+  ApplicationModules.projects.label,
+  ApplicationModules.projects.route,
+  ApplicationModules.projects.icon
+);
+ModuleRoutes.set(ApplicationModules.projects.path, projectsRoute);
+
 const routes: Routes = [
   {
     path: '',
@@ -45,6 +54,19 @@ const routes: Routes = [
         loadChildren: () =>
           import('../clients/clients.module').then((m) => m.ClientsModule),
       },
+      {
+        path: ModuleRoutes.get('projects')?.path, // 'projects
+        canActivate: [AuthenticationGuard],
+        data: { breadcrumb: ModuleRoutes.get('projects')?.breadcrumb },
+        loadChildren: () =>
+          import('../projects/projects.module').then((m) => m.ProjectsModule),
+      },
+      {
+        // default route
+        path: '',
+        redirectTo: '',
+        pathMatch: 'full',
+      }
     ],
   },
 ];

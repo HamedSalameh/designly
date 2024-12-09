@@ -1,7 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ClientsAdapter, IClientState } from './clients.state';
-
-export const CLIENTS_STATE_NAME = 'clients';
+import { CLIENTS_STATE_NAME, ClientsAdapter, IClientState } from './clients.state';
 
 export const ClientState = createFeatureSelector<IClientState>(CLIENTS_STATE_NAME);
 
@@ -31,3 +29,4 @@ export const getSingleClient = createSelector(
     return clientId ? clients[clientId] : null;
   }
 )
+export const getClientById = (id: string) => createSelector(ClientState, (state) => state.entities[id]);

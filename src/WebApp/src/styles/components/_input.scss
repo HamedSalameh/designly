@@ -10,7 +10,12 @@
   padding: 0 10px;
   margin-bottom: 10px;
   box-shadow: $shadow-xs;
+
+  &-clickable {
+    cursor: pointer;
+  }
 }
+
 
 .a-input:focus {
   outline: none;
@@ -31,7 +36,7 @@
   font-family: $font-family;
   font-size: $font-size-default;
   color: $color-v1-black;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .a-input-error {

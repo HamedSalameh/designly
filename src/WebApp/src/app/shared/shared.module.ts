@@ -18,6 +18,13 @@ import { SharedStateReducer } from './state/shared/shared.reducers';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ModalComponent } from './components/modal-component/modal-component.component';
 import { ModalService } from './services/modal-service.service';
+import { StatusChipComponent } from './components/status-chip/status-chip.component';
+import { RouterModule } from '@angular/router';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { DesDatepickerComponent } from './components/des-datepicker/des-datepicker.component';
+import { DatePicker, DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
 
@@ -28,24 +35,34 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     NotificationMessageComponent,
     LoadingSpinnerComponent,
     ModalComponent,
+    StatusChipComponent,
+    DropdownComponent,
+    DesDatepickerComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     StoreModule.forFeature(ERROR_STATE_NAME, ErrorStateReducer),
     StoreModule.forFeature(SHARED_STATE_NAME, SharedStateReducer),
 
     // syncfusion
     GridModule,
-    ToastModule
+    ToastModule,
+    DatePickerModule,
+    DropDownListModule,
   ],
   exports: [
     TableComponent,
     BreadcrumbComponent,
     NotificationMessageComponent,   
     LoadingSpinnerComponent,
-    ModalComponent
+    ModalComponent,
+    StatusChipComponent,
+    DropdownComponent,
+    DesDatepickerComponent,
+
   ],
   providers: [
     // syncfusion

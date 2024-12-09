@@ -7,7 +7,7 @@ import { Client } from '../models/client.model';
   providedIn: 'root',
 })
 export class ClientsService {
-  private serviceAddress = '/api/v1';
+  private serviceAddress = '/clients-api/v1';
 
   constructor(private httpClient: HttpClient) {}
 

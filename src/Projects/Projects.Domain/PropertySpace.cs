@@ -5,6 +5,8 @@
     /// </summary>
     public class PropertySpace
     {
+        public static readonly string DefaultName = "Unnamed Space";
+
         public string Name { get; set; }
         public string? Description { get; set; } = string.Empty;
         /// <summary>
@@ -15,6 +17,8 @@
         /// A Value represting the area of the property in square meters
         /// </summary>
         public double MeasuredArea { get; set; } = 0;
+
+        public PropertySpace() : this(DefaultName) { }
 
         public PropertySpace(string Name)
         {

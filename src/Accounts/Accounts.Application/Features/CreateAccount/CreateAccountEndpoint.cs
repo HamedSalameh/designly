@@ -11,7 +11,7 @@ namespace Accounts.Application.Features.CreateAccount
 {
     public static class CreateAccountEndpoint
     {
-        public static IEndpointConventionBuilder MapCreateAccountFeature(this IEndpointRouteBuilder endpoints, string pattern = "accounts")
+        public static IEndpointConventionBuilder MapCreateAccountEndpoint(this IEndpointRouteBuilder endpoints, string pattern = "")
         {
             var endPoint = endpoints
                 .MapPost(pattern, CreateAccountEndpointMethodAsync)

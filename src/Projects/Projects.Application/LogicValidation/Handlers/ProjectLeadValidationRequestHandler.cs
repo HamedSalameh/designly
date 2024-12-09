@@ -61,7 +61,7 @@ namespace Projects.Application.LogicValidation.Handlers
 
         private static async Task<Exception?> DoProjectLeadValidation(ProjectLeadValidationRequest request, HttpClient httpClient, CancellationToken cancellationToken)
         {
-            var response = await httpClient.GetAsync($"{request.TenantId}/users/{request.ProjectLeadId}/validate", cancellationToken).ConfigureAwait(false);
+            var response = await httpClient.PostAsync($"{request.TenantId}/users/{request.ProjectLeadId}/validate", null, cancellationToken).ConfigureAwait(false);
 
             Exception? exception = response switch
             {

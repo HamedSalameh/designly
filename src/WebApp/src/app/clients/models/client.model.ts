@@ -1,4 +1,4 @@
-import { Address } from './address.model';
+import { Address } from '../../shared/models/address.model';
 import { ContactDetails } from './contact-details.models';
 
 export interface Client {

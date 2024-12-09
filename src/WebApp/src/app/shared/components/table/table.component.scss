@@ -13,3 +13,9 @@ ejs-grid {
 .e-grid * {
   font-size: $font-size-default !important;
 }
+
+.e-pager .e-active {
+  background-color: $primary-500; /* Set your desired background color */
+  color: white; /* Set your desired text color */
+  border-radius: 50%; /* Optional: make it round */
+}

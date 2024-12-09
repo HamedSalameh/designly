@@ -9,7 +9,7 @@ import { globalResetState } from '../state/shared/shared.actions';
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorTranslationService {
+export class HttpErrorHandlingService {
 
   constructor(private store: Store, private router: Router) { }
 
