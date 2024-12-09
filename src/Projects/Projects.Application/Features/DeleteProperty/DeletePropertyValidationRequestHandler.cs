@@ -2,11 +2,6 @@
 using Designly.Base.Exceptions;
 using Projects.Application.LogicValidation;
 using Projects.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projects.Application.Features.DeleteProperty
 {
@@ -30,7 +25,7 @@ namespace Projects.Application.Features.DeleteProperty
             var isPropertyAttachedToProject = await _unitOfWork.PropertiesRepository.IsPropertyAttachedToProject(request.TenantId, request.PropertyId, 
                 cancellationToken);
 
-            if (!isPropertyAttachedToProject)
+            if (isPropertyAttachedToProject)
             {
                 return new BusinessLogicException(new Error("AttachedProperty", "The property is already attached to a project"));
             }

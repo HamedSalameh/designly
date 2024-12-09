@@ -1,8 +1,6 @@
 ﻿using Designly.Auth.Providers;
-using Designly.Shared;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
-using System.Net.Mime;
 
 namespace Projects.Application.Providers
 {
