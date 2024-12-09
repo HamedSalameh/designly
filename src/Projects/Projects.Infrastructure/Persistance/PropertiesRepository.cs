@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Designly.Shared.ConnectionProviders;
 using Designly.Shared.Polly;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Npgsql;
@@ -156,13 +157,62 @@ namespace Projects.Infrastructure.Persistance
 
                 try
                 {
-                    await connection.ExecuteAsync(sqlScript, dynamicParameters, transaction);
-                    transaction.Commit();
+                    await policy.ExecuteAsync(async () =>
+                    {
+                        await connection.ExecuteAsync(sqlScript, dynamicParameters, transaction);
+                        transaction.Commit();
+                    });
                 }
                 catch (Exception exception)
                 {
                     _logger.LogError(exception, "Could not delete property due to error: {}", exception.Message);
                     transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to check if a property is attached to a project
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="propertyId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<bool> IsPropertyAttachedToProject(TenantId tenantId, Guid propertyId, CancellationToken cancellationToken = default)
+        {
+            if (tenantId == TenantId.Empty)
+            {
+                throw new ArgumentException("Invalid value for tenant Id");
+            }
+
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Invalid value for property Id");
+            }
+
+            var sqlScript = "select exists(select 1 from projects where tenant_id=@p_tenant_id and property_id=@p_property_id)";
+
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("p_tenant_id", tenantId.Id);
+            dynamicParameters.Add("p_property_id", propertyId);
+
+            await using (var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                try
+                {
+                    var isPropertyAttachedToProject = policy.ExecuteAsync(async () =>
+                    {
+                        return await connection.ExecuteScalarAsync<bool>(sqlScript, dynamicParameters);
+                    });
+
+                    return await isPropertyAttachedToProject;
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Could not check if property is attached to project due to error: {err}", exception.Message);
                     throw;
                 }
             }
