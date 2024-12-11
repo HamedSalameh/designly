@@ -6,6 +6,7 @@ using Projects.Application.Features.DeleteProject;
 using Projects.Application.Features.DeleteProperty;
 using Projects.Application.Features.DeleteTask;
 using Projects.Application.Features.SearchProjects;
+using Projects.Application.Features.SearchProperties;
 using Projects.Application.Features.SearchTasks;
 using Projects.Application.Features.UpdateProject;
 using Projects.Application.Features.UpdateTask;
@@ -50,5 +51,6 @@ public static class EndpointsExtentions
                     .WithApiVersionSet(versionSet);
         realEstatePropertyRouteGroup.MapCreateOrUpdatePropertyEndpoint("properties");
         realEstatePropertyRouteGroup.MapDeletePropertyFeature("properties/{propertyId}");
+        realEstatePropertyRouteGroup.MapSearchPropertiesEndpoint("properties/search");
     }
 }
