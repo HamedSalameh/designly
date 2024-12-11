@@ -22,7 +22,7 @@ namespace Projects.Domain
         }
 
         // Used by Dapper for automatic object initialization
-        protected Property()
+        protected Property() : base()
         {
             Name = Consts.Strings.ValueNotSet;
             Address = new Address(Consts.Strings.ValueNotSet);

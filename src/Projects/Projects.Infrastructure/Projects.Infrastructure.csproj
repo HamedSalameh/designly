@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Designly.Filter\Designly.Filter.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Shared\Designly.Shared.csproj" />
     <ProjectReference Include="..\Projects.Domain\Projects.Domain.csproj" />
   </ItemGroup>

@@ -17,4 +17,12 @@
         public const string CreatedAt = "created_at";
         public const string ModifiedAt = "modified_at";
     }
+
+    public static class PropertyFieldToColumnMapping
+    {
+        public const string PropertiesTable = "properties";
+
+        public const string Id = "id";
+        public const string TenantId = "tenant_id";
+    }
 }
