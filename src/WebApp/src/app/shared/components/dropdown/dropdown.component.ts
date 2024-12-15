@@ -26,13 +26,20 @@ export class DropdownComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<any>();
 
   fields: Object = { text: 'label', value: 'value' };
-  private innerValue: any;
+  public innerValue: any;
 
   // ControlValueAccessor methods
 
   // Writes a new value to the element
   writeValue(value: any): void {
     this.innerValue = value;
+    // Ensure the selected value in the dropdown is updated
+    if (this.data.length > 0 && value) {
+      const selectedOption = this.data.find(option => option.value === value);
+      if (selectedOption) {
+        this.innerValue = selectedOption.value;
+      }
+    }
   }
 
   // Registers a callback function that is called when the control's value changes
@@ -65,8 +72,8 @@ export class DropdownComponent implements ControlValueAccessor {
   }
 
   // Internal methods to keep track of change and touch callbacks
-  private onChange: (value: any) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: any) => void = () => { };
+  private onTouched: () => void = () => { };
 
   // Optional: Call onTouched when the control is interacted with
   @HostListener('blur')
