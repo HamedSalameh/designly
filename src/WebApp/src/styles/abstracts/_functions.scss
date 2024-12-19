@@ -92,6 +92,10 @@ $max: 5;
   justify-content: center;
 }
 
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+
 .flex-align-center {
   align-items: center;
 }
@@ -99,6 +103,10 @@ $max: 5;
 // align items
 .flex-align-baseline {
   align-items: baseline;
+}
+
+.flex-align-center {
+  align-items: center;
 }
 
 .flex-align-start {

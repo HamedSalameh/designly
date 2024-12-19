@@ -3,39 +3,44 @@
 .grid-container {
     display: grid;
     grid-template-columns: auto 25%;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: 1fr repeat(3, 3rem);
     column-gap: $gap-normal;
     row-gap: $gap-small;
 
-    .proj-desc {
+    .proj-title {
         grid-column: 1;
         grid-row: 1;
     }
 
-    .proj-client {
+    .proj-status {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .proj-desc {
         grid-column: 1;
         grid-row: 2;
     }
 
-    .proj-add {
+    .proj-client {
         grid-column: 1;
         grid-row: 3;
     }
 
     .proj-lead {
         grid-column: 2;
-        grid-row: 1;
+        grid-row: 2;
     }
 
     .proj-start-date {
         grid-column: 2;
-        grid-row: 2;
+        grid-row: 3;
 
     }
 
     .proj-deadline-date {
         grid-column: 2;
-        grid-row: 3;
+        grid-row: 4;
     }
 }
 
