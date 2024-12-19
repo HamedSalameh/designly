@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-asset-view',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./asset-view.component.scss']
 })
 export class AssetViewComponent {
+
+  // localized strings
+  Title!: string;
+  
+  ngOnInit(): void {
+    this.Title = Strings.AssetDetails;
+  }
 
 }

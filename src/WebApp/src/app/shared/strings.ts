@@ -31,6 +31,17 @@ export class Strings {
   static AddressLine1 = $localize`:@@Global.AddressInfo.AddressLine1:AddressLine1`;
   static EmailAddress = $localize`:@@Global.ContactInfo.EmailAddress:EmailAddress`;
 
+  // Asset Info
+  static AssetDetails = $localize`:@@Global.AssetInfo:AssetDetails`;
+
+  // Project Info
+  static ProjectDetails = $localize`:@@Global.ProjectInfo:ProjectDetails`;
+  static ProjectDescription = $localize`:@@Global.ProjectInfo.ProjectDescription:ProjectDescription`;
+  static ProjectClient = $localize`:@@Global.ProjectInfo.ProjectClient:ProjectClient`;
+  static ProjectLead = $localize`:@@Global.ProjectInfo.ProjectLead:ProjectLead`;
+  static ProjectStartDate = $localize`:@@Global.ProjectInfo.ProjectStartDate:ProjectStartDate`;
+  static ProjectDeadline = $localize`:@@Global.ProjectInfo.ProjectEndDate:ProjectDeadline`;
+
   // Message titles
   static MessageTitle_Error = $localize`:@@MessageTitle_Error:Error`;
   static MessageTitle_Warning = $localize`:@@MessageTitle_Warning:Warning`;

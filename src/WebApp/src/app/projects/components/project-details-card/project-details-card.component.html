@@ -5,7 +5,7 @@
             <div class="a-card-header form-row m-bottom-1">
                 <!-- Project Name -->
                 <div class="a-card-title flex flex-column">
-                    <label class="a-input-label">פרטי פרויקט</label>
+                    <label class="a-input-label">{{ this.ProjectDetailsTitle }}</label>
 
                     <div class="details" [ngSwitch]="editMode['Name']">
                         <!-- Show project name when not in edit mode -->
@@ -31,7 +31,7 @@
             <div class="grid-container">
                 <div class="grid-item proj-desc">
                     <div class="">
-                        <label class="a-input-label"> תיאור </label>
+                        <label class="a-input-label"> {{ this.ProjectDescription }} </label>
                         <div class="details" [ngSwitch]="editMode['Description']">
                             <!-- Show project description when not in edit mode -->
                             <div *ngSwitchCase="false">
@@ -63,7 +63,7 @@
 
                 <div class="grid-item proj-client">
                     <div class="">
-                        <label class="a-input-label"> לקוח </label>
+                        <label class="a-input-label">{{ this.ProjectClient }}</label>
                         <div class="details" [ngSwitch]="editMode['Client']">
                             <!-- Show client name when not in edit mode -->
                             <div *ngSwitchCase="false">
@@ -96,7 +96,7 @@
                 <!-- Project Lead -->
                 <div class="grid-item proj-lead">
                     <div class="">
-                        <div class="a-input-label"> מוביל הפרויקט </div>
+                        <div class="a-input-label">{{ this.ProjectLead }}</div>
                         <div class="details">
                             <app-dropdown [data]="projectLeads" formControlName="projectLead"
                                 (valueChange)="onClientChange($event)">
@@ -108,7 +108,7 @@
                 <!-- Start Date -->
                 <div class="grid-item proj-start-date">
                     <div class="">
-                        <label class="a-input-label"> תאריך התחלה </label>
+                        <label class="a-input-label">{{this.ProjectStartDate}}</label>
                         <div class="details">
                             <app-des-datepicker formControlName="startDate"></app-des-datepicker>
                         </div>
@@ -119,7 +119,7 @@
                 <!-- Deadline -->
                 <div class="grid-item proj-deadline-date">
                     <div class="">
-                        <label class="a-input-label"> תאריך סיום </label>
+                        <label class="a-input-label">{{ this.ProjectDeadline }}</label>
                         <div class="details">
                             <app-des-datepicker formControlName="deadLine"></app-des-datepicker>
                         </div>

@@ -20,4 +20,18 @@ $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-bold: 600;
 
+// Font size map
+$font-sizes: (
+  small: $font-size-small,
+  default: $font-size-default,
+  medium: $font-size-medium,
+  large: $font-size-large,
+  extra-large: $font-size-extra-large
+);
 
+// Generate font size classes
+@each $size, $value in $font-sizes {
+  .font-size-#{$size} {
+    font-size: $value;
+  }
+}

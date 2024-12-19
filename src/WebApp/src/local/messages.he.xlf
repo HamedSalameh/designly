@@ -266,6 +266,34 @@
         <source>Project Status</source>
         <target state="new">סטאטוס</target>
       </trans-unit>
+      <trans-unit id="Global.AssetInfo" datatype="html">
+        <source>AssetDetails</source>
+        <target state="new">פרטי הנכס</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo" datatype="html">
+        <source>ProjectDetails</source>
+        <target state="new">פרטי הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectDescription" datatype="html">
+        <source>ProjectDescription</source>
+        <target state="new">תיאור הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectClient" datatype="html">
+        <source>ProjectClient</source>
+        <target state="new">לקוח</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectLead" datatype="html">
+        <source>ProjectLead</source>
+        <target state="new">מוביל הפרויקט</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectStartDate" datatype="html">
+        <source>ProjectStartDate</source>
+        <target state="new">תאריך התחלה</target>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectEndDate" datatype="html">
+        <source>ProjectDeadline</source>
+        <target state="new">תאריך סיום</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

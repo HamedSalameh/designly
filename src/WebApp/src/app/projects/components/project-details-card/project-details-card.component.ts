@@ -7,6 +7,7 @@ import { BuildProjectViewModelForProjectId } from '../../Factories/project-view-
 import { ProjectViewModel } from '../../models/ProjectViewModel';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getAccountUsersFromState } from 'src/app/account/state/account.selectors';
+import { Strings } from 'src/app/shared/strings';
 
 @Component({
   selector: 'app-project-details-card',
@@ -14,6 +15,13 @@ import { getAccountUsersFromState } from 'src/app/account/state/account.selector
   styleUrls: ['./project-details-card.component.scss']
 })
 export class ProjectDetailsCardComponent {
+
+  ProjectDetailsTitle!: string;
+  ProjectDescription!: string;
+  ProjectClient!: string;
+  ProjectLead!: string;
+  ProjectStartDate!: string;
+  ProjectDeadline!: string;
 
   projectIds = this.route.params.pipe(map((params) => params['id']));
   projectId!: string;
@@ -44,6 +52,14 @@ export class ProjectDetailsCardComponent {
   }
 
   ngOnInit(): void {
+
+    // Initialize strings (localized)
+    this.ProjectDetailsTitle = Strings.ProjectDetails;
+    this.ProjectDescription = Strings.ProjectDescription;
+    this.ProjectClient = Strings.ProjectClient;
+    this.ProjectLead = Strings.ProjectLead;
+    this.ProjectStartDate = Strings.ProjectStartDate;
+    this.ProjectDeadline = Strings.ProjectDeadline;
     
     this.projectIds.pipe(
       switchMap((id) => BuildProjectViewModelForProjectId(this.store, id))

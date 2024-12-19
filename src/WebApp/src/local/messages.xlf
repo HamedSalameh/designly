@@ -200,6 +200,27 @@
       <trans-unit id="Projects.ProjectStatus" datatype="html">
         <source>Project Status</source>
       </trans-unit>
+      <trans-unit id="Global.AssetInfo" datatype="html">
+        <source>Asset Details</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo" datatype="html">
+        <source>Project Details</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectClient" datatype="html">
+        <source>Client</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectDescription" datatype="html">
+        <source>Project Description</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectEndDate" datatype="html">
+        <source>Deadline</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectLead" datatype="html">
+        <source>Project Lead</source>
+      </trans-unit>
+      <trans-unit id="Global.ProjectInfo.ProjectStartDate" datatype="html">
+        <source>Project Start Date</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
