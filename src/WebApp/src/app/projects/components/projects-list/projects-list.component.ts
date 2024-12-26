@@ -11,7 +11,7 @@ import { getClients } from 'src/app/clients/client-state/clients.selectors';
 import { ProjectViewModel } from '../../models/ProjectViewModel';
 import { getAccountUsersRequest } from 'src/app/account/state/account.actions';
 import { getAccountUsersFromState } from 'src/app/account/state/account.selectors';
-import { mapProjectToViewModel } from '../../Factories/project-view-model.factory';
+import { mapProjectToViewModel } from '../../Builders/project-view-model.factory';
 
 @Component({
   selector: 'app-projects-list',

@@ -1,0 +1,12 @@
+// scss grid layout for the manage project component
+// grid size first row: 1 1 3
+// grid size second row: 1
+
+@import "main";
+
+.manage-project {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: $gap-normal;
+}

@@ -107,8 +107,8 @@
 
       <div class="form-section contactInfo">
         <ng-container formGroupName="ContactDetails">
-          <div class="form-row">
-            <div class="">
+          <div class="form-row flex">
+            <div class="flex-no-grow">
               <label class="a-input-label">{{
                 localizedPrimaryPhoneNumber
               }}</label>
@@ -144,7 +144,7 @@
               </div>
             </div>
 
-            <div class="">
+            <div class="flex-grow">
               <label class="a-input-label">{{ localizedEmailAddress }}</label>
               <input
                 type="text"

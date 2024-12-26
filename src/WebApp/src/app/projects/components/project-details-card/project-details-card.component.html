@@ -2,36 +2,44 @@
     <div class="p-top-1 p-left-1 p-right-1">
 
         <ng-container [formGroup]="ProjectDetails">
-            <div class="a-card-header form-row m-bottom-1">
-                <!-- Project Name -->
-                <div class="a-card-title flex flex-column">
-                    <label class="a-input-label">פרטי פרויקט</label>
-
-                    <div class="details" [ngSwitch]="editMode['Name']">
-                        <!-- Show project name when not in edit mode -->
-                        <div *ngSwitchCase="false">
-                            <label class="details">{{ activeProject?.Name }}</label>
-                        </div>
-
-                        <!-- Show input field when in edit mode -->
-                        <input *ngSwitchCase="true" type="text" class="a-input" formControlName="name" />
-
-                        <!-- Show default in case no condition matches -->
-                        <div *ngSwitchDefault>No data</div>
-
-                        <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Name')">
-                            <i *ngIf="!editMode['Name']" class="ph ph-pencil-simple"></i>
-                            <i *ngIf="editMode['Name']" class="ph ph-check"></i>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
 
             <div class="grid-container">
+
+                <div class="proj-title">
+                    <div class="a-card-header form-row m-bottom-1">
+                        <!-- Project Name -->
+                        <div class="a-card-title flex flex-column">
+                            <label class="a-input-label">{{ this.ProjectDetailsTitle }}</label>
+
+                            <div class="details" [ngSwitch]="editMode['Name']">
+                                <!-- Show project name when not in edit mode -->
+                                <div *ngSwitchCase="false">
+                                    <label class="details">{{ activeProject?.Name }}</label>
+                                </div>
+
+                                <!-- Show input field when in edit mode -->
+                                <input *ngSwitchCase="true" type="text" class="a-input" formControlName="name" />
+
+                                <!-- Show default in case no condition matches -->
+                                <div *ngSwitchDefault>No data</div>
+
+                                <button class="btn icon-btn icon-btn-medium" (click)="toggleEditMode('Name')">
+                                    <i *ngIf="!editMode['Name']" class="ph ph-pencil-simple"></i>
+                                    <i *ngIf="editMode['Name']" class="ph ph-check"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proj-status flex flex-justify-end">
+                    <app-status-chip [status]="activeProject?.Status!"></app-status-chip>
+                </div>
+
                 <div class="grid-item proj-desc">
                     <div class="">
-                        <label class="a-input-label"> תיאור </label>
+                        <label class="a-input-label"> {{ this.ProjectDescription }} </label>
                         <div class="details" [ngSwitch]="editMode['Description']">
                             <!-- Show project description when not in edit mode -->
                             <div *ngSwitchCase="false">
@@ -63,40 +71,23 @@
 
                 <div class="grid-item proj-client">
                     <div class="">
-                        <label class="a-input-label"> לקוח </label>
-                        <div class="details" [ngSwitch]="editMode['Client']">
-                            <!-- Show client name when not in edit mode -->
-                            <div *ngSwitchCase="false">
-                                <label class="details details-clickable" (click)="toggleEditMode('Client')">
-                                    {{ activeProject?.Client }}
-                                </label>
-                            </div>
-
-                            <!-- Show input field when in edit mode -->
-                            <input *ngSwitchCase="true" type="text" class="a-input" formControlName="client" />
-
-                            <!-- Show default in case no condition matches -->
-                            <div *ngSwitchDefault>
-                                <label class="details-item">-</label>
-                            </div>
-
-                            <div class="flex flex-row" *ngIf="editMode['Client']">
-                                <button class="btn icon-btn icon-btn-small" (click)="onConfirmEdit('Client')">
-                                    <i class="ph ph-check"></i>
-                                </button>
-                                <!-- cancel -->
-                                <button class="btn icon-btn icon-btn-small" (click)="onCancelEdit('Client')">
-                                    <i class="ph ph-x"></i>
-                                </button>
-                            </div>
+                        <label class="a-input-label">{{ this.ProjectClient }}</label>
+                        <div class="flex flex-row flex-align-baseline">
+                            <label class="details">
+                                {{ activeProject?.Client }}
+                            </label>
+                            <!-- Button to change the customer / client -->
+                            <button class="btn icon-btn icon-btn-medium">
+                                <i class="ph ph-pencil-simple"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project Lead -->
                 <div class="grid-item proj-lead">
-                    <div class="">
-                        <div class="a-input-label"> מוביל הפרויקט </div>
+                    <div class="flex flex-justify-space-between flex-align-center">
+                        <div class="a-input-label">{{ this.ProjectLead }}</div>
                         <div class="details">
                             <app-dropdown [data]="projectLeads" formControlName="projectLead"
                                 (valueChange)="onClientChange($event)">
@@ -107,8 +98,8 @@
 
                 <!-- Start Date -->
                 <div class="grid-item proj-start-date">
-                    <div class="">
-                        <label class="a-input-label"> תאריך התחלה </label>
+                    <div class="flex flex-justify-space-between flex-align-center">
+                        <label class="a-input-label">{{this.ProjectStartDate}}</label>
                         <div class="details">
                             <app-des-datepicker formControlName="startDate"></app-des-datepicker>
                         </div>
@@ -118,18 +109,13 @@
 
                 <!-- Deadline -->
                 <div class="grid-item proj-deadline-date">
-                    <div class="">
-                        <label class="a-input-label"> תאריך סיום </label>
+                    <div class="flex flex-justify-space-between flex-align-center">
+                        <label class="a-input-label">{{ this.ProjectDeadline }}</label>
                         <div class="details">
                             <app-des-datepicker formControlName="deadLine"></app-des-datepicker>
                         </div>
 
                     </div>
-                </div>
-
-                <!-- Address -->
-                <div class="grid-item proj-add">
-                    {{ activeProject?.Property | json }}
                 </div>
             </div>
 

@@ -14,6 +14,7 @@ import { ManageProjectComponent } from './components/manage-project/manage-proje
 import { ProjectDetailsCardComponent } from './components/project-details-card/project-details-card.component';
 import { ProjectWorkspaceComponent } from './components/project-workspace/project-workspace.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AssetViewComponent } from './components/asset-view/asset-view.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProjectsListComponent,
     ManageProjectComponent,
     ProjectDetailsCardComponent,
-    ProjectWorkspaceComponent
+    ProjectWorkspaceComponent,
+    AssetViewComponent
   ],
   imports: [
     ProjectsRoutingModule,

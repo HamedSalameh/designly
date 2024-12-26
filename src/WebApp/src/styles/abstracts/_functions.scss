@@ -55,6 +55,10 @@ $max: 5;
   flex-wrap: wrap-reverse;
 }
 
+.flex-no-grow {
+  flex-grow: 0;
+}
+
 .flex-grow {
   flex-grow: 1;
 }
@@ -88,6 +92,27 @@ $max: 5;
   justify-content: center;
 }
 
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+
 .flex-align-center {
   align-items: center;
+}
+
+// align items
+.flex-align-baseline {
+  align-items: baseline;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-end {
+  align-items: flex-end;
 }

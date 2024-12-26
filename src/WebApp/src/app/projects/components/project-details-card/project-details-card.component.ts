@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { Store } from '@ngrx/store';
 import { map, switchMap } from 'rxjs';
-import { BuildProjectViewModelForProjectId } from '../../Factories/project-view-model.factory';
+import { BuildProjectViewModelForProjectId } from '../../Builders/project-view-model.factory';
 import { ProjectViewModel } from '../../models/ProjectViewModel';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getAccountUsersFromState } from 'src/app/account/state/account.selectors';
+import { Strings } from 'src/app/shared/strings';
+import { getActiveProject } from '../../projects-state/projects.selectors';
 
 @Component({
   selector: 'app-project-details-card',
@@ -15,21 +16,26 @@ import { getAccountUsersFromState } from 'src/app/account/state/account.selector
 })
 export class ProjectDetailsCardComponent {
 
-  projectIds = this.route.params.pipe(map((params) => params['id']));
+  ProjectDetailsTitle!: string;
+  ProjectDescription!: string;
+  ProjectClient!: string;
+  ProjectLead!: string;
+  ProjectStartDate!: string;
+  ProjectDeadline!: string;
+
   projectId!: string;
 
   activeProject?: ProjectViewModel;
   editMode: { [key: string]: boolean } = {};
 
   ProjectDetails!: FormGroup
-  projectLeads : { label: string; value: string; }[] = [
+  projectLeads: { label: string; value: string; }[] = [
   ];
 
-  constructor(  
+  constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private store: Store<IApplicationState>
-  ) {}
+  ) { }
 
   private initializeEditMode() {
     if (this.activeProject) {
@@ -44,15 +50,25 @@ export class ProjectDetailsCardComponent {
   }
 
   ngOnInit(): void {
-    
-    this.projectIds.pipe(
-      switchMap((id) => BuildProjectViewModelForProjectId(this.store, id))
+
+    // Initialize strings (localized)
+    this.ProjectDetailsTitle = Strings.ProjectDetails;
+    this.ProjectDescription = Strings.ProjectDescription;
+    this.ProjectClient = Strings.ProjectClient;
+    this.ProjectLead = Strings.ProjectLead;
+    this.ProjectStartDate = Strings.ProjectStartDate;
+    this.ProjectDeadline = Strings.ProjectDeadline;
+
+    this.store.select(getActiveProject).pipe(
+      switchMap((activeProject) => BuildProjectViewModelForProjectId(this.store, activeProject?.Id!))
     ).subscribe((project) => {
       console.log(project);
       this.activeProject = project;
       this.initializeEditMode();
       this.initializeProjectLeadsList();
       this.createForm();
+
+      this.store.dispatch
     });
 
   }
@@ -64,7 +80,7 @@ export class ProjectDetailsCardComponent {
     this.ProjectDetails.reset();
   }
 
-  private initializeProjectLeadsList(){
+  private initializeProjectLeadsList() {
     this.store.select(getAccountUsersFromState).pipe(
       map((users) => {
         return users.map((user) => {

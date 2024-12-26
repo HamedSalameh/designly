@@ -1,13 +1,12 @@
-<div class="a-card" *ngIf="(this.selectedClient$ | async) as  selectedClient" >
+<div class="a-card" *ngIf="(this.selectedClient$ | async) as  selectedClient">
   <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
     <div class="a-card-header form-row m-bottom-3">
       <div class="a-card-title">
-        <label class="section-title"
-          >{{ selectedClient.FirstName }}
+        <label class="section-title">{{ selectedClient.FirstName }}
           {{ selectedClient.FamilyName }}
         </label>
       </div>
-      
+
       <div class="a-card-buttons">
         <!-- Icon button to edit  -->
         <button class="btn icon-btn icon-btn-medium" (click)="onEdit()">
@@ -24,27 +23,29 @@
       </div>
     </div>
 
-    <div class="form-row">
-      <i class="ph ph-map-pin"></i>
-      <label class="details"
-        >{{ selectedClient.Address.Street }}
-        {{ selectedClient.Address.BuildingNumber }},
-        {{ selectedClient.Address.City }}</label
-      >
-    </div>
+    <div class="flex flex-column">
 
-    <div class="form-row">
-      <i class="ph ph-envelope"></i>
-      <label class="details">{{
-        selectedClient.ContactDetails.EmailAddress
-      }}</label>
-    </div>
+      <div class="flex flex-row flex-align-baseline">
+        <i class="ph ph-phone"></i>
+        <label class="details">{{
+          selectedClient.ContactDetails.PrimaryPhoneNumber
+          }}</label>
+      </div>
 
-    <div class="form-row">
-      <i class="ph ph-phone"></i>
-      <label class="details">{{
-        selectedClient.ContactDetails.PrimaryPhoneNumber
-      }}</label>
+      <div class="flex flex-row flex-align-baseline">
+        <i class="ph ph-envelope"></i>
+        <label class="details">{{
+          selectedClient.ContactDetails.EmailAddress
+          }}</label>
+      </div>
+
+      <div class="flex flex-row flex-align-baseline">
+        <i class="ph ph-map-pin"></i>
+        <label class="details">{{ selectedClient.Address.Street }}
+          {{ selectedClient.Address.BuildingNumber }},
+          {{ selectedClient.Address.City }}</label>
+      </div>
+
     </div>
 
     <div class="form-section-divider"></div>

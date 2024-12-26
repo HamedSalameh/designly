@@ -1,3 +1,5 @@
+@import "main";
+
 .status-chip {
 
     padding: 1rem 1rem;
@@ -6,7 +8,9 @@
     font-weight: bold;
     display: inline-block;
     text-align: center;
-    min-width: 7rem;
+    min-width: 8rem;
+
+    font-family: $font-family;
   
 }
   

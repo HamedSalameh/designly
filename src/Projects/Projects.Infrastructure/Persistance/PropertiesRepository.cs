@@ -297,8 +297,8 @@ namespace Projects.Infrastructure.Persistance
                 {
                     "city" => query.WhereRaw(BuildJSONBQuery("address", filter)),
                     "street" => query.WhereRaw(BuildJSONBQuery("address", filter)),
-                    "id" => query.Where(filter.Field, filter.Values.First()),
-                    "tenant_id" => query.Where(filter.Field, filter.Values.First()),
+                    "id" => query.Where(filter.Field.ToLowerInvariant(), filter.Values.First()),
+                    "tenant_id" => query.Where(filter.Field.ToLowerInvariant(), filter.Values.First()),
                     _ => throw new NotSupportedException($"Field {filter.Field} is not supported for search.")
                 };
             }
