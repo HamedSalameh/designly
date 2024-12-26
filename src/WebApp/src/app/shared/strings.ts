@@ -33,6 +33,7 @@ export class Strings {
 
   // Asset Info
   static AssetDetails = $localize`:@@Global.AssetInfo:AssetDetails`;
+  static AreaMeasurementUnit = $localize`:@@Global.AssetInfo.AreaMeasurementUnit:AreaMeasurementUnit`;
 
   // Project Info
   static ProjectDetails = $localize`:@@Global.ProjectInfo:ProjectDetails`;

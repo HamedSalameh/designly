@@ -22,7 +22,7 @@ export interface Project {
     CreatedAt: Date;
     ModifiedAt: Date;
 
-    Property: Property;
+    PropertyId: string;
 }
 
 

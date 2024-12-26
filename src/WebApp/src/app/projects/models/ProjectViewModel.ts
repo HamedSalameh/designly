@@ -15,7 +15,7 @@ export interface ProjectViewModel {
     ProjectLead: string;
     ProjectLeadId: string;
     Client: string;
-    Property: Property;
+    PropertyId: string | null;
 }
 
 export interface ProjectLeadViewModel {

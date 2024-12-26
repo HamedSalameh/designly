@@ -294,6 +294,10 @@
         <source>ProjectDeadline</source>
         <target state="new">תאריך סיום</target>
       </trans-unit>
+      <trans-unit id="Global.AssetInfo.AreaMeasurementUnit" datatype="html">
+        <source>AreaMeasurementUnit</source>
+        <target state="new">מ"ר</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

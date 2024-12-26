@@ -13,3 +13,8 @@ export const getProjectsRequestError = createAction(
     '[ProjectsState] GetProjectsError', 
     props<{ payload: any }>()
 );
+
+export const setActiveProject = createAction(
+    '[ProjectsState] SetActiveProject',
+    props<{ project: any }>()
+);
