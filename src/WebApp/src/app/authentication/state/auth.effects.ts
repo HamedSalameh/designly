@@ -17,6 +17,8 @@ import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { Buffer } from 'buffer';
 import { AuthenticatedUser } from './auth.state';
+import { HttpErrorHandlingService } from 'src/app/shared/services/error-handling.service';
+import { Strings } from 'src/app/shared/strings';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -24,7 +26,8 @@ export class AuthenitcationEffects {
     private actions$: Actions,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private errorHandlingService: HttpErrorHandlingService
   ) {}
 
   login$ = createEffect(() =>
@@ -49,7 +52,10 @@ export class AuthenitcationEffects {
               redirect: true });
           }),
           catchError((error) => {
-            return of(loginFailed({ error }));
+            this.store.dispatch(SetLoading(false));
+            this.errorHandlingService.handleError(error);
+            //return of(loginFailed({ error }));
+            return of();
           })
         );
       })

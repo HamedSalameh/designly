@@ -160,7 +160,7 @@ namespace Designly.Auth.Providers
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Could not perform signin against AWS Cognito due to error: {Message}", exception.Message);
-                return null;
+                throw;
             }
         }
 

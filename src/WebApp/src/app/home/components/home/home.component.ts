@@ -31,7 +31,7 @@ export class HomeComponent {
     combineLatest([
       this.networkErrorState,
       this.applicationErrorState,
-      this.unknownErrorState,
+      this.unknownErrorState, 
     ])
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(([networkError, applicationError, unknownError]) => {
