@@ -26,7 +26,7 @@ export class HttpErrorHandlingService {
         // redirect to login page
         this.store.dispatch(globalResetState());
         this.router.navigateByUrl('/login');
-        return;
+        break;
       case 403:
         error.message = Strings.Forbidden;
         break;

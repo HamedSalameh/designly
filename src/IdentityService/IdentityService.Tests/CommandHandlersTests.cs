@@ -2,6 +2,7 @@
 using Designly.Auth.Models;
 using Designly.Auth.Providers;
 using IdentityService.Application.Commands;
+using LanguageExt.Common;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
@@ -30,10 +31,7 @@ namespace IdentityService.Tests
             throw new NotImplementedException();
         }
 
-        public Task<ITokenResponse?> LoginJwtAsync(string username, string password, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(LoginJwtAsyncResponse);
-        }
+
         public ITokenResponse? LoginJwtAsyncResponse;
 
         public Task<ITokenResponse?> RefreshToken(string refreshToken, CancellationToken cancellationToken)
@@ -50,6 +48,11 @@ namespace IdentityService.Tests
         public Task<bool> SignoutAsync(string accessToken, CancellationToken cancellationToken)
         {
             return Task.FromResult(true);
+        }
+
+        Task<Result<ITokenResponse?>> IIdentityService.LoginJwtAsync(string username, string password, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new Result<ITokenResponse?>(LoginJwtAsyncResponse));
         }
     }
 

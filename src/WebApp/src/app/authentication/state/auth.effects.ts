@@ -7,6 +7,7 @@ import {
   loginStart,
   loginSuccess,
   logout,
+  logoutFailed,
   revokeTokens
 } from './auth.actions';
 import { AuthenticationService } from '../authentication-service.service';
@@ -17,6 +18,10 @@ import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { Buffer } from 'buffer';
 import { AuthenticatedUser } from './auth.state';
+import { HttpErrorHandlingService } from 'src/app/shared/services/error-handling.service';
+import { Strings } from 'src/app/shared/strings';
+import { raiseApplicationError } from 'src/app/shared/state/error-state/error.actions';
+import { Merge } from '@syncfusion/ej2/spreadsheet';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -24,8 +29,9 @@ export class AuthenitcationEffects {
     private actions$: Actions,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private store: Store
-  ) {}
+    private store: Store,
+    private errorHandlingService: HttpErrorHandlingService
+  ) { }
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -46,15 +52,73 @@ export class AuthenitcationEffects {
               RefreshToken: '',
               ExpiresIn: expiresIn,
               ExpiresAt: expiresAt,
-              redirect: true });
+              redirect: true
+            });
           }),
           catchError((error) => {
-            return of(loginFailed({ error }));
+            this.store.dispatch(SetLoading(false));
+            this.handleSigninError(error);
+            return of();
           })
         );
       })
     )
   );
+
+  private handleSigninError(error: any) {
+    const serverResponse = error.originalError?.status || 500; // Default to 500
+    const serverErrorMessage = error.originalError?.error || 'Unexpected Error';
+
+    const errorMessages: Record<number, string> = {
+      400: Strings.BadRequest,
+      401: Strings.Unauthorized,
+      403: Strings.Forbidden,
+      404: Strings.NotFound,
+      500: Strings.InternalServerError,
+      503: Strings.ServiceUnavailable,
+    };
+
+    let errorMessage = errorMessages[serverResponse] || Strings.UnknownError;
+
+    switch (serverResponse) {
+      case 401:
+        if (serverErrorMessage === 'Incorrect username or password.') {
+          errorMessage = Strings.InvalidCredentials;
+        } else if (serverErrorMessage === 'Password attempts exceeded') {
+          errorMessage = Strings.PasswordAttemptsExceeded;
+        }
+        break;
+      case 500:
+        errorMessage = serverErrorMessage;
+        break;
+      case 403:
+        error.message = Strings.Forbidden;
+        break;
+      case 404:
+        error.message = Strings.NotFound;
+        break;
+      case 500:
+        error.message = Strings.InternalServerError;
+        break;
+      case 503:
+        error.message = Strings.ServiceUnavailable;
+        break;
+      default:
+        error.message = Strings.UnexpectedError;
+        break;
+    }
+
+    const application = {
+      message: errorMessage,
+      originalError: error.originalError,
+      handled: false,
+      type: 'ApplicationError',
+    };
+
+    this.store.dispatch(revokeTokens());
+    this.store.dispatch(SetLoading(false));
+    this.store.dispatch(loginFailed({ error: errorMessage }));
+  }
 
   loginRedirect$ = createEffect(
     () => {
@@ -64,7 +128,7 @@ export class AuthenitcationEffects {
           if (action.redirect) {
             this.router.navigate(['/']);
           }
-          
+
         })
       );
     },
@@ -83,7 +147,7 @@ export class AuthenitcationEffects {
     { dispatch: false }
   );
 
-  logout$ = createEffect( () =>
+  logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(logout),
       mergeMap(() => {
@@ -92,13 +156,13 @@ export class AuthenitcationEffects {
             return revokeTokens();
           }),
           catchError((error) => {
-            return of(loginFailed({ error }));
+            return of(logoutFailed({ error }));
           })
         );
       })
-  ));
-  
-  private decodeIdToken(idToken: string) : AuthenticatedUser {
+    ));
+
+  private decodeIdToken(idToken: string): AuthenticatedUser {
     const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
     const parsedToken = JSON.parse(decodedToken);
 
@@ -106,14 +170,14 @@ export class AuthenitcationEffects {
     const tenant_id: string | undefined = tenantClaim?.substring('tenant_'.length);
 
     const user: AuthenticatedUser = {
-      email : parsedToken.email,
-      family_name : parsedToken.family_name,
-      given_name : parsedToken.given_name,
-      name : parsedToken.given_name + ' ' + parsedToken.family_name,
-      tenant_id : tenant_id || "",
-      profile_image : parsedToken.profile_image || "",
-      roles : parsedToken.roles || [],
-      permissions : parsedToken.permissions || []
+      email: parsedToken.email,
+      family_name: parsedToken.family_name,
+      given_name: parsedToken.given_name,
+      name: parsedToken.given_name + ' ' + parsedToken.family_name,
+      tenant_id: tenant_id || "",
+      profile_image: parsedToken.profile_image || "",
+      roles: parsedToken.roles || [],
+      permissions: parsedToken.permissions || []
     }
 
     return user;
