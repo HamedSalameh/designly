@@ -3,11 +3,12 @@ using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
 using Amazon.Extensions.CognitoAuthentication;
 using Designly.Auth.Models;
-using Designly.Base;
 using Designly.Base.Exceptions;
 using IdentityService.Service;
+using LanguageExt.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Error = Designly.Base.Error;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Designly.Auth.Providers
@@ -116,7 +117,8 @@ namespace Designly.Auth.Providers
             return tokenResponse;
         }
 
-        public async Task<ITokenResponse?> LoginJwtAsync(string username, string password, CancellationToken cancellationToken)
+        // Using Result pattern instead of throwing exceptions
+        public async Task<Result<ITokenResponse?>> LoginJwtAsync(string username, string password, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -155,12 +157,12 @@ namespace Designly.Auth.Providers
             catch (NotAuthorizedException notAuthorizedException)
             {
                 _logger.LogInformation(notAuthorizedException, "Could not perform signin against AWS Cognito due to error: {Message}", notAuthorizedException.Message);
-                throw new BusinessLogicException(AuthenticationErrors.InvalidCredentials(notAuthorizedException.Message));
+                return new Result<ITokenResponse?>(new BusinessLogicException(AuthenticationErrors.InvalidCredentials(notAuthorizedException.Message)));
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Could not perform signin against AWS Cognito due to error: {Message}", exception.Message);
-                throw;
+                return new Result<ITokenResponse?>(exception);
             }
         }
 

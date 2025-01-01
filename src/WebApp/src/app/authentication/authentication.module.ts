@@ -13,8 +13,9 @@ import { AuthenitcationEffects } from './state/auth.effects';
   imports: [
     CommonModule,
     HttpClientModule,
-    EffectsModule.forFeature([AuthenitcationEffects]),
     StoreModule.forFeature(AUTH_STATE_NAME, AuthenticationReduce),
+    EffectsModule.forFeature([AuthenitcationEffects]),
+    
   ],
   providers: [    
   ]

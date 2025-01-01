@@ -29,6 +29,7 @@ export const loginSuccess = createAction(LOGIN_SUCCESS, props<{
     ExpiresAt: any,
     redirect: boolean }>());
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
+export const logoutFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
 
 export const logout = createAction(LOGOUT);
 export const revokeTokens = createAction(REVOKE_TOKENS);

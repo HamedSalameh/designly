@@ -10,7 +10,8 @@ export interface AuthenticatedUser {
     profile_image: string;
 }
 
-export interface AuthenticationState {
+export interface IAuthenticationState {
+AuthenticationError: string;
 User?: AuthenticatedUser | null;
     IdToken: string;
     AccessToken: string;
@@ -19,7 +20,8 @@ User?: AuthenticatedUser | null;
     ExpiresAt: string;
 }
 
-export const InitialAuthenticationState: AuthenticationState = {
+export const InitialAuthenticationState: IAuthenticationState = {
+    AuthenticationError: '',
     User: null,
     IdToken: '',
     AccessToken: '',

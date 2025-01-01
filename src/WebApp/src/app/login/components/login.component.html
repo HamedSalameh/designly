@@ -37,6 +37,14 @@
               </div>
             </div>
 
+            <!-- Signing error messages -->
+            <div class="flex flex-justify-center m-top-1 m-bottom-1">
+              <div class="flex flex-justify-center flex-align-center" *ngIf="this.loginError$ | async">
+                <i class="ph ph-warning"></i>
+                <span class="error-text">{{ loginError$ | async }}</span>
+              </div>
+            </div>
+
             <!-- Reset password -->
             <div class="flex flex-justify-center m-bottom-1">
               <div class="">

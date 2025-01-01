@@ -7,6 +7,7 @@ import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { isLoading } from 'src/app/shared/state/shared/shared.selectors';
 import { LoginStrings } from '../strings';
 import { Strings } from 'src/app/shared/strings';
+import { getLoginFailedError } from 'src/app/authentication/state/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -25,13 +26,14 @@ export class LoginComponent {
   requestPasswordResetLabel = LoginStrings.ResetPassword;
   localizedSigninWithSocialMediaLabel = LoginStrings.LoginWithSocialMedia;
   localizedEmailAddress = Strings.EmailAddress;
-  
+
   loginForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl('')
   });
 
   isLoading$ = this.store.select(isLoading);
+  loginError$ = this.store.select(getLoginFailedError);
 
   constructor(private formBuilder: FormBuilder,
     private store: Store) {
@@ -46,9 +48,9 @@ export class LoginComponent {
       const signinRequest = new SigninRequest();
       signinRequest.username = this.loginForm.value.username || '';
       signinRequest.password = this.loginForm.value.password || '';
-      
+
       this.store.dispatch(loginStart({ signInRequest: signinRequest }));
-      this.store.dispatch(SetLoading( true));
+      this.store.dispatch(SetLoading(true));
     }
   }
 }

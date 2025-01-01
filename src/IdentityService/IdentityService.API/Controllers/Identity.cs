@@ -1,8 +1,13 @@
 ﻿using Asp.Versioning;
+using Designly.Auth;
+using Designly.Auth.Models;
+using Designly.Base;
 using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using IdentityService.API.DTO;
 using IdentityService.Application.Commands;
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -10,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Security.Claims;
+using static Designly.Shared.Consts;
 
 namespace IdentityService.API.Controllers
 {
@@ -59,9 +65,10 @@ namespace IdentityService.API.Controllers
         [AllowAnonymous]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> LoginAsync([FromForm] ClientSigningRequest clientSigningRequest,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> LoginAsync([FromForm] ClientSigningRequest clientSigningRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -73,19 +80,18 @@ namespace IdentityService.API.Controllers
             try
             {
                 var tokenResponse = await _mediator.Send(signinRequest, cancellationToken);
-
-                if (tokenResponse != null &&
-                    !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
-                {
-                    // await SigninUserAsync(clientSigningRequest);
-                }
-
-                return Ok(tokenResponse);
+                return parseTokenResponseResult(tokenResponse);
             }
             catch (BusinessLogicException businessLogicException)
             {
+                _logger.LogError(businessLogicException, "Could not sign in user due to error: {Message}", businessLogicException.Message);
                 var problemDetails = businessLogicException.ToDesignlyProblemDetails(statusCode: System.Net.HttpStatusCode.BadRequest);
                 return BadRequest(problemDetails);
+            }
+            catch (OperationCanceledException operationCanceledException)
+            {
+                _logger.LogWarning(operationCanceledException, "Signin request was cancelled: {Message}", operationCanceledException.Message);
+                return StatusCode(StatusCodes.Status499ClientClosedRequest);
             }
             catch (Exception exception)
             {
@@ -175,5 +181,40 @@ namespace IdentityService.API.Controllers
             await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
         }
+
+        private IActionResult parseTokenResponseResult(Result<ITokenResponse> tokenResponse)
+        {
+            return tokenResponse.Match(
+                Succ: tokenResponse =>
+                {
+                    if (tokenResponse != null &&
+                        !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
+                    {
+                        // await SigninUserAsync(clientSigningRequest);
+                    }
+                    return Ok(tokenResponse); // Return IActionResult here.
+                },
+                Fail: exception =>
+                {
+                    _logger.LogError(exception, "Signin request failed: {Message}", exception.Message);
+                    return exception switch
+                    {
+                        BusinessLogicException businessLogicException => GetResponse(businessLogicException),
+                        _ => BadRequest(exception.Message) // Use BadRequest to return IActionResult.
+                    };
+                });
+        }
+
+        private IActionResult GetResponse(BusinessLogicException businessLogicException)
+        {
+            var error = businessLogicException.DomainErrors?.FirstOrDefault() ?? new KeyValuePair<string, string>("Error", businessLogicException.Message);
+
+            return error.Key switch
+            {
+                "InvalidCredentials" => Unauthorized(error.Value),
+                _ => BadRequest(businessLogicException.ToDesignlyProblemDetails(statusCode: System.Net.HttpStatusCode.BadRequest))
+            };
+        }
+
     }
 }

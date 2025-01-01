@@ -65,4 +65,7 @@ export class Strings {
   static InternalServerError = $localize`:@@Errors.InternalServerError:An error occurred while processing your request.`;
   static ServiceUnavailable = $localize`:@@Errors.ServiceUnavailable:The service is currently unavailable. Please try again later.`;
   static UnexpectedError = $localize`:@@Errors.UnexpectedError:An unexpected error occurred. Please try again later.`;
+  static InvalidCredentials: string = $localize`:@@Errors.InvalidCredentials:Invalid username or password.`;
+  static PasswordAttemptsExceeded: string = $localize`:@@Errors.PassweordAttemptsExceeded:Password attempts exceeded.`;
+  static UnknownError: string = $localize`:@@Errors.UnknownError:An unknown error occurred.`;
 }

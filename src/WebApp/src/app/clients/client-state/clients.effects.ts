@@ -55,7 +55,6 @@ export class ClientsEffects {
 
     getClient$ = createEffect(() =>
     this.actions$.pipe(
-      tap((action) => console.log('getClient effect', action)),
       ofType(getClientRequest),
       mergeMap((action) => {
         return this.clientsService.getClient(action.clientId).pipe(
