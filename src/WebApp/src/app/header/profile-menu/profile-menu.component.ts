@@ -7,6 +7,7 @@ import { HeaderStrings } from '../strings';
 import { Strings } from 'src/app/shared/strings';
 import { resetClientsState } from 'src/app/clients/client-state/clients.actions';
 import { globalResetState, resetSharedState } from 'src/app/shared/state/shared/shared.actions';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile-menu',
@@ -34,14 +35,18 @@ export class ProfileMenuComponent {
   loggedUser$ = this.store.select(getUser);
   loggedUser: string = '';
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(private store: Store) {
-    this.loggedUser$.subscribe((user) => {
-      // if the user is not undefined, set the loggedUser to the user's name
+    this.loggedUser$
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((user) => {
       if (!user) {
         this.loggedUser = '';
         this.store.dispatch(logout());
-      } 
-      this.loggedUser = `${user?.given_name} ${user?.family_name}` });
+      }
+      this.loggedUser = `${user?.given_name} ${user?.family_name}`;
+    });
     }
   
 
@@ -61,6 +66,11 @@ export class ProfileMenuComponent {
     if (!event.target.closest('.profile-menu')) {
       this.isMenuOpen = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
   
 }
