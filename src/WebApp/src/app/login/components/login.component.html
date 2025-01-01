@@ -14,12 +14,8 @@
       </div>
 
       <div class="flex flex-justify-center p-left-1 p-right-1 min-height">
-        <!-- Login form -->
-        <ng-container *ngIf="this.isLoading$ | async">
-          <app-loading-spinner></app-loading-spinner>
-        </ng-container>
 
-        <div class="loginFormContainer" *ngIf="!(this.isLoading$ | async)">
+        <div class="loginFormContainer" >
 
           <form [formGroup]="loginForm" (ngSubmit)="signIn()" novalidate>
 
@@ -58,8 +54,9 @@
 
             <div class="flex p-left-1 p-right-1">
               <button class="btn btn-size-medium btn-primary flex-grow" type="submit"
-                [disabled]="!this.loginForm.valid || this.loginForm.pristine">
-                {{ signInLabel }}
+                [disabled]="!this.loginForm.valid || this.loginForm.pristine || (this.isLoading$ | async)">
+                <span *ngIf="!(this.isLoading$ | async)">{{ signInLabel }}</span>
+                <span *ngIf="(this.isLoading$ | async)"> <i class="loader"></i> </span>
               </button>
             </div>
 

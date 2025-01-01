@@ -3,11 +3,13 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, mergeMap, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {
+  clearAuthenticationError,
   loginFailed,
   loginStart,
   loginSuccess,
   logout,
   logoutFailed,
+  logoutSuccess,
   revokeTokens
 } from './auth.actions';
 import { AuthenticationService } from '../authentication-service.service';
@@ -20,8 +22,6 @@ import { Buffer } from 'buffer';
 import { AuthenticatedUser } from './auth.state';
 import { HttpErrorHandlingService } from 'src/app/shared/services/error-handling.service';
 import { Strings } from 'src/app/shared/strings';
-import { raiseApplicationError } from 'src/app/shared/state/error-state/error.actions';
-import { Merge } from '@syncfusion/ej2/spreadsheet';
 
 @Injectable()
 export class AuthenitcationEffects {
@@ -29,9 +29,7 @@ export class AuthenitcationEffects {
     private actions$: Actions,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private store: Store,
-    private errorHandlingService: HttpErrorHandlingService
-  ) { }
+    private store: Store) { }
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -153,7 +151,9 @@ export class AuthenitcationEffects {
       mergeMap(() => {
         return this.authenticationService.signOut().pipe(
           map(() => {
-            return revokeTokens();
+            this.store.dispatch(clearAuthenticationError());
+            this.store.dispatch(revokeTokens());
+            return logoutSuccess();
           }),
           catchError((error) => {
             return of(logoutFailed({ error }));

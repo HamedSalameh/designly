@@ -6,6 +6,9 @@ export const LOGIN_START = '[Auth] Login Start';
 export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAILED = '[Auth] Login Failed';
 
+export const LOGOUT_SUCCESS = '[Auth] Logout Success';
+export const LOGOUT_FAILED = '[Auth] Logout Failed';
+
 export const LOGOUT = '[Auth] Logout';
 export const REVOKE_TOKENS = '[Auth] Revoke Tokens';
 
@@ -29,7 +32,10 @@ export const loginSuccess = createAction(LOGIN_SUCCESS, props<{
     ExpiresAt: any,
     redirect: boolean }>());
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
-export const logoutFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
+
+export const logoutFailed = createAction(LOGOUT_FAILED, props<{ error: string }>());
+export const logoutSuccess = createAction(LOGOUT_SUCCESS);
 
 export const logout = createAction(LOGOUT);
 export const revokeTokens = createAction(REVOKE_TOKENS);
+export const clearAuthenticationError = createAction(CLEAR_ERROR);
