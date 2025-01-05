@@ -147,7 +147,7 @@ export class EditClientComponent implements OnInit {
         Street: this.ClientInfo.get('AddressInfo.Street')?.value,
         BuildingNumber: this.ClientInfo.get('AddressInfo.BuildingNumber')
           ?.value,
-        AddressLines: this.ClientInfo.get('AddressInfo.AddressLine1')?.value,
+        AddressLines: [ this.ClientInfo.get('AddressInfo.AddressLine1')?.value || '' ],
       },
     };
   }
