@@ -57,3 +57,4 @@ const _authenticationReducer = createReducer<IAuthenticationState>(
 
 export function AuthenticationReduce(state: IAuthenticationState | undefined, action: Action) {
     return _authenticationReducer(state, action)
+}

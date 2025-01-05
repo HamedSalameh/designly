@@ -33,8 +33,6 @@ export const loginSuccess = createAction(LOGIN_SUCCESS, props<{
     redirect: boolean }>());
 export const loginFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
 export const logoutFailed = createAction(LOGIN_FAILED, props<{ error: string }>());
-
-export const logoutFailed = createAction(LOGOUT_FAILED, props<{ error: string }>());
 export const logoutSuccess = createAction(LOGOUT_SUCCESS);
 
 export const logout = createAction(LOGOUT);

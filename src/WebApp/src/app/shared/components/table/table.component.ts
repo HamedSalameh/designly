@@ -10,8 +10,11 @@ import {
 } from '@angular/core';
 import {
   DetailRowService,
+  FilterService,
   SearchSettingsModel,
   SelectionSettingsModel,
+  SortService,
+  ToolbarService,
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2/navigations';
 
@@ -20,7 +23,7 @@ import { ClickEventArgs } from '@syncfusion/ej2/navigations';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None, // This is needed to override the default encapsulation of Angular
-  providers: [DetailRowService]
+  providers: [DetailRowService, SortService, FilterService, ToolbarService]
 })
 export class TableComponent implements OnInit {
 
@@ -51,9 +54,7 @@ export class TableComponent implements OnInit {
   }
 
   selectedItem: any;
-  SearchtextPlaceholder: string = $localize`:@@Placeholders.Search:Search`;
-  AddNewClient: string = $localize`:@@Buttons.AddNewClient:Add New Client`;
-
+  
   @Input()
   data: any[] = [];
 
@@ -70,12 +71,6 @@ export class TableComponent implements OnInit {
   addClient: EventEmitter<any> = new EventEmitter();
 
   ngOnInit(): void {
-    this.searchOptions = {
-      fields: this.cols.map((col) => col.field),
-      operator: 'contains',
-      ignoreCase: true,
-      key: '',
-    };
 
     if (this.toolbarItems) {
       this.toolbarOptions = this.toolbarItems.map((item) => {
@@ -83,10 +78,18 @@ export class TableComponent implements OnInit {
           text: item.text,
           tooltipText: item.tooltipText,
           prefixIcon: item.prefixIcon,
-          id: item.id,
+          id: item.id
         };
       });
     }
+
+    this.searchOptions = {
+      fields: this.cols.map((col) => col.field),
+      operator: 'contains',
+      ignoreCase: true,
+      key: '',
+    };
+
   }
 
   toolbarClickHandler(args: ClickEventArgs) {
@@ -94,6 +97,14 @@ export class TableComponent implements OnInit {
     if (toolbarActionId) {
       if (toolbarActionId === 'addClientAction') {
         this.addClient.emit();
+      }
+      // search
+      if (toolbarActionId === 'searchClientAction') {
+        // Reset search key to clear search results
+        this.searchOptions = {
+          ...this.searchOptions,
+          key: '',
+        };
       }
     }
   }

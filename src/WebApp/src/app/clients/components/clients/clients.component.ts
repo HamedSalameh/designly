@@ -52,7 +52,14 @@ export class ClientsComponent {
   ngOnInit(): void { 
 
     this.tableToolbarItems = [
-      'Search',
+      {
+        // search
+        text: ClientStrings.Search,
+        tooltipText: ClientStrings.SearchTooltip,
+        prefixIcon: 'e-search-icon',
+        id: 'searchClientAction'
+      }
+      ,
       {
         text: ClientStrings.NewClient,
         tooltipText: 'Add',
