@@ -7,3 +7,4 @@ export class ProjectsStrings {
 
     static ProjectStatus = $localize`:@@Projects.ProjectStatus:Project Status`;
 }
+

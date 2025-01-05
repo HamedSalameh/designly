@@ -60,7 +60,7 @@ export class EditClientComponent implements OnInit {
           this.createForm();
           return of(null); // Return an observable that completes immediately
         }
-        
+
         return this.store.select(getSingleClient).pipe(
           tap((client) => {
             this.selectedClient = client || null;
@@ -70,7 +70,7 @@ export class EditClientComponent implements OnInit {
       }),
       take(1) // Ensure the observable completes after the first emission
     ).subscribe();
-    
+
   }
 
   ngOnInit(): void {
@@ -99,7 +99,7 @@ export class EditClientComponent implements OnInit {
     console.debug('[EditClientComponent] [onSave]');
     const client: Client = this.createClientFromForm();
     client.TenantId = this.tenantId;
-    
+
     this.SaveEditClient.emit(client);
   }
 
@@ -147,7 +147,7 @@ export class EditClientComponent implements OnInit {
         Street: this.ClientInfo.get('AddressInfo.Street')?.value,
         BuildingNumber: this.ClientInfo.get('AddressInfo.BuildingNumber')
           ?.value,
-        AddressLines: [ this.ClientInfo.get('AddressInfo.AddressLine1')?.value || '' ],
+        AddressLines: [this.ClientInfo.get('AddressInfo.AddressLine1')?.value || ''],
       },
     };
   }

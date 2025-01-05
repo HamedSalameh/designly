@@ -1,15 +1,27 @@
 <div class="a-card">
     <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
-        <div class="a-card-header form-row m-bottom-3">
+        <div class="a-card-header flex flex-row m-bottom-3">
             <div class="a-card-title">
                 <label class="section-title">
                     {{ Title }}
                 </label>
             </div>
+
+            <div class="a-card-buttons">
+                <!-- Icon button to edit  -->
+                <button class="btn icon-btn icon-btn-medium" (click)="onEdit()">
+                    <i class="ph ph-pencil-simple"></i>
+                </button>
+                <!-- Icon button to delete -->
+                <button class="btn icon-btn icon-btn-medium" (click)="onDelete()">
+                    <i class="ph ph-trash"></i>
+                </button>
+            </div>
+
         </div>
 
         <!-- Loop over all RealesateProperties and display them -->
-        <div *ngFor="let property of RealesateProperties" class="flex flex-column flex-align-start m-bottom-2">
+        <div *ngFor="let property of RealesateProperties" class="flex flex-column flex-align-start">
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-house-line font-size-large"></i>
                 <label class="details"> {{ property.Name }} </label>
@@ -22,12 +34,13 @@
 
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-frame-corners font-size-large"></i>
-                <label class="details"> {{ property.TotalArea }}  {{ AreaMeasurementUnit }} </label>
+                <label class="details"> {{ property.TotalArea }} {{ AreaMeasurementUnit }} </label>
             </div>
 
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-map-pin font-size-large"></i>
-                <label class="details"> {{ property.Address.Street}} {{ property.Address.BuildingNumber }}, {{ property.Address.City}} </label>
+                <label class="details"> {{ property.Address.Street}} {{ property.Address.BuildingNumber }}, {{
+                    property.Address.City}} </label>
             </div>
         </div>
 
@@ -35,3 +48,7 @@
 
     </div>
 </div>
+
+<ng-template #modalTemplate>
+    <div></div>
+</ng-template>
