@@ -24,6 +24,18 @@ export class RealestatePropertyService {
     return this.httpClient
       .post(`${this.serviceAddress}/realestate/properties/search`, searchPropertiesRequest, options);
   }
+
+  // delete property
+  deleteProperty(propertyId: string): Observable<any> {
+    console.debug('[RealestatePropertyService] [deleteProperty]');
+
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    // create options
+    const options = { headers };
+
+    return this.httpClient
+      .delete(`${this.serviceAddress}/realestate/properties/${propertyId}`, options);
+  }
 }
 
 

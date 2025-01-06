@@ -18,3 +18,13 @@ export const setActiveProject = createAction(
     '[ProjectsState] SetActiveProject',
     props<{ project: any }>()
 );
+
+export const deleteRealestatePropertyRequest = createAction(
+    '[ProjectsState] DeleteRealestatePropertyRequest',
+    props<{ propertyId: string }>()
+);
+
+export const deleteRealestatePropertyRequestSuccess = createAction(
+    '[ProjectsState] DeleteRealestatePropertyRequestSuccess',
+    props<{ propertyId: string }>()
+);

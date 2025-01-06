@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, of, switchMap, tap } from 'rxjs';
 import { IApplicationState } from 'src/app/shared/state/app.state';
-import { setActiveProject } from '../../projects-state/projects.actions';
+import { deleteRealestatePropertyRequest, setActiveProject } from '../../projects-state/projects.actions';
 import { BuildProjectViewModelForProjectId } from '../../Builders/project-view-model.factory';
-import { getProjectById } from '../../projects-state/projects.selectors';
+import { getActiveProject, getProjectById } from '../../projects-state/projects.selectors';
 
 @Component({
   selector: 'app-manage-project',
@@ -14,6 +14,7 @@ import { getProjectById } from '../../projects-state/projects.selectors';
 })
 export class ManageProjectComponent implements OnInit {
 
+
   projectIdFromRoute = this.route.params.pipe(map((params) => params['id']));
 
   constructor(private route: ActivatedRoute, private store: Store<IApplicationState>) {
@@ -21,7 +22,7 @@ export class ManageProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectIdFromRoute.pipe(
-      switchMap((projectId: string) => 
+      switchMap((projectId: string) =>
         this.store.select(getProjectById(projectId)).pipe(
           tap((project) => {
             if (!project) {
@@ -37,5 +38,17 @@ export class ManageProjectComponent implements OnInit {
       error: (err) => console.error('Error:', err),
     });
   }
-  
+
+  onDeleteRealestatePropoerty($event: any) {
+    // get the active project from the store
+  this.store.select(getActiveProject).pipe(
+    tap((project) => {
+      const propertyId = project?.PropertyId;
+      if (propertyId) {
+        this.store.dispatch(deleteRealestatePropertyRequest({ propertyId }));
+      }
+    })
+  ).subscribe();
+  }
+
 }

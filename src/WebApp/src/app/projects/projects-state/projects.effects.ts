@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { Store } from "@ngrx/store";
 import { ToastrService } from "ngx-toastr";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { catchError, EMPTY, map, mergeMap, of } from "rxjs";
 import { HttpErrorHandlingService } from "src/app/shared/services/error-handling.service";
 import { Strings } from "src/app/shared/strings";
-import { getProjectsRequest, getProjectsRequestSuccess } from "./projects.actions";
+import { deleteRealestatePropertyRequest, deleteRealestatePropertyRequestSuccess, getProjectsRequest, getProjectsRequestSuccess } from "./projects.actions";
 import { ProjectsService } from "../services/projects.service";
+import { RealestatePropertyService } from "../services/realestate-property.service";
+import { RealestatePropertyStrings } from "../real-estate-property-strings";
 
 @Injectable()
 export class ProjectsEffects {
@@ -14,6 +15,8 @@ export class ProjectsEffects {
     constructor(
         private action$: Actions,
         private projectsService: ProjectsService,
+        private realestatePropertyService: RealestatePropertyService,
+        private toastr: ToastrService,
         private errorHandlingService: HttpErrorHandlingService
     ) {}
 
@@ -37,4 +40,25 @@ export class ProjectsEffects {
             })
         )
     );
+
+    deleteRealestatePropertyRequest$ = createEffect(() =>
+        this.action$.pipe(
+            ofType(deleteRealestatePropertyRequest),
+            mergeMap((action) => {
+                return this.realestatePropertyService.deleteProperty(action.propertyId).pipe(
+                    map(() => {
+                        console.debug('[ProjectsEffects] [deleteRealestatePropertyRequest] - OK');
+                        this.toastr.success(RealestatePropertyStrings.DeletePropertySuccess);
+                        return deleteRealestatePropertyRequestSuccess({ propertyId: action.propertyId });
+                    }),
+                    catchError((error) => {
+                        error.message = RealestatePropertyStrings.UnableToDeleteRealestateProperty;
+                        this.errorHandlingService.handleError(error);
+                        return EMPTY; // Use EMPTY instead of of()
+                    })
+                );
+            })
+        )
+    );
+    
 }
