@@ -8,6 +8,10 @@
             </div>
 
             <div class="a-card-buttons">
+                <!-- Icon button to create new asset property -->
+                <button class="btn icon-btn icon-btn-medium" (click)="onAdd()">
+                    <i class="ph ph-plus"></i>
+                </button>
                 <!-- Icon button to edit  -->
                 <button class="btn icon-btn icon-btn-medium" (click)="onEdit()">
                     <i class="ph ph-pencil-simple"></i>
@@ -18,6 +22,15 @@
                 </button>
             </div>
 
+        </div>
+
+        <div *ngIf="this.isLoading" class="flex flex-row flex-align-center flex-justify-center">
+            <i class="spinner spinner-primary"></i>
+        </div>
+
+        <div class="no-assets" *ngIf="RealesateProperties.length === 0 && !this.isLoading">
+            <i class="ph ph-warning-circle icon"></i>
+            <span> {{ NoAssetsFound }} </span>
         </div>
 
         <!-- Loop over all RealesateProperties and display them -->

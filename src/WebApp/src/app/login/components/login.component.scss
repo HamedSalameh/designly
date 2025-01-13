@@ -73,13 +73,6 @@
   }
 }
 
-.spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
 .formWrapper {
   display: flex;
   flex-direction: column;
@@ -90,27 +83,6 @@
   min-width: 380px;
 }
 
-.loader {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  display: inline-block;
-  border-top: 5px solid #ff9500;
-  border-right: 5px solid transparent;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .loginFormContainer {
   min-width: 300px;
 }
@@ -119,23 +91,3 @@
   min-height: 357px;
 }
 
-.loader {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: inline-block;
-  border-top: 3px solid #FFF;
-  border-right: 3px solid transparent;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}

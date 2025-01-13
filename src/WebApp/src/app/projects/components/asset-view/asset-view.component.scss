@@ -1,0 +1,13 @@
+@import 'main';
+
+.no-assets {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-medium;
+    font-family: $font-family;
+}
+
+.icon {
+    font-size: $font-size-extra-large;
+}

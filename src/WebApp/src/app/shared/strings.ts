@@ -68,4 +68,5 @@ export class Strings {
   static InvalidCredentials: string = $localize`:@@Errors.InvalidCredentials:Invalid username or password.`;
   static PasswordAttemptsExceeded: string = $localize`:@@Errors.PassweordAttemptsExceeded:Password attempts exceeded.`;
   static UnknownError: string = $localize`:@@Errors.UnknownError:An unknown error occurred.`;
+  static NoAssetsFound: string = $localize`:@@Errors.NoAssetsFound:No assets found.`;
 }

@@ -26,6 +26,8 @@ export class AssetViewComponent {
   // localized strings
   Title!: string;
   AreaMeasurementUnit!: string;
+  NoAssetsFound = Strings.NoAssetsFound;
+  isLoading = false;
 
   public RealesateProperties: Property[] = [];
 
@@ -41,7 +43,8 @@ export class AssetViewComponent {
 
     this.store.select(getActiveProject).pipe(
       switchMap((activeProject) => {
-        if (activeProject) {
+        if (activeProject && activeProject.PropertyId) {
+          this.isLoading = true;
           // Build the request and fetch real estate properties
           const searchPropertiesRequest: SearchPropertiesRequest = {
             id: activeProject.PropertyId, // Assuming PropertyId exists in activeProject
@@ -54,6 +57,7 @@ export class AssetViewComponent {
       }),
       switchMap((response) => {
         if (response) {
+          this.isLoading = false;
           // Process the response into an array of Property objects using the builder function
           return of(buildRealestatePropertyBuilder(response));
         }
@@ -67,6 +71,7 @@ export class AssetViewComponent {
         } else {
           console.warn('No properties found');
         }
+        this.isLoading = false;
       },
       error: (err) => console.error('Error fetching property:', err),
     });
@@ -88,5 +93,7 @@ export class AssetViewComponent {
     throw new Error('Method not implemented.');
   }
 
-
+  onAdd() {
+    throw new Error('Method not implemented.');
+  }
 }

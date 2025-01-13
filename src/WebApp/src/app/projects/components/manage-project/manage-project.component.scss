@@ -6,7 +6,23 @@
 
 .manage-project {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
   grid-gap: $gap-normal;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row wrap;
+  gap: $gap-medium;
+}
+
+.project-details-card {
+  flex: 2; /* Updated */
+  min-width: 600px;
+}
+
+.asset-details-card {
+  flex: 1; /* Updated */
 }

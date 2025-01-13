@@ -56,7 +56,7 @@
               <button class="btn btn-size-medium btn-primary flex-grow" type="submit"
                 [disabled]="!this.loginForm.valid || this.loginForm.pristine || (this.isLoading$ | async)">
                 <span *ngIf="!(this.isLoading$ | async)">{{ signInLabel }}</span>
-                <span *ngIf="(this.isLoading$ | async)"> <i class="loader"></i> </span>
+                <span *ngIf="(this.isLoading$ | async)"> <i class="spinner spinner-shaded"></i> </span>
               </button>
             </div>
 
