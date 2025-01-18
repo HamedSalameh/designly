@@ -45,12 +45,8 @@ export class AssetViewComponent {
       switchMap((activeProject) => {
         if (activeProject && activeProject.PropertyId) {
           this.isLoading = true;
-          // Build the request and fetch real estate properties
-          const searchPropertiesRequest: SearchPropertiesRequest = {
-            id: activeProject.PropertyId, // Assuming PropertyId exists in activeProject
-          };
 
-          return this.realestatePropertyService.getProperties(searchPropertiesRequest);
+          return this.realestatePropertyService.getProperty(activeProject.PropertyId);
         }
         console.warn('Active project not found');
         return of(null); // Return a null observable if no active project
@@ -59,15 +55,16 @@ export class AssetViewComponent {
         if (response) {
           this.isLoading = false;
           // Process the response into an array of Property objects using the builder function
-          return of(buildRealestatePropertyBuilder(response));
+          return of(response);
+          //return of(buildRealestatePropertyBuilder(response));
         }
-        return of([]); // Return an empty array observable if no response
+        return of(); // Return an empty array observable if no response
       })
     ).subscribe({
-      next: (properties) => {
-        if (properties && properties.length > 0) {
-          console.log('Property loaded successfully:', properties);
-          this.RealesateProperties = properties;
+      next: (property) => {
+        if (property) {
+          console.log('Property loaded successfully:', property);
+          this.RealesateProperties = [property] ;
         } else {
           console.warn('No properties found');
         }

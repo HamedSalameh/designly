@@ -13,6 +13,17 @@ export class RealestatePropertyService {
 
   constructor(private httpClient: HttpClient) { }
 
+  getProperty(propertyId: string): Observable<any> {
+    console.debug('[RealestatePropertyService] [getProperty]');
+
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    // create options
+    const options = { headers };
+
+    return this.httpClient
+      .get(`${this.serviceAddress}/realestate/properties/${propertyId}`, options);
+  }
+
   // Get properties
   getProperties(searchPropertiesRequest: SearchPropertiesRequest): Observable<any> {
     console.debug('[RealestatePropertyService] [getProperties]');

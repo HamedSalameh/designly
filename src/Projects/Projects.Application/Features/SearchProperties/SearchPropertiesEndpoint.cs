@@ -43,7 +43,7 @@ namespace Projects.Application.Features.SearchProperties
                 string.IsNullOrWhiteSpace(searchPropertiesRequest.Street))
             {
                 logger.LogWarning("Request object is not valid. At least one of the following properties must be provided: Id, City, Street");
-                return Results.BadRequest("At least one of the following properties must be provided: Id, City, Street");
+                return Results.BadRequest("At least one of the following properties must be provided: City, Street");
             }
 
             var tenantId = tenantProvider.GetTenantId();
@@ -64,6 +64,7 @@ namespace Projects.Application.Features.SearchProperties
                 {
                     filterConditions.Add(new FilterCondition("Street", FilterConditionOperator.Contains, [searchPropertiesRequest.Street]));
                 }
+
             }
 
             searchPropertiesCommand.FilterConditions = filterConditions;
