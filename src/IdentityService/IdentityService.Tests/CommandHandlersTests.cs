@@ -177,8 +177,14 @@ namespace IdentityService.Tests
             // Act
             var token =await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            Assert.That(token, Is.EqualTo(tokenMock));
+            // assert
+            // extract the token from the response via result pattern
+            var tokenResponse = token.Match(
+                Succ: token => token,
+                Fail: ex => throw new Exception("Error")
+            );
+
+            Assert.That(tokenResponse, Is.EqualTo(tokenMock));
         }
 
         [Test]
