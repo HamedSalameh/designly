@@ -28,36 +28,34 @@
             <i class="spinner spinner-primary"></i>
         </div>
 
-        <div class="no-assets" *ngIf="RealesateProperties.length === 0 && !this.isLoading">
+        <div class="no-assets" *ngIf="!this.RealesateProperty && !this.isLoading">
             <i class="ph ph-warning-circle icon"></i>
             <span> {{ NoAssetsFound }} </span>
         </div>
 
         <!-- Loop over all RealesateProperties and display them -->
-        <div *ngFor="let property of RealesateProperties" class="flex flex-column flex-align-start">
+        <div *ngIf="this.RealesateProperty" class="flex flex-column flex-align-start">
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-house-line font-size-large"></i>
-                <label class="details"> {{ property.Name }} </label>
+                <label class="details"> {{ this.RealesateProperty?.Name }} </label>
             </div>
 
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-blueprint font-size-large"></i>
-                <label class="details"> {{ property.PropertyType }} </label>
+                <label class="details"> {{ this.RealesateProperty?.PropertyType }} </label>
             </div>
 
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-frame-corners font-size-large"></i>
-                <label class="details"> {{ property.TotalArea }} {{ AreaMeasurementUnit }} </label>
+                <label class="details"> {{ this.RealesateProperty?.TotalArea }} {{ AreaMeasurementUnit }} </label>
             </div>
 
             <div class="flex flex-row flex-align-start ">
                 <i class="ph ph-map-pin font-size-large"></i>
-                <label class="details"> {{ property.Address.Street}} {{ property.Address.BuildingNumber }}, {{
-                    property.Address.City}} </label>
+                <label class="details"> {{ this.RealesateProperty?.Address?.Street}} {{ this.RealesateProperty?.Address?.BuildingNumber }}, {{
+                    this.RealesateProperty?.Address?.City}} </label>
             </div>
         </div>
-
-
 
     </div>
 </div>

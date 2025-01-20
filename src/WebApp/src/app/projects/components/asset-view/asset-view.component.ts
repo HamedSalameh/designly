@@ -29,7 +29,7 @@ export class AssetViewComponent {
   NoAssetsFound = Strings.NoAssetsFound;
   isLoading = false;
 
-  public RealesateProperties: Property[] = [];
+  public RealesateProperty: Property | null = null;
 
   constructor(
     private realestatePropertyService: RealestatePropertyService,
@@ -45,10 +45,9 @@ export class AssetViewComponent {
       switchMap((activeProject) => {
         if (activeProject && activeProject.PropertyId) {
           this.isLoading = true;
-
+          this.RealesateProperty = null;
           return this.realestatePropertyService.getProperty(activeProject.PropertyId);
         }
-        console.warn('Active project not found');
         return of(null); // Return a null observable if no active project
       }),
       switchMap((response) => {
@@ -56,7 +55,6 @@ export class AssetViewComponent {
           this.isLoading = false;
           // Process the response into an array of Property objects using the builder function
           return of(response);
-          //return of(buildRealestatePropertyBuilder(response));
         }
         return of(); // Return an empty array observable if no response
       })
@@ -64,7 +62,7 @@ export class AssetViewComponent {
       next: (property) => {
         if (property) {
           console.log('Property loaded successfully:', property);
-          this.RealesateProperties = [property] ;
+          this.RealesateProperty = property;
         } else {
           console.warn('No properties found');
         }
