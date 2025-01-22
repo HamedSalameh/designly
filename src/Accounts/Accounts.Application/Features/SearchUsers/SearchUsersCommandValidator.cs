@@ -7,7 +7,8 @@ namespace Accounts.Application.Features.SearchUsers
     {
         public SearchUsersCommandValidator()
         {
-            RuleFor(x => x.TenantId).NotEmpty().WithMessage("Tenant id is required");
+            RuleFor(x => x.TenantId).NotEqual(Guid.Empty).WithMessage("Tenant id is required");
+            RuleFor(x => x.TenantId).NotNull().WithMessage("Tenant id is required");
 
             RuleFor(x => x.FilterConditions).Custom(FilterValidation);
         }
