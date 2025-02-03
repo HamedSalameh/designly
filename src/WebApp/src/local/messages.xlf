@@ -248,6 +248,30 @@
       <trans-unit id="RealestatePropoerty.Actions.UnableToDeleteRealestateProperty" datatype="html">
         <source>Unable to delete realestate property</source>
       </trans-unit>
+      <trans-unit id="cancelledStatus" datatype="html">
+        <source>Cancelled</source>
+      </trans-unit>
+      <trans-unit id="completedStatus" datatype="html">
+        <source>Completed</source>
+      </trans-unit>
+      <trans-unit id="delayedStatus" datatype="html">
+        <source>Delayed</source>
+      </trans-unit>
+      <trans-unit id="inProgressStatus" datatype="html">
+        <source>In Progress</source>
+      </trans-unit>
+      <trans-unit id="notStartedStatus" datatype="html">
+        <source>Not Started</source>
+      </trans-unit>
+      <trans-unit id="onHoldStatus" datatype="html">
+        <source>On Hold</source>
+      </trans-unit>
+      <trans-unit id="Errors.Project.UnableToLoadProjects" datatype="html">
+        <source>We were unable to load the projects list. Please try again.</source>
+      </trans-unit>
+      <trans-unit id="Errors.User.UnableToLoadUsers" datatype="html">
+        <source>We were unable to load the users list. Please try again.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

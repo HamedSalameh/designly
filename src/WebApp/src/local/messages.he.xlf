@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
@@ -329,6 +329,39 @@
       <trans-unit id="Errors.NoAssetsFound" datatype="html">
         <source>No assets found.</source>
         <target state="new">לא נמצאו נכסים</target>
+      </trans-unit>
+      <trans-unit id="notStartedStatus" datatype="html">
+        <source>Not Started</source>
+        <target state="new">טרם התחיל</target>
+      </trans-unit>
+      <trans-unit id="inProgressStatus" datatype="html">
+        <source>In Progress</source>
+        <target state="new">בתהליך</target>
+      </trans-unit>
+      <trans-unit id="delayedStatus" datatype="html">
+        <source>Delayed</source>
+        <target state="new">מתעכב</target>
+      </trans-unit>
+      <trans-unit id="completedStatus" datatype="html">
+        <source>Completed</source>
+        <target state="new">הושלם</target>
+      </trans-unit>
+      <trans-unit id="onHoldStatus" datatype="html">
+        <source>On Hold</source>
+        <target state="new">בהמתנה</target>
+      </trans-unit>
+      <trans-unit id="cancelledStatus" datatype="html">
+        <source>Cancelled</source>
+        <target state="new">בוטל</target>
+      </trans-unit>
+      <trans-unit id="Errors.Project.UnableToLoadProjects" datatype="html">
+        <source>We were unable to load the projects list. Please try again.</source>
+        <target state="new">לא הצלחנו לטעון את רשימת הפרויקטים. אנא נסה שוב.</target>
+      </trans-unit>
+      <trans-unit id="Errors.User.UnableToLoadUsers" datatype="html">
+        <source>We were unable to load the users list. Please try again.</source>
+        <target state="new">לא הצלחנו לטעון את רשימת המשתמשים. אנא נסה שוב.
+        </target>
       </trans-unit>
     </body>
   </file>

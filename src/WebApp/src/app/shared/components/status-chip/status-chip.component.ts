@@ -19,12 +19,12 @@ export class StatusChipComponent implements OnChanges {
   };
 
   @Input() statusTextMap: { [key: number]: string } = {
-    0: 'Not Started',
-    1: 'In Progress',
-    2: 'Delayed',
-    3: 'Completed',
-    4: 'OnHold',
-    5: 'Cancelled'
+    0: $localize `:@@notStartedStatus:Not Started`,
+    1: $localize `:@@inProgressStatus:In Progress`,
+    2: $localize `:@@delayedStatus:Delayed`,
+    3: $localize `:@@completedStatus:Completed`,
+    4: $localize `:@@onHoldStatus:On Hold`,
+    5: $localize `:@@cancelledStatus:Cancelled`
   };
 
   statusColor: string = 'blue';

@@ -1,6 +1,4 @@
-﻿using Designly.Base;
-using Designly.Base.Exceptions;
-using Projects.Application.LogicValidation;
+﻿using Projects.Application.LogicValidation;
 using Projects.Infrastructure.Interfaces;
 
 namespace Projects.Application.Features.DeleteProperty
@@ -16,21 +14,11 @@ namespace Projects.Application.Features.DeleteProperty
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Exception?> ValidateAsync(DeletePropertyValidationRequest request, CancellationToken cancellationToken)
+        public Task<Exception?> ValidateAsync(DeletePropertyValidationRequest request, CancellationToken cancellationToken)
         {
-            // when attempting to delete a property, we need to check if the property is already assigned to a project
-            // if it is, we should not allow the deletion of the property
-            // if it is not, we should allow the deletion of the property
+            ArgumentNullException.ThrowIfNull(request);
 
-            var isPropertyAttachedToProject = await _unitOfWork.PropertiesRepository.IsPropertyAttachedToProject(request.TenantId, request.PropertyId, 
-                cancellationToken);
-
-            if (isPropertyAttachedToProject)
-            {
-                return new BusinessLogicException(new Error("AttachedProperty", "The property is already attached to a project"));
-            }
-
-            return null;
+            return Task.FromResult<Exception?>(null);
         }
     }
 }
