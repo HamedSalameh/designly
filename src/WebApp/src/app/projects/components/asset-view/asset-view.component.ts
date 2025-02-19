@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Strings } from 'src/app/shared/strings';
 import { Property } from '../../models/property.model';
 import { buildRealestatePropertyBuilder } from '../../Builders/realestate-property.builder';
 import { getActiveProject } from '../../projects-state/projects.selectors';
 import { Store } from '@ngrx/store';
 import { IApplicationState } from 'src/app/shared/state/app.state';
-import { map, of, switchMap } from 'rxjs';
+import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { RealestatePropertyService } from '../../services/realestate-property.service';
 import { SearchPropertiesRequest } from '../../models/SearchPropertiesRequest';
 import { ModalService } from 'src/app/shared/services/modal-service.service';
@@ -16,9 +16,9 @@ import { RealestatePropertyStrings } from '../../real-estate-property-strings';
   templateUrl: './asset-view.component.html',
   styleUrls: ['./asset-view.component.scss']
 })
-export class AssetViewComponent {
+export class AssetViewComponent implements OnInit, OnDestroy {
 
-  @Output() DeleteRealestatePropoerty: EventEmitter<any> = new EventEmitter();
+  @Output() DeleteRealestateProperty: EventEmitter<any> = new EventEmitter();
   // element ref for modelTemplate
   @ViewChild('modalTemplate')
   modalTemplate!: TemplateRef<any>;
@@ -29,7 +29,8 @@ export class AssetViewComponent {
   NoAssetsFound = Strings.NoAssetsFound;
   isLoading = false;
 
-  public RealesateProperty: Property | null = null;
+  public RealestateProperty: Property | null = null;
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(
     private realestatePropertyService: RealestatePropertyService,
@@ -42,44 +43,44 @@ export class AssetViewComponent {
     this.AreaMeasurementUnit = Strings.AreaMeasurementUnit;
 
     this.store.select(getActiveProject).pipe(
+      takeUntil(this.ngUnsubscribe), // Ensures cleanup
       switchMap((activeProject) => {
-        if (activeProject && activeProject.PropertyId) {
+        if (activeProject?.PropertyId) {
           this.isLoading = true;
-          this.RealesateProperty = null;
+          this.RealestateProperty = null;
           return this.realestatePropertyService.getProperty(activeProject.PropertyId);
         }
-        return of(null); // Return a null observable if no active project
-      }),
-      switchMap((response) => {
-        if (response) {
-          this.isLoading = false;
-          // Process the response into an array of Property objects using the builder function
-          return of(response);
-        }
-        return of(); // Return an empty array observable if no response
+        return of(null);
       })
     ).subscribe({
       next: (property) => {
+        this.isLoading = false;
         if (property) {
           console.log('Property loaded successfully:', property);
-          this.RealesateProperty = property;
+          this.RealestateProperty = property;
         } else {
           console.warn('No properties found');
         }
-        this.isLoading = false;
       },
-      error: (err) => console.error('Error fetching property:', err),
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Error fetching property:', err);
+      }
     });
   }
 
   onDelete() {
+    if (!this.modalTemplate) {
+      console.error('Modal template is not available.');
+      return;
+    }
+  
     this.modalService.open(this.modalTemplate, {
       title: RealestatePropertyStrings.DeletePropertyTitle,
       content: RealestatePropertyStrings.DeletePropertyMessage,
     }).subscribe(action => {
-      console.log(action);
       if (action === 'confirm') {
-        this.DeleteRealestatePropoerty.emit();
+        this.DeleteRealestateProperty.emit();
       }
     });
   }
@@ -90,5 +91,10 @@ export class AssetViewComponent {
 
   onAdd() {
     throw new Error('Method not implemented.');
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
@@ -102,13 +102,9 @@
         <source>Communication</source>
         <target>תקשורת</target>
       </trans-unit>
-      <trans-unit id="Placeholders.Search" datatype="html">
+      <trans-unit id="Clients.Actions.Search" datatype="html">
         <source>Search</source>
         <target>חיפוש</target>
-      </trans-unit>
-      <trans-unit id="Buttons.AddNewClient" datatype="html">
-        <source>Add New Client</source>
-        <target>הוספת לקוח חדש</target>
       </trans-unit>
       <trans-unit id="Errors.NotFound" datatype="html">
         <source>We were unable to find the requested resource.</source>
@@ -296,7 +292,91 @@
       </trans-unit>
       <trans-unit id="Global.AssetInfo.AreaMeasurementUnit" datatype="html">
         <source>AreaMeasurementUnit</source>
-        <target state="new">מ"ר</target>
+        <target state="new">מ&quot;ר</target>
+      </trans-unit>
+      <trans-unit id="Clients.Actions.SearchTooltip" datatype="html">
+        <source>Search</source>
+        <target state="new">חיפוש</target>
+      </trans-unit>
+      <trans-unit id="RealestatePropoerty.Actions.DeletePropertyMessage" datatype="html">
+        <source>Are you sure you want to delete this property?</source>
+        <target state="new">האם למחוק את הנכס הנוכחי?</target>
+      </trans-unit>
+      <trans-unit id="RealestatePropoerty.Actions.DeletePropertyTitle" datatype="html">
+        <source>Delete Property</source>
+        <target state="new">מחק נכס</target>
+      </trans-unit>
+      <trans-unit id="RealestatePropoerty.Actions.DeletePropertySuccess" datatype="html">
+        <source>Property deleted successfully</source>
+        <target state="new">הנכס נמחק</target>
+      </trans-unit>
+      <trans-unit id="RealestatePropoerty.Actions.UnableToDeleteRealestateProperty" datatype="html">
+        <source>Unable to delete realestate property</source>
+        <target state="new">לא הצלחנו למחוק את הנכס</target>
+      </trans-unit>
+      <trans-unit id="Errors.InvalidCredentials" datatype="html">
+        <source>Invalid username or password.</source>
+        <target state="new">שם משתמש או סיסמה אינם נכונים</target>
+      </trans-unit>
+      <trans-unit id="Errors.PassweordAttemptsExceeded" datatype="html">
+        <source>Password attempts exceeded.</source>
+        <target state="new">עברת את מספר ניסיונות ההתחברות המותר. אנא נסה שוב מאוחר יותר</target>
+      </trans-unit>
+      <trans-unit id="Errors.UnknownError" datatype="html">
+        <source>An unknown error occurred.</source>
+        <target state="new">אופס! משהו לא טוב קרה, אנחנו בודקים את זה</target>
+      </trans-unit>
+      <trans-unit id="Errors.NoAssetsFound" datatype="html">
+        <source>No assets found.</source>
+        <target state="new">לא נמצאו נכסים</target>
+      </trans-unit>
+      <trans-unit id="notStartedStatus" datatype="html">
+        <source>Not Started</source>
+        <target state="new">טרם התחיל</target>
+      </trans-unit>
+      <trans-unit id="inProgressStatus" datatype="html">
+        <source>In Progress</source>
+        <target state="new">בתהליך</target>
+      </trans-unit>
+      <trans-unit id="delayedStatus" datatype="html">
+        <source>Delayed</source>
+        <target state="new">מתעכב</target>
+      </trans-unit>
+      <trans-unit id="completedStatus" datatype="html">
+        <source>Completed</source>
+        <target state="new">הושלם</target>
+      </trans-unit>
+      <trans-unit id="onHoldStatus" datatype="html">
+        <source>On Hold</source>
+        <target state="new">בהמתנה</target>
+      </trans-unit>
+      <trans-unit id="cancelledStatus" datatype="html">
+        <source>Cancelled</source>
+        <target state="new">בוטל</target>
+      </trans-unit>
+      <trans-unit id="Errors.Project.UnableToLoadProjects" datatype="html">
+        <source>We were unable to load the projects list. Please try again.</source>
+        <target state="new">לא הצלחנו לטעון את רשימת הפרויקטים. אנא נסה שוב.</target>
+      </trans-unit>
+      <trans-unit id="Errors.User.UnableToLoadUsers" datatype="html">
+        <source>We were unable to load the users list. Please try again.</source>
+        <target state="new">לא הצלחנו לטעון את רשימת המשתמשים. אנא נסה שוב. </target>
+      </trans-unit>
+      <trans-unit id="Pages.404" datatype="html">
+        <source>Umm, we can&apos;t find that page!</source>
+        <target state="new">מממ... הלכת לאיבוד? </target>
+      </trans-unit>
+      <trans-unit id="Pages.404Subtitle" datatype="html">
+        <source>404</source>
+        <target state="new">404</target>
+      </trans-unit>
+      <trans-unit id="Pages.404Message" datatype="html">
+        <source>We&apos;re sorry, but the page you&apos;re looking for doesn&apos;t exist.</source>
+        <target state="new">אנחנו מצטערים, אבל הדף שחיפשת לא נמצא</target>
+      </trans-unit>
+      <trans-unit id="Pages.GoBack" datatype="html">
+        <source>Go back</source>
+        <target state="new">חזרה</target>
       </trans-unit>
     </body>
   </file>

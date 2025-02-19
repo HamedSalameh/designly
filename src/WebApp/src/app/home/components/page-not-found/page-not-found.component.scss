@@ -1,0 +1,53 @@
+@import "main.scss";
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;  // More reliable than height: 100vh
+    font-family: $font-family;
+    
+    // Background shorthand for better readability
+    background: url("/assets/images/404.jpg") no-repeat center/cover;
+
+    .child {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: rgba($grey-300, 0.3);  // Slightly increased opacity for better contrast
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: $shadow-lg;
+    }
+}
+
+.Title {
+    font-size: 4rem;
+    font-weight: $font-weight-light;
+    color: $primary-700;
+}
+
+.Subtitle {
+    font-size: 2rem;
+    color: $grey-500;
+}
+
+.Message {
+    font-size: 1.5rem;
+    color: $grey-700;
+}
+
+.credit {
+    font-size: 1rem;
+    color: $grey-500;
+    margin-top: 1rem;
+    // Text decoration shorthand
+    text-decoration: none;
+
+    a {
+        color: $grey-500;
+        text-decoration: none;
+    }
+}

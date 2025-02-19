@@ -2,12 +2,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { logout } from 'src/app/authentication/state/auth.actions';
-import { getUser } from 'src/app/authentication/state/auth.selectors';
+import { getUser, isAuthenticated } from 'src/app/authentication/state/auth.selectors';
 import { HeaderStrings } from '../strings';
 import { Strings } from 'src/app/shared/strings';
 import { resetClientsState } from 'src/app/clients/client-state/clients.actions';
 import { globalResetState, resetSharedState } from 'src/app/shared/state/shared/shared.actions';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile-menu',
@@ -32,22 +32,24 @@ export class ProfileMenuComponent {
   localizedLogout = Strings.Logout;
 
   isMenuOpen: boolean = false;
+  isAuthenticated$ = this.store.select(isAuthenticated);
   loggedUser$ = this.store.select(getUser);
   loggedUser: string = '';
 
   private unsubscribe$ = new Subject<void>();
 
   constructor(private store: Store) {
+
+    // Subscribe to user details only after authentication is resolved
     this.loggedUser$
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((user) => {
-      if (!user) {
-        this.loggedUser = '';
-        this.store.dispatch(logout());
-      }
-      this.loggedUser = `${user?.given_name} ${user?.family_name}`;
-    });
-    }
+      .pipe(
+        filter(user => user !== null), // Ensure the user exists
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((user) => {
+        this.loggedUser = `${user?.GivenName} ${user?.FamilyName}`;
+      });
+  }
   
 
   toggleMenu() {

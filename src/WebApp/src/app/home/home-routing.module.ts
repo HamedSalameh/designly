@@ -33,13 +33,17 @@ const projectsRoute = RouteFactory.createRoute(
 );
 ModuleRoutes.set(ApplicationModules.projects.path, projectsRoute);
 
+const dashboardPath = ModuleRoutes.get('dashboard')?.path ?? 'dashboard';
+const clientsPath = ModuleRoutes.get('clients')?.path ?? 'clients';
+const projectsPath = ModuleRoutes.get('projects')?.path ?? 'projects';
+
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
     children: [
       {
-        path: ModuleRoutes.get('dashboard')?.path, // 'dashboard
+        path: dashboardPath,
         canActivate: [AuthenticationGuard],
         data: { breadcrumb: ModuleRoutes.get('dashboard')?.breadcrumb },
         loadChildren: () =>
@@ -48,25 +52,19 @@ const routes: Routes = [
           ),
       },
       {
-        path: ModuleRoutes.get('clients')?.path, // 'clients
+        path: clientsPath,
         canActivate: [AuthenticationGuard],
         data: { breadcrumb: ModuleRoutes.get('clients')?.breadcrumb },
         loadChildren: () =>
           import('../clients/clients.module').then((m) => m.ClientsModule),
       },
       {
-        path: ModuleRoutes.get('projects')?.path, // 'projects
+        path: projectsPath,
         canActivate: [AuthenticationGuard],
         data: { breadcrumb: ModuleRoutes.get('projects')?.breadcrumb },
         loadChildren: () =>
           import('../projects/projects.module').then((m) => m.ProjectsModule),
       },
-      {
-        // default route
-        path: '',
-        redirectTo: '',
-        pathMatch: 'full',
-      }
     ],
   },
 ];

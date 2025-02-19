@@ -6,11 +6,6 @@ export const AUTH_STATE_NAME = 'auth';
 
 export const authenticationFeatureSelector = createFeatureSelector<IAuthenticationState>(AUTH_STATE_NAME);
 
-export const getIdToken = createSelector(
-    authenticationFeatureSelector,
-    (state: IAuthenticationState) => state.IdToken
-);
-
 export const getUser = createSelector(
     authenticationFeatureSelector,
     (state: IAuthenticationState) => state.User
@@ -18,16 +13,12 @@ export const getUser = createSelector(
 
 export const isAuthenticated = createSelector(
     authenticationFeatureSelector,
-    (state: IAuthenticationState) => !!state.AccessToken && !isTokenExpired(state.AccessToken)
-)
-export const getAccessToken = createSelector(
-    authenticationFeatureSelector,
-    (state: IAuthenticationState) => state.AccessToken
+    (state: IAuthenticationState) => !!state.User
 )
 
 export const getTenantId = createSelector(
     authenticationFeatureSelector,
-    (state: IAuthenticationState) => state.User?.tenant_id
+    (state: IAuthenticationState) => state.User?.TenantId
 )
 
 export const getLoginFailedError = createSelector(

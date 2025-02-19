@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, of, switchMap, tap } from 'rxjs';
+import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { IApplicationState } from 'src/app/shared/state/app.state';
 import { deleteRealestatePropertyRequest, setActiveProject } from '../../projects-state/projects.actions';
-import { BuildProjectViewModelForProjectId } from '../../Builders/project-view-model.factory';
 import { getActiveProject, getProjectById } from '../../projects-state/projects.selectors';
 
 @Component({
@@ -12,16 +11,18 @@ import { getActiveProject, getProjectById } from '../../projects-state/projects.
   templateUrl: './manage-project.component.html',
   styleUrls: ['./manage-project.component.scss']
 })
-export class ManageProjectComponent implements OnInit {
-
+export class ManageProjectComponent implements OnInit, OnDestroy {
 
   projectIdFromRoute = this.route.params.pipe(map((params) => params['id']));
+
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(private route: ActivatedRoute, private store: Store<IApplicationState>) {
   }
 
   ngOnInit(): void {
     this.projectIdFromRoute.pipe(
+      takeUntil(this.ngUnsubscribe), // Ensure cleanup
       switchMap((projectId: string) =>
         this.store.select(getProjectById(projectId)).pipe(
           tap((project) => {
@@ -40,15 +41,21 @@ export class ManageProjectComponent implements OnInit {
   }
 
   onDeleteRealestatePropoerty($event: any) {
-    // get the active project from the store
-  this.store.select(getActiveProject).pipe(
-    tap((project) => {
-      const propertyId = project?.PropertyId;
-      if (propertyId) {
-        this.store.dispatch(deleteRealestatePropertyRequest({ propertyId }));
-      }
-    })
-  ).subscribe();
+    console.debug('Deleting property:', $event);
+    this.store.select(getActiveProject).pipe(
+      takeUntil(this.ngUnsubscribe), // Ensure cleanup
+      tap((project) => {
+        const propertyId = project?.PropertyId;
+        if (propertyId) {
+          this.store.dispatch(deleteRealestatePropertyRequest({ propertyId }));
+        }
+      })
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

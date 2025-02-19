@@ -1,7 +1,6 @@
 ﻿using Asp.Versioning;
-using Designly.Auth;
+using Designly.Auth.Identity;
 using Designly.Auth.Models;
-using Designly.Base;
 using Designly.Base.Exceptions;
 using Designly.Base.Extensions;
 using IdentityService.API.DTO;
@@ -13,9 +12,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using System.Security.Claims;
-using static Designly.Shared.Consts;
 
 namespace IdentityService.API.Controllers
 {
@@ -33,6 +32,23 @@ namespace IdentityService.API.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _logger = logger;
         }
+
+        [Authorize]
+        [HttpGet("is-authenticated")]
+        public IActionResult IsAuthenticated()
+        {
+            var user = HttpContext?.User;
+            if (user is null || (user.Identity?.IsAuthenticated is false))
+            {
+                return Unauthorized();
+            }
+
+            var IdToken = HttpContext?.Request.Cookies["id_token"];
+            // parse the id token from base64
+            var parsedToken = new JwtSecurityToken(IdToken);
+
+            return Ok(CreateAuthenticatedUser(parsedToken.Claims));
+        }   
 
         [HttpPost]
         [AllowAnonymous]
@@ -115,6 +131,10 @@ namespace IdentityService.API.Controllers
 
             // await UserSignoutAsync();
 
+            // remove the token from the cookies
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("refresh_token");
+
             return Ok();
         }
 
@@ -141,6 +161,12 @@ namespace IdentityService.API.Controllers
             var refreshTokenCommand = new RefreshTokenCommand(refreshToken);
 
             var response = await _mediator.Send(refreshTokenCommand, cancellation).ConfigureAwait(false);
+
+            // using the new token from refreshtoken, set the cookie
+            if (response is not null && response is ITokenResponse tokenResponse)
+            {
+                SetCookie("access_token", tokenResponse.AccessToken, 10);
+            }
 
             return Ok(response);
         }
@@ -182,6 +208,34 @@ namespace IdentityService.API.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
+        private AuthenticatedUser CreateAuthenticatedUser(IEnumerable<Claim> claims)
+        {
+            var tenantId = Guid.Empty;
+            var tenantClaim = claims.FirstOrDefault(claim => claim.Type == "cognito:groups" && claim.Value.StartsWith(IdentityData.TenantIdClaimType))?.Value;
+            if (!string.IsNullOrEmpty(tenantClaim))
+            {
+                Guid.TryParse(tenantClaim.Split('_')[1], out tenantId);
+            }
+
+            var givenName = claims.FirstOrDefault(c => c.Type == "given_name")?.Value;
+            var familyName = claims.FirstOrDefault(c => c.Type == "family_name")?.Value;
+            var email = claims.FirstOrDefault(c => c.Type == "email")?.Value ?? string.Empty;
+
+            var roles = claims.Where(c => c.Type == "cognito:groups").Select(c => c.Value).ToArray();
+            var permissions = claims.Where(c => c.Type == "permissions").Select(c => c.Value).ToArray();
+            var profileImage = claims.FirstOrDefault(c => c.Type == "picture")?.Value;
+
+            return new AuthenticatedUser(givenName, familyName, email, tenantId, roles, permissions, profileImage);
+        }
+
+        private AuthenticatedUser CreateAuthenticatedUser(string idToken)
+        {
+            var jwtToken = new JwtSecurityToken(idToken);
+            var claims = jwtToken.Claims;
+
+            return CreateAuthenticatedUser(claims);
+        }
+
         private IActionResult parseTokenResponseResult(Result<ITokenResponse> tokenResponse)
         {
             return tokenResponse.Match(
@@ -191,8 +245,15 @@ namespace IdentityService.API.Controllers
                         !string.IsNullOrEmpty(tokenResponse.AccessToken) && !string.IsNullOrEmpty(tokenResponse.RefreshToken))
                     {
                         // await SigninUserAsync(clientSigningRequest);
+                        SetCookie("access_token", tokenResponse.AccessToken, 10);
+                        SetCookie("refresh_token", tokenResponse.RefreshToken, 60);
+                        SetCookie("id_token", tokenResponse.IdToken, 10);
+
+                        // create the authenticated user respose
+                        var user = CreateAuthenticatedUser(tokenResponse.IdToken);
+                        return Ok(user); // Return IActionResult here.
                     }
-                    return Ok(tokenResponse); // Return IActionResult here.
+                    return StatusCode(StatusCodes.Status500InternalServerError);
                 },
                 Fail: exception =>
                 {
@@ -214,6 +275,17 @@ namespace IdentityService.API.Controllers
                 "InvalidCredentials" => Unauthorized(error.Value),
                 _ => BadRequest(businessLogicException.ToDesignlyProblemDetails(statusCode: System.Net.HttpStatusCode.BadRequest))
             };
+        }
+
+        private void SetCookie(string name, string value, int minutes)
+        {
+            Response.Cookies.Append(name, value, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(minutes)
+            });
         }
 
     }

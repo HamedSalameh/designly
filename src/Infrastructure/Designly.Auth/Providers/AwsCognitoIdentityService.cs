@@ -149,7 +149,8 @@ namespace Designly.Auth.Providers
                     IdToken = authResponse.AuthenticationResult.IdToken,
                     AccessToken = authResponse.AuthenticationResult.AccessToken,
                     ExpiresIn = authResponse.AuthenticationResult.ExpiresIn,
-                    TokenType = authResponse.AuthenticationResult.TokenType
+                    TokenType = authResponse.AuthenticationResult.TokenType,
+                    RefreshToken = authResponse.AuthenticationResult.RefreshToken
                 };
 
                 return tokenResponse;

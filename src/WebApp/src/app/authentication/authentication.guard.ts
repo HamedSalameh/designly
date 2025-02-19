@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { isAuthenticated } from './state/auth.selectors';
 
@@ -15,9 +15,11 @@ export class AuthenticationGuard {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
+      
       return this.store.select(isAuthenticated)
       .pipe(
+        filter(isAuthenticated => isAuthenticated !== null),
+        take(1),
         map( (isAuthenticated ) => {
           return isAuthenticated ? true : this.router.parseUrl('/login');
         })
