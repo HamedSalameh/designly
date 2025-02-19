@@ -5,8 +5,7 @@ import { logout } from 'src/app/authentication/state/auth.actions';
 import { getUser, isAuthenticated } from 'src/app/authentication/state/auth.selectors';
 import { HeaderStrings } from '../strings';
 import { Strings } from 'src/app/shared/strings';
-import { resetClientsState } from 'src/app/clients/client-state/clients.actions';
-import { globalResetState, resetSharedState } from 'src/app/shared/state/shared/shared.actions';
+import { globalResetState } from 'src/app/shared/state/shared/shared.actions';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 @Component({

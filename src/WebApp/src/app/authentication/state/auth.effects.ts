@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap, catchError, tap, switchMap } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, switchMap, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {
   checkAuthentication,
   checkAuthenticationFailure,
   checkAuthenticationSuccess,
   clearAuthenticationError,
-  loginFailed,
+  loginFailure,
   loginStart,
   loginSuccess,
   logout,
@@ -17,11 +17,9 @@ import {
 } from './auth.actions';
 import { AuthenticationService } from '../authentication-service.service';
 import { Router } from '@angular/router';
-import { SigninResponse } from '../models/signin-response.model';
-import * as moment from 'moment';
 import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
-import { Buffer } from 'buffer';
+
 import { AuthenticatedUser } from './auth.state';
 import { Strings } from 'src/app/shared/strings';
 
@@ -36,89 +34,23 @@ export class AuthenitcationEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginStart),
-      mergeMap((action) => {
-        const signInRequest = action.signInRequest;
-        return this.authenticationService.signIn(signInRequest).pipe(
-          map((response: AuthenticatedUser) => {
-            this.store.dispatch(SetLoading(false));
-            return loginSuccess({
-              User: {
-                Email: response.Email,
-                Name: `${response.GivenName} ${response.FamilyName}`,
-                GivenName: response.GivenName,
-                FamilyName: response.FamilyName,
-                Roles: response.Roles,
-                Permissions: response.Permissions,
-                TenantId: response.TenantId,
-                ProfileImage: response.ProfileImage,
-              },
+      tap(() => this.store.dispatch(SetLoading(true))), // Dispatch loading before making request
+      mergeMap(({ signInRequest }) =>
+        this.authenticationService.signIn(signInRequest).pipe(
+          map((response: AuthenticatedUser) =>
+            loginSuccess({
+              User: this.buildUserObject(response),
               redirect: true
-            });
-          }),
-          catchError((error) => {
-            this.store.dispatch(SetLoading(false));
-            this.handleSigninError(error);
-            return of();
-          })
-        );
-      })
+            })
+          ),
+          catchError((error) =>
+            of(loginFailure({ error })).pipe(tap(() => this.handleSigninError(error)))
+          ), // Use a dedicated failure action
+          finalize(() => this.store.dispatch(SetLoading(false))) // Ensure loading is reset
+        )
+      )
     )
   );
-
-  private handleSigninError(error: any) {
-    const serverResponse = error.originalError?.status || 500; // Default to 500
-    const serverErrorMessage = error.originalError?.error || 'Unexpected Error';
-
-    const errorMessages: Record<number, string> = {
-      400: Strings.BadRequest,
-      401: Strings.Unauthorized,
-      403: Strings.Forbidden,
-      404: Strings.NotFound,
-      500: Strings.InternalServerError,
-      503: Strings.ServiceUnavailable,
-    };
-
-    let errorMessage = errorMessages[serverResponse] || Strings.UnknownError;
-
-    switch (serverResponse) {
-      case 401:
-        if (serverErrorMessage === 'Incorrect username or password.') {
-          errorMessage = Strings.InvalidCredentials;
-        } else if (serverErrorMessage === 'Password attempts exceeded') {
-          errorMessage = Strings.PasswordAttemptsExceeded;
-        }
-        break;
-      case 500:
-        errorMessage = serverErrorMessage;
-        break;
-      case 403:
-        error.message = Strings.Forbidden;
-        break;
-      case 404:
-        error.message = Strings.NotFound;
-        break;
-      case 500:
-        error.message = Strings.InternalServerError;
-        break;
-      case 503:
-        error.message = Strings.ServiceUnavailable;
-        break;
-      default:
-        error.message = Strings.UnexpectedError;
-        break;
-    }
-
-    const application = {
-      message: errorMessage,
-      originalError: error.originalError,
-      handled: false,
-      type: 'ApplicationError',
-    };
-
-    this.store.dispatch(revokeTokens());
-    this.store.dispatch(SetLoading(false));
-    this.store.dispatch(loginFailed({ error: errorMessage }));
-  }
 
   loginRedirect$ = createEffect(
     () => {
@@ -169,14 +101,74 @@ export class AuthenitcationEffects {
       ofType(checkAuthentication),
       switchMap(() =>
         this.authenticationService.isAuthenticated().pipe(
-          map((authenticatedUserResponse: AuthenticatedUser) =>
-          {
-            console.debug('Authenticated User Response: ', authenticatedUserResponse);
-            return checkAuthenticationSuccess({ User: authenticatedUserResponse })
+          map((authenticatedUserResponse: AuthenticatedUser) => {
+            return checkAuthenticationSuccess({ User: this.buildUserObject(authenticatedUserResponse) });
           }),
           catchError((error) => of(checkAuthenticationFailure({ error }))) // Proper error handling
         )
       )
     )
   );
+
+  private buildUserObject(response: any): AuthenticatedUser {
+    const user: AuthenticatedUser = {
+      Email: response['email'],
+      Name: `${response['givenName']} ${response['familyName']}`,
+      GivenName: response['givenName'],
+      FamilyName: response['familyName'],
+      Roles: response['roles'],
+      Permissions: response['permissions'],
+      TenantId: response['tenantId'],
+      ProfileImage: response['profileImage'],
+    };
+    return user;
+  }
+
+  private handleSigninError(error: any) {
+    const serverResponse = error.originalError?.status || 500; // Default to 500
+    const serverErrorMessage = error.originalError?.error || 'Unexpected Error';
+
+    const errorMessages: Record<number, string> = {
+      400: Strings.BadRequest,
+      401: Strings.Unauthorized,
+      403: Strings.Forbidden,
+      404: Strings.NotFound,
+      500: Strings.InternalServerError,
+      503: Strings.ServiceUnavailable,
+    };
+
+    let errorMessage = errorMessages[serverResponse] || Strings.UnknownError;
+
+    switch (serverResponse) {
+      case 401:
+        if (serverErrorMessage === 'Incorrect username or password.') {
+          errorMessage = Strings.InvalidCredentials;
+        } else if (serverErrorMessage === 'Password attempts exceeded') {
+          errorMessage = Strings.PasswordAttemptsExceeded;
+        }
+        break;
+      case 500:
+        errorMessage = serverErrorMessage;
+        break;
+      case 403:
+        error.message = Strings.Forbidden;
+        break;
+      case 404:
+        error.message = Strings.NotFound;
+        break;
+      case 500:
+        error.message = Strings.InternalServerError;
+        break;
+      case 503:
+        error.message = Strings.ServiceUnavailable;
+        break;
+      default:
+        error.message = Strings.UnexpectedError;
+        break;
+    }
+
+    this.store.dispatch(revokeTokens());
+    this.store.dispatch(SetLoading(false));
+    this.store.dispatch(loginFailure({ error: errorMessage }));
+  }
 }

@@ -7,6 +7,7 @@ using System.Net.Mime;
 using System.Text.Json;
 using Designly.Auth.Extentions;
 using Designly.Shared.Extensions;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace IdentityService.API;
 
@@ -65,6 +66,10 @@ public static class Program
         // Configure Swagger
         builder.Services.ConfigureSecuredSwagger("Identity Service API", "v1");
         builder.Services.ConfigureCors();
+        builder.Services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy = null;
+        });
 
         // Configure Services
         builder.Services.AddHttpClient();
