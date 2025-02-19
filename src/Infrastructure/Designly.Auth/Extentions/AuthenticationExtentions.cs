@@ -76,6 +76,16 @@ namespace Designly.Auth.Extentions
 
                 jwtBearerOptions.Events = new JwtBearerEvents
                 {
+                    OnMessageReceived = context =>
+                    {
+                        context.Request.Cookies.TryGetValue("access_token", out var token);
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask; 
+                    },
+
                     OnTokenValidated = context =>
                     {
                         // This is necessary because Cognito tokens doesn't have "aud" claim. Instead the audience is set in "client_id"

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap, catchError, tap } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {
+  checkAuthentication,
+  checkAuthenticationFailure,
+  checkAuthenticationSuccess,
   clearAuthenticationError,
   loginFailed,
   loginStart,
@@ -20,7 +23,6 @@ import { Store } from '@ngrx/store';
 import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 import { Buffer } from 'buffer';
 import { AuthenticatedUser } from './auth.state';
-import { HttpErrorHandlingService } from 'src/app/shared/services/error-handling.service';
 import { Strings } from 'src/app/shared/strings';
 
 @Injectable()
@@ -37,19 +39,19 @@ export class AuthenitcationEffects {
       mergeMap((action) => {
         const signInRequest = action.signInRequest;
         return this.authenticationService.signIn(signInRequest).pipe(
-          map((response: SigninResponse) => {
-            const accessToken = response.accessToken;
-            const idToken = response.idToken;
-            const expiresIn = response.expiresIn;
-            const expiresAt = moment().add(response.idToken, 'second');
+          map((response: AuthenticatedUser) => {
             this.store.dispatch(SetLoading(false));
             return loginSuccess({
-              User: this.decodeIdToken(idToken),
-              IdToken: idToken,
-              AccessToken: accessToken,
-              RefreshToken: '',
-              ExpiresIn: expiresIn,
-              ExpiresAt: expiresAt,
+              User: {
+                Email: response.Email,
+                Name: `${response.GivenName} ${response.FamilyName}`,
+                GivenName: response.GivenName,
+                FamilyName: response.FamilyName,
+                Roles: response.Roles,
+                Permissions: response.Permissions,
+                TenantId: response.TenantId,
+                ProfileImage: response.ProfileImage,
+              },
               redirect: true
             });
           }),
@@ -162,24 +164,19 @@ export class AuthenitcationEffects {
       })
     ));
 
-  private decodeIdToken(idToken: string): AuthenticatedUser {
-    const decodedToken = Buffer.from(idToken.split('.')[1], 'base64').toString();
-    const parsedToken = JSON.parse(decodedToken);
-
-    const tenantClaim = parsedToken['cognito:groups']?.find((group: string) => group.startsWith('tenant_'));
-    const tenant_id: string | undefined = tenantClaim?.substring('tenant_'.length);
-
-    const user: AuthenticatedUser = {
-      email: parsedToken.email,
-      family_name: parsedToken.family_name,
-      given_name: parsedToken.given_name,
-      name: parsedToken.given_name + ' ' + parsedToken.family_name,
-      tenant_id: tenant_id || "",
-      profile_image: parsedToken.profile_image || "",
-      roles: parsedToken.roles || [],
-      permissions: parsedToken.permissions || []
-    }
-
-    return user;
-  }
+  checkAuthentication$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(checkAuthentication),
+      switchMap(() =>
+        this.authenticationService.isAuthenticated().pipe(
+          map((authenticatedUserResponse: AuthenticatedUser) =>
+          {
+            console.debug('Authenticated User Response: ', authenticatedUserResponse);
+            return checkAuthenticationSuccess({ User: authenticatedUserResponse })
+          }),
+          catchError((error) => of(checkAuthenticationFailure({ error }))) // Proper error handling
+        )
+      )
+    )
+  );
 }

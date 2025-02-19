@@ -360,8 +360,23 @@
       </trans-unit>
       <trans-unit id="Errors.User.UnableToLoadUsers" datatype="html">
         <source>We were unable to load the users list. Please try again.</source>
-        <target state="new">לא הצלחנו לטעון את רשימת המשתמשים. אנא נסה שוב.
-        </target>
+        <target state="new">לא הצלחנו לטעון את רשימת המשתמשים. אנא נסה שוב. </target>
+      </trans-unit>
+      <trans-unit id="Pages.404" datatype="html">
+        <source>Umm, we can&apos;t find that page!</source>
+        <target state="new">מממ... הלכת לאיבוד? </target>
+      </trans-unit>
+      <trans-unit id="Pages.404Subtitle" datatype="html">
+        <source>404</source>
+        <target state="new">404</target>
+      </trans-unit>
+      <trans-unit id="Pages.404Message" datatype="html">
+        <source>We&apos;re sorry, but the page you&apos;re looking for doesn&apos;t exist.</source>
+        <target state="new">אנחנו מצטערים, אבל הדף שחיפשת לא נמצא</target>
+      </trans-unit>
+      <trans-unit id="Pages.GoBack" datatype="html">
+        <source>Go back</source>
+        <target state="new">חזרה</target>
       </trans-unit>
     </body>
   </file>

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { checkAuthentication } from './authentication/state/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'DesignFlow';
+
+  constructor(private store: Store) {
+    
+  }
+
+  ngOnInit(): void {
+    this.store.dispatch(checkAuthentication()); // Only call API once on app load
+  }
 }
