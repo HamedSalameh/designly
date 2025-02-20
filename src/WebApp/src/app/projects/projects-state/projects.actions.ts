@@ -28,3 +28,7 @@ export const deleteRealestatePropertyRequestSuccess = createAction(
     '[ProjectsState] DeleteRealestatePropertyRequestSuccess',
     props<{ propertyId: string }>()
 );
+
+export const resetProjectsState = createAction(
+    '[ProjectsState] ResetProjectsState'
+);

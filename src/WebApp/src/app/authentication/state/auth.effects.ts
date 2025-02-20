@@ -22,9 +22,12 @@ import { SetLoading } from 'src/app/shared/state/shared/shared.actions';
 
 import { AuthenticatedUser } from './auth.state';
 import { Strings } from 'src/app/shared/strings';
+import { resetProjectsState } from 'src/app/projects/projects-state/projects.actions';
+import { resetClientsState } from 'src/app/clients/client-state/clients.actions';
+import { resetAccountState } from 'src/app/account/state/account.actions';
 
 @Injectable()
-export class AuthenitcationEffects {
+export class AuthenticationEffects {
   constructor(
     private actions$: Actions,
     private authenticationService: AuthenticationService,
@@ -55,7 +58,7 @@ export class AuthenitcationEffects {
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(...[loginSuccess]),
+        ofType(loginSuccess),
         tap((action) => {
           if (action.redirect) {
             this.router.navigate(['/']);
@@ -70,7 +73,7 @@ export class AuthenitcationEffects {
   logoutRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(...[logout]),
+        ofType(logout),
         tap(() => {
           this.router.navigate(['/login']);
         })
@@ -84,11 +87,15 @@ export class AuthenitcationEffects {
       ofType(logout),
       mergeMap(() => {
         return this.authenticationService.signOut().pipe(
-          map(() => {
-            this.store.dispatch(clearAuthenticationError());
-            this.store.dispatch(revokeTokens());
-            return logoutSuccess();
-          }),
+          mergeMap(() =>
+            of(
+              resetProjectsState(),
+              resetClientsState(),
+              resetAccountState(),
+              clearAuthenticationError(), 
+              revokeTokens(),
+              logoutSuccess())
+          ),
           catchError((error) => {
             return of(logoutFailed({ error }));
           })
@@ -104,7 +111,12 @@ export class AuthenitcationEffects {
           map((authenticatedUserResponse: AuthenticatedUser) => {
             return checkAuthenticationSuccess({ User: this.buildUserObject(authenticatedUserResponse) });
           }),
-          catchError((error) => of(checkAuthenticationFailure({ error }))) // Proper error handling
+          catchError((error) => {
+            if (error.originalError?.status === 401) {
+              this.router.navigate(['/login']);
+            }
+            return of(checkAuthenticationFailure({ error }));
+          })
         )
       )
     )

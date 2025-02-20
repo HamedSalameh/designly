@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { InitialProjectsState, IProjectsState, ProjectsAdapter } from "./projects.state";
-import { getProjectsRequestSuccess, setActiveProject } from "./projects.actions";
+import { getProjectsRequestSuccess, resetProjectsState, setActiveProject } from "./projects.actions";
 
 export const ProjectsStateReducer = createReducer<IProjectsState>(
     InitialProjectsState,
@@ -16,5 +16,12 @@ export const ProjectsStateReducer = createReducer<IProjectsState>(
             ...state,
             selectedProjectModel: payload
         }
+    }),
+
+    // Reset State
+    on(resetProjectsState, (state) => {
+        return ProjectsAdapter.removeAll({
+            ...state, ...InitialProjectsState
+        });
     })
 )

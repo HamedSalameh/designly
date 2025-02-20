@@ -48,7 +48,7 @@ namespace Projects.Application.Features.UpdateProject
             {
                 ProjectId = projectId,
                 TenantId = tenantId,
-
+                PropertyId = updateProjectRequestDto.PropertyId,
                 Name = updateProjectRequestDto.Name,
                 Description = updateProjectRequestDto.Description,
                 ProjectLeadId = updateProjectRequestDto.ProjectLeadId,
