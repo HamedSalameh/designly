@@ -168,9 +168,6 @@ export class AuthenticationEffects {
       case 404:
         error.message = Strings.NotFound;
         break;
-      case 500:
-        error.message = Strings.InternalServerError;
-        break;
       case 503:
         error.message = Strings.ServiceUnavailable;
         break;

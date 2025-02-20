@@ -11,3 +11,14 @@
 .icon {
     font-size: $font-size-extra-large;
 }
+
+.a-card {
+    min-height: 17rem;
+}
+
+button:disabled {
+
+    background: inherit !important;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
