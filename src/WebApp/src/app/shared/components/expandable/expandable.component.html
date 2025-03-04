@@ -1,0 +1,13 @@
+<!-- Always visible content -->
+<div class="always-visible">
+    <ng-content select="[always]"></ng-content>
+    <!-- Toggle button (always visible) -->
+    <button (click)="toggleExpand()">
+        {{ isExpanded ? expandedText : collapsedText }}
+    </button>
+</div>
+
+<!-- Expandable content -->
+<div class="expandable" [class.expanded]="isExpanded" [style.maxHeight]="isExpanded ? maxHeight : '0'">
+    <ng-content select="[expandable]"></ng-content>
+</div>

@@ -11,7 +11,7 @@ import { ClientStrings } from '../../strings';
   templateUrl: './view-client-info.component.html',
   styleUrls: ['./view-client-info.component.scss'],
 })
-export class ViewClientInfoComponent implements OnDestroy{
+export class ViewClientInfoComponent implements OnDestroy {
   @Output() CloseClient: EventEmitter<any> = new EventEmitter();
   @Output() EditClient: EventEmitter<any> = new EventEmitter();
   @Output() ShareClient: EventEmitter<any> = new EventEmitter();
@@ -23,6 +23,8 @@ export class ViewClientInfoComponent implements OnDestroy{
   // element ref for modelTemplate
   @ViewChild('modalTemplate')
   modalTemplate!: TemplateRef<any>;
+
+  deleteClientMessage = ClientStrings.DeleteClientMessage;
 
   constructor(
     private xStore: Store<IApplicationState>,
@@ -47,13 +49,14 @@ export class ViewClientInfoComponent implements OnDestroy{
     this.modalService.open(this.modalTemplate, {
       title: ClientStrings.DeleteClientTitle,
       content: ClientStrings.DeleteClientMessage,
-      }).subscribe( action => {
-        console.log(action);
-        if (action === 'confirm') {
-          this.DeleteClient.emit();
-        }
-      });
+    }).subscribe(action => {
+      console.log(action);
+      if (action === 'confirm') {
+        this.DeleteClient.emit();
+      }
+    });
   }
+
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();

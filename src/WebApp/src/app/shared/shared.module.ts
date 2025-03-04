@@ -25,6 +25,7 @@ import { DesDatepickerComponent } from './components/des-datepicker/des-datepick
 import { DatePicker, DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { GlobalNotificationHandlerComponent } from './global-notification-handler/global-notification-handler.component';
+import { ExpandableComponent } from './components/expandable/expandable.component';
 
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnxTdEZjUX5acXBVRmBdU0FzXQ==');
@@ -40,6 +41,7 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     DropdownComponent,
     DesDatepickerComponent,
     GlobalNotificationHandlerComponent,
+    ExpandableComponent,
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cWGhIfEx1RHxQdld5ZFRHallYTnNWUj0eQnx
     StatusChipComponent,
     DropdownComponent,
     DesDatepickerComponent,
-    GlobalNotificationHandlerComponent
+    GlobalNotificationHandlerComponent,
+    ExpandableComponent,
   ],
   providers: [
     // syncfusion

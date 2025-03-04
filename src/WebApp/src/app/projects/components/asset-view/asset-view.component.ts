@@ -52,7 +52,8 @@ export class AssetViewComponent implements OnInit, OnDestroy {
           this.isLoading = true;
           this.RealestateProperty = null;
           return this.realestatePropertyService.getProperty(activeProject.PropertyId);
-        }
+        } 
+        this.RealestateProperty = null;
         return of(null);
       })
     ).subscribe({

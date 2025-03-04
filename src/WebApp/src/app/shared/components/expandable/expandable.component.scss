@@ -1,0 +1,19 @@
+.always-visible {
+    padding: 10px;
+    background-color: #f0f0f0; // Example styling; adjust as needed
+
+    button {
+        margin-top: 10px;
+    }
+}
+
+.expandable {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+    &.expanded {
+        opacity: 1;
+    }
+}
