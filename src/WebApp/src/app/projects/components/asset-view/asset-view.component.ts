@@ -28,6 +28,9 @@ export class AssetViewComponent implements OnInit, OnDestroy {
   AreaMeasurementUnit!: string;
   NoAssetsFound = Strings.NoAssetsFound;
   isLoading = false;
+  PropoertyType = RealestatePropertyStrings.PropertyType;
+  PropertyName = RealestatePropertyStrings.PropertyName;
+  PropoeryTotalArea = RealestatePropertyStrings.PropoeryTotalArea;
 
   public RealestateProperty: Property | null = null;
   private ngUnsubscribe = new Subject<void>();
@@ -49,7 +52,8 @@ export class AssetViewComponent implements OnInit, OnDestroy {
           this.isLoading = true;
           this.RealestateProperty = null;
           return this.realestatePropertyService.getProperty(activeProject.PropertyId);
-        }
+        } 
+        this.RealestateProperty = null;
         return of(null);
       })
     ).subscribe({

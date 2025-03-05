@@ -148,7 +148,7 @@ namespace Projects.Infrastructure.Persistance
             dynamicParameters.Add("p_deadline", basicProject.Deadline, DbType.Date);
             dynamicParameters.Add("p_completed_at", basicProject.CompletedAt, DbType.Date);
             dynamicParameters.Add("p_status", basicProject.Status);
-
+            dynamicParameters.Add("p_property_id", basicProject.PropertyId, DbType.Guid);
             dynamicParameters.Add("p_project_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
 
             await using var connection = new NpgsqlConnection(_dbConnectionStringProvider.ConnectionString);

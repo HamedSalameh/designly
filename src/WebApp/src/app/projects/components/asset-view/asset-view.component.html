@@ -1,6 +1,6 @@
-<div class="a-card">
+<div class="a-card min-height-17">
     <div class="p-top-1 p-bottom-1 p-left-1 p-right-1">
-        <div class="a-card-header flex flex-row m-bottom-3">
+        <div class="a-card-header flex flex-row m-bottom-2">
             <div class="a-card-title">
                 <label class="section-title">
                     {{ Title }}
@@ -13,11 +13,11 @@
                     <i class="ph ph-plus"></i>
                 </button>
                 <!-- Icon button to edit  -->
-                <button class="btn icon-btn icon-btn-medium" (click)="onEdit()">
+                <button [disabled]="!this.RealestateProperty" class="btn icon-btn icon-btn-medium" (click)="onEdit()">
                     <i class="ph ph-pencil-simple"></i>
                 </button>
                 <!-- Icon button to delete -->
-                <button class="btn icon-btn icon-btn-medium" (click)="onDelete()">
+                <button [disabled]="!this.RealestateProperty" class="btn icon-btn icon-btn-medium" (click)="onDelete()">
                     <i class="ph ph-trash"></i>
                 </button>
             </div>
@@ -35,17 +35,17 @@
 
         <!-- Loop over all RealesateProperties and display them -->
         <div *ngIf="this.RealestateProperty" class="flex flex-column flex-align-start">
-            <div class="flex flex-row flex-align-start ">
+            <div class="flex flex-row flex-align-start " [title]="this.PropertyName">
                 <i class="ph ph-house-line font-size-large"></i>
                 <label class="details"> {{ this.RealestateProperty.Name }} </label>
             </div>
 
-            <div class="flex flex-row flex-align-start ">
+            <div class="flex flex-row flex-align-start " [title]="this.PropoertyType">
                 <i class="ph ph-blueprint font-size-large"></i>
                 <label class="details"> {{ this.RealestateProperty.PropertyType }} </label>
             </div>
 
-            <div class="flex flex-row flex-align-start ">
+            <div class="flex flex-row flex-align-start " [title]="this.PropoeryTotalArea">
                 <i class="ph ph-frame-corners font-size-large"></i>
                 <label class="details"> {{ this.RealestateProperty.TotalArea }} {{ AreaMeasurementUnit }} </label>
             </div>

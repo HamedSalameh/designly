@@ -11,17 +11,17 @@ import { RealestatePropertyStrings } from "../real-estate-property-strings";
 
 @Injectable()
 export class ProjectsEffects {
-    
+
     constructor(
         private action$: Actions,
         private projectsService: ProjectsService,
         private realestatePropertyService: RealestatePropertyService,
         private toastr: ToastrService,
         private errorHandlingService: HttpErrorHandlingService
-    ) {}
+    ) { }
 
     // Get Projects List
-    getProjectsList$ = createEffect(() => 
+    getProjectsList$ = createEffect(() =>
         this.action$.pipe(
             ofType(getProjectsRequest),
             mergeMap((action) => {
@@ -44,21 +44,22 @@ export class ProjectsEffects {
     deleteRealestatePropertyRequest$ = createEffect(() =>
         this.action$.pipe(
             ofType(deleteRealestatePropertyRequest),
-            mergeMap((action) => {
-                return this.realestatePropertyService.deleteProperty(action.propertyId).pipe(
+            mergeMap((action) =>
+                this.realestatePropertyService.deleteProperty(action.propertyId).pipe(
                     map(() => {
                         console.debug('[ProjectsEffects] [deleteRealestatePropertyRequest] - OK');
                         this.toastr.success(RealestatePropertyStrings.DeletePropertySuccess);
-                        return deleteRealestatePropertyRequestSuccess({ propertyId: action.propertyId });
+                        return deleteRealestatePropertyRequestSuccess(); // 
                     }),
                     catchError((error) => {
                         error.message = RealestatePropertyStrings.UnableToDeleteRealestateProperty;
                         this.errorHandlingService.handleError(error);
-                        return EMPTY; // Use EMPTY instead of of()
+                        return EMPTY;
                     })
-                );
-            })
+                )
+            )
         )
     );
     
+
 }

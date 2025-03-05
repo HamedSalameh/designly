@@ -5,7 +5,7 @@ import { AuthenticationReduce } from './state/auth.reducer';
 import { StoreModule } from '@ngrx/store';
 import { AUTH_STATE_NAME } from './state/auth.selectors';
 import { EffectsModule } from '@ngrx/effects';
-import { AuthenitcationEffects } from './state/auth.effects';
+import { AuthenticationEffects } from './state/auth.effects';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,7 @@ import { AuthenitcationEffects } from './state/auth.effects';
     CommonModule,
     HttpClientModule,
     StoreModule.forFeature(AUTH_STATE_NAME, AuthenticationReduce),
-    EffectsModule.forFeature([AuthenitcationEffects]),
+    EffectsModule.forFeature([AuthenticationEffects]),
     
   ],
   providers: [    

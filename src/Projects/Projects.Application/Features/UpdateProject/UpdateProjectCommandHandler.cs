@@ -74,6 +74,7 @@ namespace Projects.Application.Features.UpdateProject
                     .WithStartDate(request.StartDate)
                     .WithDeadline(request.Deadline)
                     .WithCompletedAt(request.CompletedAt)
+                    .WithProperty(request.PropertyId)
                     .BuildBasicProject();
 
             // Since this is an update flow of an existing project we need to set the id

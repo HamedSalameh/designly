@@ -149,6 +149,7 @@ namespace Projects.Infrastructure.Persistance
             }
 
             var sqlScript = "delete from properties where id=@p_id and tenant_id=@p_tenant_id";
+            var sqlScripts_RemovePropertyFromProject = "update projects set property_id = null where property_id=@p_id and tenant_id=@p_tenant_id";
 
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("p_id", propertyId);
@@ -163,7 +164,11 @@ namespace Projects.Infrastructure.Persistance
                 {
                     await policy.ExecuteAsync(async () =>
                     {
+                        // remove the property from the properties table
                         await connection.ExecuteAsync(sqlScript, dynamicParameters, transaction);
+                        // remove the property from the projects
+                        await connection.ExecuteAsync(sqlScripts_RemovePropertyFromProject, dynamicParameters, transaction);
+
                         transaction.Commit();
                     });
                 }

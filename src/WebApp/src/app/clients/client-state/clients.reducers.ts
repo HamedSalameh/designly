@@ -45,9 +45,9 @@ export const ClientStateReducer = createReducer<IClientState>(
   }),
 
   // UPDATE CLIENT
-  on(updateClientRequestSuccess, (state, payload ) => {
+  on(updateClientRequestSuccess, (state, payload) => {
     return ClientsAdapter.updateOne(
       payload.client, state);
-    })
+  })
 );
 

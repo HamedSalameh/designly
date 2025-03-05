@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { IApplicationState } from 'src/app/shared/state/app.state';
-import { deleteRealestatePropertyRequest, setActiveProject } from '../../projects-state/projects.actions';
+import { clearActiveProject, deleteRealestatePropertyRequest, resetProjectsState, setActiveProject } from '../../projects-state/projects.actions';
 import { getActiveProject, getProjectById } from '../../projects-state/projects.selectors';
 
 @Component({
@@ -30,7 +30,7 @@ export class ManageProjectComponent implements OnInit, OnDestroy {
               console.warn('Project not found');
             } else {
               // Dispatch the action to set the active project in the store
-              this.store.dispatch(setActiveProject({ project }));
+              this.store.dispatch(setActiveProject({ project })); // Set the active project
             }
           })
         )
@@ -54,6 +54,7 @@ export class ManageProjectComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.store.dispatch(clearActiveProject());
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

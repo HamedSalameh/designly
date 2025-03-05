@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { InitialProjectsState, IProjectsState, ProjectsAdapter } from "./projects.state";
-import { getProjectsRequestSuccess, setActiveProject } from "./projects.actions";
+import { clearActiveProject, deleteRealestatePropertyRequestSuccess, getProjectsRequestSuccess, resetProjectsState, setActiveProject } from "./projects.actions";
 
 export const ProjectsStateReducer = createReducer<IProjectsState>(
     InitialProjectsState,
@@ -14,7 +14,43 @@ export const ProjectsStateReducer = createReducer<IProjectsState>(
     on(setActiveProject, (state, { project: payload }) => {
         return {
             ...state,
+            selectedProjectId: payload.Id,
             selectedProjectModel: payload
         }
+    }),
+
+    on(deleteRealestatePropertyRequestSuccess, (state) => {
+        console.debug('Reducer triggered for deleteRealestatePropertyRequestSuccess');
+    
+        if (!state.selectedProjectId) return state; // No active project
+    
+        return ProjectsAdapter.updateOne(
+            {
+                id: state.selectedProjectId,
+                changes: { PropertyId: undefined }, 
+            },
+            {
+                ...state,
+                selectedProjectModel: state.selectedProjectModel
+                    ? { ...state.selectedProjectModel, PropertyId: undefined }
+                    : undefined,
+            }
+        );
+    }),
+
+    on(clearActiveProject, (state) => {
+        return {
+            ...state,
+            selectedProjectId: null,
+            selectedProjectModel: null,
+        }
+    }),
+    
+
+    // Reset State
+    on(resetProjectsState, (state) => {
+        return ProjectsAdapter.removeAll({
+            ...state, ...InitialProjectsState
+        });
     })
 )

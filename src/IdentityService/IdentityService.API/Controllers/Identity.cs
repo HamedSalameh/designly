@@ -123,7 +123,12 @@ namespace IdentityService.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Signout(CancellationToken cancellation)
         {
-            var accessToken = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty);
+            // fetch the access token from the cookie
+            var accessToken = Request.Cookies["access_token"];
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return Ok();
+            }
 
             var signoutRequest = new SignoutRequest(accessToken);
 
