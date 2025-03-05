@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ViewClientInfoComponent } from './view-client-info.component';
 import { NgxsModule } from '@ngxs/store';
 import { ClientState } from 'src/app/state/client-state/client-state.state';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ViewClientInfoComponent', () => {
   let component: ViewClientInfoComponent;
@@ -10,9 +11,10 @@ describe('ViewClientInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewClientInfoComponent ],
-      imports: [ HttpClientTestingModule, NgxsModule.forRoot([ClientState]) ]
-    })
+    declarations: [ViewClientInfoComponent],
+    imports: [NgxsModule.forRoot([ClientState])],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ViewClientInfoComponent);
