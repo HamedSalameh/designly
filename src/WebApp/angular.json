@@ -81,10 +81,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "DesignFlow:build:production"
+              "buildTarget": "DesignFlow:build:production"
             },
             "development": {
-              "browserTarget": "DesignFlow:build:development"
+              "buildTarget": "DesignFlow:build:development"
             }
           },
           "defaultConfiguration": "development"
