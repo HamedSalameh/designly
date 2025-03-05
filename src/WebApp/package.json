@@ -26,8 +26,6 @@
     "@ngrx/entity": "^17.2.0",
     "@ngrx/store": "^17.2.0",
     "@ngrx/store-devtools": "^17.2.0",
-    "@ngxs/logger-plugin": "^3.8.1",
-    "@ngxs/store": "^3.8.1",
     "@syncfusion/ej2": "^22.2.9",
     "@syncfusion/ej2-angular-calendars": "^26.2.12",
     "@syncfusion/ej2-angular-dropdowns": "^27.1.48",
