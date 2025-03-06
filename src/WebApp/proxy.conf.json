@@ -1,36 +1,36 @@
 {
-    "/clients-api/*": {
-        "target": "https://127.0.0.1:7246/api/",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/clients-api": ""
-        }
+    "/clients-api": {
+      "target": "https://127.0.0.1:7246/api/",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/clients-api": ""
+      }
     },
-    "/projects-api/*": {
-        "target": "https://127.0.0.1:7174/api/",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/projects-api": ""
-        }
+    "/projects-api": {
+      "target": "https://127.0.0.1:7174/api/",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/projects-api": ""
+      }
     },
-    "/accounts-api/*": {
-        "target": "https://127.0.0.1:7241/api/",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/accounts-api": ""
-        }
+    "/accounts-api": {
+      "target": "https://127.0.0.1:7241/api/",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/accounts-api": ""
+      }
     },
-    
     "/auth": {
-        "target": "https://127.0.0.1:7119/api/v1/Identity",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug"
+      "target": "https://127.0.0.1:7119/api/v1/Identity",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
     }
-}
+  }
+  

@@ -7,9 +7,10 @@ import { clearActiveProject, deleteRealestatePropertyRequest, resetProjectsState
 import { getActiveProject, getProjectById } from '../../projects-state/projects.selectors';
 
 @Component({
-  selector: 'app-manage-project',
-  templateUrl: './manage-project.component.html',
-  styleUrls: ['./manage-project.component.scss']
+    selector: 'app-manage-project',
+    templateUrl: './manage-project.component.html',
+    styleUrls: ['./manage-project.component.scss'],
+    standalone: false
 })
 export class ManageProjectComponent implements OnInit, OnDestroy {
 

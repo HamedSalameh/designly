@@ -14,9 +14,10 @@ import { getAccountUsersFromState } from 'src/app/account/state/account.selector
 import { mapProjectToViewModel } from '../../Builders/project-view-model.factory';
 
 @Component({
-  selector: 'app-projects-list',
-  templateUrl: './projects-list.component.html',
-  styleUrls: ['./projects-list.component.scss']
+    selector: 'app-projects-list',
+    templateUrl: './projects-list.component.html',
+    styleUrls: ['./projects-list.component.scss'],
+    standalone: false
 })
 export class ProjectsListComponent {
 

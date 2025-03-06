@@ -8,9 +8,10 @@ import { Strings } from 'src/app/shared/strings';
 import { ClientStrings } from '../../strings';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss'],
+    selector: 'app-clients',
+    templateUrl: './clients.component.html',
+    styleUrls: ['./clients.component.scss'],
+    standalone: false
 })
 export class ClientsComponent {
   @Output() SelectRow: EventEmitter<string> = new EventEmitter<string>();

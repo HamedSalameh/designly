@@ -10,9 +10,10 @@ import { Strings } from 'src/app/shared/strings';
 import { getActiveProject } from '../../projects-state/projects.selectors';
 
 @Component({
-  selector: 'app-project-details-card',
-  templateUrl: './project-details-card.component.html',
-  styleUrls: ['./project-details-card.component.scss']
+    selector: 'app-project-details-card',
+    templateUrl: './project-details-card.component.html',
+    styleUrls: ['./project-details-card.component.scss'],
+    standalone: false
 })
 export class ProjectDetailsCardComponent {
 

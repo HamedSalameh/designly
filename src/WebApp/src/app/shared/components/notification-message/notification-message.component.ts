@@ -14,9 +14,10 @@ export interface NotificationMessage {
 }
 
 @Component({
-  selector: 'app-notification-message',
-  templateUrl: './notification-message.component.html',
-  styleUrls: ['./notification-message.component.scss']
+    selector: 'app-notification-message',
+    templateUrl: './notification-message.component.html',
+    styleUrls: ['./notification-message.component.scss'],
+    standalone: false
 })
 export class NotificationMessageComponent {
 

@@ -17,9 +17,10 @@ import { Strings } from 'src/app/shared/strings';
 import { ClientStrings } from '../../strings';
 
 @Component({
-  selector: 'app-edit-client',
-  templateUrl: './edit-client.component.html',
-  styleUrls: ['./edit-client.component.scss'],
+    selector: 'app-edit-client',
+    templateUrl: './edit-client.component.html',
+    styleUrls: ['./edit-client.component.scss'],
+    standalone: false
 })
 export class EditClientComponent implements OnInit {
   ClientInfo!: FormGroup;

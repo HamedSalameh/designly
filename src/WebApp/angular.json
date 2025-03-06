@@ -21,16 +21,18 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "localize": [
               "he-IL"
             ],
-            "outputPath": "dist/design-flow",
+            "outputPath": {
+              "base": "dist/design-flow"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -48,7 +50,8 @@
                 "src/styles"
               ]
             },
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -67,9 +70,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -81,10 +82,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "DesignFlow:build:production"
+              "buildTarget": "DesignFlow:build:production"
             },
             "development": {
-              "browserTarget": "DesignFlow:build:development"
+              "buildTarget": "DesignFlow:build:development"
             }
           },
           "defaultConfiguration": "development"

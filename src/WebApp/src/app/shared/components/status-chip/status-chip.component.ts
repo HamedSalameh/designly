@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-status-chip',
-  templateUrl: './status-chip.component.html',
-  styleUrls: ['./status-chip.component.scss']
+    selector: 'app-status-chip',
+    templateUrl: './status-chip.component.html',
+    styleUrls: ['./status-chip.component.scss'],
+    standalone: false
 })
 export class StatusChipComponent implements OnChanges {
 

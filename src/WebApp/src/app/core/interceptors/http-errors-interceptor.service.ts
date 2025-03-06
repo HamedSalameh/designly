@@ -1,10 +1,4 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpRequest,
-  HttpInterceptor,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest, HttpInterceptor } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, delay,
   EMPTY,

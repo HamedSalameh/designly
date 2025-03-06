@@ -19,11 +19,12 @@ import {
 import { ClickEventArgs } from '@syncfusion/ej2/navigations';
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
-  encapsulation: ViewEncapsulation.None, // This is needed to override the default encapsulation of Angular
-  providers: [DetailRowService, SortService, FilterService, ToolbarService]
+    selector: 'app-table',
+    templateUrl: './table.component.html',
+    styleUrls: ['./table.component.scss'],
+    encapsulation: ViewEncapsulation.None, // This is needed to override the default encapsulation of Angular
+    providers: [DetailRowService, SortService, FilterService, ToolbarService],
+    standalone: false
 })
 export class TableComponent implements OnInit {
 
