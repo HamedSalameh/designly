@@ -38,7 +38,7 @@ import { provideRouter } from '@angular/router';
     LoginModule,
     ToastrModule.forRoot(),
     GridModule, PagerModule, 
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }), StoreModule.forRoot({}, {})
   ],
   providers: [  
     // provide the global error handler
