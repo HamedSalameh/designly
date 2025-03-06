@@ -2,18 +2,19 @@ import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'app-des-datepicker',
-  template: `
+    selector: 'app-des-datepicker',
+    template: `
     <ejs-datepicker [value]="value" (change)="onValueChange($event)" [format]="format">
     </ejs-datepicker>
   `,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DesDatepickerComponent),
-      multi: true
-    }
-  ]
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DesDatepickerComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class DesDatepickerComponent implements ControlValueAccessor {
   @Input() format: string = 'dd/MM/yyyy'; // Default format

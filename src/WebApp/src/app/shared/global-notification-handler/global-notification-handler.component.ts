@@ -8,9 +8,10 @@ import { getNetworkError, getApplicationError, getUnknownError } from '../state/
 import { Strings } from '../strings';
 
 @Component({
-  selector: 'app-global-notification-handler',
-  templateUrl: './global-notification-handler.component.html',
-  styleUrls: ['./global-notification-handler.component.scss']
+    selector: 'app-global-notification-handler',
+    templateUrl: './global-notification-handler.component.html',
+    styleUrls: ['./global-notification-handler.component.scss'],
+    standalone: false
 })
 export class GlobalNotificationHandlerComponent {
 

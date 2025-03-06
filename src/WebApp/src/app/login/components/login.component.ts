@@ -10,9 +10,10 @@ import { Strings } from 'src/app/shared/strings';
 import { getLoginFailedError } from 'src/app/authentication/state/auth.selectors';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent {
 

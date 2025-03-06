@@ -7,9 +7,10 @@ import { ModalService } from 'src/app/shared/services/modal-service.service';
 import { ClientStrings } from '../../strings';
 
 @Component({
-  selector: 'app-view-client-info',
-  templateUrl: './view-client-info.component.html',
-  styleUrls: ['./view-client-info.component.scss'],
+    selector: 'app-view-client-info',
+    templateUrl: './view-client-info.component.html',
+    styleUrls: ['./view-client-info.component.scss'],
+    standalone: false
 })
 export class ViewClientInfoComponent implements OnDestroy {
   @Output() CloseClient: EventEmitter<any> = new EventEmitter();

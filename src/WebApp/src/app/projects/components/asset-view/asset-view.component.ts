@@ -12,9 +12,10 @@ import { ModalService } from 'src/app/shared/services/modal-service.service';
 import { RealestatePropertyStrings } from '../../real-estate-property-strings';
 
 @Component({
-  selector: 'app-asset-view',
-  templateUrl: './asset-view.component.html',
-  styleUrls: ['./asset-view.component.scss']
+    selector: 'app-asset-view',
+    templateUrl: './asset-view.component.html',
+    styleUrls: ['./asset-view.component.scss'],
+    standalone: false
 })
 export class AssetViewComponent implements OnInit, OnDestroy {
 

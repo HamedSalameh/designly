@@ -9,9 +9,10 @@ import { SetActiveModule } from 'src/app/shared/state/shared/shared.actions';
 import { activeModule } from 'src/app/shared/state/shared/shared.selectors';
 
 @Component({
-  selector: 'app-side-nav',
-  templateUrl: './side-nav.component.html',
-  styleUrls: ['./side-nav.component.scss'],
+    selector: 'app-side-nav',
+    templateUrl: './side-nav.component.html',
+    styleUrls: ['./side-nav.component.scss'],
+    standalone: false
 })
 export class SideNavComponent {
   modules: ApplicationModule[] = [];

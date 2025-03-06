@@ -9,21 +9,22 @@ import { globalResetState } from 'src/app/shared/state/shared/shared.actions';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-profile-menu',
-  templateUrl: './profile-menu.component.html',
-  styleUrls: ['./profile-menu.component.scss'],
-  animations: [
-    trigger('inOutAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(40px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
-      ]),
-      transition(':leave', [
-        style({ opacity: 1, transform: 'translateY(0)' }),
-        animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(40px)'} )),
-      ]),
-    ]),
-  ],
+    selector: 'app-profile-menu',
+    templateUrl: './profile-menu.component.html',
+    styleUrls: ['./profile-menu.component.scss'],
+    animations: [
+        trigger('inOutAnimation', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(40px)' }),
+                animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+            ]),
+            transition(':leave', [
+                style({ opacity: 1, transform: 'translateY(0)' }),
+                animate('300ms ease-in', style({ opacity: 0, transform: 'translateY(40px)' })),
+            ]),
+        ]),
+    ],
+    standalone: false
 })
 export class ProfileMenuComponent {
 

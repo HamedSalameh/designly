@@ -7,16 +7,17 @@ interface DropdownOption {
 }
 
 @Component({
-  selector: 'app-dropdown',
-  templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DropdownComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-dropdown',
+    templateUrl: './dropdown.component.html',
+    styleUrls: ['./dropdown.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DropdownComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class DropdownComponent implements ControlValueAccessor {
   @Input() data: DropdownOption[] = [];
